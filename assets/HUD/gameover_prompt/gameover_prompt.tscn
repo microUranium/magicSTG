@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://10gihgm5jf3s"]
+
+[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="1_nhowy"]
+
+[node name="GameOverPrompt" type="CanvasLayer"]
+
+[node name="GameOverLabel" type="RichTextLabel" parent="."]
+modulate = Color(0.345, 0, 0.45, 1)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -72.5
+offset_right = 500.0
+offset_bottom = 72.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("1_nhowy")
+theme_override_font_sizes/normal_font_size = 120
+bbcode_enabled = true
+text = "[center]Game Over...[/center]"

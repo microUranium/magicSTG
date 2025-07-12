@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueLine" load_steps=4 format=3 uid="uid://c53uelahed3ek"]
+
+[ext_resource type="Texture2D" uid="uid://dp0j6c6w2jw1t" path="res://assets/message_box/Felis_sprites/F1.png" id="1_l416n"]
+[ext_resource type="Texture2D" uid="uid://bi4meqtph5dqg" path="res://assets/message_box/harpy_sprites/F1.png" id="2_dmhh4"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/DialogueLine.gd" id="3_ud6ja"]
+
+[resource]
+script = ExtResource("3_ud6ja")
+speaker_name = "フェリス"
+face_left = ExtResource("1_l416n")
+face_right = ExtResource("2_dmhh4")
+speaker_side = "left"
+box_direction = "left"
+text = "じゃあさっさとどっか行ってよね。
+もう二度と近寄らないで。"
+metadata/_custom_type_script = "uid://dt7d57vf3s2pj"

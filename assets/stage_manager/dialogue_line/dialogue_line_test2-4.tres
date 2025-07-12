@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueLine" load_steps=3 format=3 uid="uid://w4u47pgn2g37"]
+
+[ext_resource type="Texture2D" uid="uid://dp0j6c6w2jw1t" path="res://assets/message_box/Felis_sprites/F1.png" id="1_vguui"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/DialogueLine.gd" id="2_cbik6"]
+
+[resource]
+script = ExtResource("2_cbik6")
+speaker_name = "フェリス"
+face_left = ExtResource("1_vguui")
+speaker_side = "left"
+text = "（あいつだな～？魔物がやけに多い理由は。）"
+metadata/_custom_type_script = "uid://dt7d57vf3s2pj"

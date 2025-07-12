@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=13 format=3 uid="uid://m2v8f5obqt6a"]
+
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/DialogueLine.gd" id="1_r2c1q"]
+[ext_resource type="Resource" uid="uid://bo6kc3oqm678x" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-1.tres" id="2_afuch"]
+[ext_resource type="Resource" uid="uid://crt7eskjpjkdt" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-2.tres" id="3_rw4di"]
+[ext_resource type="Resource" uid="uid://do4usnfqlk8l3" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-3.tres" id="4_p41p8"]
+[ext_resource type="Resource" uid="uid://c7fdpowfjc836" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-4.tres" id="5_liibm"]
+[ext_resource type="Resource" uid="uid://b5kfleoyynrry" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-5.tres" id="6_jdohx"]
+[ext_resource type="Resource" uid="uid://dx3nw7etevlbk" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-6.tres" id="7_vdqa6"]
+[ext_resource type="Script" uid="uid://8sqselivq4a1" path="res://src/DialogueData.gd" id="8_liibm"]
+[ext_resource type="Resource" uid="uid://cgbpkb18saibb" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-7.tres" id="8_tbue2"]
+[ext_resource type="Resource" uid="uid://bmj5pjrjb1xgs" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-8.tres" id="9_52lg1"]
+[ext_resource type="Resource" uid="uid://dcc8d43jwxe7g" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-9.tres" id="10_l7t86"]
+[ext_resource type="Resource" uid="uid://c1cxsr460mb23" path="res://assets/stage_manager/dialogue_line/dialogue_line_test3-10.tres" id="11_6m3xy"]
+
+[resource]
+script = ExtResource("8_liibm")
+lines = Array[ExtResource("1_r2c1q")]([ExtResource("2_afuch"), ExtResource("3_rw4di"), ExtResource("4_p41p8"), ExtResource("5_liibm"), ExtResource("6_jdohx"), ExtResource("7_vdqa6"), ExtResource("8_tbue2"), ExtResource("9_52lg1"), ExtResource("10_l7t86"), ExtResource("11_6m3xy")])
+metadata/_custom_type_script = "uid://8sqselivq4a1"

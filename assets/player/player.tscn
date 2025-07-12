@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://bk5e3tn2k0vcl"]
+
+[ext_resource type="Script" uid="uid://daelfwwj35v86" path="res://src/Player.gd" id="1_h6syq"]
+[ext_resource type="Texture2D" uid="uid://dtlgjn1r5pwy5" path="res://assets/player/player_sprite.png" id="2_v2miy"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/HpNode.gd" id="3_v2miy"]
+[ext_resource type="PackedScene" uid="uid://isv53e4mqpf3" path="res://assets/fairy/fairy_container/fairy_container.tscn" id="4_ouxva"]
+[ext_resource type="PackedScene" uid="uid://uk1k0t60775y" path="res://assets/bullet/ProjectileBullet/bullet_core.tscn" id="5_d5dr7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ouxva"]
+atlas = ExtResource("2_v2miy")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5dr7"]
+atlas = ExtResource("2_v2miy")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_toylo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ouxva")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5dr7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tb4ck"]
+radius = 8.0
+height = 34.0
+
+[node name="Player" type="Area2D" groups=["players"]]
+script = ExtResource("1_h6syq")
+speed = 400.0
+metadata/_edit_lock_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_toylo")
+frame_progress = 0.0853613
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_tb4ck")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_v2miy")
+max_hp = 50
+
+[node name="EquippedBlessings" type="Node" parent="."]
+
+[node name="FairyContainer" parent="." instance=ExtResource("4_ouxva")]
+position = Vector2(2, 0)
+attack_core_scenes = Array[PackedScene]([ExtResource("5_d5dr7"), ExtResource("5_d5dr7"), ExtResource("5_d5dr7")])

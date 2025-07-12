@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://isv53e4mqpf3"]
+
+[ext_resource type="Script" uid="uid://b2rn6wervkkf1" path="res://src/FairyContainer.gd" id="1_j8uhk"]
+[ext_resource type="PackedScene" uid="uid://dypijchgmf00l" path="res://assets/fairy/fairy.tscn" id="2_h3abj"]
+
+[node name="FairyContainer" type="Node2D"]
+script = ExtResource("1_j8uhk")
+fairy_scene = ExtResource("2_h3abj")

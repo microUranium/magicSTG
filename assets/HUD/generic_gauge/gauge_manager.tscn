@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1315qexpkx2j"]
+
+[ext_resource type="Script" uid="uid://bolohqcfnkoth" path="res://src/GaugeManager.gd" id="1_30bkx"]
+
+[node name="GaugeManager" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_30bkx")
+container_path = NodePath("VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 50

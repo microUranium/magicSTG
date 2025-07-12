@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyPatternResource" load_steps=2 format=3 uid="uid://b488ts4ingalc"]
+
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://src/EnemyPatternResource.gd" id="2_cbyw8"]
+
+[resource]
+script = ExtResource("2_cbyw8")
+move_to = Vector2(448, 144)
+move_time = 2.0
+core_to_enable = ""
+core_duration = 3.0
+metadata/_custom_type_script = "uid://bps01f3m37042"

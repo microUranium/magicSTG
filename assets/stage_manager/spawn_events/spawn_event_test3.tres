@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpawnEvent" load_steps=3 format=3 uid="uid://q80ood7bumic"]
+
+[ext_resource type="PackedScene" uid="uid://byf8v6vbanosf" path="res://assets/enemy/enemyB/enemy_b.tscn" id="1_mitt3"]
+[ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://src/SpawnEvent.gd" id="2_etxei"]
+
+[resource]
+script = ExtResource("2_etxei")
+pattern = 2
+enemy_scenes = Array[PackedScene]([ExtResource("1_mitt3")])
+count = 4
+interval = 0.4
+base_pos = Vector2(0, 0)
+metadata/_custom_type_script = "uid://cfkyg4rfgta2t"

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://s7rdh1ihw4r1"]
+
+[ext_resource type="Script" uid="uid://cta80l5qb8qug" path="res://src/EnemyProjectileCore.gd" id="1_tpq8v"]
+[ext_resource type="PackedScene" uid="uid://celmmwyiy81ha" path="res://assets/bullet_enemy/ProjectileBullet/bullet_enemy.tscn" id="2_x448f"]
+
+[node name="ProjectileCoreEnemy5Rapid" type="Node2D"]
+script = ExtResource("1_tpq8v")
+bullet_scene = ExtResource("2_x448f")
+target_group = "players"
+rapid_fire_amount = 5

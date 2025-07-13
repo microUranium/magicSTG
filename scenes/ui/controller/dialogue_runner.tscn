@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://j2mvra4ldqkj"]
+
+[ext_resource type="Script" uid="uid://cda0mms3475vl" path="res://scripts/ui/DialogueRunner.gd" id="1_e5rnt"]
+
+[node name="DialogueRunner" type="CanvasLayer"]
+script = ExtResource("1_e5rnt")

@@ -1,0 +1,90 @@
+[gd_scene load_steps=24 format=3 uid="uid://cjoen8mdlmhks"]
+
+[ext_resource type="Script" uid="uid://uh0qd5u61qs7" path="res://scripts/enemy/Harpy.gd" id="1_l4g2j"]
+[ext_resource type="Texture2D" uid="uid://ctbnimw6slxdk" path="res://assets/gfx/sprites/harpy_sprite.png" id="2_f2sx0"]
+[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_harpy.tscn" id="2_njnvt"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_wdiqv"]
+[ext_resource type="Script" uid="uid://dvnqgbnjws8av" path="res://scripts/enemy/HarpyAI.gd" id="4_mmm4h"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="5_f01p3"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_jmlbr"]
+[ext_resource type="Resource" uid="uid://gkd1fh7mywlq" path="res://resources/enemy/harpy/phase/harpy_phase1.tres" id="6_jooee"]
+[ext_resource type="Resource" uid="uid://tgegwq2bima6" path="res://resources/enemy/harpy/phase/harpy_phase2.tres" id="7_q13j7"]
+[ext_resource type="Resource" uid="uid://bn6iihbcjnyfj" path="res://resources/enemy/harpy/phase/harpy_phase3.tres" id="8_jooee"]
+[ext_resource type="PackedScene" uid="uid://c2p5pqy7vtchs" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core.tscn" id="8_mmm4h"]
+[ext_resource type="Resource" uid="uid://b62fimtgpgajo" path="res://resources/enemy/harpy/phase/harpy_phase4.tres" id="9_gkiv5"]
+[ext_resource type="PackedScene" uid="uid://s7rdh1ihw4r1" path="res://scenes/attackCores/enemy/projectile_core_enemy_5_rapid_fire.tscn" id="11_jooee"]
+[ext_resource type="PackedScene" uid="uid://dswqosnjyt64w" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core_2.tscn" id="11_q13j7"]
+[ext_resource type="PackedScene" uid="uid://bvbrvoughiosu" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core_3.tscn" id="13_6pji5"]
+[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="15_dotlt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6282"]
+atlas = ExtResource("2_f2sx0")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4g2j"]
+atlas = ExtResource("2_f2sx0")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmm4h"]
+atlas = ExtResource("2_f2sx0")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f01p3"]
+atlas = ExtResource("2_f2sx0")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jooee"]
+atlas = ExtResource("2_f2sx0")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6282")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4g2j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mmm4h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f01p3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jooee")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(76, 131)
+
+[node name="EnemyA" type="Area2D" groups=["enemies"]]
+script = ExtResource("1_l4g2j")
+destroy_particles_scene = ExtResource("2_njnvt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12.5)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_wdiqv")
+max_hp = 1000
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("4_mmm4h")
+phases = Array[ExtResource("5_f01p3")]([ExtResource("6_jooee"), ExtResource("7_q13j7"), ExtResource("8_jooee"), ExtResource("9_gkiv5")])
+attack_core_phase1 = Array[PackedScene]([ExtResource("8_mmm4h"), ExtResource("11_jooee")])
+attack_core_phase3_1 = Array[PackedScene]([ExtResource("11_jooee"), ExtResource("11_q13j7")])
+attack_core_phase3_2 = Array[PackedScene]([ExtResource("13_6pji5")])
+attack_core_slot = NodePath("../AttackCoreSlot")
+_bgm = ExtResource("15_dotlt")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("5_jmlbr")]

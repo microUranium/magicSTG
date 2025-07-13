@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://d10gn3jcpvioq"]
+
+[ext_resource type="Script" uid="uid://dqq06ln5rrfvj" path="res://scripts/ui/GenericGauge.gd" id="1_3hq31"]
+[ext_resource type="Texture2D" uid="uid://jtpyb6djv6lg" path="res://icon.svg" id="1_pq45t"]
+[ext_resource type="Texture2D" uid="uid://rx8htymiaovy" path="res://assets/gfx/sprites/generic_gauge_under.png" id="2_3hq31"]
+[ext_resource type="Texture2D" uid="uid://y10h7aissen0" path="res://assets/gfx/sprites/generic_gauge_over.png" id="3_t1c1l"]
+[ext_resource type="Texture2D" uid="uid://b1omyy0mqfhly" path="res://assets/gfx/sprites/generic_gauge_progress.png" id="4_5ssje"]
+
+[node name="GenericGauge" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 10.0
+offset_bottom = 100.0
+script = ExtResource("1_3hq31")
+
+[node name="Bar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_top = -65.0
+offset_right = 192.0
+offset_bottom = 127.0
+nine_patch_stretch = true
+texture_under = ExtResource("2_3hq31")
+texture_over = ExtResource("3_t1c1l")
+texture_progress = ExtResource("4_5ssje")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 35.0
+texture = ExtResource("1_pq45t")
+expand_mode = 1
+
+[node name="Name" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 20.0
+offset_right = 188.0
+offset_bottom = 43.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "防壁の加護"

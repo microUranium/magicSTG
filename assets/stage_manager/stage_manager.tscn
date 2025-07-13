@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxte2v852483q"]
-
-[ext_resource type="Script" uid="uid://vgrsqpavp4la" path="res://src/StageManager.gd" id="1_frg50"]
-[ext_resource type="PackedScene" uid="uid://vtekd023jx04" path="res://assets/HUD/ready_prompt/ready_prompt.tscn" id="2_6qohi"]
-
-[node name="StageManager" type="Node"]
-script = ExtResource("1_frg50")
-ready_prompt_scene = ExtResource("2_6qohi")

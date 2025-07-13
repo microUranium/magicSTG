@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyyoe8pge3tsh"]
+
+[ext_resource type="Script" uid="uid://d2d0503afl6do" path="res://scripts/player/AttackCoreSlot.gd" id="1_qojxn"]
+
+[node name="AttackCoreSlot" type="Node"]
+script = ExtResource("1_qojxn")

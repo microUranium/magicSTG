@@ -1,0 +1,49 @@
+[gd_scene load_steps=19 format=3 uid="uid://4jn460oodppl"]
+
+[ext_resource type="PackedScene" uid="uid://b2qf1txmx5iug" path="res://scenes/ui/hud.tscn" id="1_qgoyv"]
+[ext_resource type="PackedScene" uid="uid://b1315qexpkx2j" path="res://scenes/ui/controller/gauge_manager.tscn" id="2_px1c8"]
+[ext_resource type="PackedScene" uid="uid://bk5e3tn2k0vcl" path="res://scenes/player/player.tscn" id="3_xgklb"]
+[ext_resource type="PackedScene" uid="uid://dkebraj3c7ik8" path="res://scenes/managers/enemy_spawner.tscn" id="4_5wre2"]
+[ext_resource type="PackedScene" uid="uid://dxte2v852483q" path="res://scenes/managers/stage_manager.tscn" id="5_qy6q0"]
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://scripts/systems/StageSegment.gd" id="6_ykry0"]
+[ext_resource type="Resource" uid="uid://c6lxdp0c4mh7q" path="res://resources/stage/stage_segment/stage_segment_test1.tres" id="7_im81g"]
+[ext_resource type="Resource" uid="uid://btlqescgksfwv" path="res://resources/stage/stage_segment/stage_segment_test2.tres" id="8_ysjpo"]
+[ext_resource type="Resource" uid="uid://dus38a43lnm3d" path="res://resources/stage/stage_segment/stage_segment_test3.tres" id="9_gexqn"]
+[ext_resource type="Resource" uid="uid://c3cdvtxar8vj3" path="res://resources/stage/stage_segment/stage_segment_test4.tres" id="10_kc8j3"]
+[ext_resource type="Resource" uid="uid://bc2efo8rc1u1g" path="res://resources/stage/stage_segment/stage_segment_test5.tres" id="11_e5eww"]
+[ext_resource type="Resource" uid="uid://d1ivxc7d53btm" path="res://resources/stage/stage_segment/stage_segment_test6.tres" id="12_ygu70"]
+[ext_resource type="Resource" uid="uid://bogsqux4kw7pm" path="res://resources/stage/stage_segment/stage_segment_test_harpy.tres" id="13_x5gqu"]
+[ext_resource type="Resource" uid="uid://bg6fafco5bhcd" path="res://resources/stage/stage_segment/stage_segment_test_7.tres" id="14_8qayg"]
+[ext_resource type="AudioStream" uid="uid://bnsl7rxxvq8sq" path="res://assets/audio/bgm/testStage_bgm.mp3" id="15_gvp5n"]
+[ext_resource type="AudioStream" uid="uid://c3v0b5o4h8qo2" path="res://assets/audio/bgm/stageclear_bgm.mp3" id="16_oix75"]
+[ext_resource type="PackedScene" uid="uid://bh68hvfympwiu" path="res://scenes/ui/background.tscn" id="17_masl8"]
+[ext_resource type="PackedScene" uid="uid://j2mvra4ldqkj" path="res://scenes/ui/controller/dialogue_runner.tscn" id="18_2qtp0"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Hud" parent="." instance=ExtResource("1_qgoyv")]
+player_path = NodePath("../Player")
+
+[node name="GaugeManager" parent="Hud" instance=ExtResource("2_px1c8")]
+offset_left = 930.0
+offset_top = 193.0
+offset_right = 930.0
+offset_bottom = 193.0
+
+[node name="Player" parent="." instance=ExtResource("3_xgklb")]
+position = Vector2(448, 748)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("4_5wre2")]
+
+[node name="StageManager" parent="." instance=ExtResource("5_qy6q0")]
+segments = Array[ExtResource("6_ykry0")]([ExtResource("7_im81g"), ExtResource("8_ysjpo"), ExtResource("9_gexqn"), ExtResource("10_kc8j3"), ExtResource("11_e5eww"), ExtResource("12_ygu70"), ExtResource("8_ysjpo"), ExtResource("10_kc8j3"), ExtResource("11_e5eww"), ExtResource("13_x5gqu"), ExtResource("14_8qayg")])
+spawner_path = NodePath("../EnemySpawner")
+dialogue_runner_path = NodePath("../DialogueRunner")
+inter_wave_delay = 1.5
+player_path = NodePath("../Player")
+stage_bgm = ExtResource("15_gvp5n")
+stageclear_bgm = ExtResource("16_oix75")
+
+[node name="Background" parent="." instance=ExtResource("17_masl8")]
+
+[node name="DialogueRunner" parent="." instance=ExtResource("18_2qtp0")]

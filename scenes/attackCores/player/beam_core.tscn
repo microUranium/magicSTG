@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqav7lgswik8f"]
+
+[ext_resource type="Script" uid="uid://n1du4ojshu6s" path="res://scripts/player/BeamCore.gd" id="1_jag6r"]
+[ext_resource type="PackedScene" uid="uid://cpvyvr12to1f1" path="res://scenes/attackCores/player/beam.tscn" id="2_sc24i"]
+
+[node name="BeamCore" type="Node2D"]
+script = ExtResource("1_jag6r")
+beam_scene = ExtResource("2_sc24i")
+cooldown_sec = 5.0

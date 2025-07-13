@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://cpvyvr12to1f1"]
+
+[ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="1_5mxah"]
+[ext_resource type="Script" uid="uid://clftwdfuotu4j" path="res://scripts/player/Beam.gd" id="1_jsy6y"]
+[ext_resource type="Texture2D" uid="uid://b48s78plwbe1q" path="res://assets/gfx/sprites/beam_sprite.png" id="1_wp73g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsy6y"]
+shader = ExtResource("1_5mxah")
+shader_parameter/frame_count = 3
+shader_parameter/fps = 10.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5mxah"]
+size = Vector2(4, 40)
+
+[node name="Beam" type="Area2D"]
+script = ExtResource("1_jsy6y")
+desired_length = 800.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+material = SubResource("ShaderMaterial_jsy6y")
+offset_left = -20.0
+offset_top = -33.0
+offset_right = 20.0
+offset_bottom = 7.0
+texture = ExtResource("1_wp73g")
+patch_margin_top = 16
+patch_margin_bottom = 16
+axis_stretch_vertical = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_5mxah")

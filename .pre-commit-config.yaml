@@ -1,0 +1,9 @@
+repos:
+  # ─ gdformat（GDScript フォーマッタ） ─
+  - repo: https://github.com/Scony/godot-gdscript-toolkit
+    rev: 4.3.3
+    hooks:
+      - id: gdformat
+        additional_dependencies: ["gdtoolkit==4.3.3"]
+        types: [gdscript]
+        args: [--use-spaces=2, autoload/, scripts/, tests/]

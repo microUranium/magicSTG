@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvbrvoughiosu"]
+
+[ext_resource type="Script" uid="uid://bf60672np1jcb" path="res://scripts/enemy/HarpyBulletBarrierCore3.gd" id="1_f4cm0"]
+[ext_resource type="PackedScene" uid="uid://knhv1kdxbs34" path="res://scenes/attackCores/enemy/harpy_bullet_barrier.tscn" id="2_swdoj"]
+
+[node name="HarpyBulletBarrierCore3" type="Node2D"]
+script = ExtResource("1_f4cm0")
+bullet_scene = ExtResource("2_swdoj")
+target_group = "players"
+bullet_amount = 8

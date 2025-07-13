@@ -4,11 +4,7 @@ class_name SpawnEvent
 #------------------------------
 # 出現パターン
 #------------------------------
-enum Pattern { 
-  SINGLE_RANDOM,   # 1 体をランダム位置
-  BURST_SAME_POS,  # N 体を同座標・等間隔
-  LINE_HORIZ       # 左→右に横一列（追加例）
-}
+enum Pattern { SINGLE_RANDOM, BURST_SAME_POS, LINE_HORIZ }  # 1 体をランダム位置  # N 体を同座標・等間隔  # 左→右に横一列（追加例）
 
 @export_enum("SINGLE_RANDOM", "BURST_SAME_POS", "LINE_HORIZ")
 var pattern: int = Pattern.SINGLE_RANDOM
@@ -21,11 +17,9 @@ var pattern: int = Pattern.SINGLE_RANDOM
 #------------------------------
 # 個体数・間隔
 #------------------------------
-@export_range(1, 99, 1)
-var count: int = 5
+@export_range(1, 99, 1) var count: int = 5
 
-@export_range(0.05, 10.0, 0.05, "suffix:s")
-var interval: float = 0.4
+@export_range(0.05, 10.0, 0.05, "suffix:s") var interval: float = 0.4
 
 #------------------------------
 # 基準座標（BURST 等で使用）

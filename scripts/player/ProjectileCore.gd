@@ -11,10 +11,12 @@ func _ready() -> void:
   # 汎用ゲージの初期化
   init_gauge("cooldown", 100, 0, "魔弾")
 
+
 func _process(_delta: float) -> void:
   if _cool_timer:
     var elapsed = _cool_timer.time_left
     set_gauge((cooldown_sec - elapsed) * 100 / cooldown_sec)  # 残り時間をゲージに反映
+
 
 func _do_fire():
   if bullet_scene:
@@ -23,7 +25,7 @@ func _do_fire():
     get_tree().current_scene.add_child(bullet)
 
     if _owner_actor:
-      bullet.global_position = _owner_actor.global_position # 親はSpirit
+      bullet.global_position = _owner_actor.global_position  # 親はSpirit
     else:
       push_warning("ProjectileCore: Owner actor is not set. Using default position.")
 

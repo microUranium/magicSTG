@@ -4,18 +4,20 @@ signal fairy_added(fairy)
 signal fairy_removed(fairy)
 
 @export var fairy_scene: PackedScene
-@export var attack_core_scenes: Array[PackedScene] = []   # ★ プレイヤー装備中の攻撃核
+@export var attack_core_scenes: Array[PackedScene] = []  # ★ プレイヤー装備中の攻撃核
 
 @export var circle_radius := 80.0
 @export var circle_rotate_speed := 180.0
 
 @export_enum("CIRCLE", "LINE") var formation: int = 0
 
-var fairies: Array = []   # 生成済みの精霊
+var fairies: Array = []  # 生成済みの精霊
 var _circle_angle := 0.0
 
+
 func _ready():
-  _spawn_all_from_cores()          # 装備リストぶん精霊を出す
+  _spawn_all_from_cores()  # 装備リストぶん精霊を出す
+
 
 #────────────────────────────────
 # Public API
@@ -26,6 +28,7 @@ func set_attack_cores(cores: Array[PackedScene]) -> void:
     despawn_fairy(f)
   attack_core_scenes = cores.duplicate()
   _spawn_all_from_cores()
+
 
 func spawn_fairy(core_scene: PackedScene) -> Node:
   if core_scene == null:
@@ -53,6 +56,7 @@ func spawn_fairy(core_scene: PackedScene) -> Node:
   emit_signal("fairy_added", f)
   return f
 
+
 func despawn_fairy(fairy: Node) -> void:
   if fairy and fairy in fairies:
     fairies.erase(fairy)
@@ -60,16 +64,20 @@ func despawn_fairy(fairy: Node) -> void:
     emit_signal("fairy_removed", fairy)
     update_offsets()
 
+
 func set_formation(new_form: int) -> void:
   formation = new_form
   update_offsets()
 
+
 func get_fairies() -> Array:
   return fairies
+
 
 #────────────────────────────────
 # Internal
 #────────────────────────────────
+
 
 func _process(delta):
   # if formation == 0:                              # CIRCLE
@@ -77,23 +85,26 @@ func _process(delta):
   #     _circle_angle + circle_rotate_speed * delta,
   #     0.0, 360.0)
   #   update_offsets()
-  
+
   pass
+
 
 func _spawn_all_from_cores() -> void:
   for core_scene in attack_core_scenes:
     spawn_fairy(core_scene)
 
+
 func update_offsets() -> void:
   for i in range(fairies.size()):
     _recalc_offset_for(fairies[i], i)
 
+
 func _recalc_offset_for(fairy: Node, idx: int) -> void:
-  var total: int = max(attack_core_scenes.size(), 1)   # 0 除算対策
+  var total: int = max(attack_core_scenes.size(), 1)  # 0 除算対策
   match formation:
     0:  # CIRCLE
       var base_angle := 360.0 * idx / total
-      var angle_rad  := deg_to_rad(base_angle + _circle_angle)
+      var angle_rad := deg_to_rad(base_angle + _circle_angle)
       fairy.offset = Vector2(0, -circle_radius).rotated(angle_rad)
     1:  # LINE
       fairy.offset = Vector2(30 * (idx + 1), -20)

@@ -6,6 +6,7 @@ extends ParallaxBackground
 
 var background_width: float = 0.0
 
+
 func _ready() -> void:
   if sprite:
     background_width = sprite.texture.get_size().x * sprite.scale.x
@@ -16,13 +17,16 @@ func _ready() -> void:
   StageSignals.request_change_background_scroll_speed.connect(_change_scroll_speed)
   StageSignals.request_start_vibration.connect(_start_vibration)
 
+
 func _process(delta: float) -> void:
   scroll_offset.y += scroll_speed * delta
+
 
 func _change_scroll_speed(new_speed: float, change_time: float) -> void:
   var tween = create_tween()
   tween.tween_property(self, "scroll_speed", new_speed, change_time)
   tween.play()
+
 
 func _start_vibration() -> void:
   var default_pos = sprite.position.x if sprite else 0

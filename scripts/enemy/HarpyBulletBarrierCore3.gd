@@ -3,13 +3,15 @@ extends AttackCoreBase
 @export var bullet_scene: PackedScene
 @export var bullet_direction: Vector2 = Vector2.DOWN
 @export var target_group: String = "player"
-@export var bullet_amount: int = 16 # 弾の数
+@export var bullet_amount: int = 16  # 弾の数
 @export var damage: int = 5
-@export var bullet_circle_radius: = 140
+@export var bullet_circle_radius := 140
+
 
 func _ready() -> void:
   show_on_hud = false
   super._ready()
+
 
 func _do_fire():
   var player = get_tree().current_scene.get_node("Player")
@@ -20,12 +22,12 @@ func _do_fire():
       push_warning("EnemyProjectileCore: Owner actor is not set. Using default direction.")
 
     # バレットグループは "harpy_bullets" + UID
-    var bullets : Array[HarpyBulletBarrier] = []
+    var bullets: Array[HarpyBulletBarrier] = []
     var bullet_group = "harpy_bullets_" + str(ResourceUID.create_id())
     for i in range(bullet_amount):
-      var bullet : HarpyBulletBarrier = bullet_scene.instantiate()
+      var bullet: HarpyBulletBarrier = bullet_scene.instantiate()
       get_tree().current_scene.add_child(bullet)
-      
+
       bullet.owner_node = _owner_actor
       bullet.bullet_group = bullet_group
       bullet.bullet_amount = bullet_amount
@@ -35,7 +37,7 @@ func _do_fire():
       bullet.target_node = player
       bullet.circle_radius = bullet_circle_radius
       bullet.damage = damage
-      
+
       bullet.target_group = target_group
       bullets.append(bullet)
 
@@ -43,6 +45,3 @@ func _do_fire():
       bullets[i].start()
       if i < bullets.size() - 1:
         await get_tree().create_timer(1.0 / 16.0).timeout  # 弾の発射間隔を調整
-      
-
-      

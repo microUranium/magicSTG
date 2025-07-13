@@ -6,11 +6,13 @@ extends AttackCoreBase
 var beam_instance: Area2D = null
 var _beam_duration_timer: SceneTreeTimer
 
+
 func _ready():
   super._ready()
 
   # 汎用ゲージの初期化
   init_gauge("cooldown", 100, 0, "光線")
+
 
 func _process(_delta: float) -> void:
   if _cool_timer and _cooling:
@@ -20,11 +22,13 @@ func _process(_delta: float) -> void:
     var elapsed = _beam_duration_timer.time_left
     set_gauge((elapsed) * 100 / beam_duration)  # ビームの残り時間をゲージに反映
 
-func trigger() -> void: # ビームを打った後、すぐにクールダウンを開始せず、ビームの終了後にクールダウンを開始する
+
+func trigger() -> void:  # ビームを打った後、すぐにクールダウンを開始せず、ビームの終了後にクールダウンを開始する
   if _cooling:
     return
   _do_fire()
   emit_signal("core_fired")
+
 
 func _do_fire():
   if beam_scene:
@@ -32,12 +36,12 @@ func _do_fire():
     get_tree().current_scene.add_child(beam_instance)
 
     if _owner_actor:
-      beam_instance.global_position = _owner_actor.global_position # 親はSpirit
+      beam_instance.global_position = _owner_actor.global_position  # 親はSpirit
     else:
       push_warning("BeamCore: Owner actor is not set. Using default position.")
 
     # Beam.gd に desired_length プロパティがある場合設定
-    beam_instance.desired_length = 800.0 # 必要に応じて変更
+    beam_instance.desired_length = 800.0  # 必要に応じて変更
 
     # initialize() でowner_nodeを直接渡す
     if beam_instance.has_method("initialize"):
@@ -53,6 +57,7 @@ func _do_fire():
     if is_instance_valid(beam_instance):
       beam_instance.queue_free()
       _start_cooldown()
+
 
 func _on_beam_body_entered(_body):
   # damage_enemy(body)

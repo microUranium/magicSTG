@@ -1,5 +1,6 @@
 extends TextureProgressBar
 
+
 func update_hp(current_hp: int, max_hp: int):
   max_value = 100  # 表示は常に0～100%ベースにする
 

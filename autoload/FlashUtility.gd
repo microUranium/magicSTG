@@ -1,5 +1,6 @@
 extends Node
 
+
 ## AnimatedSprite2D を一瞬だけフラッシュ
 static func flash_white(node: AnimatedSprite2D, duration := 0.1):
   if node == null:

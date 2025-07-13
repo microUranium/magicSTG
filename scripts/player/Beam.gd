@@ -2,9 +2,10 @@ extends Area2D
 
 @export var damage: int = 1
 @export var desired_length: float = 300.0
-@export var owner_path: NodePath # 精霊への参照
+@export var owner_path: NodePath  # 精霊への参照
 
 var owner_node: Node2D
+
 
 func _ready():
   var ninepatch = $NinePatchRect
@@ -18,8 +19,10 @@ func _ready():
   if owner_path != NodePath():
     owner_node = get_node(owner_path)
 
+
 func initialize(_owner_node: Node2D):
   self.owner_node = _owner_node
+
 
 func _process(_delta):
   if owner_node:

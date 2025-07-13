@@ -15,8 +15,5 @@ export_credentials.cfg
 data_*/
 mono_crash.*.json
 
-# ignore .uid files
-*.uid
-
 # Build artifacts
 /build/

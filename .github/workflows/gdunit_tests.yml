@@ -5,10 +5,6 @@ on:
     branches: [ main, develop ]
   pull_request:
 
-permissions:
-  contents: read
-  checks: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,3 +16,6 @@ jobs:
           godot-version: '4.4.1'
           paths: 'res://tests'
           publish-report: true
+  permissions:
+    contents: read
+    checks: write

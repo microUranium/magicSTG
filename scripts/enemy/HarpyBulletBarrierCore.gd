@@ -17,8 +17,13 @@ func _do_fire():
     # バレットグループは "harpy_bullets" + UID
     var bullet_group = "harpy_bullets_" + str(ResourceUID.create_id())
     for i in range(bullet_amount):
+      var parent := _find_bullet_parent()
+      if parent == null:
+        push_warning("ProjectileCore: No valid parent node found, aborting fire.")
+        return
+
       var bullet: HarpyBulletBarrier = bullet_scene.instantiate()
-      get_tree().current_scene.add_child(bullet)
+      parent.add_child(bullet)
 
       bullet.owner_node = _owner_actor
       bullet.bullet_group = bullet_group

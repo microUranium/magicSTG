@@ -22,8 +22,13 @@ func _do_fire():
 
     # 連射処理
     for i in range(rapid_fire_amount):
+      var parent := _find_bullet_parent()
+      if parent == null:
+        push_warning("ProjectileCore: No valid parent node found, aborting fire.")
+        return
+
       var bullet = bullet_scene.instantiate()
-      get_tree().current_scene.add_child(bullet)
+      parent.add_child(bullet)
 
       if _owner_actor:
         bullet.global_position = _owner_actor.global_position  # 親はSpirit

@@ -5,13 +5,18 @@ on:
     branches: [ main, develop ]
   pull_request:
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4           # ソース取得
-      - uses: MikeSchulze/gdunit4-action@v1 # ★ 公式 Action
+      - uses: actions/checkout@v4
+      - uses: MikeSchulze/gdunit4-action@v1
         with:
-          godot-version: '4.4.1'            # 使用する Godot Editor
-          paths: 'res://tests'              # テストフォルダ
+          godot-version: '4.4.1'
+          paths: 'res://tests'
+          publish-report: true

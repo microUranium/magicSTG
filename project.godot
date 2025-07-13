@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MagicSTG"
-run/main_scene="uid://bbm3capbd2b4g"
+run/main_scene="uid://dtgyrjk5r3aab"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -32,6 +32,15 @@ window/size/viewport_height=960
 [dotnet]
 
 project/assembly_name="MagicSTG"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
+[gdunit4]
+
+settings/test/test_lookup_folder="tests"
+settings/test/test_discovery=true
 
 [global_group]
 

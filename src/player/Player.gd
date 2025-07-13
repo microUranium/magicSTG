@@ -13,6 +13,7 @@ signal game_over
 
 var equipped_blessings = []
 var player_size
+var direction: Vector2
 
 func _ready() -> void:
   # Set the initial animation
@@ -26,7 +27,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
   # Move the player based on input
-  var direction: Vector2 = Vector2.ZERO
+  direction = Vector2.ZERO
 
   if Input.is_action_pressed("ui_up"):
     direction.y -= 1

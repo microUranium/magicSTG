@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="StageSegment" load_steps=3 format=3 uid="uid://bogsqux4kw7pm"]
 
-[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/StageSegment.gd" id="2_oa5cs"]
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/systems/StageSegment.gd" id="2_oa5cs"]
 [ext_resource type="Resource" uid="uid://mhaq1wa8ggl4" path="res://assets/stage_manager/wave_data/wave_data_test_harpy.tres" id="2_tlp4g"]
 
 [resource]

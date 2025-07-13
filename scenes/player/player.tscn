@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://bk5e3tn2k0vcl"]
 
-[ext_resource type="Script" uid="uid://daelfwwj35v86" path="res://src/Player.gd" id="1_h6syq"]
+[ext_resource type="Script" uid="uid://daelfwwj35v86" path="res://src/player/Player.gd" id="1_h6syq"]
 [ext_resource type="Texture2D" uid="uid://dtlgjn1r5pwy5" path="res://assets/gfx/sprites/player_sprite.png" id="2_v2miy"]
-[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/HpNode.gd" id="3_v2miy"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/player/HpNode.gd" id="3_v2miy"]
 [ext_resource type="PackedScene" uid="uid://isv53e4mqpf3" path="res://scenes/player/fairy_container.tscn" id="4_ouxva"]
 [ext_resource type="PackedScene" uid="uid://uk1k0t60775y" path="res://scenes/attackCores/player/bullet_core.tscn" id="5_d5dr7"]
 

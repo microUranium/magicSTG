@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="StageSegment" load_steps=3 format=3 uid="uid://bg6fafco5bhcd"]
 
 [ext_resource type="Resource" uid="uid://srqbdirvr21m" path="res://assets/stage_manager/dialogue_data/dialogue_data_test5.tres" id="1_ab0fr"]
-[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/StageSegment.gd" id="1_s7pb6"]
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/systems/StageSegment.gd" id="1_s7pb6"]
 
 [resource]
 script = ExtResource("1_s7pb6")

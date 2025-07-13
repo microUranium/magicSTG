@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="StageSegment" load_steps=3 format=3 uid="uid://c6lxdp0c4mh7q"]
 
-[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/StageSegment.gd" id="1_hly0v"]
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/systems/StageSegment.gd" id="1_hly0v"]
 [ext_resource type="Resource" uid="uid://cca02juwjlc86" path="res://assets/stage_manager/dialogue_data/dialogue_data_test1.tres" id="1_xi0tb"]
 
 [resource]

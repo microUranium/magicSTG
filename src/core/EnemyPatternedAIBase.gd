@@ -1,5 +1,5 @@
 # パターン化された敵AIのベースクラス
-extends "res://src/EnemyAIBase.gd"
+extends "res://src/core/EnemyAIBase.gd"
 
 @export var patterns:Array[EnemyPatternResource] = [] # パターンのリスト
 @export var loop_type:int = 0   # 0 = SEQ, 1 = RANDOM

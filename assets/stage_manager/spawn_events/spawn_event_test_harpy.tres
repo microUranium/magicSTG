@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SpawnEvent" load_steps=3 format=3 uid="uid://bua288u4ma0n"]
 
 [ext_resource type="PackedScene" uid="uid://cjoen8mdlmhks" path="res://scenes/enemy/harpy.tscn" id="1_eyxbr"]
-[ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://src/SpawnEvent.gd" id="1_ss8vo"]
+[ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://src/systems/SpawnEvent.gd" id="1_ss8vo"]
 
 [resource]
 script = ExtResource("1_ss8vo")

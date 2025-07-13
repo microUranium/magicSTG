@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://b2qf1txmx5iug"]
 
-[ext_resource type="Script" uid="uid://djv35rytt1dm7" path="res://src/HUD.gd" id="1_jn2t8"]
+[ext_resource type="Script" uid="uid://djv35rytt1dm7" path="res://src/ui/HUD.gd" id="1_jn2t8"]
 [ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="2_6axep"]
 [ext_resource type="Texture2D" uid="uid://cv3e2sq3aecnn" path="res://assets/gfx/sprites/HPBar_under.png" id="2_jggq7"]
-[ext_resource type="Script" uid="uid://b0qbdpodqus5r" path="res://src/HPBar.gd" id="2_y0j1j"]
+[ext_resource type="Script" uid="uid://b0qbdpodqus5r" path="res://src/ui/HPBar.gd" id="2_y0j1j"]
 [ext_resource type="Texture2D" uid="uid://dxio5rlmk5q24" path="res://assets/gfx/sprites/HPBar_over.png" id="3_6axep"]
-[ext_resource type="Script" uid="uid://dsf860vniuhha" path="res://src/HUDFlash.gd" id="3_basyl"]
+[ext_resource type="Script" uid="uid://dsf860vniuhha" path="res://src/ui/HUDFlash.gd" id="3_basyl"]
 [ext_resource type="Texture2D" uid="uid://caxwqrvh1bh3n" path="res://assets/gfx/sprites/HPBar_progress.png" id="4_basyl"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6axep"]

@@ -1,4 +1,4 @@
-extends "res://src/EnemyBase.gd"
+extends "res://src/core/EnemyBase.gd"
 
 @onready var ai :HarpyAI = $EnemyAI
 

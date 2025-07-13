@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bk5e3tn2k0vcl" path="res://scenes/player/player.tscn" id="3_xgklb"]
 [ext_resource type="PackedScene" uid="uid://dkebraj3c7ik8" path="res://scenes/managers/enemy_spawner.tscn" id="4_5wre2"]
 [ext_resource type="PackedScene" uid="uid://dxte2v852483q" path="res://scenes/managers/stage_manager.tscn" id="5_qy6q0"]
-[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/StageSegment.gd" id="6_ykry0"]
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://src/systems/StageSegment.gd" id="6_ykry0"]
 [ext_resource type="Resource" uid="uid://c6lxdp0c4mh7q" path="res://assets/stage_manager/stage_segment/stage_segment_test1.tres" id="7_im81g"]
 [ext_resource type="Resource" uid="uid://btlqescgksfwv" path="res://assets/stage_manager/stage_segment/stage_segment_test2.tres" id="8_ysjpo"]
 [ext_resource type="Resource" uid="uid://dus38a43lnm3d" path="res://assets/stage_manager/stage_segment/stage_segment_test3.tres" id="9_gexqn"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cpvyvr12to1f1"]
 
 [ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="1_5mxah"]
-[ext_resource type="Script" uid="uid://clftwdfuotu4j" path="res://src/Beam.gd" id="1_jsy6y"]
+[ext_resource type="Script" uid="uid://clftwdfuotu4j" path="res://src/player/Beam.gd" id="1_jsy6y"]
 [ext_resource type="Texture2D" uid="uid://b48s78plwbe1q" path="res://assets/gfx/sprites/beam_sprite.png" id="1_wp73g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsy6y"]

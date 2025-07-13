@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="DialogueLine" load_steps=3 format=3 uid="uid://w4u47pgn2g37"]
 
 [ext_resource type="Texture2D" uid="uid://dp0j6c6w2jw1t" path="res://assets/gfx/sprites/felis_face_1.png" id="1_vguui"]
-[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/DialogueLine.gd" id="2_cbik6"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/ui/DialogueLine.gd" id="2_cbik6"]
 
 [resource]
 script = ExtResource("2_cbik6")

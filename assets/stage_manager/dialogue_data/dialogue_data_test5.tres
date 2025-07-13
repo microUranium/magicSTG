@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="DialogueData" load_steps=18 format=3 uid="uid://srqbdirvr21m"]
 
-[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/DialogueLine.gd" id="1_d04sd"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://src/ui/DialogueLine.gd" id="1_d04sd"]
 [ext_resource type="Resource" uid="uid://cpqbl3bdbuxup" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-1.tres" id="2_pgk8x"]
 [ext_resource type="Resource" uid="uid://dedqbjmrogfci" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-2.tres" id="3_lig8i"]
 [ext_resource type="Resource" uid="uid://qxdpxgmbapwk" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-3.tres" id="4_ssm1r"]
 [ext_resource type="Resource" uid="uid://dv0t4n72nnijk" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-4.tres" id="5_lynuq"]
-[ext_resource type="Script" uid="uid://8sqselivq4a1" path="res://src/DialogueData.gd" id="6_mb4dj"]
+[ext_resource type="Script" uid="uid://8sqselivq4a1" path="res://src/ui/DialogueData.gd" id="6_mb4dj"]
 [ext_resource type="Resource" uid="uid://c5jcrueiooq74" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-5.tres" id="6_ndc1v"]
 [ext_resource type="Resource" uid="uid://dlxp2jenbqwop" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-6.tres" id="7_c5jc0"]
 [ext_resource type="Resource" uid="uid://bu4k5lg8l5f0v" path="res://assets/stage_manager/dialogue_line/dialogue_line_test5-7.tres" id="8_8d0p8"]

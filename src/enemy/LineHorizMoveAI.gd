@@ -1,4 +1,4 @@
-extends "res://src/EnemyAIBase.gd"
+extends "res://src/core/EnemyAIBase.gd"
 
 @export var align_speed   : float = 400.0   # 整列移動速度
 @export var stop_threshold: float = 2.0     # 到達判定距離

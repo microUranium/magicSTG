@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="PhaseResource" load_steps=5 format=3 uid="uid://tgegwq2bima6"]
 
-[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://src/EnemyPatternResource.gd" id="1_21hem"]
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://src/systems/EnemyPatternResource.gd" id="1_21hem"]
 [ext_resource type="Resource" uid="uid://wwbarjlrwj4" path="res://assets/enemy/harpy/pattern/harpy_pattern2-1.tres" id="2_padsh"]
 [ext_resource type="Resource" uid="uid://j1go501kf2t2" path="res://assets/enemy/harpy/pattern/harpy_pattern2-2.tres" id="3_21hem"]
-[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://src/PhaseResource.gd" id="5_k0o0b"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://src/systems/PhaseResource.gd" id="5_k0o0b"]
 
 [resource]
 script = ExtResource("5_k0o0b")

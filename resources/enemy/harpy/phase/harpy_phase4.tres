@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PhaseResource" load_steps=7 format=3 uid="uid://b62fimtgpgajo"]
+
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="1_05j7f"]
+[ext_resource type="Resource" uid="uid://wwbarjlrwj4" path="res://resources/enemy/harpy/pattern/harpy_pattern2-1.tres" id="2_mimup"]
+[ext_resource type="Resource" uid="uid://j1go501kf2t2" path="res://resources/enemy/harpy/pattern/harpy_pattern2-2.tres" id="3_ahckj"]
+[ext_resource type="Resource" uid="uid://dnuakb8dxa4lk" path="res://resources/enemy/harpy/pattern/harpy_pattern4-1.tres" id="4_6gebm"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="4_ahckj"]
+[ext_resource type="Resource" uid="uid://brbki733tlxfc" path="res://resources/enemy/harpy/pattern/harpy_pattern4-2.tres" id="5_xvnjv"]
+
+[resource]
+script = ExtResource("4_ahckj")
+patterns = Array[ExtResource("1_05j7f")]([ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("4_6gebm"), ExtResource("5_xvnjv"), ExtResource("4_6gebm")])
+loop_type = 0

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://vtekd023jx04"]
 
-[ext_resource type="Script" uid="uid://dcpxgvw6w1wsf" path="res://src/ui/ReadyPrompt.gd" id="1_577t6"]
+[ext_resource type="Script" uid="uid://dcpxgvw6w1wsf" path="res://scripts/ui/ReadyPrompt.gd" id="1_577t6"]
 [ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_bf0ab"]
 
 [node name="ReadyPrompt" type="CanvasLayer"]

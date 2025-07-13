@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1315qexpkx2j"]
 
-[ext_resource type="Script" uid="uid://bolohqcfnkoth" path="res://src/ui/GaugeManager.gd" id="1_30bkx"]
+[ext_resource type="Script" uid="uid://bolohqcfnkoth" path="res://scripts/ui/GaugeManager.gd" id="1_30bkx"]
 
 [node name="GaugeManager" type="Control"]
 layout_mode = 3

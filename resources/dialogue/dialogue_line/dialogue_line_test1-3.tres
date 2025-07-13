@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogueLine" load_steps=3 format=3 uid="uid://bm1bs0lwl8epd"]
+
+[ext_resource type="Texture2D" uid="uid://t0gxs4sf3kof" path="res://assets/gfx/sprites/felis_face_0.png" id="1_ww6pu"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://scripts/ui/DialogueLine.gd" id="2_pryc2"]
+
+[resource]
+script = ExtResource("2_pryc2")
+speaker_name = "フェリス"
+face_left = ExtResource("1_ww6pu")
+speaker_side = "left"
+box_direction = "left"
+text = "あーもう！
+邪魔しないでよねー！"
+metadata/_custom_type_script = "uid://dt7d57vf3s2pj"

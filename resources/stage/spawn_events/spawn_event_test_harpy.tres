@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpawnEvent" load_steps=3 format=3 uid="uid://bua288u4ma0n"]
+
+[ext_resource type="PackedScene" uid="uid://cjoen8mdlmhks" path="res://scenes/enemy/harpy.tscn" id="1_eyxbr"]
+[ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://scripts/systems/SpawnEvent.gd" id="1_ss8vo"]
+
+[resource]
+script = ExtResource("1_ss8vo")
+pattern = 2
+enemy_scenes = Array[PackedScene]([ExtResource("1_eyxbr")])
+count = 1
+interval = 0.4
+base_pos = Vector2(0, 0)
+metadata/_custom_type_script = "uid://cfkyg4rfgta2t"

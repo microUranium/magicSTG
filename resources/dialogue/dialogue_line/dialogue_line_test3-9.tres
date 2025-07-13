@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DialogueLine" load_steps=4 format=3 uid="uid://dcc8d43jwxe7g"]
+
+[ext_resource type="Texture2D" uid="uid://t0gxs4sf3kof" path="res://assets/gfx/sprites/felis_face_0.png" id="1_7udnu"]
+[ext_resource type="Texture2D" uid="uid://cwweknawc67jh" path="res://assets/gfx/sprites/harpy_face_0.png" id="2_vp6pf"]
+[ext_resource type="Script" uid="uid://dt7d57vf3s2pj" path="res://scripts/ui/DialogueLine.gd" id="3_ddgrm"]
+
+[resource]
+script = ExtResource("3_ddgrm")
+speaker_name = "ハーピー"
+face_left = ExtResource("1_7udnu")
+face_right = ExtResource("2_vp6pf")
+speaker_side = "right"
+box_direction = "right"
+text = "たっぷり可愛がった後にその魔力をぜーんぶ吸い尽くして…"
+metadata/_custom_type_script = "uid://dt7d57vf3s2pj"

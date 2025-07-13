@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://byxyawydpds61"]
 
-[ext_resource type="Script" uid="uid://bf8c8a2usyw4n" path="res://src/player/DefensiveBlessing.gd" id="1_4yxmm"]
+[ext_resource type="Script" uid="uid://bf8c8a2usyw4n" path="res://scripts/player/DefensiveBlessing.gd" id="1_4yxmm"]
 [ext_resource type="Texture2D" uid="uid://0mv41vko8xw0" path="res://assets/gfx/sprites/blessing_defensive_sprite.png" id="1_q4nia"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4yxmm"]

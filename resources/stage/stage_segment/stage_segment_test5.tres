@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StageSegment" load_steps=3 format=3 uid="uid://bc2efo8rc1u1g"]
+
+[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://scripts/systems/StageSegment.gd" id="1_nyl3m"]
+[ext_resource type="Resource" uid="uid://cqcoerd6rkbwn" path="res://resources/stage/wave_data/wave_data_test4.tres" id="2_nyl3m"]
+
+[resource]
+script = ExtResource("1_nyl3m")
+kind = 0
+wave_data = ExtResource("2_nyl3m")
+metadata/_custom_type_script = "uid://ws0w2wdc7ixc"

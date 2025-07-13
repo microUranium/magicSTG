@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://bvbeyhe0dkmwx"]
 
-[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://src/core/EnemyBase.gd" id="1_fy70o"]
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_fy70o"]
 [ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/gfx/sprites/enemy_a_sprite.png" id="2_vtk1f"]
-[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/player/HpNode.gd" id="3_xcpoi"]
-[ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://src/enemy/StraightMoveAI.gd" id="4_xjt1d"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_xcpoi"]
+[ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://scripts/enemy/StraightMoveAI.gd" id="4_xjt1d"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_cvnfo"]
 [ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://scenes/attackCores/enemy/projectile_core_enemy.tscn" id="6_2yrmr"]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bvbeyhe0dkmwx"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://src/EnemyBase.gd" id="1_8c1ik"]
-[ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/enemy/enemyA/enemy_a_sprite.png" id="1_f5a8l"]
+[ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/gfx/sprites/enemy_a_sprite.png" id="1_f5a8l"]
 [ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://assets/bullet_enemy/ProjectileBullet/projectile_core_enemy.tscn" id="2_jrb5u"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/HpNode.gd" id="4_jrb5u"]
 [ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://src/StraightMoveAI.gd" id="5_4utyh"]

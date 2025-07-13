@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://chn8es8hwl1ak"]
 
-[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://assets/enemy/destroy_particle.png" id="1_7r8gv"]
+[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://assets/gfx/effects/destroy_particle.png" id="1_7r8gv"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fpsj8"]
 blend_mode = 1

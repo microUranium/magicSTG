@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dypijchgmf00l"]
 
 [ext_resource type="Script" uid="uid://5edflsdac8ar" path="res://src/Fairy.gd" id="1_ac1c3"]
-[ext_resource type="Texture2D" uid="uid://bydxdctg7u4to" path="res://assets/fairy/fairy_sprite.png" id="2_24ktk"]
+[ext_resource type="Texture2D" uid="uid://bydxdctg7u4to" path="res://assets/gfx/sprites/fairy_sprite.png" id="2_24ktk"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://assets/attack_core_slot/attack_core_slot.tscn" id="3_rivsa"]
 
 [node name="Fairy" type="Node2D"]

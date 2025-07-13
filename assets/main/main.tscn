@@ -15,9 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://j2mvra4ldqkj" path="res://assets/message_box/dialogue_runner.tscn" id="13_74c7k"]
 [ext_resource type="Resource" uid="uid://d1ivxc7d53btm" path="res://assets/stage_manager/stage_segment/stage_segment_test6.tres" id="13_u3ouf"]
 [ext_resource type="Resource" uid="uid://bogsqux4kw7pm" path="res://assets/stage_manager/stage_segment/stage_segment_test_harpy.tres" id="14_m2px1"]
-[ext_resource type="AudioStream" uid="uid://bnsl7rxxvq8sq" path="res://assets/BGM/testStage_bgm.mp3" id="15_2lteh"]
+[ext_resource type="AudioStream" uid="uid://bnsl7rxxvq8sq" path="res://assets/audio/bgm/testStage_bgm.mp3" id="15_2lteh"]
 [ext_resource type="Resource" uid="uid://bg6fafco5bhcd" path="res://assets/stage_manager/stage_segment/stage_segment_test_7.tres" id="15_rknst"]
-[ext_resource type="AudioStream" uid="uid://c3v0b5o4h8qo2" path="res://assets/BGM/stageclear_bgm.mp3" id="16_2lteh"]
+[ext_resource type="AudioStream" uid="uid://c3v0b5o4h8qo2" path="res://assets/audio/bgm/stageclear_bgm.mp3" id="16_2lteh"]
 
 [node name="Main" type="Node2D"]
 

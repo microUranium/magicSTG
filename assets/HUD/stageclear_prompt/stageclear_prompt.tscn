@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dyvid60bl6wi7"]
 
-[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_2hfmh"]
+[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_2hfmh"]
 
 [node name="StageClearPrompt" type="CanvasLayer"]
 

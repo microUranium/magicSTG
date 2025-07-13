@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://10gihgm5jf3s"]
 
-[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="1_nhowy"]
+[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="1_nhowy"]
 
 [node name="GameOverPrompt" type="CanvasLayer"]
 

@@ -17,12 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-FlashUtility="*res://src/FlashUtility.gd"
-PlayArea="*res://src/PlayArea.gd"
-StageSignals="*res://src/StageSignals.gd"
-BgmController="*res://src/BGMController.gd"
-SfxManager="*res://src/SFXManager.gd"
-GameFlow="*res://src/GameFlow.gd"
+BgmController="*res://autoload/BGMController.gd"
+FlashUtility="*res://autoload/FlashUtility.gd"
+GameFlow="*res://autoload/GameFlow.gd"
+PlayArea="*res://autoload/PlayArea.gd"
+SfxManager="*res://autoload/SFXManager.gd"
+StageSignals="*res://autoload/StageSignals.gd"
 
 [display]
 

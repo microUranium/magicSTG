@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/enemy/enemyA/enemy_a_sprite.png" id="1_f5a8l"]
 [ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://assets/bullet_enemy/ProjectileBullet/projectile_core_enemy.tscn" id="2_jrb5u"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/HpNode.gd" id="4_jrb5u"]
-[ext_resource type="Script" uid="uid://bioj3lkr127po" path="res://src/StraightMoveAI.gd" id="5_4utyh"]
+[ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://src/StraightMoveAI.gd" id="5_4utyh"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://assets/attack_core_slot/attack_core_slot.tscn" id="5_82b1m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_erd6v"]

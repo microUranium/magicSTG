@@ -1,4 +1,4 @@
-extends "res://src/core/BulletBase.gd"
+extends BulletBase
 
 @export var speed: float = 500.0
 @export var direction: Vector2 = Vector2.UP

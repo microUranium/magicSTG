@@ -1,4 +1,4 @@
-extends "res://src/core/EnemyAIBase.gd"
+extends EnemyAIBase
 
 @export var turn_rate: float = 5.0
 @export var deceleration_rate: float = 10.0 # 速度減衰量 (per second)

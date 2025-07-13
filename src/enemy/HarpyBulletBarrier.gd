@@ -1,4 +1,4 @@
-extends "res://src/ProjectileBullet.gd"
+extends "res://src/player/ProjectileBullet.gd"
 class_name HarpyBulletBarrier
 
 @export var owner_path: NodePath

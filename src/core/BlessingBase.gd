@@ -1,4 +1,5 @@
 extends GaugeProvider
+class_name BlessingBase
 
 signal blessing_updated
 

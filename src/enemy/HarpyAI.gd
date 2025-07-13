@@ -1,4 +1,4 @@
-extends "res://src/core/EnemyPatternedAIBase.gd"
+extends EnemyPatternedAIBase
 class_name HarpyAI
 
 @export var phases: Array[PhaseResource] = [] # 各 Phase のパターンリソース

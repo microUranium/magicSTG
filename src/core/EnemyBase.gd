@@ -1,4 +1,5 @@
 extends Area2D
+class_name EnemyBase
 
 @export var destroy_particles_scene:PackedScene = preload("res://scenes/enemy/destroy_particle.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D

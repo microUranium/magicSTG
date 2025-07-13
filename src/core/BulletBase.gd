@@ -1,4 +1,5 @@
 extends Area2D
+class_name BulletBase
 
 @export var target_group: String = "enemies"
 @export var damage: int = 1

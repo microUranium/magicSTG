@@ -1,4 +1,5 @@
 extends Node
+class_name EnemyAIBase
 
 @export var base_speed: float = 100.0
 

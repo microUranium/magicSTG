@@ -1,4 +1,4 @@
-extends "res://src/core/BlessingBase.gd"
+extends BlessingBase
 
 signal shield_broken
 signal shield_recovered

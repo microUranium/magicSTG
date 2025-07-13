@@ -23,6 +23,7 @@ GameFlow="*res://autoload/GameFlow.gd"
 PlayArea="*res://autoload/PlayArea.gd"
 SfxManager="*res://autoload/SFXManager.gd"
 StageSignals="*res://autoload/StageSignals.gd"
+ItemDb="*res://autoload/ItemDB.gd"
 
 [display]
 

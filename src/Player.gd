@@ -6,7 +6,7 @@ signal game_over
 
 @export var speed: float = 200.0
 @export var equip_blessing_scene: PackedScene
-@export var destroy_particles_scene: PackedScene = preload("res://assets/player/destroy_particle_player.tscn")
+@export var destroy_particles_scene: PackedScene = preload("res://scenes/player/destroy_particle_player.tscn")
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var fairy_container := $FairyContainer

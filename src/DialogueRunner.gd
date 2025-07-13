@@ -3,7 +3,7 @@ class_name DialogueRunner
 
 signal dialogue_finished(dialogue_data: DialogueData)
 
-@export var message_box_scene: PackedScene = preload("res://assets/message_box/message_box.tscn")
+@export var message_box_scene: PackedScene = preload("res://scenes/ui/message_box.tscn")
 
 var _dialogue_data: DialogueData
 var _line_idx: int = 0

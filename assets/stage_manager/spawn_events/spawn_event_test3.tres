@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SpawnEvent" load_steps=3 format=3 uid="uid://q80ood7bumic"]
 
-[ext_resource type="PackedScene" uid="uid://byf8v6vbanosf" path="res://assets/enemy/enemyB/enemy_b.tscn" id="1_mitt3"]
+[ext_resource type="PackedScene" uid="uid://byf8v6vbanosf" path="res://scenes/enemy/enemy_b.tscn" id="1_mitt3"]
 [ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://src/SpawnEvent.gd" id="2_etxei"]
 
 [resource]

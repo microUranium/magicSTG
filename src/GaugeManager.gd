@@ -6,7 +6,7 @@ class_name GaugeManager
 ## ----------------------------------------
 
 @export_node_path("Control") var container_path : NodePath        # ゲージを並べるコンテナ
-var _gauge_scene : PackedScene = preload("res://assets/HUD/generic_gauge/generic_gauge.tscn")
+var _gauge_scene : PackedScene = preload("res://scenes/ui/generic_gauge.tscn")
 var _provider_map : Dictionary = {}        # provider(Node) -> gauge(Control)
 
 @onready var _container : Control = (

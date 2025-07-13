@@ -18,8 +18,8 @@ signal stage_cleared
 @export var inter_wave_delay := 2.0                     # Wave → 次 Segment 待機
 @export var ready_prompt_scene: PackedScene             # Optional "Ready?"
 @export var start_segment_idx: int = 0  # 開始時のセグメントインデックス
-@export var clear_prompt_scene: PackedScene = preload("res://assets/HUD/stageclear_prompt/stageclear_prompt.tscn")
-@export var gameover_prompt_scene: PackedScene = preload("res://assets/HUD/gameover_prompt/gameover_prompt.tscn")
+@export var clear_prompt_scene: PackedScene = preload("res://scenes/ui/stageclear_prompt.tscn")
+@export var gameover_prompt_scene: PackedScene = preload("res://scenes/ui/gameover_prompt.tscn")
 @export var player_path: NodePath
 
 # BGM

@@ -1,0 +1,56 @@
+[gd_scene load_steps=11 format=3 uid="uid://bvbeyhe0dkmwx"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://src/EnemyBase.gd" id="1_fy70o"]
+[ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/gfx/sprites/enemy_a_sprite.png" id="2_vtk1f"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://src/HpNode.gd" id="3_xcpoi"]
+[ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://src/StraightMoveAI.gd" id="4_xjt1d"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_cvnfo"]
+[ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://scenes/attackCores/enemy/projectile_core_enemy.tscn" id="6_2yrmr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erd6v"]
+atlas = ExtResource("2_vtk1f")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8c1ik"]
+atlas = ExtResource("2_vtk1f")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_erd6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8c1ik")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(40, 66)
+
+[node name="EnemyA" type="Area2D" groups=["enemies"]]
+script = ExtResource("1_fy70o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.953131
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_xcpoi")
+max_hp = 2
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("4_xjt1d")
+base_speed = 200.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("5_cvnfo")]
+default_core_scene = ExtResource("6_2yrmr")

@@ -1,7 +1,7 @@
 extends Node
 
-@export_file("*.tscn") var title_scene := "res://assets/title/title_screen.tscn"
-@export_file("*.tscn") var stage_scene := "res://assets/main/main.tscn"
+@export_file("*.tscn") var title_scene := "res://scenes/levels/title_screen.tscn"
+@export_file("*.tscn") var stage_scene := "res://scenes/levels/main.tscn"
 
 func _ready():
   change_to_title()

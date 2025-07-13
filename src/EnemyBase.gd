@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var destroy_particles_scene:PackedScene = preload("res://assets/enemy/destroy_particle.tscn")
+@export var destroy_particles_scene:PackedScene = preload("res://scenes/enemy/destroy_particle.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var slot := $AttackCoreSlot
 

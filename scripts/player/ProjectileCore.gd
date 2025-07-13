@@ -21,8 +21,13 @@ func _process(_delta: float) -> void:
 func _do_fire():
   if bullet_scene:
     set_gauge(0)  # 発射時にゲージをリセット
+    var parent := _find_bullet_parent()
+    if parent == null:
+      push_warning("ProjectileCore: No valid parent node found, aborting fire.")
+      return
+
     var bullet = bullet_scene.instantiate()
-    get_tree().current_scene.add_child(bullet)
+    parent.add_child(bullet)
 
     if _owner_actor:
       bullet.global_position = _owner_actor.global_position  # 親はSpirit

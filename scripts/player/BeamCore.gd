@@ -32,8 +32,13 @@ func trigger() -> void:  # ビームを打った後、すぐにクールダウ�
 
 func _do_fire():
   if beam_scene:
+    var parent := _find_bullet_parent()
+    if parent == null:
+      push_warning("ProjectileCore: No valid parent node found, aborting fire.")
+      return
+
     beam_instance = beam_scene.instantiate()
-    get_tree().current_scene.add_child(beam_instance)
+    parent.add_child(beam_instance)
 
     if _owner_actor:
       beam_instance.global_position = _owner_actor.global_position  # 親はSpirit

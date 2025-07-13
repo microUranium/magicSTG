@@ -90,3 +90,12 @@ func set_paused(state: bool) -> void:
     # ---- 再開処理 ----
     _cool_timer = get_tree().create_timer(cooldown_sec)
     _cool_timer.timeout.connect(_on_cooldown_finished)
+
+
+func _find_bullet_parent() -> Node:
+  # 実行シーンがあればそこへ
+  if get_tree().current_scene:
+    return get_tree().current_scene
+
+  # テストなどで current_scene が無いときは root へ
+  return get_tree().root

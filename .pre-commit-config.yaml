@@ -6,3 +6,4 @@ repos:
       - id: gdformat
         additional_dependencies: ["gdtoolkit==4.3.3"]
         types: [gdscript]
+        args: [--use-spaces=2, --check, autoload/, scripts/, tests/]

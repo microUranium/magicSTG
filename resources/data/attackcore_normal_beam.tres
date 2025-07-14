@@ -8,6 +8,9 @@ script = ExtResource("2_pye4m")
 projectile_scene = ExtResource("1_74b3g")
 damage_base = 1.0
 cooldown_sec_base = 4.0
+base_modifiers = {
+"beam_duration_sec": 2.0
+}
 id = &"attackcore_normal_beam"
 item_type = 1
 display_name = "攻撃核『光線』"

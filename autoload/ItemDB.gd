@@ -5,7 +5,7 @@ var _items := {}  # id → ItemBase
 
 func _ready() -> void:
   # 起動時に Resource フォルダを自動ロード
-  var dir := DirAccess.open("res://data/items")
+  var dir := DirAccess.open("res://resources/data")
   _scan_dir_recursive(dir)
 
 

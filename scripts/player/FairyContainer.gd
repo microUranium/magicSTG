@@ -4,35 +4,61 @@ signal fairy_added(fairy)
 signal fairy_removed(fairy)
 
 @export var fairy_scene: PackedScene
-@export var attack_core_scenes: Array[PackedScene] = []  # ★ プレイヤー装備中の攻撃核
-
+@export var debug_item_res: Array[ItemInstanceRes] = []  # デバッグ用アイテムリソース
 @export var circle_radius := 80.0
 @export var circle_rotate_speed := 180.0
 
 @export_enum("CIRCLE", "LINE") var formation: int = 0
 
+var attack_core_instance: Array[ItemInstance] = []  # ★ 装備中の攻撃核インスタンス
+var attack_core_nodes: Array[AttackCoreBase] = []  # ★ プレイヤー装備中の攻撃核
 var fairies: Array = []  # 生成済みの精霊
 var _circle_angle := 0.0
 
 
 func _ready():
+  # デバッグ用アイテムを生成
+  if attack_core_instance.size() == 0 and debug_item_res.size() > 0:
+    for res in debug_item_res:
+      var inst := res.to_instance()
+      attack_core_instance.append(inst)
+  # デバッグここまで
+
+  # アイテムインスタンスから攻撃核を取得
+  for inst in attack_core_instance:
+    if inst.prototype is AttackCoreItem:
+      var core: AttackCoreBase = equip_core(inst)
+      if core:
+        attack_core_nodes.append(core)
+
+  if attack_core_nodes.size() == 0:
+    push_error("FairyContainer: No attack cores found in the equipped items.")
+
   _spawn_all_from_cores()  # 装備リストぶん精霊を出す
 
 
 #────────────────────────────────
 # Public API
 #────────────────────────────────
-func set_attack_cores(cores: Array[PackedScene]) -> void:
+func set_attack_cores(cores: Array[AttackCoreBase]) -> void:
   ## 装備をまるごと入れ替えるヘルパ
   for f in fairies:
     despawn_fairy(f)
-  attack_core_scenes = cores.duplicate()
+  attack_core_nodes = cores.duplicate()
   _spawn_all_from_cores()
 
 
-func spawn_fairy(core_scene: PackedScene) -> Node:
-  if core_scene == null:
-    push_warning("FairyContainer: core_scene が null です")
+func equip_core(item_inst: ItemInstance) -> AttackCoreBase:
+  var proto := item_inst.prototype as AttackCoreItem
+  var core := proto.core_scene.instantiate() as AttackCoreBase
+  core.item_inst = item_inst  # ★ 注入
+  core.set_owner_actor(owner)
+  return core
+
+
+func spawn_fairy(core_node: AttackCoreBase) -> Node:
+  if core_node == null:
+    push_warning("FairyContainer: core_node が null です")
     return null
   if fairy_scene == null:
     push_warning("FairyContainer: fairy_scene が未設定です")
@@ -50,7 +76,7 @@ func spawn_fairy(core_scene: PackedScene) -> Node:
   # 攻撃核をセット
   var slot = f.get_node_or_null("AttackCoreSlot")
   if slot and slot.has_method("set_core"):
-    slot.set_core(core_scene)
+    slot.set_core(core_node)
 
   _recalc_offset_for(f, fairies.size() - 1)
   emit_signal("fairy_added", f)
@@ -77,8 +103,6 @@ func get_fairies() -> Array:
 #────────────────────────────────
 # Internal
 #────────────────────────────────
-
-
 func _process(delta):
   # if formation == 0:                              # CIRCLE
   #   _circle_angle = wrapf(
@@ -90,7 +114,7 @@ func _process(delta):
 
 
 func _spawn_all_from_cores() -> void:
-  for core_scene in attack_core_scenes:
+  for core_scene in attack_core_nodes:
     spawn_fairy(core_scene)
 
 
@@ -100,7 +124,7 @@ func update_offsets() -> void:
 
 
 func _recalc_offset_for(fairy: Node, idx: int) -> void:
-  var total: int = max(attack_core_scenes.size(), 1)  # 0 除算対策
+  var total: int = max(attack_core_nodes.size(), 1)  # 0 除算対策
   match formation:
     0:  # CIRCLE
       var base_angle := 360.0 * idx / total

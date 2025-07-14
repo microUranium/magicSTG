@@ -4,17 +4,33 @@ signal shield_broken
 signal shield_recovered
 signal shield_damaged
 
-@export var shield_max: int = 50
+var shield_max: int = 50
 var shield_current: int = 50
-@export var recover_delay: float = 5.0
+var recover_delay: float = 5.0
 var is_broken: bool = false
 
 var player_ref
 @onready var shield_sprite = $ShieldSprite
 
 
+func _recalc_stats() -> void:
+  # BlessingItem 側の base_modifiers を取り込み
+  shield_max = _proto.base_modifiers.shield_hp + int(_sum_add("shield_hp_add"))
+  shield_max = int(shield_max * (1.0 + _sum_pct("shield_hp_pct")))
+  recover_delay = (
+    _proto.base_modifiers.shield_recover_delay * (1.0 + _sum_pct("shield_recover_delay_pct"))
+  )
+
+  # 値が変わったらゲージ刷新
+  shield_current = shield_max
+  init_gauge("durability", shield_max, shield_current, "防壁の加護")
+  emit_signal("blessing_updated")
+
+
 func on_equip(player):
   player_ref = player
+  _recalc_stats()
+
   shield_current = shield_max
   is_broken = false
 

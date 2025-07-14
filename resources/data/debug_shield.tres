@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemInstanceRes" load_steps=4 format=3 uid="uid://vmmo8atuf1i3"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_1cps5"]
+[ext_resource type="Resource" uid="uid://3nngmwmi7ijo" path="res://resources/data/blessing_shield.tres" id="2_1cps5"]
+[ext_resource type="Script" uid="uid://d0h0idqbjmte0" path="res://scripts/item/ItemInstanceRes.gd" id="3_1nof1"]
+
+[resource]
+script = ExtResource("3_1nof1")
+prototype = ExtResource("2_1cps5")
+enchantments = Array[ExtResource("1_1cps5")]([])

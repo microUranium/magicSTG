@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="BlessingItem" load_steps=2 format=3 uid="uid://3nngmwmi7ijo"]
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=3 format=3 uid="uid://3nngmwmi7ijo"]
 
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1_qkv0m"]
+[ext_resource type="PackedScene" uid="uid://byxyawydpds61" path="res://scenes/blessings/defensive_blessing.tscn" id="1_xq25p"]
 
 [resource]
 script = ExtResource("1_qkv0m")
+blessing_scene = ExtResource("1_xq25p")
 base_modifiers = {
-"shield_hp": 10
+"shield_hp": 10,
+"shield_recover_delay": 10
 }
 id = &"blessing_shield"
 item_type = 0

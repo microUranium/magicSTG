@@ -63,6 +63,17 @@ func take_damage(amount: int) -> void:
     _apply_damage(final_damage)
 
 
+func pick_up(item: ItemInstance) -> void:
+  match item.prototype.item_type:
+    ItemBase.ItemType.ATTACK_CORE:
+      $AttackCoreSlot.set_core(item.prototype.core_scene)
+      # Enchantment をコアに適用するユーティリティが別途必要ならここで呼ぶ
+    ItemBase.ItemType.BLESSING:
+      $EquippedBlessings.equip(item)  # BlessingContainer 側で実装
+  # StageSignals.emit_signal("sfx_play_requested", "pickup_item", global_position, 0, 0)
+  # StageSignals.emit_signal("item_picked", item)  # UI などに通知
+
+
 func _apply_damage(damage):
   $HpNode.take_damage(damage)
   StageSignals.emit_signal("sfx_play_requested", "hit_player", global_position, 0, 0)

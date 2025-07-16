@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvbeyhe0dkmwx"]
+[gd_scene load_steps=13 format=3 uid="uid://bvbeyhe0dkmwx"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_fy70o"]
 [ext_resource type="Texture2D" uid="uid://cgwi7xpuwj2mw" path="res://assets/gfx/sprites/enemy_a_sprite.png" id="2_vtk1f"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_xcpoi"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_xcpoi"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_xjt1d"]
 [ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://scripts/enemy/StraightMoveAI.gd" id="4_xjt1d"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_cvnfo"]
 [ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://scenes/attackCores/enemy/projectile_core_enemy.tscn" id="6_2yrmr"]
@@ -34,6 +36,7 @@ size = Vector2(40, 66)
 
 [node name="EnemyA" type="Area2D" groups=["enemies"]]
 script = ExtResource("1_fy70o")
+drop_table = Array[ExtResource("2_xcpoi")]([ExtResource("3_xjt1d")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

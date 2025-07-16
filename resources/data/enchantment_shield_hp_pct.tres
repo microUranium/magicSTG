@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://b5ygisaornxxp"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_2jaqe"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2_w0fbm"]
+[ext_resource type="Resource" uid="uid://dv0hvspay58br" path="res://resources/data/tiers/tier_shield_hp_pct_1.tres" id="3_hm8sm"]
+[ext_resource type="Resource" uid="uid://ug21d27hr1g8" path="res://resources/data/tiers/tier_shield_hp_pct_2.tres" id="4_67b8p"]
+[ext_resource type="Resource" uid="uid://dufmb4iaxoi6x" path="res://resources/data/tiers/tier_shield_hp_pct_3.tres" id="5_a4in2"]
+
+[resource]
+script = ExtResource("1_2jaqe")
+id = &"shield_hp_pct"
+display_name = "堅固"
+description = ""
+tiers = Array[ExtResource("2_w0fbm")]([ExtResource("3_hm8sm"), ExtResource("4_67b8p"), ExtResource("5_a4in2")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

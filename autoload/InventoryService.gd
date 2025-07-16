@@ -6,13 +6,15 @@ const max_size := 100
 var _items: Array[ItemInstance] = []
 
 ## ────────── Signals ──────────
-signal changed                       # UI・セーブ系が Listen
-signal full(item: ItemInstance)      # 収納失敗時
+signal changed  # UI・セーブ系が Listen
+signal full(item: ItemInstance)  # 収納失敗時
 signal equipped(item: ItemInstance)  # 装備成功時（HUD 点滅など）
+
 
 ## ────────── API ──────────
 func get_items() -> Array[ItemInstance]:
   return _items.duplicate()
+
 
 func try_add(item: ItemInstance) -> bool:
   if _items.size() >= max_size:
@@ -23,13 +25,20 @@ func try_add(item: ItemInstance) -> bool:
   print_debug("Current inventory size: ", _items.size())
   var enchantments = item.enchantments
   if enchantments.size() > 0:
-    print_debug("Enchantments: ", enchantments[0].display_name, "x", enchantments[0].modifiers["level"])
+    print_debug(
+      "Item has enchantments: ",
+      enchantments.keys()[0].display_name,
+      " Level: ",
+      enchantments[enchantments.keys()[0]]
+    )
   changed.emit()
   return true
+
 
 func remove(item: ItemInstance) -> void:
   _items.erase(item)
   changed.emit()
+
 
 func request_equip(item: ItemInstance) -> bool:
   return true

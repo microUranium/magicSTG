@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnchantmentTier" load_steps=2 format=3 uid="uid://ug21d27hr1g8"]
+
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="1_mii8k"]
+
+[resource]
+script = ExtResource("1_mii8k")
+level = 2
+modifiers = {
+"shield_hp_pct": 1.0
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"

@@ -1,8 +1,11 @@
 extends Node
 
 var _rng := RandomNumberGenerator.new()
+const enchantment_max_count := 2  # 最大エンチャント数
 
 
+# -------------------------------------------------
+# Public API
 # -------------------------------------------------
 func spawn_drop(pos: Vector2, drop_table: Array[DropTableEntry]) -> void:
   for entry in drop_table:
@@ -13,19 +16,23 @@ func spawn_drop(pos: Vector2, drop_table: Array[DropTableEntry]) -> void:
 
 
 # -------------------------------------------------
+# Private Methods
+# -------------------------------------------------
 func _roll_enchantments(inst: ItemInstance, rule: EnchantmentRule) -> void:
   if rule == null or rule.pool.is_empty():
     return
-  var count: int = min(rule.max_count, int(_weighted_pick({0: 0.6, 1: 0.3, 2: 0.09, 3: 0.01})))
+  var count: int = min(enchantment_max_count, int(_weighted_pick(rule.count_weights)))
+  var table = rule.pool.duplicate()
   for i in count:
-    var enc: Enchantment = rule.pool.pick_random()
+    if table.is_empty():
+      break  # No more enchantments to pick
+    var enc: Enchantment = table.pick_random()
+    table.erase(enc)  # Remove to avoid duplicates
     var level: int = _weighted_pick(rule.level_weights)
     var enc_copy := enc.duplicate()
-    enc_copy.modifiers["level"] = level
-    inst.add_enchantment(enc_copy)
+    inst.add_enchantment(enc_copy, level)
 
 
-# -------------------------------------------------
 func _spawn_item_node(pos: Vector2, inst: ItemInstance) -> void:
   var scene := preload("res://scenes/items/dropped_item.tscn")
   var node := scene.instantiate()
@@ -37,7 +44,6 @@ func _spawn_item_node(pos: Vector2, inst: ItemInstance) -> void:
   get_tree().current_scene.add_child(node)
 
 
-# -------------------------------------------------
 func _weighted_pick(weights: Dictionary) -> Variant:
   var total := 0.0
   for v in weights.values():

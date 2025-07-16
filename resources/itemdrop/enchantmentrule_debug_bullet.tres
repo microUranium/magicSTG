@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnchantmentRule" load_steps=4 format=3 uid="uid://bxwj8m3hocamu"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_3lrwi"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="2_3lrwi"]
+[ext_resource type="Script" uid="uid://nasv7r61bej3" path="res://scripts/item/EnchantmentRule.gd" id="3_e7xso"]
+
+[resource]
+script = ExtResource("3_e7xso")
+max_count = 1
+level_weights = {
+1: 1.0,
+2: 0.0,
+3: 0.0
+}
+pool = Array[ExtResource("1_3lrwi")]([ExtResource("2_3lrwi")])

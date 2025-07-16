@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://d1s06gkc12ui4"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_6bm2h"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2_yo63d"]
+[ext_resource type="Resource" uid="uid://bm2l66nkho1ob" path="res://resources/data/tiers/tier_cooldown_pct_1.tres" id="3_ve2au"]
+[ext_resource type="Resource" uid="uid://bwvli2crfmm54" path="res://resources/data/tiers/tier_cooldown_pct_2.tres" id="4_r0cbw"]
+[ext_resource type="Resource" uid="uid://dvtoyhpjf7r8w" path="res://resources/data/tiers/tier_cooldown_pct_3.tres" id="5_jmw3k"]
+
+[resource]
+script = ExtResource("1_6bm2h")
+id = &"cooldown_pct"
+display_name = "速射"
+description = ""
+tiers = Array[ExtResource("2_yo63d")]([ExtResource("3_ve2au"), ExtResource("4_r0cbw"), ExtResource("5_jmw3k")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

@@ -24,8 +24,8 @@ PlayArea="*res://autoload/PlayArea.gd"
 SfxManager="*res://autoload/SFXManager.gd"
 StageSignals="*res://autoload/StageSignals.gd"
 ItemDb="*res://autoload/ItemDB.gd"
-Helpers="*res://autoload/Helpers.gd"
 LootSystem="*res://autoload/LootSystem.gd"
+Helpers="*res://autoload/Helpers.gd"
 InventoryService="*res://autoload/InventoryService.gd"
 
 [display]

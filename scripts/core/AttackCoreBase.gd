@@ -74,7 +74,8 @@ func _on_stats_updated() -> void:
 func _sum_pct(key: String) -> float:
   var total := 0.0
   for enc in item_inst.enchantments:
-    total += enc.modifiers.get(key, 0.0)
+    var modifiers := enc.get_modifiers(item_inst.enchantments[enc])
+    total += modifiers.get(key, 0.0)
   return total
 
 

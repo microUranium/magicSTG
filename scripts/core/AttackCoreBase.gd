@@ -63,6 +63,7 @@ func _do_fire() -> void:
 func _recalc_stats() -> void:
   # 共通パラメータ
   cooldown_sec = _proto.cooldown_sec_base * (1.0 - _sum_pct("cooldown_pct"))
+  cooldown_sec = max(cooldown_sec, 0.02)  # 最低クールダウンは 0.02 秒
   # ここで子クラス個別の再計算も呼ぶ
   _on_stats_updated()
 

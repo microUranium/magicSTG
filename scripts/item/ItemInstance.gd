@@ -1,7 +1,7 @@
 extends RefCounted
 class_name ItemInstance
 
-signal enchantment_added(enchant: Enchantment)
+signal enchantment_added(enchant: Enchantment, level: int)
 
 var prototype: ItemBase
 var enchantments: Dictionary[Enchantment, int] = {}  # enchant: level
@@ -25,4 +25,4 @@ func _init(p: ItemBase) -> void:
 
 func add_enchantment(enc: Enchantment, level: int) -> void:
   enchantments.set(enc, level)
-  emit_signal("enchantment_added", enc)
+  emit_signal("enchantment_added", enc, level)

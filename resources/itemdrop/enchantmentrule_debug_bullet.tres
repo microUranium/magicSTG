@@ -6,7 +6,11 @@
 
 [resource]
 script = ExtResource("3_e7xso")
-max_count = 1
+count_weights = {
+0: 0.6,
+1: 0.3,
+2: 0.1
+}
 level_weights = {
 1: 1.0,
 2: 0.0,

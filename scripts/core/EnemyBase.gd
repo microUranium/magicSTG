@@ -22,9 +22,9 @@ func take_damage(amount: int) -> void:
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  print("HP changed: ", current_hp, "/", max_hp)
   if current_hp <= 0:
     _spawn_destroy_particles()
+    _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
     queue_free()
 

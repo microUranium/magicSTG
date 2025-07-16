@@ -33,7 +33,6 @@ var item_inst: ItemInstance:
 # Public API
 #---------------------------------------------------------------------
 func trigger() -> void:
-  print_debug("paused: ", _paused, ", cooling: ", _cooling)
   if _paused:  # ← 停止中は撃たない
     return
   if _cooling:  # まだ冷却中

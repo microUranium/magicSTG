@@ -14,7 +14,6 @@ func take_damage(amount: int) -> void:
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  print("HP changed: ", current_hp, "/", max_hp)
   if current_hp <= max_hp * 0.5 and ai._phase_idx == 1:
     # Phase 1でHPが50%以下になったら次のフェーズへ
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行

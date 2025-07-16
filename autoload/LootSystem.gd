@@ -29,8 +29,11 @@ func _roll_enchantments(inst: ItemInstance, rule: EnchantmentRule) -> void:
 func _spawn_item_node(pos: Vector2, inst: ItemInstance) -> void:
   var scene := preload("res://scenes/items/dropped_item.tscn")
   var node := scene.instantiate()
+  if not node is DroppedItem:
+    push_error("Spawned node is not a DroppedItem instance.")
+    return
   node.global_position = pos
-  node.item_instance = inst  # export var
+  node.item_instance = inst
   get_tree().current_scene.add_child(node)
 
 

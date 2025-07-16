@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckxwukmh08a5p"]
+[gd_scene load_steps=4 format=3 uid="uid://ckxwukmh08a5p"]
 
 [ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="1_tfr3g"]
+[ext_resource type="Script" uid="uid://dusftmjboyxew" path="res://scripts/item/DroppedItem.gd" id="1_ukli2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ukli2"]
 size = Vector2(64, 64)
 
 [node name="DroppedItem" type="Area2D"]
+script = ExtResource("1_ukli2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_tfr3g")

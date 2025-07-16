@@ -2,14 +2,13 @@
 
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_i37wq"]
 [ext_resource type="Resource" uid="uid://b5ygisaornxxp" path="res://resources/data/enchantment_shield_hp_pct_50.tres" id="2_nfdyj"]
-[ext_resource type="Script" uid="uid://nasv7r61bej3" path="res://scripts/item/EnchantmentRule.gd" id="3_of737"]
+[ext_resource type="Script" path="res://scripts/item/EnchantmentRule.gd" id="3_of737"]
 
 [resource]
 script = ExtResource("3_of737")
 max_count = 1
 level_weights = {
-0: 0.7,
-1: 0.3,
+1: 1.0,
 2: 0.0,
 3: 0.0
 }

@@ -36,12 +36,14 @@ func process_damage(_player, damage):
 func _sum_pct(key: String) -> float:
   var t := 0.0
   for enc in item_inst.enchantments:
-    t += enc.modifiers.get(key, 0.0)
+    var modifiers := enc.get_modifiers(item_inst.enchantments[enc])
+    t += modifiers.get(key, 0.0)
   return t
 
 
 func _sum_add(key: String) -> float:
   var t := 0.0
   for enc in item_inst.enchantments:
-    t += enc.modifiers.get(key, 0)
+    var modifiers := enc.get_modifiers(item_inst.enchantments[enc])
+    t += modifiers.get(key, 0)
   return t

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DropTableEntry" load_steps=4 format=3 uid="uid://dccuu0cipycr7"]
+
+[ext_resource type="Resource" uid="uid://dccxdrkplr7b1" path="res://resources/itemdrop/enchantmentrule_debug_shield.tres" id="1_ujra5"]
+[ext_resource type="Resource" uid="uid://3nngmwmi7ijo" path="res://resources/data/blessing_shield.tres" id="2_wedj7"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="3_htetb"]
+
+[resource]
+script = ExtResource("3_htetb")
+prototype = ExtResource("2_wedj7")
+probability = 0.6
+enchant_rule = ExtResource("1_ujra5")

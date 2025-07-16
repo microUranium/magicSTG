@@ -5,6 +5,7 @@ class_name EnemyBase
 var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_particle.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var slot := $AttackCoreSlot
+@export var drop_table: Array[DropTableEntry] = []
 
 
 func _ready():
@@ -21,9 +22,9 @@ func take_damage(amount: int) -> void:
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  print("HP changed: ", current_hp, "/", max_hp)
   if current_hp <= 0:
     _spawn_destroy_particles()
+    _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
     queue_free()
 
@@ -34,3 +35,8 @@ func _spawn_destroy_particles():
     get_tree().current_scene.add_child(p)
     p.global_position = global_position
     p.restart()
+
+
+func _drop_item() -> void:
+  if drop_table.size() > 0:
+    LootSystem.spawn_drop(global_position, drop_table)

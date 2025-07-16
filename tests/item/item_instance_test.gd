@@ -10,10 +10,14 @@ func _before() -> void:
   _proto.display_name = "テスト加護"
   _proto.base_modifiers = {}
 
+  var tier: EnchantmentTier = EnchantmentTier.new()
+  tier.level = 1
+  tier.modifiers = {"hp_bonus": 10}
+
   _enc = Enchantment.new()
   _enc.id = "enc_test"
   _enc.display_name = "テストエンチャント"
-  _enc.modifiers = {"hp_bonus": 10}
+  _enc.tiers = [tier]
 
 
 # "quantity は常に 1"
@@ -27,8 +31,9 @@ func test_add_enchantment() -> void:
   var inst := ItemInstance.new(_proto)
   var emitter := monitor_signals(inst)
 
-  inst.add_enchantment(_enc)
+  inst.add_enchantment(_enc, 1)
 
-  await assert_signal(emitter).wait_until(50).is_emitted("enchantment_added", [_enc])
+  await assert_signal(emitter).wait_until(50).is_emitted("enchantment_added", [_enc, 1])
   assert_int(inst.enchantments.size()).is_equal(1)
-  assert_object(inst.enchantments[0]).is_equal(_enc)
+  assert_object(inst.enchantments.keys()[0]).is_equal(_enc)
+  assert_int(inst.enchantments.values()[0]).is_equal(1)

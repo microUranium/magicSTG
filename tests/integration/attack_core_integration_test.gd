@@ -26,9 +26,13 @@ func _pack_scene(node: Node) -> PackedScene:
 
 # Enchantment 生成
 func _enc_speed_up() -> Enchantment:
+  var tier := EnchantmentTier.new()
+  tier.level = 1
+  tier.modifiers = {"bullet_speed_pct": 0.25}  # 速度を 25% 増加
+
   var e := Enchantment.new()
   e.display_name = "速度+25%"
-  e.modifiers = {"bullet_speed_pct": 0.25}
+  e.tiers = [tier]
   return e
 
 
@@ -36,7 +40,7 @@ func _enc_speed_up() -> Enchantment:
 func test_projectile_core_with_instance() -> void:
   var proto := _make_attack_core_item()
   var inst := ItemInstance.new(proto)
-  inst.add_enchantment(_enc_speed_up())
+  inst.add_enchantment(_enc_speed_up(), 1)
 
   var core := proto.core_scene.instantiate() as AttackCoreBase
   core.item_inst = inst

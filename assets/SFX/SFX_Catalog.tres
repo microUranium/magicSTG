@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=9 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=10 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://b88om8tlih2pe" path="res://assets/audio/sfx/hit_player.wav" id="6_hxujo"]
 [ext_resource type="AudioStream" uid="uid://3bdxggov2t4p" path="res://assets/audio/sfx/gameover.wav" id="7_gl6cx"]
 [ext_resource type="AudioStream" uid="uid://b3o6p0nqbcwac" path="res://assets/audio/sfx/power_up_boss.wav" id="8_1e7oh"]
+[ext_resource type="AudioStream" uid="uid://b7623kptbukfr" path="res://assets/audio/sfx/get_item.wav" id="9_kghj2"]
 
 [resource]
 script = ExtResource("1_tnkwu")
@@ -16,6 +17,7 @@ table = Dictionary[String, AudioStream]({
 "destroy_enemy": ExtResource("3_grn6y"),
 "destroy_player": ExtResource("4_grn6y"),
 "gameover": ExtResource("7_gl6cx"),
+"get_item": ExtResource("9_kghj2"),
 "hit_enemy": ExtResource("5_t7eo4"),
 "hit_player": ExtResource("6_hxujo"),
 "power_up_boss": ExtResource("8_1e7oh")

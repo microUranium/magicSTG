@@ -1,6 +1,13 @@
-name: test
+name: GdUnit4 Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+
+permissions:
+  contents: read
+  checks: write
 
 jobs:
   gdunit4:
@@ -29,7 +36,8 @@ jobs:
       # 4) Always upload the HTML report artefact
       - name: Upload GdUnit report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gdunit-report
           path: reports
+          retention-days: 7

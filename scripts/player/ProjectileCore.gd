@@ -27,7 +27,7 @@ func _do_fire():
       push_warning("ProjectileCore: No valid parent node found, aborting fire.")
       return
 
-    var bullet: ProjectileBullet = _proto.projectile_scene.instantiate()
+    var bullet = _proto.projectile_scene.instantiate()
     parent.add_child(bullet)
 
     bullet.speed = _bullet_speed

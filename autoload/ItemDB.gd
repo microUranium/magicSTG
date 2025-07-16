@@ -1,24 +1,17 @@
 extends Node
 
 var _items := {}  # id → ItemBase
+const ITEM_DIR := "res://resources/data"
 
 
-func _ready() -> void:
-  # 起動時に Resource フォルダを自動ロード
-  var dir := DirAccess.open("res://resources/data")
-  _scan_dir_recursive(dir)
+func _ready():
+  var tic := Time.get_ticks_msec()
 
+  for file in DirAccess.get_files_at(ITEM_DIR):
+    if not file.ends_with(".tres"):
+      continue
+    var res: Resource = load("%s/%s" % [ITEM_DIR, file])
+    if res is ItemBase:
+      _items[res.id] = res
 
-func _scan_dir_recursive(dir: DirAccess) -> void:
-  for file in dir.get_files():
-    if file.get_extension() == "tres":
-      var res := load(dir.get_current_dir().path_join(file))
-      if res is ItemBase:
-        _items[res.id] = res
-  for sub in dir.get_directories():
-    var sub_dir := DirAccess.open(dir.get_current_dir().path_join(sub))
-    _scan_dir_recursive(sub_dir)
-
-
-func get_item(id: StringName) -> ItemBase:
-  return _items.get(id, null)
+  print("ItemDB: loaded %d items in %d ms" % [_items.size(), Time.get_ticks_msec() - tic])

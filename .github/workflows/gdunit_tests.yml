@@ -1,13 +1,6 @@
-name: GdUnit4 Tests
+name: test
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-
-permissions:
-  contents: read
-  checks: write
+on: [push, pull_request]
 
 jobs:
   gdunit4:

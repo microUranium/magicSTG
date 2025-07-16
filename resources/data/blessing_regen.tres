@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=2 format=3 uid="uid://bu5le1yukmyk1"]
+
+[ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1_4o0dt"]
+
+[resource]
+script = ExtResource("1_4o0dt")
+base_modifiers = {
+"regen_amount": 1,
+"regen_interval_sec": 5
+}
+id = &"blessing_regen"
+item_type = 0
+display_name = "回復の加護"
+description = "一定間隔で体力を回復します。"
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

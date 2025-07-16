@@ -4,17 +4,33 @@ signal shield_broken
 signal shield_recovered
 signal shield_damaged
 
-@export var shield_max: int = 50
+var shield_max: int = 50
 var shield_current: int = 50
-@export var recover_delay: float = 5.0
+var recover_delay: float = 5.0
 var is_broken: bool = false
 
 var player_ref
-@onready var shield_sprite = $ShieldSprite
+@onready var shield_sprite = get_node_or_null("ShieldSprite")
+
+
+func _recalc_stats() -> void:
+  # BlessingItem 側の base_modifiers を取り込み
+  shield_max = _proto.base_modifiers.shield_hp + int(_sum_add("shield_hp_add"))
+  shield_max = int(shield_max * (1.0 + _sum_pct("shield_hp_pct")))
+  recover_delay = (
+    _proto.base_modifiers.shield_recover_delay * (1.0 + _sum_pct("shield_recover_delay_pct"))
+  )
+
+  # 値が変わったらゲージ刷新
+  shield_current = shield_max
+  init_gauge("durability", shield_max, shield_current, "防壁の加護")
+  emit_signal("blessing_updated")
 
 
 func on_equip(player):
   player_ref = player
+  _recalc_stats()
+
   shield_current = shield_max
   is_broken = false
 
@@ -23,9 +39,10 @@ func on_equip(player):
     player_ref.connect("damage_received", Callable(self, "on_player_damaged"))
 
   # プレイヤーにシールドスプライトを配置する場合
-  player.add_child(shield_sprite)
-  shield_sprite.global_position = player.global_position
-  shield_sprite.play("idle")
+  if shield_sprite:
+    player.add_child(shield_sprite)
+    shield_sprite.global_position = player.global_position
+    shield_sprite.play("idle")
 
   # 汎用ゲージの初期化
   init_gauge("durability", shield_max, shield_current, "防壁の加護")
@@ -59,12 +76,14 @@ func on_player_damaged(damage):
   emit_signal("shield_damaged", shield_current, shield_max)
 
   if shield_current > 0:
-    shield_sprite.play("hit")
+    if shield_sprite:
+      shield_sprite.play("hit")
     get_tree().create_timer(0.1).connect("timeout", Callable(self, "_return_to_idle"))
   else:
     shield_current = 0
     is_broken = true
-    shield_sprite.play("break")
+    if shield_sprite:
+      shield_sprite.play("break")
     emit_signal("shield_broken")
     # 復活タイマー起動
     get_tree().create_timer(recover_delay).connect("timeout", Callable(self, "recover_shield"))
@@ -74,9 +93,10 @@ func recover_shield():
   shield_current = shield_max
   set_gauge(shield_current)  # 汎用ゲージの値を更新
   is_broken = false
-  shield_sprite.play("recover")
-  emit_signal("shield_recovered")
+  if shield_sprite:
+    shield_sprite.play("recover")
   get_tree().create_timer(0.1).connect("timeout", Callable(self, "_return_to_idle"))
+  emit_signal("shield_recovered")
 
 
 func _return_to_idle():

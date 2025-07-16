@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemInstanceRes" load_steps=5 format=3 uid="uid://b8v30v62mlylr"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_a7bo0"]
+[ext_resource type="Script" uid="uid://d0h0idqbjmte0" path="res://scripts/item/ItemInstanceRes.gd" id="2_8y0q7"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct_50.tres" id="2_c33f0"]
+[ext_resource type="Resource" uid="uid://btduv61qerhj" path="res://resources/data/attackcore_magic_bullet.tres" id="2_e6jj7"]
+
+[resource]
+script = ExtResource("2_8y0q7")
+prototype = ExtResource("2_e6jj7")
+enchantments = Array[ExtResource("1_a7bo0")]([ExtResource("2_c33f0")])

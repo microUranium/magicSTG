@@ -52,7 +52,7 @@ if echo "$GODOT_VERSION" | grep -i "mono" > /dev/null; then
 fi
 
 # Run the tests with the filtered arguments
-"$godot_bin" --path . -s -d res://addons/gdUnit4/bin/GdUnitCmdTool.gd $filtered_args
+"$godot_bin" --headless --path . -s -d res://addons/gdUnit4/bin/GdUnitCmdTool.gd $filtered_args
 exit_code=$?
 echo "Run tests ends with $exit_code"
 

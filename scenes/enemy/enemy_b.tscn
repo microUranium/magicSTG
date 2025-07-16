@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_m4udk"]
 [ext_resource type="Script" uid="uid://blw0hu0cpq7dn" path="res://scripts/enemy/LineHorizMoveAI.gd" id="4_f6cdp"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_xf0bn"]
-[ext_resource type="PackedScene" uid="uid://btbjrc7nbjq5d" path="res://scenes/attackCores/enemy/projectile_core_enemy.tscn" id="6_vgovg"]
+[ext_resource type="PackedScene" uid="uid://s7rdh1ihw4r1" path="res://scenes/attackCores/enemy/projectile_core_enemy_5_rapid_fire.tscn" id="6_un3wx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vbgx1"]
 atlas = ExtResource("2_ywadb")
@@ -53,4 +53,4 @@ script = ExtResource("4_f6cdp")
 base_speed = 200.0
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("5_xf0bn")]
-default_core_scene = ExtResource("6_vgovg")
+default_core_scene = ExtResource("6_un3wx")

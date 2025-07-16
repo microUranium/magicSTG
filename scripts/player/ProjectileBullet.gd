@@ -1,4 +1,5 @@
 extends BulletBase
+class_name ProjectileBullet
 
 @export var speed: float = 500.0
 @export var direction: Vector2 = Vector2.UP

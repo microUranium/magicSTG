@@ -16,23 +16,17 @@ func _ready() -> void:
 #-------------------------------------------------
 # Public API
 #-------------------------------------------------
-func set_core(core_scene: PackedScene) -> void:
-  # ① 既存コアを外す
+func set_core(core_input) -> void:
   clear_core()
 
-  # ② 新コアを生成して子に
-  core = core_scene.instantiate()
-  add_child(core)
+  if core_input is PackedScene:
+    core = core_input.instantiate()
+  elif core_input is AttackCoreBase:
+    core = core_input
+  else:
+    push_error("AttackCoreSlot: Invalid core input type. Expected PackedScene or AttackCoreBase.")
+    return
 
-  # ③ 必要なら親 (Fairy / Enemy) を渡す
-  if core.has_method("set_owner_actor"):
-    core.set_owner_actor(get_parent())
-
-  emit_signal("core_changed", core)
-
-
-func set_core_additive(core_scene: PackedScene) -> void:
-  core = core_scene.instantiate()
   add_child(core)
 
   # 必要なら親 (Fairy / Enemy) を渡す
@@ -40,6 +34,25 @@ func set_core_additive(core_scene: PackedScene) -> void:
     core.set_owner_actor(get_parent())
 
   emit_signal("core_changed", core)
+
+
+func set_core_additive(core_input) -> void:
+  var new_core: AttackCoreBase = null
+
+  if core_input is PackedScene:
+    new_core = core_input.instantiate()
+  elif core_input is AttackCoreBase:
+    new_core = core_input
+  else:
+    push_warning("AttackCoreSlot: Unsupported core_input type.")
+    return
+
+  add_child(new_core)
+
+  if new_core.has_method("set_owner_actor"):
+    new_core.set_owner_actor(get_parent())
+
+  emit_signal("core_changed", new_core)
 
 
 func clear_core() -> void:

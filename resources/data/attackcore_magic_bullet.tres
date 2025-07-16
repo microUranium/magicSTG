@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=4 format=3 uid="uid://btduv61qerhj"]
+
+[ext_resource type="PackedScene" uid="uid://c8dge426kwwql" path="res://scenes/attackCores/player/bullet.tscn" id="1_01gxq"]
+[ext_resource type="PackedScene" uid="uid://uk1k0t60775y" path="res://scenes/attackCores/player/bullet_core.tscn" id="1_6jnqk"]
+[ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="1_ypo2y"]
+
+[resource]
+script = ExtResource("1_ypo2y")
+core_scene = ExtResource("1_6jnqk")
+projectile_scene = ExtResource("1_01gxq")
+damage_base = 1.0
+cooldown_sec_base = 0.1
+base_modifiers = {
+"bullet_speed": 1000.0
+}
+id = &"attackcore_magic_bullet"
+item_type = 1
+display_name = "攻撃核『魔弾』"
+description = "高速連射可能な魔弾を発射します。"
+metadata/_custom_type_script = "uid://31siypvcpkwh"

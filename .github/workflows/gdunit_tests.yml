@@ -10,13 +10,33 @@ permissions:
   checks: write
 
 jobs:
-  test:
+  gdunit4:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-      - uses: MikeSchulze/gdunit4-action@v1
+
+      # 1) Download Headless Godot 4.4 (you can pin a version)
+      - name: Download Godot Headless
+        run: |
+          curl -L -o godot https://downloads.tuxfamily.org/godotengine/4.4.0-stable/mono/Godot_v4.4-stable_linux_headless.64.zip
+          unzip godot -d .
+          chmod +x Godot_v4.4-stable_linux_headless.64
+
+      # 2) make report dir so GdUnit won't error out
+      - name: Prepare report dir
+        run: mkdir -p reports
+
+      # 3) Run the tests
+      - name: Run GdUnit4 tests
+        run: |
+          ./Godot_v4.4-stable_linux_headless.64 --headless \
+            -s addons/gdUnit4/bin/gdunit_cmdln.gd -d \
+            "--gdunitHtmlReportDir=reports"
+
+      # 4) Always upload the HTML report artefact
+      - name: Upload GdUnit report
+        if: always()
+        uses: actions/upload-artifact@v3
         with:
-          godot-version: '4.4.1'
-          paths: 'res://tests'
-          publish-report: true
+          name: gdunit-report
+          path: reports

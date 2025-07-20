@@ -10,6 +10,6 @@
 script = ExtResource("1_2jaqe")
 id = &"shield_hp_pct"
 display_name = "堅固"
-description = ""
+description = "シールドの耐久力が上がります。"
 tiers = Array[ExtResource("2_w0fbm")]([ExtResource("3_hm8sm"), ExtResource("4_67b8p"), ExtResource("5_a4in2")])
 metadata/_custom_type_script = "uid://b1salw3wjfq77"

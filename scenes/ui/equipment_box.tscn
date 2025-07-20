@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://c75dex56tpcf7"]
+
+[ext_resource type="Texture2D" uid="uid://cs3t2ta6yp8s3" path="res://assets/gfx/sprites/felis_full_body.png" id="1_0md2j"]
+[ext_resource type="Texture2D" uid="uid://dbxnieavyv5pr" path="res://assets/gfx/sprites/waku_background.png" id="1_6my2e"]
+[ext_resource type="Texture2D" uid="uid://eqml38esesst" path="res://assets/gfx/sprites/faily_full_body.png" id="2_vdb7o"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="4_vdb7o"]
+
+[node name="EquipmentBox" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+modulate = Color(0.94, 0.376, 0.7426, 1)
+layout_mode = 0
+offset_right = 352.0
+offset_bottom = 426.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_6my2e")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 58.0
+offset_right = 256.0
+offset_bottom = 442.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_0md2j")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 398.0
+offset_right = 120.0
+offset_bottom = 526.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_vdb7o")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 443.0
+offset_top = 7.0
+offset_right = 587.0
+offset_bottom = 112.0
+theme_override_fonts/font = ExtResource("4_vdb7o")
+theme_override_font_sizes/font_size = 72
+text = "加護"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 443.0
+offset_top = 396.0
+offset_right = 587.0
+offset_bottom = 501.0
+theme_override_fonts/font = ExtResource("4_vdb7o")
+theme_override_font_sizes/font_size = 72
+text = "魔法"

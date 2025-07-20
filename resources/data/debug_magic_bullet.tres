@@ -9,5 +9,5 @@
 script = ExtResource("2_8y0q7")
 prototype = ExtResource("2_e6jj7")
 enchantments = Dictionary[ExtResource("1_a7bo0"), int]({
-ExtResource("2_c33f0"): 2
+ExtResource("2_c33f0"): 1
 })

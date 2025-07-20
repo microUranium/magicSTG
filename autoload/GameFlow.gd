@@ -1,7 +1,7 @@
 extends Node
 
 @export_file("*.tscn") var title_scene := "res://scenes/levels/title_screen.tscn"
-@export_file("*.tscn") var stage_scene := "res://scenes/levels/main.tscn"
+@export_file("*.tscn") var stage_scene := "res://scenes/levels/stage_root.tscn"
 
 
 #-------------------------------------------------

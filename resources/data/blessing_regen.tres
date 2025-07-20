@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="BlessingItem" load_steps=2 format=3 uid="uid://bu5le1yukmyk1"]
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=3 format=3 uid="uid://bu5le1yukmyk1"]
 
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1_4o0dt"]
+[ext_resource type="Texture2D" uid="uid://uh3ylg2y3bxw" path="res://assets/gfx/sprites/blessing_common_sprite.png" id="1_bywf7"]
 
 [resource]
 script = ExtResource("1_4o0dt")
@@ -12,4 +13,5 @@ id = &"blessing_regen"
 item_type = 0
 display_name = "回復の加護"
 description = "一定間隔で体力を回復します。"
+icon = ExtResource("1_bywf7")
 metadata/_custom_type_script = "uid://bclm6we4v4mkb"

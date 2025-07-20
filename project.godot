@@ -27,6 +27,8 @@ ItemDb="*res://autoload/ItemDB.gd"
 LootSystem="*res://autoload/LootSystem.gd"
 Helpers="*res://autoload/Helpers.gd"
 InventoryService="*res://autoload/InventoryService.gd"
+PlayerSaveData="*res://autoload/PlayerSaveData.gd"
+EquipSignals="*res://autoload/EquipSignals.gd"
 
 [display]
 

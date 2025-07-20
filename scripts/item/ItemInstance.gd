@@ -3,6 +3,7 @@ class_name ItemInstance
 
 signal enchantment_added(enchant: Enchantment, level: int)
 
+var uid: String = ""  # ユニークID
 var prototype: ItemBase
 var enchantments: Dictionary[Enchantment, int] = {}  # enchant: level
 
@@ -19,8 +20,12 @@ func get_quantity() -> int:  # 読み取り専用
 # -------------------
 
 
-func _init(p: ItemBase) -> void:
+func _init(p: ItemBase, _uid: String = "") -> void:
   prototype = p
+  if _uid == "":
+    uid = ResourceUID.id_to_text(ResourceUID.create_id())
+  else:
+    uid = _uid  # 外部から指定された場合はそのまま使用
 
 
 func add_enchantment(enc: Enchantment, level: int) -> void:

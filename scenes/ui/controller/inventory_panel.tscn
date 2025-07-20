@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4m80irnu0v7g"]
+
+[ext_resource type="Script" uid="uid://d3kjpgvhtj6a" path="res://scripts/ui/ItemGrid.gd" id="2_76hj5"]
+[ext_resource type="Texture2D" uid="uid://dbxnieavyv5pr" path="res://assets/gfx/sprites/waku_background.png" id="2_taj87"]
+[ext_resource type="Texture2D" uid="uid://cp5rdy7l0xi0s" path="res://assets/gfx/sprites/next_prev_button.png" id="3_76hj5"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_en4sb"]
+
+[node name="InventoryPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_right = 14.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+modulate = Color(0.369744, 0.585485, 0.929343, 1)
+layout_mode = 0
+offset_right = 201.0
+offset_bottom = 330.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_taj87")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="ItemListPane" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 40.0
+offset_top = 116.0
+offset_right = 52.0
+offset_bottom = 116.0
+
+[node name="InventoryGrid" type="GridContainer" parent="ItemListPane" node_paths=PackedStringArray("page_label")]
+layout_mode = 2
+columns = 5
+script = ExtResource("2_76hj5")
+page_label = NodePath("../PageControls/MarginContainer/Label")
+
+[node name="PageControls" type="HBoxContainer" parent="ItemListPane"]
+layout_mode = 2
+alignment = 1
+
+[node name="prev" type="Button" parent="ItemListPane/PageControls"]
+layout_mode = 2
+icon = ExtResource("3_76hj5")
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemListPane/PageControls"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="Label" type="Label" parent="ItemListPane/PageControls/MarginContainer"]
+layout_mode = 2
+text = "1/1"
+
+[node name="next" type="Button" parent="ItemListPane/PageControls"]
+layout_mode = 2
+icon = ExtResource("3_76hj5")
+flat = true
+
+[node name="Sort" type="Button" parent="ItemListPane"]
+layout_mode = 2
+text = "ソート"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 14.0
+offset_right = 167.0
+offset_bottom = 119.0
+theme_override_fonts/font = ExtResource("3_en4sb")
+theme_override_font_sizes/font_size = 48
+text = "持ち物"

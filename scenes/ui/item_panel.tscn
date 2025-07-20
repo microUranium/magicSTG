@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://8thercflikhy"]
+
+[ext_resource type="Script" uid="uid://gkkj1iptrmrd" path="res://scripts/ui/ItemSlotPanel.gd" id="1_0k6an"]
+[ext_resource type="Texture2D" uid="uid://blumcv3j6ckbi" path="res://assets/gfx/sprites/item_panel_base.png" id="1_ogmfo"]
+[ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="1_oqpv0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eojn8"]
+texture = ExtResource("1_ogmfo")
+
+[node name="ItemPanel" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxTexture_eojn8")
+script = ExtResource("1_0k6an")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_oqpv0")

@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlv5tsm5uecbo"]
+
+[ext_resource type="Script" uid="uid://ypmi6cxkohln" path="res://scripts/ui/ItemTooltipPanel.gd" id="1_qfmde"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="2_5fejo"]
+[ext_resource type="Texture2D" uid="uid://dbxnieavyv5pr" path="res://assets/gfx/sprites/waku_background.png" id="2_52hd1"]
+
+[node name="ItemTooltipPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qfmde")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 220.0
+texture = ExtResource("2_52hd1")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 458.0
+offset_bottom = 208.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_5fejo")
+theme_override_font_sizes/font_size = 24
+text = "名前"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_5fejo")
+theme_override_font_sizes/font_size = 24
+text = "種類"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_5fejo")
+theme_override_font_sizes/normal_font_size = 24
+text = "アイテム説明"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer"]
+modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_5fejo")
+theme_override_font_sizes/normal_font_size = 24
+text = "エンチャント"
+fit_content = true

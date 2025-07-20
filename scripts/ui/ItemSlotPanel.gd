@@ -27,7 +27,7 @@ func _refresh():
   queue_redraw()
 
 
-## Drag &amp; Drop -------------------------------------------------------
+## Drag & Drop -------------------------------------------------------
 # Drag 開始
 func _get_drag_data(_pos):
   if data == null:

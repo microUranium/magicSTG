@@ -1,5 +1,5 @@
 extends GridContainer
-class_name InventoryGrid
+class_name ItemGrid
 
 ## Constants -----------------------------------------------------------
 const SLOTS_PER_PAGE := 30
@@ -39,7 +39,7 @@ func current_page() -> int:
 
 
 func max_page() -> int:
-  return _pages.size() - 1
+  return _pages.size()
 
 
 ## Signals -------------------------------------------------------------
@@ -58,7 +58,7 @@ func _recalc_pages():
 
 
 func next_page():
-  if _page < max_page():
+  if _page < max_page() - 1:
     _page += 1
     _populate()
 
@@ -87,7 +87,7 @@ func _populate():
     add_child(slot)
 
   # ページラベル更新
-  page_label.text = "%d / %d" % [_page + 1, max_page() + 1]
+  page_label.text = "%d / %d" % [_page + 1, max_page()]
 
   emit_signal("ui_needs_refresh")
 

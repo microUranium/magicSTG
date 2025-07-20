@@ -157,7 +157,7 @@ func _can_accept(panel: Node, data: ItemPanelData) -> bool:
 func _collect_inventory_items() -> Array[ItemPanelData]:
   var items: Array[ItemPanelData] = []
   # 全ページのアイテムを収集
-  for page in range(grid.max_page() + 1):
+  for page in range(grid.max_page()):
     if page == grid.current_page():
       for slot in grid.get_children():
         if slot is ItemSlotPanel and slot.data != null:
@@ -170,10 +170,10 @@ func _collect_inventory_items() -> Array[ItemPanelData]:
 
 
 func _update_nav():
-  btn_prev.visible = grid.max_page() > 0
-  btn_next.visible = grid.max_page() > 0
+  btn_prev.visible = grid.max_page() > 1
+  btn_next.visible = grid.max_page() > 1
   btn_prev.disabled = grid.current_page() == 0
-  btn_next.disabled = grid.current_page() == grid.max_page()
+  btn_next.disabled = grid.current_page() == grid.max_page() - 1
 
 
 # ページング

@@ -3,10 +3,13 @@ class_name ResultInventory
 
 @onready var grid_inv := $InventoryPanel/ItemListPane/InventoryGrid
 @onready var grid_results := $ResultInventoryPanel/ItemListPane/InventoryGrid
+@onready var result_panel := $ResultInventoryPanel
 @onready var tooltip := $ItemTooltipPanel
 @onready var back_btn := $BackButton
 @onready var bring_all_items_btn := $BringAllItemsFromResultInventory
 @onready var debug_label := $Debug
+
+@export var generic_popup_window := preload("res://scenes/ui/generic_pop-up_window.tscn")
 
 
 #---------------------------------------------------------------------
@@ -20,6 +23,7 @@ func _ready():
   back_btn.connect("pressed", _on_back_pressed)
   bring_all_items_btn.connect("pressed", _on_bring_all_items_from_result_inventory_pressed)
   await get_tree().process_frame
+  result_panel.change_label_text("取得アイテム")
   _show_result_items()  # 結果アイテムを表示
   _load_inventory()  # 初期化時にインベントリを読み込む
 
@@ -159,6 +163,14 @@ func _on_request_show_item(item: ItemInstance):
 
 
 func _on_back_pressed():
+  if grid_results.get_items().size() > 0:
+    _show_popup_dialogue("取得アイテム欄にあるアイテムは失われます。", _on_ok_pressed)
+  else:
+    _on_ok_pressed()
+
+
+func _on_ok_pressed():
+  # OKボタンが押されたときの処理
   Ephemeralnventory.clear()
   # タイトルへ戻る
   GameFlow.change_to_title()
@@ -182,6 +194,14 @@ func _on_bring_all_items_from_result_inventory_pressed():
 
   grid_inv.set_items(inv_items)
   grid_results.set_items(result_items)
+
+
+func _show_popup_dialogue(message: String, on_ok: Callable):
+  var dialogue: GenericPopupWindow = generic_popup_window.instantiate()
+  get_tree().current_scene.add_child(dialogue)
+  dialogue.set_message(message)
+  dialogue.ok_pressed.connect(on_ok)
+  dialogue.cancel_pressed.connect(func(): dialogue.queue_free())  # ダイアログを閉じる
 
 
 func _process(delta: float) -> void:

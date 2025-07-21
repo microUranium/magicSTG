@@ -5,6 +5,7 @@ class_name InventoryPanel
 @onready var btn_prev := $ItemListPane/PageControls/prev
 @onready var btn_next := $ItemListPane/PageControls/next
 @onready var sort_btn := $ItemListPane/Sort
+@onready var panel_label := $Label
 
 var _current_sort: int = ItemBase.ItemType.ATTACK_CORE  # 現在のソート状態
 
@@ -41,3 +42,7 @@ func _on_sort_pressed():
   # ソートボタンの表示更新
   var type_names := ["加護", "魔法"]
   sort_btn.text = "ソート: %s" % type_names[_current_sort]
+
+
+func change_label_text(text: String):
+  panel_label.text = text

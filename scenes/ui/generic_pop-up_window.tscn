@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7dks5lo637rp"]
+
+[ext_resource type="Script" uid="uid://csss21736nxdi" path="res://scripts/ui/GenericPopupWindow.gd" id="1_xn2eg"]
+[ext_resource type="Texture2D" uid="uid://dbxnieavyv5pr" path="res://assets/gfx/sprites/waku_background.png" id="2_kxrmr"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_2n3hy"]
+
+[node name="GenericPop-upWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xn2eg")
+
+[node name="ClickableArea" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -480.0
+offset_right = 640.0
+offset_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -110.0
+offset_right = 250.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_kxrmr")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="Label" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 389.0
+offset_right = 868.0
+offset_bottom = 516.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_2n3hy")
+theme_override_font_sizes/normal_font_size = 28
+text = "取得アイテム欄にあるアイテムは破棄されます"
+autowrap_mode = 1
+
+[node name="OK" type="Button" parent="."]
+layout_mode = 0
+offset_left = 421.0
+offset_top = 520.0
+offset_right = 601.0
+offset_bottom = 570.0
+theme_override_fonts/font = ExtResource("3_2n3hy")
+theme_override_font_sizes/font_size = 28
+text = "ОＫ"
+
+[node name="Cancel" type="Button" parent="."]
+layout_mode = 0
+offset_left = 678.0
+offset_top = 520.0
+offset_right = 858.0
+offset_bottom = 570.0
+theme_override_fonts/font = ExtResource("3_2n3hy")
+theme_override_font_sizes/font_size = 28
+text = "キャンセル"

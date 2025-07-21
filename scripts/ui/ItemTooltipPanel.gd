@@ -44,6 +44,5 @@ func _process(_delta: float) -> void:
   var pos := vp.get_mouse_position() + OFFSET
   # 画面外にはみ出さないようクランプ
   var rect := Rect2(Vector2.ZERO, vp.get_visible_rect().size)
-  rect.position += Vector2(MARGIN_X, MARGIN_Y)
-  rect.size -= Vector2(MARGIN_X * 2, MARGIN_Y * 2)
+  rect.size -= Vector2(MARGIN_X, MARGIN_Y)
   global_position = pos.clamp(rect.position, rect.position + rect.size)

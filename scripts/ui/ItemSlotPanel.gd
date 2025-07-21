@@ -61,3 +61,10 @@ func _on_hover():
 
 func _on_hover_exit():
   EquipSignals.request_show_item.emit(null)  # アイテム情報を非表示
+
+
+func _gui_input(event):
+  if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+    if data == null:
+      return
+    EquipSignals.swap_to_each_grid.emit(self, get_parent())  # 別のインベントリへのアイテム移動要求

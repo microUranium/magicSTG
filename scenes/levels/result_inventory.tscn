@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://bv1w32bl27ptg"]
+
+[ext_resource type="Script" uid="uid://danufyfafddic" path="res://scripts/systems/ResultInventory.gd" id="1_0e7j2"]
+[ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="1_pu8yt"]
+[ext_resource type="PackedScene" uid="uid://d4m80irnu0v7g" path="res://scenes/ui/controller/inventory_panel.tscn" id="2_6v0vp"]
+[ext_resource type="PackedScene" uid="uid://dlv5tsm5uecbo" path="res://scenes/ui/tooltip_panel.tscn" id="4_743wv"]
+[ext_resource type="PackedScene" uid="uid://bug7l77qgl7ep" path="res://scenes/ui/back_button.tscn" id="4_g43v5"]
+
+[node name="ResultInventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0e7j2")
+
+[node name="BackGround" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_pu8yt")
+stretch_mode = 1
+
+[node name="ResultInventoryPanel" parent="." instance=ExtResource("2_6v0vp")]
+offset_left = 101.0
+offset_top = 146.0
+offset_right = 113.0
+offset_bottom = 146.0
+
+[node name="InventoryPanel" parent="." instance=ExtResource("2_6v0vp")]
+offset_left = 765.0
+offset_top = 148.0
+offset_right = 777.0
+offset_bottom = 148.0
+
+[node name="BackButton" parent="." instance=ExtResource("4_g43v5")]
+layout_mode = 0
+offset_left = 1067.0
+offset_top = 824.0
+offset_right = 1131.0
+offset_bottom = 872.0
+scale = Vector2(2, 2)
+
+[node name="BringAllItemsFromResultInventory" type="Button" parent="."]
+layout_mode = 0
+offset_left = 564.0
+offset_top = 462.0
+offset_right = 716.0
+offset_bottom = 520.0
+theme_override_font_sizes/font_size = 36
+text = "一括移動"
+
+[node name="ItemTooltipPanel" parent="." instance=ExtResource("4_743wv")]
+layout_mode = 1
+
+[node name="Debug" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

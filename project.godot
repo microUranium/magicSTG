@@ -29,6 +29,7 @@ Helpers="*res://autoload/Helpers.gd"
 InventoryService="*res://autoload/InventoryService.gd"
 PlayerSaveData="*res://autoload/PlayerSaveData.gd"
 EquipSignals="*res://autoload/EquipSignals.gd"
+Ephemeralnventory="*res://autoload/Ephemeralnventory.gd"
 
 [display]
 

@@ -206,13 +206,15 @@ func _load_items(root: Dictionary) -> void:
     var i := _deserialize_item(e)
     if i:
       uid2inst[i.uid] = i
-      InventoryService.try_add(i)
+      if i.uid not in equipped_uids:
+        InventoryService.try_add(i)
 
   for e in bl_raw:
     var i := _deserialize_item(e)
     if i:
       uid2inst[i.uid] = i
-      InventoryService.try_add(i)
+      if i.uid not in equipped_uids:
+        InventoryService.try_add(i)
 
   # 2) 装備を組み立て
   var eq := _Equipment.new()

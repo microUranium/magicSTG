@@ -30,6 +30,16 @@
             "level": 3.0
           }
         ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_4",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 3.0
+          }
+        ]
       }
     ],
     "blessings": [

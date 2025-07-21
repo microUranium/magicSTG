@@ -51,6 +51,7 @@ func _load_inventory():
     else:
       list.append(d)
 
+  print_debug("Loaded inventory items: %d" % list.size())
   grid.set_items(list)
   # ソート状態を初期化
   _on_sort_pressed()
@@ -214,8 +215,10 @@ func _on_save_pressed():
   PlayerSaveData.set_attack_cores(new_equipment_attack_core)
   PlayerSaveData.set_blessings(new_equipment_blessings)
 
-  #シーン再読み込み
-  get_tree().reload_current_scene()
+  # TODO: 保存処理
+
+  # タイトルへ戻る
+  GameFlow.change_to_title()
 
 
 func _on_request_show_item(item: ItemInstance):

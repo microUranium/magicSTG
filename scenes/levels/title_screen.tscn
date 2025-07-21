@@ -38,3 +38,12 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/normal_font_size = 40
 text = "Press Any Key"
+
+[node name="SwitchToEquipmentButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 483.0
+offset_top = 676.0
+offset_right = 779.0
+offset_bottom = 783.0
+theme_override_font_sizes/font_size = 72
+text = "装備画面"

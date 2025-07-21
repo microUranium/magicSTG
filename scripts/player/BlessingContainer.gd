@@ -1,10 +1,8 @@
 extends Node
 class_name BlessingContainer
 
-## デバッグ用 : Editor で複数個ドラッグできる
-@export var debug_item_res: Array[ItemInstanceRes] = []
-
 ## 実行時に保持する加護
+var blessing_instances: Array[ItemInstance] = []  # 装備中の加護アイテムインスタンス
 var blessings: Array[BlessingBase] = []
 var _player: Node2D  # 親 Player 参照
 
@@ -15,10 +13,14 @@ signal blessing_unequipped(blessing)
 #──────────────────────────────────────────────
 func _ready() -> void:
   _player = get_parent()  # = Player
-  # デバッグ装備
-  if blessings.is_empty() and debug_item_res.size() > 0:
-    for res in debug_item_res:
-      equip_res(res)
+
+  _load_blessings_from_savedata()
+
+  for item in blessing_instances:
+    if item.prototype.item_type == ItemBase.ItemType.BLESSING:
+      equip_instance(item)
+    else:
+      push_warning("BlessingContainer: Item is not BlessingItem")
 
 
 # 装備系 API -------------------------------------------------------
@@ -55,3 +57,16 @@ func process_damage(player: Node2D, raw_damage: int) -> int:
   for b in blessings:
     final = b.process_damage(player, final)
   return final
+
+
+func _load_blessings_from_savedata() -> void:
+  var equipments = PlayerSaveData.get_blessings()
+  if not equipments:
+    push_warning("BlessingContainer: No equipment data found.")
+    return
+
+  for item in equipments:
+    if item is ItemInstance and item.prototype.item_type == ItemBase.ItemType.BLESSING:
+      blessing_instances.append(item)
+    else:
+      push_warning("BlessingContainer: Item is not BlessingItem")

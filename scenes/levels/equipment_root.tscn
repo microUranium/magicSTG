@@ -23,9 +23,9 @@ stretch_mode = 1
 
 [node name="InventoryPanel" parent="." instance=ExtResource("2_3jaj2")]
 offset_left = 789.0
-offset_top = 262.0
+offset_top = 74.0
 offset_right = 801.0
-offset_bottom = 262.0
+offset_bottom = 74.0
 
 [node name="EquipmentBox" parent="." instance=ExtResource("3_s35cl")]
 layout_mode = 1
@@ -79,13 +79,13 @@ offset_right = 611.0
 offset_bottom = 824.0
 allowed_type = 1
 
-[node name="ItemTooltipPanel" parent="." instance=ExtResource("5_mrksw")]
-layout_mode = 1
-
 [node name="BackButton" parent="." instance=ExtResource("7_wqlw7")]
 layout_mode = 0
 offset_left = 1067.0
-offset_top = 82.0
+offset_top = 824.0
 offset_right = 1131.0
-offset_bottom = 130.0
+offset_bottom = 872.0
 scale = Vector2(2, 2)
+
+[node name="ItemTooltipPanel" parent="." instance=ExtResource("5_mrksw")]
+layout_mode = 1

@@ -4,7 +4,6 @@ signal fairy_added(fairy)
 signal fairy_removed(fairy)
 
 @export var fairy_scene: PackedScene
-@export var debug_item_res: Array[ItemInstanceRes] = []  # デバッグ用アイテムリソース
 @export var circle_radius := 80.0
 @export var circle_rotate_speed := 180.0
 
@@ -17,12 +16,7 @@ var _circle_angle := 0.0
 
 
 func _ready():
-  # デバッグ用アイテムを生成
-  if attack_core_instance.size() == 0 and debug_item_res.size() > 0:
-    for res in debug_item_res:
-      var inst := res.to_instance()
-      attack_core_instance.append(inst)
-  # デバッグここまで
+  _load_attack_core_from_savedata()
 
   # アイテムインスタンスから攻撃核を取得
   for inst in attack_core_instance:
@@ -134,3 +128,16 @@ func _recalc_offset_for(fairy: Node, idx: int) -> void:
       fairy.offset = Vector2(30 * (idx + 1), -20)
     _:
       fairy.offset = Vector2.ZERO
+
+
+func _load_attack_core_from_savedata() -> void:
+  var equipments = PlayerSaveData.get_attack_cores()
+  if not equipments:
+    push_warning("FairyContainer: No equipment data found.")
+    return
+
+  for item in equipments:
+    if item is ItemInstance and item.prototype.item_type == ItemBase.ItemType.ATTACK_CORE:
+      attack_core_instance.append(item)
+    else:
+      push_warning("FairyContainer: Invalid item instance in savedata.")

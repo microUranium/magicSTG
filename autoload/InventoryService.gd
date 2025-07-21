@@ -1,6 +1,6 @@
 extends Node
 
-const INVENTORY_MAX_SIZE := 100
+const INVENTORY_MAX_SIZE := 240
 
 ## 内部状態は完全カプセル化
 var _items: Array[ItemInstance] = []

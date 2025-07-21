@@ -46,6 +46,6 @@ func _process(delta: float) -> void:
 
 func _on_area_entered(body: Node) -> void:
   if body is Player:
-    if InventoryService.try_add(item_instance):
-      StageSignals.emit_signal("sfx_play_requested", "get_item", global_position, 0, 0)
-      queue_free()
+    Ephemeralnventory.add(item_instance)
+    StageSignals.emit_signal("sfx_play_requested", "get_item", global_position, 0, 0)
+    queue_free()

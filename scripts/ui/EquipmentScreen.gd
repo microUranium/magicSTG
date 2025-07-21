@@ -2,60 +2,37 @@ extends Control
 class_name EquipmentScreen
 
 @onready var grid := $InventoryPanel/ItemListPane/InventoryGrid
-@onready var btn_prev := $InventoryPanel/ItemListPane/PageControls/prev
-@onready var btn_next := $InventoryPanel/ItemListPane/PageControls/next
 @onready var tooltip := $ItemTooltipPanel
-@onready var sort_btn := $InventoryPanel/ItemListPane/Sort
 @onready var save_btn := $BackButton
-
-var _current_sort: int = ItemBase.ItemType.ATTACK_CORE  # 現在のソート状態
 
 
 func _ready():
   # Signal 接続
-  grid.ui_needs_refresh.connect(_update_nav)
-  EquipSignals.page_changed.connect(_update_nav)
   EquipSignals.swap_request.connect(_on_swap_request)
   EquipSignals.return_item_to_inventory.connect(_on_return_item_to_inventory)
   EquipSignals.request_show_item.connect(_on_request_show_item)
   # PlayerSaveData.data_loaded.connect(_set_inventory)
 
   save_btn.connect("pressed", _on_save_pressed)
-  sort_btn.connect("pressed", _on_sort_pressed)
-  btn_prev.connect("pressed", _on_prev_pressed)
-  btn_next.connect("pressed", _on_next_pressed)
   await get_tree().process_frame
   _load_inventory()  # 初期化時にインベントリを読み込む
 
 
 func _load_inventory():
-  var equipped_attack_core_uid: Array[String] = []
-  var equipped_blessings_uid: Array[String] = []
-
-  for item in PlayerSaveData.get_attack_cores():
-    equipped_attack_core_uid.append(item.uid)
-
-  for item in PlayerSaveData.get_blessings():
-    equipped_blessings_uid.append(item.uid)
+  for item in PlayerSaveData.get_all_equipped_items():
+    var d := ItemPanelData.new()
+    d.inst = item
+    _set_equipment(d)
 
   var list: Array[ItemPanelData] = []
   for inst in InventoryService.get_items():
     var d := ItemPanelData.new()
     d.inst = inst
-    if inst.uid in equipped_attack_core_uid:
-      _set_equipment(d)  # 装備スロットへ配置
-      continue
-    elif inst.uid in equipped_blessings_uid:
-      _set_equipment(d)  # 装備スロットへ配置
-      continue
-    else:
-      list.append(d)
+    list.append(d)
 
   print_debug("Loaded inventory items: %d" % list.size())
   grid.set_items(list)
-  # ソート状態を初期化
-  _on_sort_pressed()
-  _update_nav()
+  grid.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
 
 
 func _set_equipment(data: ItemPanelData):
@@ -79,12 +56,15 @@ func _set_equipment(data: ItemPanelData):
 func _on_swap_request(src: Node, dst: Node):
   _swap_items(src, dst)
   grid.set_items(_collect_inventory_items())  # 再配置
-  _update_nav()
+  grid.emit_signal("ui_needs_refresh")
 
 
 func _on_return_item_to_inventory(pane: Node):
-  print_debug("Returning item to inventory from pane: ", pane.name)
-  if pane is EquipSlotPanel and pane.data:
+  if (
+    pane is EquipSlotPanel
+    and pane.data
+    and _collect_inventory_items().size() < InventoryService.get_max_size()
+  ):
     # 装備スロットからインベントリへ戻す
     var item: ItemPanelData = pane.data
     var items: Array[ItemPanelData] = grid.get_items()
@@ -121,6 +101,12 @@ func _swap_items(src: Node, dst: Node) -> void:
     return  # ルール外 → キャンセル
   if src is EquipSlotPanel and dst is EquipSlotPanel and src.allowed_type != dst.allowed_type:
     return  # 異なる装備種間は不可
+  if (
+    src is EquipSlotPanel
+    and dst is ItemSlotPanel
+    and _collect_inventory_items().size() >= InventoryService.get_max_size()
+  ):
+    return
 
   # swap or move
   if _can_accept(src, dst_data):
@@ -170,33 +156,14 @@ func _collect_inventory_items() -> Array[ItemPanelData]:
   return items
 
 
-func _update_nav():
-  btn_prev.visible = grid.max_page() > 1
-  btn_next.visible = grid.max_page() > 1
-  btn_prev.disabled = grid.current_page() == 0
-  btn_next.disabled = grid.current_page() == grid.max_page() - 1
-
-
-# ページング
-func _on_prev_pressed():
-  grid.prev_page()
-
-
-func _on_next_pressed():
-  grid.next_page()
-
-
-# ソート
-func _on_sort_pressed():
-  _current_sort = (_current_sort + 1) % ItemBase.ItemType.size()
-  EquipSignals.sort_requested.emit(_current_sort)
-  # ソートボタンの表示更新
-  var type_names := ["加護", "魔法"]
-  sort_btn.text = "ソート: %s" % type_names[_current_sort]
-
-
 # 保存
 func _on_save_pressed():
+  var inventory_items: Array[ItemPanelData] = _collect_inventory_items()
+  InventoryService.clear()
+  for item in inventory_items:
+    if item.inst:
+      InventoryService.try_add(item.inst)
+
   var new_equipment_attack_core: Array[ItemInstance] = []
   var new_equipment_blessings: Array[ItemInstance] = []
 

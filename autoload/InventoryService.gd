@@ -17,7 +17,7 @@ func get_items() -> Array[ItemInstance]:
 
 
 func try_add(item: ItemInstance) -> bool:
-  if _items.size() >= INVENTORY_MAX_SIZE:
+  if _items.size() >= get_max_size():
     full.emit(item)
     return false
   _items.append(item)
@@ -37,6 +37,10 @@ func clear() -> void:
 
 func request_equip(item: ItemInstance) -> bool:
   return true
+
+
+func get_max_size() -> int:
+  return INVENTORY_MAX_SIZE
 
 
 func _load_from_savedata():

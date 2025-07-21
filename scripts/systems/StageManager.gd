@@ -133,7 +133,7 @@ func _on_stage_cleared() -> void:
 
   await get_tree().create_timer(5.0).timeout
   StageSignals.emit_bgm_stop_requested(bgm_fade_out)
-  GameFlow.change_to_title()
+  GameFlow.start_result_inventory()
 
 
 func _on_game_over() -> void:
@@ -147,7 +147,7 @@ func _on_game_over() -> void:
     add_child(prompt)
 
   await get_tree().create_timer(5.0).timeout
-  GameFlow.change_to_title()
+  GameFlow.start_result_inventory()
 
 
 # -------------------------------------------------

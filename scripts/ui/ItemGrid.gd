@@ -7,6 +7,9 @@ const SLOTS_PER_PAGE := 30
 ## Nodes ---------------------------------------------------------------
 @export var page_label: Label
 
+## Signals -------------------------------------------------------------
+signal sort_requested(item_type: int)  # ソートリクエスト
+
 ## State ---------------------------------------------------------------
 var _page: int = 0
 var _pages: PackedInt32Array  # 各ページ先頭インデックス保持
@@ -14,7 +17,7 @@ var _items: Array[ItemPanelData] = []  # 所持アイテムデータ (未装備)
 
 
 func _ready() -> void:
-  EquipSignals.sort_requested.connect(_on_sort_requested)
+  sort_requested.connect(_on_sort_requested)
 
 
 ## Public API ----------------------------------------------------------

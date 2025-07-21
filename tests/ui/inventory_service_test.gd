@@ -25,7 +25,7 @@ func test_try_add_and_remove() -> void:
 
 
 func test_try_add_full() -> void:
-  for i in range(InventoryService.INVENTORY_MAX_SIZE):
+  for i in range(InventoryService.get_max_size()):
     InventoryService.try_add(
       ItemInstanceStub.dummy_item("uid%d" % i, ItemBase.ItemType.ATTACK_CORE)
     )
@@ -34,7 +34,7 @@ func test_try_add_full() -> void:
   var result = InventoryService.try_add(item)
 
   assert_bool(result).is_false()
-  assert_int(InventoryService.get_items().size()).is_equal(InventoryService.INVENTORY_MAX_SIZE)
+  assert_int(InventoryService.get_items().size()).is_equal(InventoryService.get_max_size())
 
 
 func test_clear_inventory() -> void:

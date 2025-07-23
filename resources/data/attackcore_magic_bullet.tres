@@ -10,7 +10,7 @@ script = ExtResource("1_ypo2y")
 core_scene = ExtResource("1_6jnqk")
 projectile_scene = ExtResource("1_01gxq")
 damage_base = 1.0
-cooldown_sec_base = 0.1
+cooldown_sec_base = 0.2
 base_modifiers = {
 "bullet_speed": 1000.0
 }

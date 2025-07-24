@@ -70,11 +70,6 @@ func _do_fire():
     _start_cooldown()
 
 
-func _start_cooldown():
-  print_debug("Starting cooldown")
-  super._start_cooldown()
-
-
 func _on_beam_body_entered(_body):
   # damage_enemy(body)
   pass

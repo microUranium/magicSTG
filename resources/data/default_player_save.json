@@ -37,11 +37,16 @@
         "uid": "blessing_shield_1",
         "id": "blessing_shield",
         "enchantments": []
+      },
+      {
+        "uid": "blessing_regen_1",
+        "id": "blessing_regen",
+        "enchantments": []
       }
     ]
   },
   "equipped": [
     "attackcore_normal_beam_2",
-    "blessing_shield_1"
+    "blessing_regen_1"
   ]
 }

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dybfiah44oqiw"]
+
+[ext_resource type="Script" uid="uid://dg6sco22rv555" path="res://scripts/player/RegenBlessing.gd" id="1_2s002"]
+
+[node name="RegenBlessing" type="Node"]
+script = ExtResource("1_2s002")
+heal_amount = 5
+
+[node name="HealTimer" type="Timer" parent="."]

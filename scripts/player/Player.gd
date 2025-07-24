@@ -3,6 +3,7 @@ class_name Player
 
 signal damage_received(damage)
 signal game_over
+signal healing_received(amount)
 
 @export var speed: float = 200.0
 @export var destroy_particles_scene: PackedScene = preload(
@@ -25,6 +26,7 @@ func _ready() -> void:
     animated_sprite.sprite_frames.get_frame_texture("default", 0).get_size() * animated_sprite.scale
   )
   $HpNode.connect("hp_changed", Callable(self, "_on_hp_changed"))
+  self.healing_received.connect(_on_heal_received)
 
 
 func _process(delta):
@@ -67,6 +69,10 @@ func _apply_damage(damage):
   $HpNode.take_damage(damage)
   StageSignals.emit_signal("sfx_play_requested", "hit_player", global_position, 0, 0)
   FlashUtility.flash_white(animated_sprite)
+
+
+func _on_heal_received(amount: int) -> void:
+  $HpNode.heal(amount)
 
 
 func _on_hp_changed(current_hp: int, max_hp: int) -> void:

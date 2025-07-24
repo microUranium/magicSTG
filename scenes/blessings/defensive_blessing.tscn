@@ -84,7 +84,6 @@ animations = [{
 
 [node name="DefensiveBlessing" type="Node"]
 script = ExtResource("1_4yxmm")
-shield_max = 10
 
 [node name="ShieldSprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_rgy23")

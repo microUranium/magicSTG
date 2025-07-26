@@ -1,20 +1,22 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=4 format=3 uid="uid://bmmatk3mro6is"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=5 format=3 uid="uid://bmmatk3mro6is"]
 
 [ext_resource type="PackedScene" uid="uid://cpvyvr12to1f1" path="res://scenes/attackCores/player/beam.tscn" id="1_74b3g"]
 [ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="1_pye4m"]
+[ext_resource type="PackedScene" uid="uid://cqav7lgswik8f" path="res://scenes/attackCores/player/beam_core.tscn" id="1_ukr3k"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="2_pye4m"]
 
 [resource]
 script = ExtResource("2_pye4m")
+core_scene = ExtResource("1_ukr3k")
 projectile_scene = ExtResource("1_74b3g")
 damage_base = 1.0
-cooldown_sec_base = 4.0
+cooldown_sec_base = 2.0
 base_modifiers = {
 "beam_duration_sec": 2.0
 }
 id = &"attackcore_normal_beam"
 item_type = 1
-display_name = "攻撃核『光線』"
-description = "チャージ後、一定時間持続する光線を放ちます。"
+display_name = "ビーム"
+description = "チャージ後、一定時間持続するビームを放ちます。"
 icon = ExtResource("1_pye4m")
 metadata/_custom_type_script = "uid://31siypvcpkwh"

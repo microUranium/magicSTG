@@ -33,11 +33,11 @@ var item_inst: ItemInstance:
 # Public API
 #---------------------------------------------------------------------
 func trigger() -> void:
-  if _paused:  # ← 停止中は撃たない
+  if _paused:
     return
-  if _cooling:  # まだ冷却中
+  if _cooling:
     return
-  _do_fire()  # ← 派生クラスで実装
+  _do_fire()
   emit_signal("core_fired")
   _start_cooldown()
 
@@ -92,6 +92,9 @@ func _ready():
 func _start_cooldown():
   _cooling = true
   emit_signal("core_cooldown_updated", 0.0, cooldown_sec)
+  if _cool_timer:
+    _cool_timer.timeout.disconnect(_on_cooldown_finished)
+    _cool_timer = null
   _cool_timer = get_tree().create_timer(cooldown_sec)
   _cool_timer.timeout.connect(_on_cooldown_finished)
 
@@ -100,7 +103,7 @@ func _on_cooldown_finished():
   _cooling = false
   emit_signal("core_ready_to_fire")
   emit_signal("core_cooldown_updated", cooldown_sec, cooldown_sec)
-  trigger()  # クールダウンが終わったら自動で発射
+  trigger()
 
 
 func set_paused(state: bool) -> void:
@@ -109,13 +112,11 @@ func set_paused(state: bool) -> void:
   _paused = state
 
   if _paused:
-    # ---- 停止処理 ----
     if _cool_timer:
-      _cool_timer = null  # これでタイマー解除
+      _cool_timer.timeout.disconnect(_on_cooldown_finished)
+      _cool_timer = null
   else:
-    # ---- 再開処理 ----
-    _cool_timer = get_tree().create_timer(cooldown_sec)
-    _cool_timer.timeout.connect(_on_cooldown_finished)
+    _start_cooldown()
 
 
 func _find_bullet_parent() -> Node:

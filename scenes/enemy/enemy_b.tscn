@@ -36,6 +36,8 @@ animations = [{
 size = Vector2(42, 66)
 
 [node name="EnemyB" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_un3wx")
 drop_table = Array[ExtResource("2_f6cdp")]([ExtResource("3_xf0bn"), ExtResource("4_vgovg")])
 

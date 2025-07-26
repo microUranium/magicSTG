@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=10 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=13 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -9,10 +9,14 @@
 [ext_resource type="AudioStream" uid="uid://3bdxggov2t4p" path="res://assets/audio/sfx/gameover.wav" id="7_gl6cx"]
 [ext_resource type="AudioStream" uid="uid://b3o6p0nqbcwac" path="res://assets/audio/sfx/power_up_boss.wav" id="8_1e7oh"]
 [ext_resource type="AudioStream" uid="uid://b7623kptbukfr" path="res://assets/audio/sfx/get_item.wav" id="9_kghj2"]
+[ext_resource type="AudioStream" uid="uid://cfkvjip1vyu6u" path="res://assets/audio/sfx/hit_shield.wav" id="10_iwsf2"]
+[ext_resource type="AudioStream" uid="uid://cju7cocrjg6vu" path="res://assets/audio/sfx/shot_beam.wav" id="11_mkvwg"]
+[ext_resource type="AudioStream" uid="uid://bgj3ek276cp5b" path="res://assets/audio/sfx/break_shield.wav" id="12_t4efp"]
 
 [resource]
 script = ExtResource("1_tnkwu")
 table = Dictionary[String, AudioStream]({
+"break_shield": ExtResource("12_t4efp"),
 "destroy_boss": ExtResource("2_tskcg"),
 "destroy_enemy": ExtResource("3_grn6y"),
 "destroy_player": ExtResource("4_grn6y"),
@@ -20,6 +24,8 @@ table = Dictionary[String, AudioStream]({
 "get_item": ExtResource("9_kghj2"),
 "hit_enemy": ExtResource("5_t7eo4"),
 "hit_player": ExtResource("6_hxujo"),
-"power_up_boss": ExtResource("8_1e7oh")
+"hit_shield": ExtResource("10_iwsf2"),
+"power_up_boss": ExtResource("8_1e7oh"),
+"shot_beam": ExtResource("11_mkvwg")
 })
 metadata/_custom_type_script = "uid://de03wt8svtbcg"

@@ -13,7 +13,7 @@ base_modifiers = {
 }
 id = &"blessing_shield"
 item_type = 0
-display_name = "防壁の加護"
+display_name = "障壁の加護"
 description = "敵の攻撃を完全に遮断する魔法障壁を展開します。"
 icon = ExtResource("2_skbd8")
 metadata/_custom_type_script = "uid://bclm6we4v4mkb"

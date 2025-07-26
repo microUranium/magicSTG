@@ -23,7 +23,7 @@ func _recalc_stats() -> void:
 
   # 値が変わったらゲージ刷新
   shield_current = shield_max
-  init_gauge("durability", shield_max, shield_current, "防壁の加護")
+  init_gauge("durability", shield_max, shield_current, _proto.display_name)
   emit_signal("blessing_updated")
 
 
@@ -78,12 +78,14 @@ func on_player_damaged(damage):
   if shield_current > 0:
     if shield_sprite:
       shield_sprite.play("hit")
+    StageSignals.sfx_play_requested.emit("hit_shield", player_ref.global_position, 0, 1.0)
     get_tree().create_timer(0.1).connect("timeout", Callable(self, "_return_to_idle"))
   else:
     shield_current = 0
     is_broken = true
     if shield_sprite:
       shield_sprite.play("break")
+    StageSignals.sfx_play_requested.emit("break_shield", player_ref.global_position, 0, 1.0)
     emit_signal("shield_broken")
     # 復活タイマー起動
     get_tree().create_timer(recover_delay).connect("timeout", Callable(self, "recover_shield"))

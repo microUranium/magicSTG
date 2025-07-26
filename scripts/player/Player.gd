@@ -4,19 +4,21 @@ class_name Player
 signal damage_received(damage)
 signal game_over
 signal healing_received(amount)
+signal sneak_state_changed(is_sneaking: bool)
 
 @export var speed: float = 200.0
+@export var sneak_multiplier: float = 0.5
 @export var destroy_particles_scene: PackedScene = preload(
   "res://scenes/player/destroy_particle_player.tscn"
 )
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var fairy_container := $FairyContainer
 @onready var blessing_container := $EquippedBlessings as BlessingContainer
 @onready var hp_node := $HpNode
 
 var player_size
 var direction: Vector2
+var _is_sneaking: bool = false
 
 
 func _ready() -> void:
@@ -42,7 +44,13 @@ func _handle_input(delta):
     )
     . normalized()
   )
-  position += direction * speed * delta
+  var sneaking := Input.is_action_pressed("ui_sneak")  # Shift 判定
+  if sneaking != _is_sneaking:
+    _is_sneaking = sneaking
+    emit_signal("sneak_state_changed", _is_sneaking)
+
+  var effective_speed := speed * (sneak_multiplier if sneaking else 1.0)
+  position += direction * effective_speed * delta
 
 
 func _clamp_inside_playrect():

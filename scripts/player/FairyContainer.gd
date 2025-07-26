@@ -28,6 +28,8 @@ func _ready():
   if attack_core_nodes.size() == 0:
     push_error("FairyContainer: No attack cores found in the equipped items.")
 
+  owner.connect("sneak_state_changed", Callable(self, "_on_sneak_state_changed"))
+
   _spawn_all_from_cores()  # 装備リストぶん精霊を出す
 
 
@@ -72,7 +74,6 @@ func spawn_fairy(core_node: AttackCoreBase) -> Node:
   if slot and slot.has_method("set_core"):
     slot.set_core(core_node)
 
-  _recalc_offset_for(f, fairies.size() - 1)
   emit_signal("fairy_added", f)
   return f
 
@@ -111,23 +112,39 @@ func _spawn_all_from_cores() -> void:
   for core_scene in attack_core_nodes:
     spawn_fairy(core_scene)
 
+  update_offsets()
+
 
 func update_offsets() -> void:
+  # Tweenを作成
+  var tw = get_tree().create_tween()
+
   for i in range(fairies.size()):
-    _recalc_offset_for(fairies[i], i)
+    var fairy = fairies[i]
+    if not fairy:
+      continue
+
+    var offset = _recalc_offset_for(i)
+
+    # Tweenを設定
+    tw.tween_property(fairy, "offset", offset, 0.2)
+    tw.set_parallel()
+  tw.play()
 
 
-func _recalc_offset_for(fairy: Node, idx: int) -> void:
+func _recalc_offset_for(idx: int) -> Vector2:
   var total: int = max(attack_core_nodes.size(), 1)  # 0 除算対策
+  var base_angle := 360.0 * idx / total
+  var angle_rad := deg_to_rad(base_angle + _circle_angle)
+  var offset = Vector2.ZERO
   match formation:
     0:  # CIRCLE
-      var base_angle := 360.0 * idx / total
-      var angle_rad := deg_to_rad(base_angle + _circle_angle)
-      fairy.offset = Vector2(0, -circle_radius).rotated(angle_rad)
+      offset = Vector2(0, -circle_radius).rotated(angle_rad)
     1:  # LINE
-      fairy.offset = Vector2(30 * (idx + 1), -20)
+      offset = Vector2(circle_radius / 2 * sin(angle_rad), -circle_radius)
     _:
-      fairy.offset = Vector2.ZERO
+      return offset
+  return offset
 
 
 func _load_attack_core_from_savedata() -> void:
@@ -141,3 +158,7 @@ func _load_attack_core_from_savedata() -> void:
       attack_core_instance.append(item)
     else:
       push_warning("FairyContainer: Invalid item instance in savedata.")
+
+
+func _on_sneak_state_changed(is_sneaking: bool) -> void:
+  set_formation(1 if is_sneaking else 0)  # スニーク時はラインフォーメーション

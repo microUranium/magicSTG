@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_7f158"]
 [ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="7_04mq3"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_gvb3s"]
-[ext_resource type="PackedScene" uid="uid://cekbj5t2n3vdf" path="res://scenes/attackCores/enemy/projectile_core_to_slow_enemy_5_rapid_fire.tscn" id="9_04mq3"]
+[ext_resource type="PackedScene" uid="uid://cekbj5t2n3vdf" path="res://scenes/attackCores/enemy/projectile_core_to_slow_circle_shot_enemy_5_rapid_fire.tscn" id="9_04mq3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yljys"]
 atlas = ExtResource("5_04mq3")

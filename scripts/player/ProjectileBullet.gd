@@ -8,6 +8,7 @@ class_name ProjectileBullet
 
 
 func _ready():
+  super._ready()
   if speed > min_speed:
     var tw = get_tree().create_tween()
     tw.tween_property(self, "speed", min_speed, deceleration_time)

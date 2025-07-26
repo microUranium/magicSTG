@@ -39,6 +39,11 @@ func _play_next_event() -> void:
 
   _current_event = _spawn_queue.pop_front()
   _event_counter = 0
+  if _current_event.pattern == SpawnEvent.Pattern.FROM_TOP_SPACING:
+    _spawn_from_top_spacing(_current_event)
+    _play_next_event()
+    return
+
   _schedule_next_spawn(0.001)  # 即座に 1 体目
 
 
@@ -76,6 +81,8 @@ func _spawn_by_pattern(ev: SpawnEvent) -> void:
       _spawn_enemy(ev.base_pos)
     SpawnEvent.Pattern.LINE_HORIZ:
       _spawn_line_horiz(ev)
+    SpawnEvent.Pattern.FROM_TOP_SPACING:
+      _spawn_from_top_spacing(ev)
     _:
       push_warning("EnemySpawner: Unknown pattern %s" % ev.pattern)
 
@@ -92,6 +99,22 @@ func _spawn_line_horiz(ev: SpawnEvent) -> void:
     ev.base_pos = Vector2(first_x, y)
   var spawn_pos := ev.base_pos + Vector2(line_horiz_spacing * _event_counter, 0)
   _spawn_enemy(spawn_pos)
+
+
+func _spawn_from_top_spacing(ev: SpawnEvent) -> void:
+  # 上から等間隔で出現
+  var total = ev.count
+  if total <= 0:
+    push_warning("EnemySpawner: Invalid count for FROM_TOP_SPACING pattern.")
+    return
+
+  var rect := PlayArea.get_play_rect()
+  var spacing: float = rect.size.x / float(total + 1)  # 左端～右端を N+1 分割
+
+  for i in range(total):
+    var x := rect.position.x + spacing * (i + 1)
+    var pos := Vector2(x, rect.position.y - 32)  # 上端から出現
+    _spawn_enemy(pos)
 
 
 #----------------------------------------------------------------------

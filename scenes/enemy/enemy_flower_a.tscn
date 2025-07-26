@@ -1,0 +1,77 @@
+[gd_scene load_steps=16 format=3 uid="uid://5kwk2ks0t1mn"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_04mq3"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_yljys"]
+[ext_resource type="Resource" uid="uid://bpvxkjd10aoum" path="res://resources/itemdrop/droptableentry_debug_core.tres" id="3_k123e"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="4_02lgu"]
+[ext_resource type="Texture2D" uid="uid://chqwh8p2w52y" path="res://assets/gfx/sprites/enemy_flower_sprite.png" id="5_04mq3"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_7f158"]
+[ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="7_04mq3"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_gvb3s"]
+[ext_resource type="PackedScene" uid="uid://cekbj5t2n3vdf" path="res://scenes/attackCores/enemy/projectile_core_to_slow_enemy_5_rapid_fire.tscn" id="9_04mq3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yljys"]
+atlas = ExtResource("5_04mq3")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k123e"]
+atlas = ExtResource("5_04mq3")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02lgu"]
+atlas = ExtResource("5_04mq3")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2mrex"]
+atlas = ExtResource("5_04mq3")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yljys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k123e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02lgu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2mrex")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(120, 118)
+
+[node name="EnemyFlowerA" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_04mq3")
+drop_table = Array[ExtResource("2_yljys")]([ExtResource("3_k123e"), ExtResource("4_02lgu")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame = 2
+frame_progress = 0.61561
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("6_7f158")
+max_hp = 20
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("7_04mq3")
+base_speed = 150.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("8_gvb3s")]
+default_core_scene = ExtResource("9_04mq3")

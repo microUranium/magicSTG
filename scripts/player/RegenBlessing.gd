@@ -12,6 +12,9 @@ var _cooling: bool = false
 
 
 func on_equip(player):
+  heal_amount = _proto.base_modifiers.get("regen_amount", heal_amount)
+  heal_interval = _proto.base_modifiers.get("regen_interval_sec", heal_interval)
+
   player_ref = player
   _recalc_stats()
 

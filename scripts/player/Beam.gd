@@ -56,7 +56,7 @@ func _apply_length(length: float) -> void:
 
 
 func _on_damage_tick() -> void:
-  print("Beam: Damage tick")
+  StageSignals.sfx_play_requested.emit("shot_beam", global_position, 0, 1.0)
   if !raycast.is_colliding():
     return
 

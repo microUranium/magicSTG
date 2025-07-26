@@ -4,6 +4,6 @@
 
 [node name="RegenBlessing" type="Node"]
 script = ExtResource("1_2s002")
-heal_amount = 5
+heal_interval = 5.0
 
 [node name="HealTimer" type="Timer" parent="."]

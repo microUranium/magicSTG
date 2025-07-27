@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WaveData" load_steps=4 format=3 uid="uid://cdylvqxngbdd8"]
+
+[ext_resource type="Script" uid="uid://b6y0trwpjnexw" path="res://scripts/systems/WaveData.gd" id="1_8bn2m"]
+[ext_resource type="Script" uid="uid://cfkyg4rfgta2t" path="res://scripts/systems/SpawnEvent.gd" id="2_fe0la"]
+[ext_resource type="Resource" uid="uid://bi81x8e10y8wa" path="res://resources/stage/spawn_events/spawn_event_test4.tres" id="3_8bn2m"]
+
+[resource]
+script = ExtResource("1_8bn2m")
+spawn_events = Array[ExtResource("2_fe0la")]([ExtResource("3_8bn2m")])
+metadata/_custom_type_script = "uid://b6y0trwpjnexw"

@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_i4phm"]
 radius = 8.06226
 
-[node name="BulletEnemy" type="Area2D"]
+[node name="BulletEnemy2" type="Area2D"]
 position = Vector2(1, 1)
 script = ExtResource("1_3tk4f")
 speed = 300.0

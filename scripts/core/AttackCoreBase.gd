@@ -13,6 +13,8 @@ signal core_cooldown_updated(elapsed, max)  # HUD ゲージ用
 #---------------------------------------------------------------------
 @export var cooldown_sec: float = 1.0  # 1 発ごとのクールタイム
 @export var auto_start := true  # 生成直後に連射を始めるか
+@export var attack_pattern: AttackPattern:
+  set = set_attack_pattern
 
 #---------------------------------------------------------------------
 # Runtime State
@@ -30,16 +32,58 @@ var item_inst: ItemInstance:
 
 
 #---------------------------------------------------------------------
+# AttackPattern 管理
+#---------------------------------------------------------------------
+func set_attack_pattern(new_pattern: AttackPattern) -> void:
+  """攻撃パターンを設定"""
+  var old_pattern = attack_pattern
+  attack_pattern = new_pattern
+
+  # パターン変更時の処理
+  _on_pattern_changed(old_pattern, new_pattern)
+
+  if old_pattern != new_pattern:
+    emit_signal("pattern_changed", new_pattern)
+
+
+func _on_pattern_changed(old_pattern: AttackPattern, new_pattern: AttackPattern) -> void:
+  """パターン変更時の共通処理"""
+  # クールダウンタイムをパターンから更新
+  if new_pattern and new_pattern.burst_delay > 0:
+    cooldown_sec = new_pattern.burst_delay
+
+    # 子クラスでの追加処理
+  _on_pattern_changed_impl(old_pattern, new_pattern)
+
+
+func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPattern) -> void:
+  """子クラスでオーバーライドするパターン変更処理"""
+  pass
+
+
+#---------------------------------------------------------------------
 # Public API
 #---------------------------------------------------------------------
 func trigger() -> void:
+  if not can_fire():
+    return
+
+  if await _do_fire():
+    emit_signal("core_fired")
+    _start_cooldown()
+
+
+func force_fire() -> void:
+  """強制発射（クールダウン無視）"""
   if _paused:
     return
-  if _cooling:
-    return
-  _do_fire()
-  emit_signal("core_fired")
-  _start_cooldown()
+  if _do_fire():
+    emit_signal("core_fired")
+
+
+func can_fire() -> bool:
+  """発射可能かチェック"""
+  return not _paused and not _cooling
 
 
 func set_owner_actor(new_owner: Node) -> void:
@@ -54,9 +98,10 @@ func set_owner_actor(new_owner: Node) -> void:
 #---------------------------------------------------------------------
 # Virtual (override in child)
 #---------------------------------------------------------------------
-func _do_fire() -> void:
+func _do_fire() -> bool:
   # ProjectileCore / BeamCore などが弾やビームを生成する処理を書く
-  pass
+  push_warning("AttackCoreBase: _do_fire() is not implemented in child class.")
+  return false
 
 
 func _recalc_stats() -> void:
@@ -85,8 +130,19 @@ func _sum_pct(key: String) -> float:
 func _ready():
   super._ready()
   add_to_group("attack_cores")
+  # パターンの初期検証
+  _validate_pattern()
   if auto_start:
     _start_cooldown()
+
+
+func _validate_pattern():
+  """パターンの有効性を検証"""
+  if not attack_pattern:
+    push_warning("AttackCoreBase: No attack pattern assigned.")
+    return
+  if not attack_pattern.bullet_scene:
+    push_warning("AttackCoreBase: Attack pattern has no bullet scene.")
 
 
 func _start_cooldown():
@@ -126,3 +182,16 @@ func _find_bullet_parent() -> Node:
 
   # テストなどで current_scene が無いときは root へ
   return get_tree().root
+
+
+func get_debug_info() -> Dictionary:
+  """デバッグ情報を取得"""
+  return {
+    "class_name": get_class(),
+    "cooling": _cooling,
+    "paused": _paused,
+    "cooldown_sec": cooldown_sec,
+    "pattern_name": attack_pattern.resource_path.get_file() if attack_pattern else "none",
+    "owner": str(_owner_actor.name) if _owner_actor else "none",
+    "can_fire": can_fire()
+  }

@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://phoaomysa03n"]
+
+[ext_resource type="Script" uid="uid://dwfltd8qe8ou" path="res://scripts/core/UniversalBullet.gd" id="1_6vpcq"]
+[ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="2_ek0ve"]
+[ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="2_nji8l"]
+[ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="3_2d55w"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nji8l"]
+radius = 8.0
+
+[node name="UniversalBullet" type="Area2D"]
+script = ExtResource("1_6vpcq")
+bullet_config = ExtResource("2_nji8l")
+movement_config = ExtResource("3_2d55w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ek0ve")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nji8l")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

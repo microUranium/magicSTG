@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AttackPattern" load_steps=3 format=3 uid="uid://dysglhbm8dk24"]
+
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_71vna"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="2_3b0se"]
+
+[resource]
+script = ExtResource("2_3b0se")
+pattern_type = 0
+bullet_scene = ExtResource("1_71vna")
+target_group = "players"
+damage = 1
+bullet_count = 1
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 1.0
+direction_type = 1
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 400.0
+curve_strength = 0.0
+orbit_radius = 50.0
+custom_parameters = {}
+pattern_layers = Array[ExtResource("2_3b0se")]([])
+layer_delays = Array[float]([])
+metadata/_custom_type_script = "uid://su05ub25qwt5"

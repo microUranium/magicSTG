@@ -158,7 +158,9 @@ func create_harpy_phase1_barrier() -> AttackPattern:
   pattern.burst_delay = 5
   pattern.rapid_fire_interval = 0
 
-  var visual_config = preload("res://resources/bulletVisuals/basic_bullet_standard.tres")
+  var visual_config = (
+    preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+  )
   visual_config.scale = 1.5
   pattern.bullet_visual_config = visual_config
 
@@ -187,7 +189,9 @@ func create_harpy_phase3_barrier2() -> AttackPattern:
 
   layered_pattern.burst_delay = 4.5
 
-  var visual_config = preload("res://resources/bulletVisuals/basic_bullet_standard.tres")
+  var visual_config = (
+    preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+  )
   visual_config.scale = 1.5
   inner_pattern.bullet_visual_config = visual_config
   outer_pattern.bullet_visual_config = visual_config
@@ -211,7 +215,9 @@ func create_harpy_phase3_barrier3() -> AttackPattern:
   pattern.burst_delay = 0.5
   pattern.rapid_fire_interval = 0.0625
 
-  var visual_config = preload("res://resources/bulletVisuals/basic_bullet_standard.tres")
+  var visual_config = (
+    preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+  )
   visual_config.scale = 1.5
   pattern.bullet_visual_config = visual_config
 

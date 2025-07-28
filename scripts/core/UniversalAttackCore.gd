@@ -214,6 +214,9 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   if not pattern.bullet_scene:
     return false
 
+  if not can_fire():
+    return false
+
   var parent = _find_bullet_parent()
   if not parent:
     push_warning("UniversalAttackCore: No valid parent node found.")
@@ -250,6 +253,9 @@ func _create_barrier_bullet(
   """バリア弾専用の弾丸を生成"""
   if not pattern.bullet_scene:
     return null
+
+  if not can_fire():
+    return false
 
   var parent = _find_bullet_parent()
   if not parent:

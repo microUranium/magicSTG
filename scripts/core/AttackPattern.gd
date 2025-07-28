@@ -17,6 +17,7 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 # === 弾丸外観、動作設定 ===
 @export var bullet_visual_config: BulletVisualConfig  # 弾丸の外観設定
 @export var bullet_movement_config: BulletMovementConfig  # 弾丸の動作設定
+@export var barrier_movement_config: BarrierBulletMovement  # バリア弾の動作設定
 
 # === 発射設定 ===
 @export var bullet_count: int = 1

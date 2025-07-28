@@ -65,6 +65,15 @@ func _do_fire() -> bool:
   else:
     success = await _execute_single_pattern(attack_pattern)
 
+  print_debug(
+    "UniversalAttackCore: Fire completed",
+    "Pattern:",
+    attack_pattern.resource_path,
+    "Success:",
+    success,
+    "Bullets Spawned:",
+    _current_execution.bullets_spawned if _current_execution else 0
+  )
   _current_execution = null
   return success
 
@@ -149,16 +158,6 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   return success
 
 
-# func _execute_circle_shot(pattern: AttackPattern):
-#   """円形配置射撃"""
-#   var target_pos = _get_player_position()
-#   var base_dir = pattern.calculate_base_direction(_owner_actor.global_position, target_pos)
-
-#   for i in range(pattern.bullet_count):
-#     var bullet_dir = pattern.calculate_circle_direction(i, pattern.bullet_count, base_dir)
-#     _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position)
-
-
 func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
   """バリア弾（回転→直進）"""
   var bullet_group = "barrier_bullets_" + str(ResourceUID.create_id())
@@ -171,6 +170,9 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
       _start_barrier_bullet(bullet, pattern)
     else:
       success = false
+
+    if pattern.rapid_fire_interval > 0:
+      await get_tree().create_timer(pattern.rapid_fire_interval).timeout
 
   return success
 
@@ -242,17 +244,6 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   return true
 
 
-func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
-  """弾丸に視覚・動作設定を適用"""
-  # 視覚設定の適用
-  if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
-    bullet.apply_visual_config(pattern.bullet_visual_config)
-
-  # 動作設定の適用
-  if pattern.bullet_movement_config and bullet.has_method("apply_movement_config"):
-    bullet.apply_movement_config(pattern.bullet_movement_config)
-
-
 func _create_barrier_bullet(
   pattern: AttackPattern, index: int, group_id: String, target_pos: Vector2
 ):
@@ -267,6 +258,9 @@ func _create_barrier_bullet(
   var bullet = pattern.bullet_scene.instantiate()
   parent.add_child(bullet)
 
+  # 視覚・動作設定の適用
+  _apply_bullet_configs(bullet, pattern)
+
   # バリア弾特有の設定
   if bullet.has_method("setup_barrier_bullet"):
     bullet.setup_barrier_bullet(
@@ -276,7 +270,8 @@ func _create_barrier_bullet(
       index,
       _get_player_node(),
       pattern.circle_radius,
-      pattern.damage
+      pattern.damage,
+      pattern.target_group
     )
 
   return bullet
@@ -286,6 +281,21 @@ func _start_barrier_bullet(bullet, pattern: AttackPattern):
   """バリア弾の開始処理"""
   if bullet.has_method("start_rotation"):
     bullet.start_rotation(pattern.rotation_duration, pattern.rotation_speed)
+
+
+func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
+  """弾丸に視覚・動作設定を適用"""
+  # 視覚設定の適用
+  if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
+    bullet.apply_visual_config(pattern.bullet_visual_config)
+
+  # 動作設定の適用
+  if pattern.bullet_movement_config and bullet.has_method("apply_movement_config"):
+    bullet.apply_movement_config(pattern.bullet_movement_config)
+
+  # バリア弾の動作設定
+  if pattern.barrier_movement_config and bullet.has_method("apply_barrier_movement_config"):
+    bullet.apply_barrier_movement_config(pattern.barrier_movement_config)
 
 
 func _get_player_position() -> Vector2:

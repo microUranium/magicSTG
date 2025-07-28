@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cjoen8mdlmhks"]
+[gd_scene load_steps=22 format=3 uid="uid://cjoen8mdlmhks"]
 
 [ext_resource type="Script" uid="uid://uh0qd5u61qs7" path="res://scripts/enemy/Harpy.gd" id="1_l4g2j"]
 [ext_resource type="Texture2D" uid="uid://ctbnimw6slxdk" path="res://assets/gfx/sprites/harpy_sprite.png" id="2_f2sx0"]
@@ -10,12 +10,10 @@
 [ext_resource type="Resource" uid="uid://gkd1fh7mywlq" path="res://resources/enemy/harpy/phase/harpy_phase1.tres" id="6_jooee"]
 [ext_resource type="Resource" uid="uid://tgegwq2bima6" path="res://resources/enemy/harpy/phase/harpy_phase2.tres" id="7_q13j7"]
 [ext_resource type="Resource" uid="uid://bn6iihbcjnyfj" path="res://resources/enemy/harpy/phase/harpy_phase3.tres" id="8_jooee"]
-[ext_resource type="PackedScene" uid="uid://c2p5pqy7vtchs" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core.tscn" id="8_mmm4h"]
 [ext_resource type="Resource" uid="uid://b62fimtgpgajo" path="res://resources/enemy/harpy/phase/harpy_phase4.tres" id="9_gkiv5"]
-[ext_resource type="PackedScene" uid="uid://s7rdh1ihw4r1" path="res://scenes/attackCores/enemy/projectile_core_enemy_5_rapid_fire.tscn" id="11_jooee"]
-[ext_resource type="PackedScene" uid="uid://dswqosnjyt64w" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core_2.tscn" id="11_q13j7"]
-[ext_resource type="PackedScene" uid="uid://bvbrvoughiosu" path="res://scenes/attackCores/enemy/harpy_bullet_barrier_core_3.tscn" id="13_6pji5"]
 [ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="15_dotlt"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="17_81vii"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="18_l66gx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e6282"]
 atlas = ExtResource("2_f2sx0")
@@ -63,7 +61,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
 size = Vector2(76, 131)
 
-[node name="EnemyA" type="Area2D" groups=["enemies"]]
+[node name="Harpy" type="Area2D" groups=["enemies"]]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_l4g2j")
@@ -78,15 +76,16 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("3_wdiqv")
-max_hp = 1000
+max_hp = 500
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("4_mmm4h")
 phases = Array[ExtResource("5_f01p3")]([ExtResource("6_jooee"), ExtResource("7_q13j7"), ExtResource("8_jooee"), ExtResource("9_gkiv5")])
-attack_core_phase1 = Array[PackedScene]([ExtResource("8_mmm4h"), ExtResource("11_jooee")])
-attack_core_phase3_1 = Array[PackedScene]([ExtResource("11_jooee"), ExtResource("11_q13j7")])
-attack_core_phase3_2 = Array[PackedScene]([ExtResource("13_6pji5")])
 attack_core_slot = NodePath("../AttackCoreSlot")
 _bgm = ExtResource("15_dotlt")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("5_jmlbr")]
+script = ExtResource("17_81vii")
+default_core_scene = ExtResource("18_l66gx")
+attack_pattern = null
+auto_create_core = true

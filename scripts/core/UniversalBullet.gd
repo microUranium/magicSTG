@@ -33,25 +33,10 @@ func apply_visual_config(_bullet_config: BulletVisualConfig = null):
   if not bullet_config:
     return
 
-    # スプライト設定
-
-    # コリジョン設定
-
-    # パーティクル設定
-
-    # アニメーション設定
-
-    # 音声設定
+  # スプライト設定
   if bullet_config.texture:
     sprite.texture = bullet_config.texture
 
-    # コリジョン設定
-
-    # パーティクル設定
-
-    # アニメーション設定
-
-    # 音声設定
   sprite.scale = Vector2(bullet_config.scale, bullet_config.scale)
   sprite.modulate = bullet_config.color
 
@@ -61,30 +46,20 @@ func apply_visual_config(_bullet_config: BulletVisualConfig = null):
     shape.radius = bullet_config.collision_radius
     collision.shape = shape
 
-    # パーティクル設定
-
-    # アニメーション設定
-
-    # 音声設定
+  # パーティクル設定
   if bullet_config.enable_particles and particles:
     particles.visible = true
     if bullet_config.particle_material:
       particles.process_material = bullet_config.particle_material
-
-      # アニメーション設定
-
-      # 音声設定
   else:
     if particles:
       particles.visible = false
 
-      # アニメーション設定
-
-      # 音声設定
+  # アニメーション設定
   if bullet_config.animation_name and animation_player:
     animation_player.play(bullet_config.animation_name)
 
-    # 音声設定
+  # 音声設定
   if bullet_config.spawn_sound and audio_player:
     audio_player.stream = bullet_config.spawn_sound
     audio_player.play()
@@ -166,7 +141,7 @@ func _find_homing_target() -> Node2D:
   if targets.is_empty():
     return null
 
-    # 最も近い対象を選択
+  # 最も近い対象を選択
   var closest_target = null
   var closest_distance = INF
 

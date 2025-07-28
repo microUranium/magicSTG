@@ -85,7 +85,6 @@ func _create_core_from_input(core_input) -> AttackCoreBase:
 
 func _setup_core(core: AttackCoreBase) -> void:
   """コアの初期設定"""
-  print("Setting up core: ", core)
   # 攻撃パターンを設定
   #if core.has_property("attack_pattern"):
   core.attack_pattern = attack_pattern

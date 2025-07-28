@@ -65,15 +65,6 @@ func _do_fire() -> bool:
   else:
     success = await _execute_single_pattern(attack_pattern)
 
-  print_debug(
-    "UniversalAttackCore: Fire completed",
-    "Pattern:",
-    attack_pattern.resource_path,
-    "Success:",
-    success,
-    "Bullets Spawned:",
-    _current_execution.bullets_spawned if _current_execution else 0
-  )
   _current_execution = null
   return success
 

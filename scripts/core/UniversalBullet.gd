@@ -25,50 +25,57 @@ func _ready():
   apply_movement_config()
 
 
-func apply_visual_config(_bullet_config: BulletVisualConfig = null):
-  """視覚設定の適用"""
-  if _bullet_config:
-    bullet_config = _bullet_config
+func apply_visual_config(config: BulletVisualConfig = null):
+  """視覚設定の適用（修正版）"""
+  # 引数で渡された設定を優先
+  if config:
+    bullet_config = config
 
+  # 設定が存在しない場合は処理をスキップ
   if not bullet_config:
     return
 
-  # スプライト設定
-  if bullet_config.texture:
-    sprite.texture = bullet_config.texture
+  _apply_visual_settings()
 
-  sprite.scale = Vector2(bullet_config.scale, bullet_config.scale)
-  sprite.modulate = bullet_config.color
+
+func _apply_visual_settings():
+  """実際の視覚設定適用"""
+  var config = bullet_config
+
+  # スプライト設定
+  if config.texture and sprite:
+    sprite.texture = config.texture
+  if sprite:
+    sprite.scale = Vector2(config.scale, config.scale)
+    sprite.modulate = config.color
 
   # コリジョン設定
-  if bullet_config.collision_radius > 0:
+  if config.collision_radius > 0 and collision:
     var shape = CircleShape2D.new()
-    shape.radius = bullet_config.collision_radius
+    shape.radius = config.collision_radius
     collision.shape = shape
 
   # パーティクル設定
-  if bullet_config.enable_particles and particles:
-    particles.visible = true
-    if bullet_config.particle_material:
-      particles.process_material = bullet_config.particle_material
-  else:
-    if particles:
-      particles.visible = false
+  if particles:
+    particles.visible = config.enable_particles
+    if config.enable_particles and config.particle_material:
+      particles.process_material = config.particle_material
 
   # アニメーション設定
-  if bullet_config.animation_name and animation_player:
-    animation_player.play(bullet_config.animation_name)
+  if config.animation_name and animation_player:
+    if animation_player.has_animation(config.animation_name):
+      animation_player.play(config.animation_name)
 
   # 音声設定
-  if bullet_config.spawn_sound and audio_player:
-    audio_player.stream = bullet_config.spawn_sound
+  if config.spawn_sound and audio_player:
+    audio_player.stream = config.spawn_sound
     audio_player.play()
 
 
-func apply_movement_config(_movement_config: BulletMovementConfig = null):
+func apply_movement_config(config: BulletMovementConfig = null):
   """移動設定の適用"""
-  if _movement_config:
-    movement_config = _movement_config
+  if config:
+    movement_config = config
 
   if not movement_config:
     return

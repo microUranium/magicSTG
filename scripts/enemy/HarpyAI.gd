@@ -19,19 +19,6 @@ func _ready():
   patterns = phases[_phase_idx].patterns
   loop_type = phases[_phase_idx].loop_type
 
-  for i in range(phases.size()):
-    for j in range(phases[i].patterns.size()):
-      print_debug(
-        "Phase ",
-        i,
-        " Pattern ",
-        j,
-        ": ",
-        phases[i].patterns[j].move_to,
-        " - Time: ",
-        phases[i].patterns[j].move_time
-      )
-
   _initialize_attack_patterns()
 
   super._ready()
@@ -63,7 +50,6 @@ func _next_phase():
 
   _phase_idx += 1
   if _phase_idx >= phases.size():
-    print_debug("All phases completed.")
     return
 
   var phase := phases[_phase_idx]
@@ -93,7 +79,6 @@ func _next_pattern():
 
 
 func _on_pattern_finished(cb_token: int):
-  print_debug(_idx, " - Patterns.size(): ", patterns.size(), " - Phase Index: ", _phase_idx)
   if cb_token != _token:  # 重複防止
     return
   if _idx >= patterns.size() and (_phase_idx == 0 or _phase_idx == 2):

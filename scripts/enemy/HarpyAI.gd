@@ -11,7 +11,8 @@ class_name HarpyAI
 @export var bgm_fade_in := 2.0
 
 var _phase_idx := 0
-var _universal_core: UniversalAttackCore
+var _pattern_cores: Array[UniversalAttackCore] = []
+var core_scene: PackedScene = preload("res://scenes/attackCores/universal_attack_core.tscn")
 
 
 func _ready():
@@ -31,18 +32,9 @@ func _ready():
         phases[i].patterns[j].move_time
       )
 
-  _setup_universal_attack_core()
   _initialize_attack_patterns()
 
   super._ready()
-
-
-func _setup_universal_attack_core():
-  """汎用攻撃コアの準備"""
-  if attack_core_slot:
-    # UniversalAttackCoreを作成してスロットにセット
-    _universal_core = UniversalAttackCore.new()
-    attack_core_slot.add_core(_universal_core)
 
 
 func _initialize_attack_patterns():
@@ -112,16 +104,13 @@ func _on_pattern_finished(cb_token: int):
 
 func _setup_phase_attacks():
   """フェーズに応じた攻撃パターンを設定"""
-  if not _universal_core:
-    return
-
   match _phase_idx:
     1:
       # Phase 1: シンプルな攻撃
       _set_attack_patterns(phase1_patterns)
     2:
       # Phase 2: 攻撃停止
-      _clear_attack_patterns()
+      _clear_all_pattern_cores()
     3:
       # Phase 3: バリア弾攻撃
       _set_attack_patterns(phase3_patterns_1)
@@ -129,22 +118,34 @@ func _setup_phase_attacks():
 
 func _set_attack_patterns(patterns: Array[AttackPattern]):
   """攻撃パターンを汎用コアに設定"""
-  if patterns.is_empty():
-    return
+  var needed_cores = patterns.size()
+  var current_cores = _pattern_cores.size()
 
-  attack_core_slot.clear_all_cores()
+  # 不要なコアを削除
+  if current_cores > needed_cores:
+    for i in range(needed_cores, current_cores):
+      attack_core_slot.remove_core(_pattern_cores[i])
+      _pattern_cores.resize(needed_cores)
 
-  for pattern in patterns:
-    if pattern:
-      # パターンを汎用コアに設定
-      _setup_universal_attack_core()
-      _universal_core.attack_pattern = pattern
+  # 必要なコアを追加
+  elif current_cores < needed_cores:
+    for i in range(current_cores, needed_cores):
+      var new_core = attack_core_slot.add_core(core_scene)
+      _pattern_cores.append(new_core)
+
+  # 各コアに独立したパターンを割り当て
+  for i in range(patterns.size()):
+    _pattern_cores[i].attack_pattern = patterns[i]
+    _pattern_cores[i].cooldown_sec = patterns[i].burst_delay
 
 
-func _clear_attack_patterns():
-  """攻撃パターンをクリア"""
-  if _universal_core:
-    _universal_core.attack_pattern = null
+func _clear_all_pattern_cores():
+  """全てのパターンコアを削除"""
+  for core in _pattern_cores:
+    if is_instance_valid(core):
+      attack_core_slot.remove_core(core)
+
+  _pattern_cores.clear()
 
 
 func create_harpy_phase1_pattern() -> AttackPattern:

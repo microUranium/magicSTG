@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://btbjrc7nbjq5d"]
-
-[ext_resource type="PackedScene" uid="uid://celmmwyiy81ha" path="res://scenes/attackCores/enemy/bullet_enemy.tscn" id="2_63vh2"]
-[ext_resource type="Script" uid="uid://cta80l5qb8qug" path="res://scripts/enemy/EnemyProjectileCore.gd" id="3_b6d2m"]
-
-[node name="ProjectileCoreEnemy" type="Node2D"]
-script = ExtResource("3_b6d2m")
-bullet_scene = ExtResource("2_63vh2")
-target_group = "players"

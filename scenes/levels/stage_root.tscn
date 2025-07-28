@@ -41,7 +41,6 @@ segments = Array[ExtResource("6_p1fty")]([ExtResource("7_srajf"), ExtResource("8
 spawner_path = NodePath("../EnemySpawner")
 dialogue_runner_path = NodePath("../DialogueRunner")
 inter_wave_delay = 1.5
-start_segment_idx = 9
 player_path = NodePath("../Player")
 stage_bgm = ExtResource("15_yohi3")
 stageclear_bgm = ExtResource("16_3c375")

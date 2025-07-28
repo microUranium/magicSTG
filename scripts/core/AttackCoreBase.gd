@@ -68,7 +68,9 @@ func trigger() -> void:
   if not can_fire():
     return
 
-  if await _do_fire():
+  var success = await _do_fire()
+
+  if success:
     emit_signal("core_fired")
     _start_cooldown()
 
@@ -77,7 +79,10 @@ func force_fire() -> void:
   """強制発射（クールダウン無視）"""
   if _paused:
     return
-  if _do_fire():
+
+  var success = await _do_fire()
+
+  if success:
     emit_signal("core_fired")
 
 
@@ -100,6 +105,7 @@ func set_owner_actor(new_owner: Node) -> void:
 #---------------------------------------------------------------------
 func _do_fire() -> bool:
   # ProjectileCore / BeamCore などが弾やビームを生成する処理を書く
+  await get_tree().process_frame  # 最低限のawait
   push_warning("AttackCoreBase: _do_fire() is not implemented in child class.")
   return false
 

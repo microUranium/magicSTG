@@ -141,6 +141,8 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
       success = false
 
+    await get_tree().process_frame
+
   return success
 
 
@@ -149,7 +151,7 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   var success = true
 
   for burst in range(pattern.rapid_fire_count):
-    if not _execute_single_shot(pattern):
+    if not await _execute_single_shot(pattern):
       success = false
 
     if burst < pattern.rapid_fire_count - 1:
@@ -200,9 +202,10 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
 func _execute_custom(pattern: AttackPattern) -> bool:
   """カスタムパターン"""
   if pattern.custom_script and pattern.custom_script.has_method("execute_pattern"):
-    return pattern.custom_script.execute_pattern(self, pattern, _owner_actor)
+    return await pattern.custom_script.execute_pattern(self, pattern, _owner_actor)
   else:
     push_warning("UniversalAttackCore: Custom pattern has no execute_pattern method.")
+    await get_tree().process_frame
     return false
 
 

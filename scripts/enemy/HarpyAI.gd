@@ -106,11 +106,12 @@ func _set_attack_patterns(patterns: Array[AttackPattern]):
   var needed_cores = patterns.size()
   var current_cores = _pattern_cores.size()
 
-  # 不要なコアを削除
+  # 不要なコアを削除（逆順で削除）
   if current_cores > needed_cores:
-    for i in range(needed_cores, current_cores):
-      attack_core_slot.remove_core(_pattern_cores[i])
-      _pattern_cores.resize(needed_cores)
+    for i in range(current_cores - 1, needed_cores - 1, -1):
+      if i < _pattern_cores.size():
+        attack_core_slot.remove_core(_pattern_cores[i])
+        _pattern_cores.remove_at(i)
 
   # 必要なコアを追加
   elif current_cores < needed_cores:

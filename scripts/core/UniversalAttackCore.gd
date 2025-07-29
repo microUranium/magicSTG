@@ -75,7 +75,7 @@ func _validate_firing_conditions() -> bool:
     push_warning("UniversalAttackCore: Owner actor is not set.")
     return false
 
-  if not attack_pattern.bullet_scene:
+  if not attack_pattern or not attack_pattern.bullet_scene:
     push_warning("UniversalAttackCore: Attack pattern has no bullet scene.")
     return false
 

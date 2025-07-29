@@ -19,11 +19,12 @@ signal core_cooldown_updated(elapsed, max)  # HUD ゲージ用
 #---------------------------------------------------------------------
 # Runtime State
 #---------------------------------------------------------------------
-var _cooling := false
+var _cooling: bool = false
 var _paused: bool = false
 var _cool_timer: SceneTreeTimer
 var _owner_actor: Node2D = null  # 親ノード (Fairy / Enemy) を保持
 var _proto: AttackCoreItem
+var _last_fire_success: bool = false
 var item_inst: ItemInstance:
   set(v):
     item_inst = v
@@ -106,6 +107,7 @@ func set_owner_actor(new_owner: Node) -> void:
 func _do_fire() -> bool:
   # ProjectileCore / BeamCore などが弾やビームを生成する処理を書く
   await get_tree().process_frame  # 最低限のawait
+  _last_fire_success = false
   push_warning("AttackCoreBase: _do_fire() is not implemented in child class.")
   return false
 
@@ -177,7 +179,7 @@ func set_paused(state: bool) -> void:
     if _cool_timer:
       _cool_timer.timeout.disconnect(_on_cooldown_finished)
       _cool_timer = null
-  else:
+  elif auto_start:
     _start_cooldown()
 
 
@@ -188,6 +190,11 @@ func _find_bullet_parent() -> Node:
 
   # テストなどで current_scene が無いときは root へ
   return get_tree().root
+
+
+func _get_last_fire_success() -> bool:
+  """最後の発射が成功したかを取得（テスト用）"""
+  return _last_fire_success
 
 
 func get_debug_info() -> Dictionary:

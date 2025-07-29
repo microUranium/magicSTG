@@ -19,13 +19,13 @@ func _process(_delta: float) -> void:
     set_gauge((cooldown_sec - elapsed) * 100 / cooldown_sec)  # 残り時間をゲージに反映
 
 
-func _do_fire():
+func _do_fire() -> bool:
   if _proto.projectile_scene:
     set_gauge(0)  # 発射時にゲージをリセット
     var parent := _find_bullet_parent()
     if parent == null:
       push_warning("ProjectileCore: No valid parent node found, aborting fire.")
-      return
+      return false
 
     var bullet = _proto.projectile_scene.instantiate()
     parent.add_child(bullet)
@@ -39,6 +39,10 @@ func _do_fire():
       bullet.global_position = _owner_actor.global_position  # 親はSpirit
     else:
       push_warning("ProjectileCore: Owner actor is not set. Using default position.")
+
+    return true
+
+  return false
 
 
 func _on_stats_updated() -> void:

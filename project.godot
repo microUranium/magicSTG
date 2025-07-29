@@ -17,19 +17,19 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-BgmController="*res://autoload/BGMController.gd"
-FlashUtility="*res://autoload/FlashUtility.gd"
-GameFlow="*res://autoload/GameFlow.gd"
-PlayArea="*res://autoload/PlayArea.gd"
-SfxManager="*res://autoload/SFXManager.gd"
-StageSignals="*res://autoload/StageSignals.gd"
-ItemDb="*res://autoload/ItemDB.gd"
-LootSystem="*res://autoload/LootSystem.gd"
+BgmController="*res://scripts/autoload/BGMController.gd"
+FlashUtility="*res://scripts/autoload/FlashUtility.gd"
+GameFlow="*res://scripts/autoload/GameFlow.gd"
+PlayArea="*res://scripts/autoload/PlayArea.gd"
+SfxManager="*res://scripts/autoload/SFXManager.gd"
+StageSignals="*res://scripts/autoload/StageSignals.gd"
+ItemDb="*res://scripts/autoload/ItemDB.gd"
+LootSystem="*res://scripts/autoload/LootSystem.gd"
 Helpers="*res://autoload/Helpers.gd"
-InventoryService="*res://autoload/InventoryService.gd"
-PlayerSaveData="*res://autoload/PlayerSaveData.gd"
-EquipSignals="*res://autoload/EquipSignals.gd"
-Ephemeralnventory="*res://autoload/Ephemeralnventory.gd"
+InventoryService="*res://scripts/autoload/InventoryService.gd"
+PlayerSaveData="*res://scripts/autoload/PlayerSaveData.gd"
+EquipSignals="*res://scripts/autoload/EquipSignals.gd"
+Ephemeralnventory="*res://scripts/autoload/Ephemeralnventory.gd"
 
 [display]
 

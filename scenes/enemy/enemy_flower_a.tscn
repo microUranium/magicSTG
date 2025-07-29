@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://5kwk2ks0t1mn"]
+[gd_scene load_steps=18 format=3 uid="uid://5kwk2ks0t1mn"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_04mq3"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_yljys"]
@@ -8,7 +8,9 @@
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_7f158"]
 [ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="7_04mq3"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_gvb3s"]
-[ext_resource type="PackedScene" uid="uid://cekbj5t2n3vdf" path="res://scenes/attackCores/enemy/projectile_core_to_slow_circle_shot_enemy_5_rapid_fire.tscn" id="9_04mq3"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_04mq3"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_k123e"]
+[ext_resource type="Resource" uid="uid://cwqftwgjojxq" path="res://resources/attackPatterns/rapid_fire_circle_16_slow_straight.tres" id="10_yljys"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yljys"]
 atlas = ExtResource("5_04mq3")
@@ -74,4 +76,7 @@ script = ExtResource("7_04mq3")
 base_speed = 150.0
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("8_gvb3s")]
-default_core_scene = ExtResource("9_04mq3")
+script = ExtResource("9_04mq3")
+default_core_scene = ExtResource("10_k123e")
+attack_pattern = ExtResource("10_yljys")
+auto_create_core = true

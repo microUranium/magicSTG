@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BulletVisualConfig" load_steps=3 format=3 uid="uid://drmkisrnexa4l"]
+
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="1_37h3q"]
+[ext_resource type="Texture2D" uid="uid://eeykk5dmkswh" path="res://assets/gfx/sprites/bullet_enemy_sprite_2.png" id="2_37h3q"]
+
+[resource]
+script = ExtResource("1_37h3q")
+texture = ExtResource("2_37h3q")
+scale = 1.0
+color = Color(1, 1, 1, 1)
+collision_radius = 8.0
+enable_particles = false
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"

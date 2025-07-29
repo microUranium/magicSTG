@@ -14,3 +14,15 @@ func setup(dmg: float, spd: float, pc: int) -> void:
   speed = spd
   pierce = pc
   initialized = true
+
+
+func apply_visual_config(config):
+  pass
+
+
+func apply_movement_config(config):
+  pass
+
+
+func apply_barrier_movement_config(config):
+  pass

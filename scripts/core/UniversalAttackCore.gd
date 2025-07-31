@@ -169,7 +169,7 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
       success = false
 
-    await get_tree().process_frame
+  await get_tree().process_frame
 
   return success
 

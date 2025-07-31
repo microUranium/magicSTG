@@ -14,7 +14,6 @@ size = Vector2(4, 40)
 
 [node name="Beam" type="Area2D"]
 script = ExtResource("1_jsy6y")
-desired_length = 800.0
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, -800)

@@ -1,7 +1,7 @@
 extends GdUnitTestSuite
 
 const BulletStubScript := preload("res://tests/stubs/BulletStub.gd")
-const ProjectileCore := preload("res://scripts/player/ProjectileCore.gd")
+const UniversalAttackCore := preload("res://scripts/core/UniversalAttackCore.gd")
 
 
 # ★ AttackCoreItem をメモリ上で生成
@@ -13,7 +13,7 @@ func _make_attack_core_item() -> AttackCoreItem:
   proto.cooldown_sec_base = 0.2
   proto.base_modifiers = {"bullet_speed": 400.0}
   proto.projectile_scene = _pack_scene(BulletStub.new())
-  proto.core_scene = _pack_scene(ProjectileCore.new())
+  proto.core_scene = _pack_scene(UniversalAttackCore.new())
   return proto
 
 
@@ -36,14 +36,15 @@ func _enc_speed_up() -> Enchantment:
   return e
 
 
-# "ProjectileCore に ItemInstance を注入すると弾が生成され、補正値も反映される"
-func test_projectile_core_with_instance() -> void:
+# "UniversalAttackCore に ItemInstance を注入すると弾が生成され、補正値も反映される"
+func test_universal_attack_core_with_instance() -> void:
   var proto := _make_attack_core_item()
   var inst := ItemInstance.new(proto)
   inst.add_enchantment(_enc_speed_up(), 1)
 
-  var core := proto.core_scene.instantiate() as AttackCoreBase
+  var core := proto.core_scene.instantiate() as UniversalAttackCore
   core.item_inst = inst
+  core.player_mode = true
   core.set_owner_actor(PlayerStub.new())  # ダミー owner
   core.auto_start = false
 
@@ -61,6 +62,6 @@ func test_projectile_core_with_instance() -> void:
   assert_int(bullets.size()).is_equal(1)
   var b := bullets[0] as BulletStub
 
-  # ダメージは enchant で変わらず 10、速度は 400 * 1.25
+  # ダメージは pattern で設定した 10、速度は 400 * 1.25
   assert_float(b.damage).is_equal(10.0)
   assert_float(b.speed).is_equal(500.0)

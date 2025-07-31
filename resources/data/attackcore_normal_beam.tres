@@ -2,11 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://cpvyvr12to1f1" path="res://scenes/attackCores/player/beam.tscn" id="1_74b3g"]
 [ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="1_pye4m"]
-[ext_resource type="PackedScene" uid="uid://cqav7lgswik8f" path="res://scenes/attackCores/player/beam_core.tscn" id="1_ukr3k"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_ukr3k"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="2_pye4m"]
 
 [resource]
 script = ExtResource("2_pye4m")
+pattern_type = 1
 core_scene = ExtResource("1_ukr3k")
 projectile_scene = ExtResource("1_74b3g")
 damage_base = 1.0

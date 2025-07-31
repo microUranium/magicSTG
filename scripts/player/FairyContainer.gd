@@ -29,6 +29,7 @@ func _ready():
     push_error("FairyContainer: No attack cores found in the equipped items.")
 
   owner.connect("sneak_state_changed", Callable(self, "_on_sneak_state_changed"))
+  owner.connect("game_over", Callable(self, "_on_player_game_over"))
 
   _spawn_all_from_cores()  # 装備リストぶん精霊を出す
 
@@ -45,10 +46,25 @@ func set_attack_cores(cores: Array[AttackCoreBase]) -> void:
 
 
 func equip_core(item_inst: ItemInstance) -> AttackCoreBase:
-  var proto := item_inst.prototype as AttackCoreItem
-  var core := proto.core_scene.instantiate() as AttackCoreBase
-  core.item_inst = item_inst  # ★ 注入
+  # UniversalAttackCoreで統一
+  var universal_core_scene = preload("res://scenes/attackCores/universal_attack_core.tscn")
+  var core = universal_core_scene.instantiate() as UniversalAttackCore
+
+  # プレイヤーモード設定
+  core.player_mode = true
+  core.show_gauge_ui = true
+  core.item_inst = item_inst  # AttackCoreBaseがAttackPatternを自動生成
+  core.show_debug_info = true  # デバッグ用表示
   core.set_owner_actor(owner)
+
+  # デバッグ: コア生成後のAttackPattern状態を確認
+  print_debug(
+    (
+      "FairyContainer: Core created with pattern: %s"
+      % (core.attack_pattern.resource_path.get_file() if core.attack_pattern else "none")
+    )
+  )
+
   return core
 
 
@@ -162,3 +178,17 @@ func _load_attack_core_from_savedata() -> void:
 
 func _on_sneak_state_changed(is_sneaking: bool) -> void:
   set_formation(1 if is_sneaking else 0)  # スニーク時はラインフォーメーション
+
+
+func _on_player_game_over() -> void:
+  for fairy in fairies:
+    if fairy:
+      var slot = fairy.get_node_or_null("AttackCoreSlot")
+      if slot:
+        var cores = slot.get_active_cores()
+        for core in cores:
+          if core and core.has_method("cleanup_on_death"):
+            core.cleanup_on_death()
+      fairy.queue_free()
+  fairies.clear()
+  attack_core_nodes.clear()

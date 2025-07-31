@@ -2,7 +2,7 @@
 extends Resource
 class_name AttackPattern
 
-enum PatternType { SINGLE_SHOT, RAPID_FIRE, BARRIER_BULLETS, SPIRAL, CUSTOM }  # 単発  # 連射  # 円形配置  # バリア弾（回転→直進）  # 螺旋  # カスタムスクリプト用
+enum PatternType { SINGLE_SHOT, RAPID_FIRE, BARRIER_BULLETS, SPIRAL, BEAM, CUSTOM }  # 単発  # 連射  # 円形配置  # バリア弾（回転→直進）  # 螺旋  # ビーム  # カスタムスクリプト用
 
 enum DirectionType { FIXED, TO_PLAYER, RANDOM, CIRCLE, CUSTOM }  # 固定方向  # プレイヤー狙い  # ランダム # 円形  # カスタム計算
 
@@ -41,6 +41,11 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var bullet_speed: float = 200.0
 @export var curve_strength: float = 0.0
 @export var orbit_radius: float = 50.0
+
+# === ビーム設定 ===
+@export var beam_duration: float = 1.0
+@export var beam_scene: PackedScene
+@export var continuous_damage: bool = false  # ビームが持続的にダメージを与えるかどうか
 
 # === カスタム設定 ===
 @export var custom_script: GDScript  # カスタム動作用

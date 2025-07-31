@@ -30,5 +30,23 @@ func clear_spawned_bullets():
   spawned_bullets.clear()
 
 
+func _create_barrier_bullet(
+  pattern: AttackPattern, index: int, group_id: String, target_pos: Vector2
+):
+  """テスト用：バリア弾もモック弾として追跡"""
+  # モック弾丸を作成
+  var mock_bullet = Node2D.new()
+  mock_bullet.set_script(BulletStub)
+
+  # バリア弾設定を適用
+  mock_bullet.damage = pattern.damage
+  mock_bullet.target_group = pattern.target_group
+
+  # 追跡用に配列に追加
+  spawned_bullets.append(mock_bullet)
+
+  return mock_bullet
+
+
 func set_owner_actor(new_owner: Node) -> void:
   _owner_actor = new_owner

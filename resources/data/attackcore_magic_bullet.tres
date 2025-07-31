@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="AttackCoreItem" load_steps=5 format=3 uid="uid://btduv61qerhj"]
 
 [ext_resource type="PackedScene" uid="uid://c8dge426kwwql" path="res://scenes/attackCores/player/bullet.tscn" id="1_01gxq"]
-[ext_resource type="PackedScene" uid="uid://uk1k0t60775y" path="res://scenes/attackCores/player/bullet_core.tscn" id="1_6jnqk"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_k7kja"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="1_ypo2y"]
 [ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="2_k7kja"]
 
 [resource]
 script = ExtResource("1_ypo2y")
-core_scene = ExtResource("1_6jnqk")
+pattern_type = 0
+core_scene = ExtResource("1_k7kja")
 projectile_scene = ExtResource("1_01gxq")
 damage_base = 1.0
 cooldown_sec_base = 0.2

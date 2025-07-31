@@ -1,6 +1,9 @@
 extends ItemBase
 class_name AttackCoreItem
 
+enum PatternType { SINGLE_SHOT, BEAM, CUSTOM }
+
+@export var pattern_type: PatternType = PatternType.SINGLE_SHOT  # パターンタイプ
 @export var core_scene: PackedScene
 @export var projectile_scene: PackedScene  # 発射するプロジェクタイルのシーン
 @export var damage_base: float = 1.0  # 基本ダメージ

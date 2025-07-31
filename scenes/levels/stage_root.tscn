@@ -49,3 +49,5 @@ stageclear_bgm = ExtResource("16_3c375")
 [node name="Background" parent="." instance=ExtResource("17_vhqjk")]
 
 [node name="DialogueRunner" parent="." instance=ExtResource("18_o2yuv")]
+
+[node name="BulletLayer" type="Node" parent="."]

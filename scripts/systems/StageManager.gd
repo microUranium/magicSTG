@@ -66,6 +66,9 @@ func _initialize_and_start() -> void:
     return
   _initialized = true
 
+  # BulletLayerの初期化
+  _setup_bullet_layer()
+
   if stage_bgm:
     StageSignals.emit_bgm_play_requested(stage_bgm, 0, -10)
 
@@ -148,6 +151,19 @@ func _on_game_over() -> void:
 
   await get_tree().create_timer(5.0).timeout
   GameFlow.start_result_inventory()
+
+
+# -------------------------------------------------
+# Helper : BulletLayer初期化
+# -------------------------------------------------
+func _setup_bullet_layer() -> void:
+  """BulletLayerを見つけてTargetServiceに設定"""
+  var bullet_layer = get_node_or_null("../BulletLayer")
+  if bullet_layer:
+    TargetService.set_bullet_parent(bullet_layer)
+    print_debug("StageManager: BulletLayer initialized: %s" % bullet_layer.name)
+  else:
+    push_warning("StageManager: BulletLayer not found. Bullets will use fallback parent.")
 
 
 # -------------------------------------------------

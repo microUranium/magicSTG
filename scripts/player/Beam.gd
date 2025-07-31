@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var damage: int = 1
-@export var desired_length: float = 300.0
+@export var desired_length: float = 1000.0
 @export var owner_path: NodePath  # 精霊への参照
 @export var enemy_group: String = "enemies"
 @export var damage_tick_sec: float = 1.0 / 30.0
@@ -29,8 +29,10 @@ func _ready():
     owner_node = get_node(owner_path)
 
 
-func initialize(_owner_node: Node2D):
+func initialize(_owner_node: Node2D, _damage: int) -> void:
+  """ビームの初期化"""
   self.owner_node = _owner_node
+  self.damage = _damage
 
 
 func _process(_delta: float) -> void:

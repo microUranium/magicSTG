@@ -7,7 +7,6 @@ class_name BulletBase
 
 func _ready():
   connect("area_entered", Callable(self, "_on_area_entered"))
-  print_debug("BulletBase: _ready ", target_group, damage)
   StageSignals.destroy_bullet.connect(_destroy_bullet)
 
 

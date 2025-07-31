@@ -7,7 +7,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 1.0
+            "level": 2.0
           }
         ]
       },
@@ -46,7 +46,8 @@
     ]
   },
   "equipped": [
-    "attackcore_normal_beam_2",
+    "attackcore_magic_bullet_1",
+    "attackcore_normal_beam_1",
     "blessing_regen_1"
   ]
 }

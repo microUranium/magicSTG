@@ -11,6 +11,8 @@ class_name UniversalAttackCore
 
 var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
+var _beam_duration_timer: SceneTreeTimer = null  # ビーム持続時間タイマー
+var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追跡
 
 
 class ExecutionContext:
@@ -26,11 +28,35 @@ class ExecutionContext:
 
 
 func _ready() -> void:
-  show_on_hud = false
   super._ready()
   if debug_display:
     debug_display.visible = show_debug_info and OS.is_debug_build()
   _register_pattern_executors()
+
+
+func _process(_delta: float) -> void:
+  _update_gauge_display()
+
+
+func _update_gauge_display() -> void:
+  """ゲージ表示の更新（プレイヤーモード時のみ）"""
+  if not player_mode or not show_gauge_ui:
+    return
+
+  # ビーム発射中の場合
+  if (
+    _beam_duration_timer
+    and attack_pattern
+    and attack_pattern.pattern_type == AttackPattern.PatternType.BEAM
+  ):
+    var elapsed = _beam_duration_timer.time_left
+    var progress = (elapsed) * 100 / attack_pattern.beam_duration
+    set_gauge(progress)
+  # 通常のクールダウン中の場合
+  elif _cool_timer and _cooling:
+    var elapsed = _cool_timer.time_left
+    var progress = (cooldown_sec - elapsed) * 100 / cooldown_sec
+    set_gauge(progress)
 
 
 func _register_pattern_executors() -> void:
@@ -39,6 +65,7 @@ func _register_pattern_executors() -> void:
   _pattern_executors[AttackPattern.PatternType.RAPID_FIRE] = _execute_rapid_fire
   _pattern_executors[AttackPattern.PatternType.BARRIER_BULLETS] = _execute_barrier_bullets
   _pattern_executors[AttackPattern.PatternType.SPIRAL] = _execute_spiral
+  _pattern_executors[AttackPattern.PatternType.BEAM] = _execute_beam
   _pattern_executors[AttackPattern.PatternType.CUSTOM] = _execute_custom
 
 
@@ -75,9 +102,19 @@ func _validate_firing_conditions() -> bool:
     push_warning("UniversalAttackCore: Owner actor is not set.")
     return false
 
-  if not attack_pattern or not attack_pattern.bullet_scene:
-    push_warning("UniversalAttackCore: Attack pattern has no bullet scene.")
+  if not attack_pattern:
+    push_warning("UniversalAttackCore: Attack pattern is not set.")
     return false
+
+  # ビームパターンの場合はbeam_sceneをチェック、それ以外はbullet_sceneをチェック
+  if attack_pattern.pattern_type == AttackPattern.PatternType.BEAM:
+    if not attack_pattern.beam_scene:
+      push_warning("UniversalAttackCore: Beam pattern has no beam scene.")
+      return false
+  else:
+    if not attack_pattern.bullet_scene:
+      push_warning("UniversalAttackCore: Attack pattern has no bullet scene.")
+      return false
 
   return true
 
@@ -132,7 +169,7 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
       success = false
 
-    await get_tree().process_frame
+  await get_tree().process_frame
 
   return success
 
@@ -159,6 +196,7 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
   var success = true
   for i in range(pattern.bullet_count):
     var bullet = _create_barrier_bullet(pattern, i, bullet_group, target_pos)
+
     if bullet:
       _start_barrier_bullet(bullet, pattern)
     else:
@@ -188,6 +226,63 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
     await get_tree().create_timer(0.05).timeout
 
   return success
+
+
+func _execute_beam(pattern: AttackPattern) -> bool:
+  """ビーム攻撃"""
+  if not pattern.beam_scene:
+    push_warning("UniversalAttackCore: Beam pattern has no beam scene.")
+    return false
+
+  var parent = _find_bullet_parent()
+  if not parent:
+    push_warning("UniversalAttackCore: No valid parent node found for beam.")
+    return false
+
+  var beam_instance = pattern.beam_scene.instantiate()
+  parent.add_child(beam_instance)
+
+  if _owner_actor:
+    beam_instance.global_position = _owner_actor.global_position
+  else:
+    push_warning("UniversalAttackCore: Owner actor is not set for beam.")
+
+  # エンチャント適用済み値で初期化
+  var modified_duration = pattern.beam_duration
+  var modified_damage = pattern.damage
+
+  # 視覚・動作設定の適用
+  _apply_bullet_configs(beam_instance, pattern)
+
+  # ビーム専用初期化
+  if beam_instance.has_method("initialize"):
+    beam_instance.initialize(_owner_actor, modified_damage)
+
+  # ターゲットグループ設定
+  var target_group = (
+    override_target_group if not override_target_group.is_empty() else pattern.target_group
+  )
+  if beam_instance.has_method("set_target_group"):
+    beam_instance.set_target_group(target_group)
+
+  # 生成したビームを追跡リストに追加
+  _spawned_projectiles.append(beam_instance)
+  beam_instance.tree_exiting.connect(_on_projectile_destroyed.bind(beam_instance))
+
+  # ビーム持続時間タイマーを設定（ゲージ表示用）
+  _beam_duration_timer = get_tree().create_timer(modified_duration)
+
+  # プレイヤーモード時はゲージをリセット
+  if player_mode and show_gauge_ui:
+    set_gauge(0)
+
+  # 一定時間後にビームを削除
+  await _beam_duration_timer.timeout
+  if is_instance_valid(beam_instance):
+    beam_instance.queue_free()
+
+  _beam_duration_timer = null
+  return true
 
 
 func _execute_custom(pattern: AttackPattern) -> bool:
@@ -234,9 +329,17 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   # 視覚・動作設定の適用
   _apply_bullet_configs(bullet, pattern)
 
+  # 生成した弾丸を追跡リストに追加
+  _spawned_projectiles.append(bullet)
+  bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
+
   # 実行コンテキスト更新
   if _current_execution:
     _current_execution.bullets_spawned += 1
+
+  # プレイヤーモード時は発射時にゲージをリセット
+  if player_mode and show_gauge_ui:
+    set_gauge(0)
 
   return true
 
@@ -263,16 +366,22 @@ func _create_barrier_bullet(
 
   # バリア弾特有の設定
   if bullet.has_method("setup_barrier_bullet"):
+    var modified_damage = pattern.damage
+    var modified_radius = pattern.circle_radius
     bullet.setup_barrier_bullet(
       _owner_actor,
       group_id,
       pattern.bullet_count,
       index,
       _get_player_node(),
-      pattern.circle_radius,
-      pattern.damage,
+      modified_radius,
+      modified_damage,
       pattern.target_group
     )
+
+  # 生成したバリア弾を追跡リストに追加
+  _spawned_projectiles.append(bullet)
+  bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
 
   return bullet
 
@@ -299,12 +408,11 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
 
 
 func _get_player_position() -> Vector2:
-  var player = _get_player_node()
-  return player.global_position if player else Vector2.ZERO
+  return TargetService.get_player_position()
 
 
 func _get_player_node() -> Node2D:
-  return get_tree().current_scene.get_node_or_null("Player")
+  return TargetService.get_player()
 
 
 #---------------------------------------------------------------------
@@ -321,7 +429,7 @@ func _update_debug_display():
 
 func _update_debug_label():
   """デバッグラベルの更新"""
-  if not debug_label:
+  if not debug_label or not attack_pattern:
     return
 
   var pattern_name = attack_pattern.resource_path.get_file().get_basename()
@@ -329,9 +437,15 @@ func _update_debug_label():
   if _current_execution:
     execution_info = "\nBullets: %d" % _current_execution.bullets_spawned
 
+  var enchant_info = ""
+  if player_mode and item_inst and item_inst.enchantments.size() > 0:
+    enchant_info = "\nEnchants: %d" % item_inst.enchantments.size()
+
   debug_label.text = (
-    "Pattern: %s\nCount: %d\nDamage: %d%s"
-    % [pattern_name, attack_pattern.bullet_count, attack_pattern.damage, execution_info]
+    "Pattern: %s\nCount: %d\nDamage: %d%s%s"
+    % [
+      pattern_name, attack_pattern.bullet_count, attack_pattern.damage, execution_info, enchant_info
+    ]
   )
 
 
@@ -397,3 +511,15 @@ func get_debug_info() -> Dictionary:
   )
 
   return base_info
+
+
+func _on_projectile_destroyed(projectile: Node) -> void:
+  _spawned_projectiles.erase(projectile)
+
+
+func cleanup_on_death() -> void:
+  for projectile in _spawned_projectiles:
+    if is_instance_valid(projectile):
+      projectile.queue_free()
+  _spawned_projectiles.clear()
+  _beam_duration_timer = null

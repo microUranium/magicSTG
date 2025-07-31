@@ -15,6 +15,8 @@ signal core_cooldown_updated(elapsed, max)  # HUD ゲージ用
 @export var auto_start := true  # 生成直後に連射を始めるか
 @export var attack_pattern: AttackPattern:
   set = set_attack_pattern
+@export var player_mode: bool = false
+@export var show_gauge_ui: bool = false
 
 #---------------------------------------------------------------------
 # Runtime State
@@ -29,7 +31,7 @@ var item_inst: ItemInstance:
   set(v):
     item_inst = v
     _proto = v.prototype as AttackCoreItem
-    _recalc_stats()
+    _update_attack_pattern_stats()
 
 
 #---------------------------------------------------------------------
@@ -68,7 +70,7 @@ func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPat
 func trigger() -> void:
   if not can_fire():
     return
-
+  print_debug("AttackCoreBase: Triggering fire with cooldown %.2f" % cooldown_sec)
   var success = await _do_fire()
 
   if success:
@@ -112,32 +114,30 @@ func _do_fire() -> bool:
   return false
 
 
-func _recalc_stats() -> void:
-  # 共通パラメータ
-  cooldown_sec = _proto.cooldown_sec_base * (1.0 - _sum_pct("cooldown_pct"))
-  cooldown_sec = max(cooldown_sec, 0.02)  # 最低クールダウンは 0.02 秒
-  # ここで子クラス個別の再計算も呼ぶ
-  _on_stats_updated()
-
-
-func _on_stats_updated() -> void:
-  pass  # ProjectileCore / BeamCore が override
-
-
-func _sum_pct(key: String) -> float:
-  var total := 0.0
-  for enc in item_inst.enchantments:
-    var modifiers := enc.get_modifiers(item_inst.enchantments[enc])
-    total += modifiers.get(key, 0.0)
-  return total
-
-
 #---------------------------------------------------------------------
 # Internal
 #---------------------------------------------------------------------
 func _ready():
+  show_on_hud = player_mode and show_gauge_ui
   super._ready()
   add_to_group("attack_cores")
+
+  # プレイヤーモード時にAttackPatternを動的生成
+  if player_mode and item_inst and not attack_pattern:
+    _generate_attack_pattern_from_item()
+    _update_attack_pattern_stats()
+    init_gauge("cooldown", 100, 0, _proto.display_name)
+
+  print_debug(
+    (
+      "AttackCoreBase: Ready with cooldown %.2f, pattern %s"
+      % [
+        attack_pattern.burst_delay if attack_pattern else 0.0,
+        attack_pattern.resource_path.get_file() if attack_pattern else "none"
+      ]
+    )
+  )
+
   # パターンの初期検証
   _validate_pattern()
   if auto_start:
@@ -149,8 +149,68 @@ func _validate_pattern():
   if not attack_pattern:
     push_warning("AttackCoreBase: No attack pattern assigned.")
     return
-  if not attack_pattern.bullet_scene:
-    push_warning("AttackCoreBase: Attack pattern has no bullet scene.")
+
+  match attack_pattern.pattern_type:
+    AttackPattern.PatternType.BEAM:
+      if not attack_pattern.beam_scene:
+        push_warning("AttackCoreBase: Beam pattern has no beam scene.")
+    _:
+      if not attack_pattern.bullet_scene:
+        push_warning("AttackCoreBase: Attack pattern has no bullet scene.")
+
+
+func _validate_enchantments() -> bool:
+  """装着エンチャントの互換性チェック"""
+  if not item_inst:
+    return true
+  var available_keys = _get_available_enchant_keys()
+  for enc in item_inst.enchantments:
+    var modifiers = enc.get_modifiers(item_inst.enchantments[enc])
+    for key in modifiers.keys():
+      if not _is_compatible_enchant_key(key, available_keys):
+        push_warning("Incompatible enchantment: %s" % key)
+        return false
+  return true
+
+
+func _get_available_enchant_keys() -> Array[String]:
+  """このコアが対応するエンチャントキーを返す"""
+  return ["damage", "bullet_speed", "cooldown"]
+
+
+func _is_compatible_enchant_key(key: String, available_keys: Array[String]) -> bool:
+  """エンチャントキーが対応しているかチェック"""
+  return key in available_keys
+
+
+func _generate_attack_pattern_from_item() -> void:
+  """ItemInstanceからAttackPatternを動的生成"""
+  if not item_inst or not _proto:
+    return
+
+  attack_pattern = PlayerAttackPatternFactory.create_pattern_from_item_instance(item_inst)
+  if attack_pattern:
+    print_debug("AttackCoreBase: Generated attack pattern from item: %s" % _proto.display_name)
+  else:
+    push_warning("AttackCoreBase: Failed to generate attack pattern from item.")
+
+
+func _update_attack_pattern_stats() -> void:
+  """エンチャント適用後にAttackPatternの値を更新"""
+  if player_mode and item_inst and attack_pattern:
+    PlayerAttackPatternFactory.update_pattern_from_enchantments(attack_pattern, item_inst)
+    set_attack_pattern(attack_pattern)  # パターンを更新
+    print_debug("AttackCoreBase: Updated attack pattern stats from item: %s" % _proto.display_name)
+    print_debug(
+      (
+        "Damage: %d, Speed: %.2f, Cooldown: %.2f"
+        % [attack_pattern.damage, attack_pattern.bullet_speed, attack_pattern.burst_delay]
+      )
+    )
+  else:
+    push_warning(
+      "AttackCoreBase: Cannot update attack pattern stats, item_inst or attack_pattern is missing."
+    )
 
 
 func _start_cooldown():
@@ -184,7 +244,12 @@ func set_paused(state: bool) -> void:
 
 
 func _find_bullet_parent() -> Node:
-  # 実行シーンがあればそこへ
+  # サービスロケーターから取得を試行
+  var bullet_parent = TargetService.get_bullet_parent()
+  if bullet_parent:
+    return bullet_parent
+
+  # フォールバック: 実行シーンがあればそこへ
   if get_tree().current_scene:
     return get_tree().current_scene
 

@@ -29,6 +29,7 @@ func _ready() -> void:
   )
   $HpNode.connect("hp_changed", Callable(self, "_on_hp_changed"))
   self.healing_received.connect(_on_heal_received)
+  TargetService.register_player(self)
 
 
 func _process(delta):
@@ -99,3 +100,7 @@ func _spawn_destroy_particles():
     get_tree().current_scene.add_child(p)
     p.global_position = global_position
     p.restart()
+
+
+func _exit_tree():
+  TargetService.unregister_player()

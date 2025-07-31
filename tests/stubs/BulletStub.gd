@@ -26,3 +26,24 @@ func apply_movement_config(config):
 
 func apply_barrier_movement_config(config):
   pass
+
+
+func setup_barrier_bullet(
+  owner_actor,
+  group_id: String,
+  bullet_count: int,
+  index: int,
+  player_node,
+  radius: float,
+  dmg: int,
+  target_grp: String
+):
+  """バリア弾用のセットアップメソッド"""
+  damage = dmg
+  target_group = target_grp
+  initialized = true
+
+
+func start_rotation(duration: float, speed: float):
+  """バリア弾の回転開始メソッド"""
+  pass

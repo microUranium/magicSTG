@@ -248,7 +248,8 @@ func _check_layer_clear(layer_id: String) -> void:
     _finish_layer(layer_id)
   else:
     # 敵残カウントを監視して再試行
-    await get_tree().create_timer(0.5).timeout
+    if is_inside_tree():
+      await get_tree().create_timer(0.5).timeout
     _check_layer_clear(layer_id)
 
 

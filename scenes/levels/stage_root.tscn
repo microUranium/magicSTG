@@ -64,3 +64,4 @@ enemy_spawner_path = NodePath("../EnemySpawner")
 script = ExtResource("21_end45")
 wave_executor_path = NodePath("../WaveExecuter")
 dialogue_runner_path = NodePath("../DialogueRunner")
+inter_wave_delay = 1.5

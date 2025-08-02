@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://4jn460oodppl"]
+[gd_scene load_steps=22 format=3 uid="uid://4jn460oodppl"]
 
 [ext_resource type="PackedScene" uid="uid://b2qf1txmx5iug" path="res://scenes/ui/hud.tscn" id="1_58tok"]
 [ext_resource type="PackedScene" uid="uid://b1315qexpkx2j" path="res://scenes/ui/controller/gauge_manager.tscn" id="2_sk5mj"]
@@ -19,6 +19,8 @@
 [ext_resource type="AudioStream" uid="uid://c3v0b5o4h8qo2" path="res://assets/audio/bgm/stageclear_bgm.mp3" id="16_3c375"]
 [ext_resource type="PackedScene" uid="uid://bh68hvfympwiu" path="res://scenes/ui/background.tscn" id="17_vhqjk"]
 [ext_resource type="PackedScene" uid="uid://j2mvra4ldqkj" path="res://scenes/ui/controller/dialogue_runner.tscn" id="18_o2yuv"]
+[ext_resource type="Script" uid="uid://vek3ecy03q8c" path="res://scripts/systems/WaveExecutor.gd" id="20_yuom2"]
+[ext_resource type="Script" uid="uid://bmblpot7dnnlb" path="res://scripts/systems/StageController.gd" id="21_end45"]
 
 [node name="Main" type="Node2D"]
 
@@ -37,6 +39,9 @@ position = Vector2(448, 748)
 [node name="EnemySpawner" parent="." instance=ExtResource("4_end45")]
 
 [node name="StageManager" parent="." instance=ExtResource("5_y2ubk")]
+use_new_system = true
+stage_controller_path = NodePath("../StageController")
+wave_executor_path = NodePath("../WaveExecuter")
 segments = Array[ExtResource("6_p1fty")]([ExtResource("7_srajf"), ExtResource("8_sk5mj"), ExtResource("9_eujnn"), ExtResource("10_7pstm"), ExtResource("11_wsajr"), ExtResource("12_0unko"), ExtResource("8_msijp"), ExtResource("10_7pstm"), ExtResource("11_wsajr"), ExtResource("13_3pwvb"), ExtResource("14_7swd5")])
 spawner_path = NodePath("../EnemySpawner")
 dialogue_runner_path = NodePath("../DialogueRunner")
@@ -50,3 +55,12 @@ stageclear_bgm = ExtResource("16_3c375")
 [node name="DialogueRunner" parent="." instance=ExtResource("18_o2yuv")]
 
 [node name="BulletLayer" type="Node" parent="."]
+
+[node name="WaveExecuter" type="Node" parent="."]
+script = ExtResource("20_yuom2")
+enemy_spawner_path = NodePath("../EnemySpawner")
+
+[node name="StageController" type="Node" parent="."]
+script = ExtResource("21_end45")
+wave_executor_path = NodePath("../WaveExecuter")
+dialogue_runner_path = NodePath("../DialogueRunner")

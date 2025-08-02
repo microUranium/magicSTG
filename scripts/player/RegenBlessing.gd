@@ -52,7 +52,6 @@ func _do_heal() -> void:
   if player_ref and _healable:
     player_ref.emit_signal("healing_received", heal_amount)
     emit_signal("healing_done", heal_amount)
-    print_debug("RegenBlessing: Healing done, amount: ", heal_amount)
 
 
 func _start_cooldown() -> void:
@@ -62,7 +61,6 @@ func _start_cooldown() -> void:
 
 
 func _on_hp_changed(current_hp: int, max_hp: int) -> void:
-  print_debug("RegenBlessing: HP changed, current: ", current_hp, ", max: ", max_hp)
   if current_hp < max_hp:
     _healable = true
   else:

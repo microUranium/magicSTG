@@ -12,6 +12,13 @@ signal stage_cleared
 #---------------------------------------------------------------------
 # Inspector
 #---------------------------------------------------------------------
+# 新システム用
+@export var use_new_system: bool = false  # 新システムを使用するかどうか
+@export var stage_seed: String = ""  # 新システム用シード値
+@export_node_path("StageController") var stage_controller_path: NodePath
+@export_node_path("WaveExecutor") var wave_executor_path: NodePath
+
+# 旧システム用（互換性維持）
 @export var segments: Array[StageSegment] = []  # 再生タイムライン
 @export_node_path("Node") var spawner_path: NodePath  # EnemySpawner
 @export_node_path("CanvasLayer") var dialogue_runner_path: NodePath
@@ -31,9 +38,15 @@ signal stage_cleared
 #---------------------------------------------------------------------
 # Runtime
 #---------------------------------------------------------------------
+# 新システム用
+var _stage_controller: StageController
+var _wave_executor: WaveExecutor
+
+# 旧システム用（互換性維持）
 var _seg_idx := -1
-@onready var _spawner: EnemySpawner = get_node(spawner_path)
-@onready var _drunner: DialogueRunner = get_node(dialogue_runner_path)
+@onready var _spawner: EnemySpawner = get_node(spawner_path) if spawner_path else null
+@onready
+var _drunner: DialogueRunner = get_node(dialogue_runner_path) if dialogue_runner_path else null
 
 var _initialized := false
 var _current_dialogue: DialogueData = null
@@ -72,16 +85,11 @@ func _initialize_and_start() -> void:
   if stage_bgm:
     StageSignals.emit_bgm_play_requested(stage_bgm, 0, -10)
 
-  _spawner.wave_finished.connect(_on_wave_finished)
-  _drunner.dialogue_finished.connect(_on_dialogue_finished)
-  stage_cleared.connect(_on_stage_cleared)
-
-  var player: Player = get_node_or_null(player_path)
-  if player:
-    player.game_over.connect(_on_game_over)
-
-  _seg_idx = start_segment_idx - 1
-  _play_next_segment()
+  # 新システムか旧システムかで分岐
+  if use_new_system:
+    _initialize_new_system()
+  else:
+    _initialize_legacy_system()
 
 
 #---------------------------------------------------------------------
@@ -164,6 +172,56 @@ func _setup_bullet_layer() -> void:
     print_debug("StageManager: BulletLayer initialized: %s" % bullet_layer.name)
   else:
     push_warning("StageManager: BulletLayer not found. Bullets will use fallback parent.")
+
+
+# -------------------------------------------------
+# 新システム初期化
+# -------------------------------------------------
+func _initialize_new_system() -> void:
+  if stage_controller_path:
+    _stage_controller = get_node(stage_controller_path)
+  if wave_executor_path:
+    _wave_executor = get_node(wave_executor_path)
+
+  if not _stage_controller:
+    push_error("StageManager: StageController not found, falling back to legacy system")
+    _initialize_legacy_system()
+    return
+
+  # 新システムのシグナル接続
+  _stage_controller.stage_completed.connect(_on_stage_cleared)
+  _stage_controller.stage_failed.connect(_on_game_over)
+
+  var player: Player = get_node_or_null(player_path)
+  if player:
+    player.game_over.connect(_on_game_over)
+
+  # シード値でステージ開始
+  if stage_seed.is_empty():
+    stage_seed = "basic_swarm-Dstage1.intro-mixed_assault-boss_encounter-Dstage1.intro"  # デフォルト
+
+  print_debug("StageManager: Starting new system with seed: %s" % stage_seed)
+  # Readyプロンプト後に攻撃コアが停止されているため、ステージ開始時に適切に制御される
+  _stage_controller.start_stage(stage_seed)
+
+
+# -------------------------------------------------
+# 旧システム初期化（互換性維持）
+# -------------------------------------------------
+func _initialize_legacy_system() -> void:
+  if _spawner:
+    _spawner.wave_finished.connect(_on_wave_finished)
+  if _drunner:
+    _drunner.dialogue_finished.connect(_on_dialogue_finished)
+
+  stage_cleared.connect(_on_stage_cleared)
+
+  var player: Player = get_node_or_null(player_path)
+  if player:
+    player.game_over.connect(_on_game_over)
+
+  _seg_idx = start_segment_idx - 1
+  _play_next_segment()
 
 
 # -------------------------------------------------

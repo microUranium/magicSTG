@@ -19,11 +19,20 @@ var _is_paused: bool = false
 
 func _ready() -> void:
   if enemy_spawner_path:
-    _enemy_spawner = get_node(enemy_spawner_path)
+    _enemy_spawner = get_node_or_null(enemy_spawner_path)
+    if _enemy_spawner:
+      _enemy_spawner.wave_finished.connect(_on_spawner_wave_finished)
+      _enemy_spawner.layer_finished.connect(_on_layer_finished)
 
-  if _enemy_spawner:
-    _enemy_spawner.wave_finished.connect(_on_spawner_wave_finished)
-    _enemy_spawner.layer_finished.connect(_on_layer_finished)
+
+func set_enemy_spawner(spawner: EnemySpawner) -> void:
+  """外部からのEnemySpawner設定"""
+  if spawner and _enemy_spawner != spawner:
+    _enemy_spawner = spawner
+    if not _enemy_spawner.wave_finished.is_connected(_on_spawner_wave_finished):
+      _enemy_spawner.wave_finished.connect(_on_spawner_wave_finished)
+    if not _enemy_spawner.layer_finished.is_connected(_on_layer_finished):
+      _enemy_spawner.layer_finished.connect(_on_layer_finished)
 
 
 func execute_wave_template(template_data: Dictionary) -> bool:

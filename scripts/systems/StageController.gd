@@ -21,14 +21,33 @@ var _current_dialogue_token: String = ""  # StageController管理のダイアロ
 
 func _ready() -> void:
   if wave_executor_path:
-    _wave_executor = get_node(wave_executor_path)
+    _wave_executor = get_node_or_null(wave_executor_path)
+    if _wave_executor:
+      _wave_executor.wave_completed.connect(_on_wave_completed)
+      _wave_executor.wave_failed.connect(_on_wave_failed)
+
   if dialogue_runner_path:
-    _dialogue_runner = get_node(dialogue_runner_path)
-  if _wave_executor:
-    _wave_executor.wave_completed.connect(_on_wave_completed)
-    _wave_executor.wave_failed.connect(_on_wave_failed)
-  if _dialogue_runner:
-    _dialogue_runner.dialogue_finished.connect(_on_dialogue_completed)
+    _dialogue_runner = get_node_or_null(dialogue_runner_path)
+    if _dialogue_runner:
+      _dialogue_runner.dialogue_finished.connect(_on_dialogue_completed)
+
+  # StageSignalsからの攻撃コア停止要求を処理
+  StageSignals.attack_cores_pause_requested.connect(_pause_attack_cores)
+
+
+func set_dependencies(wave_executor: WaveExecutor, dialogue_runner: DialogueRunner) -> void:
+  """外部からの依存関係設定"""
+  if wave_executor and _wave_executor != wave_executor:
+    _wave_executor = wave_executor
+    if not _wave_executor.wave_completed.is_connected(_on_wave_completed):
+      _wave_executor.wave_completed.connect(_on_wave_completed)
+    if not _wave_executor.wave_failed.is_connected(_on_wave_failed):
+      _wave_executor.wave_failed.connect(_on_wave_failed)
+
+  if dialogue_runner and _dialogue_runner != dialogue_runner:
+    _dialogue_runner = dialogue_runner
+    if not _dialogue_runner.dialogue_finished.is_connected(_on_dialogue_completed):
+      _dialogue_runner.dialogue_finished.connect(_on_dialogue_completed)
 
 
 func start_stage(seed_value: String) -> bool:
@@ -80,6 +99,9 @@ func _parse_seed(seed_value: String) -> bool:
 func _execute_next_event() -> void:
   if not _is_running:
     return
+  print_debug(
+    "StageController: Executing event %d/%d" % [_current_event_index + 1, _event_queue.size()]
+  )
   if _current_event_index >= _event_queue.size():
     _complete_stage()
     return
@@ -106,7 +128,6 @@ func _execute_wave_event(event: Dictionary) -> void:
   var template_name: String = event.get("template_name", "")
   var template_data: Dictionary = event.get("template_data", {})
 
-  print_debug("StageController: Executing wave '%s'" % template_name)
   _pause_attack_cores(false)  # ウェーブ開始時は攻撃コアを有効化
   _wave_executor.execute_wave_template(template_data)
 
@@ -117,9 +138,9 @@ func _execute_dialogue_event(event: Dictionary) -> void:
     _advance_to_next_event()
     return
 
-    # StageController管理のダイアログに一意トークンを付与
+  # StageController管理のダイアログに一意トークンを付与
 
-    # トークン付きでダイアログ実行（StageManager経由）
+  # トークン付きでダイアログ実行（StageManager経由）
   var dialogue_path: String = event.get("dialogue_path", "")
   var dialogue_data: Array = event.get("dialogue_data", [])
 
@@ -178,14 +199,12 @@ func _advance_to_next_event() -> void:
 
 
 func _complete_stage() -> void:
-  print_debug("StageController: Stage completed")
   _is_running = false
   _pause_attack_cores(true)  # ステージ完了時は攻撃コアを停止
   stage_completed.emit()
 
 
 func _fail_stage() -> void:
-  print_debug("StageController: Stage failed")
   _is_running = false
   _pause_attack_cores(true)  # ステージ失敗時は攻撃コアを停止
   stage_failed.emit()
@@ -200,26 +219,19 @@ func _on_wave_completed() -> void:
 
 
 func _on_wave_failed() -> void:
-  print_debug("StageController: Wave failed")
   _fail_stage()
 
 
 func _on_dialogue_completed(_dialogue_data: DialogueData) -> void:
-  print_debug("StageController: Generic dialogue completed (ignoring - not stage managed)")
   _pause_attack_cores(false)
   # 敵などの外部ダイアログ完了は無視（トークン付きコールバックのみ処理）
 
 
 func _on_stage_dialogue_finished(token: String) -> void:
-  print_debug("StageController: Stage dialogue finished with token '%s'" % token)
-
   # 自分が管理するダイアログの完了のみ処理
   if token == _current_dialogue_token:
-    print_debug("StageController: Token matched - advancing to next event")
     _current_dialogue_token = ""  # トークンをクリア
     _advance_to_next_event()
-  else:
-    print_debug("StageController: Token mismatch - ignoring dialogue completion")
 
 
 func stop_stage() -> void:

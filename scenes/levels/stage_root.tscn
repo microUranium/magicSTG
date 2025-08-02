@@ -1,20 +1,14 @@
-[gd_scene load_steps=22 format=3 uid="uid://4jn460oodppl"]
+[gd_scene load_steps=16 format=3 uid="uid://4jn460oodppl"]
 
 [ext_resource type="PackedScene" uid="uid://b2qf1txmx5iug" path="res://scenes/ui/hud.tscn" id="1_58tok"]
 [ext_resource type="PackedScene" uid="uid://b1315qexpkx2j" path="res://scenes/ui/controller/gauge_manager.tscn" id="2_sk5mj"]
 [ext_resource type="PackedScene" uid="uid://bk5e3tn2k0vcl" path="res://scenes/player/player.tscn" id="3_yuom2"]
 [ext_resource type="PackedScene" uid="uid://dkebraj3c7ik8" path="res://scenes/managers/enemy_spawner.tscn" id="4_end45"]
 [ext_resource type="PackedScene" uid="uid://dxte2v852483q" path="res://scenes/managers/stage_manager.tscn" id="5_y2ubk"]
-[ext_resource type="Script" uid="uid://ws0w2wdc7ixc" path="res://scripts/systems/StageSegment.gd" id="6_p1fty"]
-[ext_resource type="Resource" uid="uid://c6lxdp0c4mh7q" path="res://resources/stage/stage_segment/stage_segment_test1.tres" id="7_srajf"]
-[ext_resource type="Resource" uid="uid://btlqescgksfwv" path="res://resources/stage/stage_segment/stage_segment_test2.tres" id="8_msijp"]
-[ext_resource type="Resource" uid="uid://iqwm784npugp" path="res://resources/stage/stage_segment/stage_segment_test8.tres" id="8_sk5mj"]
-[ext_resource type="Resource" uid="uid://dus38a43lnm3d" path="res://resources/stage/stage_segment/stage_segment_test3.tres" id="9_eujnn"]
-[ext_resource type="Resource" uid="uid://c3cdvtxar8vj3" path="res://resources/stage/stage_segment/stage_segment_test4.tres" id="10_7pstm"]
-[ext_resource type="Resource" uid="uid://bc2efo8rc1u1g" path="res://resources/stage/stage_segment/stage_segment_test5.tres" id="11_wsajr"]
-[ext_resource type="Resource" uid="uid://d1ivxc7d53btm" path="res://resources/stage/stage_segment/stage_segment_test6.tres" id="12_0unko"]
-[ext_resource type="Resource" uid="uid://bogsqux4kw7pm" path="res://resources/stage/stage_segment/stage_segment_test_harpy.tres" id="13_3pwvb"]
-[ext_resource type="Resource" uid="uid://bg6fafco5bhcd" path="res://resources/stage/stage_segment/stage_segment_test7.tres" id="14_7swd5"]
+[ext_resource type="Script" uid="uid://c5c6ig5pjyfhj" path="res://scripts/systems/StageAudioController.gd" id="10_m2w43"]
+[ext_resource type="Script" uid="uid://ba5gf6vo77l0d" path="res://scripts/systems/StageEnvironmentSetup.gd" id="13_clcak"]
+[ext_resource type="Script" uid="uid://cifgrcj5jwq6b" path="res://scripts/systems/StageUIController.gd" id="14_iwvup"]
+[ext_resource type="Script" uid="uid://wf0y3kkjmccb" path="res://scripts/systems/StageLifecycleController.gd" id="15_clcak"]
 [ext_resource type="AudioStream" uid="uid://bnsl7rxxvq8sq" path="res://assets/audio/bgm/testStage_bgm.mp3" id="15_yohi3"]
 [ext_resource type="AudioStream" uid="uid://c3v0b5o4h8qo2" path="res://assets/audio/bgm/stageclear_bgm.mp3" id="16_3c375"]
 [ext_resource type="PackedScene" uid="uid://bh68hvfympwiu" path="res://scenes/ui/background.tscn" id="17_vhqjk"]
@@ -39,16 +33,14 @@ position = Vector2(448, 748)
 [node name="EnemySpawner" parent="." instance=ExtResource("4_end45")]
 
 [node name="StageManager" parent="." instance=ExtResource("5_y2ubk")]
-use_new_system = true
+player_path = NodePath("../Player")
 stage_controller_path = NodePath("../StageController")
 wave_executor_path = NodePath("../WaveExecuter")
-segments = Array[ExtResource("6_p1fty")]([ExtResource("7_srajf"), ExtResource("8_sk5mj"), ExtResource("9_eujnn"), ExtResource("10_7pstm"), ExtResource("11_wsajr"), ExtResource("12_0unko"), ExtResource("8_msijp"), ExtResource("10_7pstm"), ExtResource("11_wsajr"), ExtResource("13_3pwvb"), ExtResource("14_7swd5")])
-spawner_path = NodePath("../EnemySpawner")
 dialogue_runner_path = NodePath("../DialogueRunner")
-inter_wave_delay = 1.5
-player_path = NodePath("../Player")
-stage_bgm = ExtResource("15_yohi3")
-stageclear_bgm = ExtResource("16_3c375")
+audio_controller_path = NodePath("../AudioController")
+ui_controller_path = NodePath("../UIController")
+environment_setup_path = NodePath("../EnvironmentSetup")
+lifecycle_controller_path = NodePath("../LifecycleController")
 
 [node name="Background" parent="." instance=ExtResource("17_vhqjk")]
 
@@ -65,3 +57,19 @@ script = ExtResource("21_end45")
 wave_executor_path = NodePath("../WaveExecuter")
 dialogue_runner_path = NodePath("../DialogueRunner")
 inter_wave_delay = 1.5
+
+[node name="AudioController" type="Node" parent="."]
+script = ExtResource("10_m2w43")
+stage_bgm = ExtResource("15_yohi3")
+stageclear_bgm = ExtResource("16_3c375")
+bgm_fade_in = 0.0
+bgm_fade_out = 0.5
+
+[node name="EnvironmentSetup" type="Node" parent="."]
+script = ExtResource("13_clcak")
+
+[node name="UIController" type="Node" parent="."]
+script = ExtResource("14_iwvup")
+
+[node name="LifecycleController" type="Node" parent="."]
+script = ExtResource("15_clcak")

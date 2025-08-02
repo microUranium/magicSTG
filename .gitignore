@@ -17,3 +17,6 @@ mono_crash.*.json
 
 # Build artifacts
 /build/
+
+# Claude settings
+.claude/

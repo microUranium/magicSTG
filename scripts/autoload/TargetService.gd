@@ -32,3 +32,7 @@ func set_bullet_parent(parent: Node) -> void:
 
 func get_bullet_parent() -> Node:
   return _bullet_parent if _bullet_parent else get_tree().current_scene
+
+
+func has_bullet_parent() -> bool:
+  return _bullet_parent != null

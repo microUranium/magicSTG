@@ -70,7 +70,6 @@ func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPat
 func trigger() -> void:
   if not can_fire():
     return
-  print_debug("AttackCoreBase: Triggering fire with cooldown %.2f" % cooldown_sec)
   var success = await _do_fire()
 
   if success:
@@ -127,16 +126,6 @@ func _ready():
     _generate_attack_pattern_from_item()
     _update_attack_pattern_stats()
     init_gauge("cooldown", 100, 0, _proto.display_name)
-
-  print_debug(
-    (
-      "AttackCoreBase: Ready with cooldown %.2f, pattern %s"
-      % [
-        attack_pattern.burst_delay if attack_pattern else 0.0,
-        attack_pattern.resource_path.get_file() if attack_pattern else "none"
-      ]
-    )
-  )
 
   # パターンの初期検証
   _validate_pattern()
@@ -201,12 +190,6 @@ func _update_attack_pattern_stats() -> void:
     PlayerAttackPatternFactory.update_pattern_from_enchantments(attack_pattern, item_inst)
     set_attack_pattern(attack_pattern)  # パターンを更新
     print_debug("AttackCoreBase: Updated attack pattern stats from item: %s" % _proto.display_name)
-    print_debug(
-      (
-        "Damage: %d, Speed: %.2f, Cooldown: %.2f"
-        % [attack_pattern.damage, attack_pattern.bullet_speed, attack_pattern.burst_delay]
-      )
-    )
   else:
     push_warning(
       "AttackCoreBase: Cannot update attack pattern stats, item_inst or attack_pattern is missing."

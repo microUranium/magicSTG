@@ -169,7 +169,8 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
       success = false
 
-  await get_tree().process_frame
+  if is_inside_tree():
+    await get_tree().process_frame
 
   return success
 
@@ -183,7 +184,8 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
       success = false
 
     if burst < pattern.rapid_fire_count - 1:
-      await get_tree().create_timer(pattern.rapid_fire_interval).timeout
+      if is_inside_tree():
+        await get_tree().create_timer(pattern.rapid_fire_interval).timeout
 
   return success
 

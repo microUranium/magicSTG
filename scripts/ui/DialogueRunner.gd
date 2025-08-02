@@ -39,6 +39,17 @@ func start_with_callback(dialogue_data: DialogueData, finished_cb: Callable) -> 
   start(dialogue_data)
 
 
+func start_dialogue_lines(dialogue_lines: Array[DialogueLine]) -> void:
+  if dialogue_lines.is_empty():
+    push_warning("DialogueRunner: dialogue_lines is empty.")
+    _finish_dialogue()
+    return
+
+  var dialogue_data := DialogueData.new()
+  dialogue_data.lines = dialogue_lines
+  start(dialogue_data)
+
+
 # --------------------------------------------------
 # Face Cache & Side Assignment
 # --------------------------------------------------

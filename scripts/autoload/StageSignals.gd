@@ -5,6 +5,7 @@ signal request_hud_flash(fade_duration)
 signal request_change_background_scroll_speed(new_speed: float, change_time: float)
 signal request_start_vibration
 signal destroy_bullet
+signal attack_cores_pause_requested(paused: bool)
 
 ## ───── BGM 系シグナル ─────
 signal bgm_play_requested(stream: AudioStream, fade_time: float)

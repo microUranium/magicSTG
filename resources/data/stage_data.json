@@ -1,0 +1,160 @@
+{
+  "wave_templates": {
+    "basic_swarm": {
+      "layers": [
+        {
+          "enemy": "enemy_bird_a",
+          "count": 5,
+          "pattern": "single_random",
+          "interval": 1.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "mixed_assault": {
+      "layers": [
+        {
+          "enemy": "enemy_bird_a",
+          "count": 8,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_b", 
+          "count": 3,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_flower_a",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 1.5,
+          "delay": 5.0
+        }
+      ]
+    },
+    "boss_encounter": {
+      "layers": [
+        {
+          "enemy": "harpy",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    }
+  },
+  
+  "enemies": {
+    "enemy_bird_a": {
+      "scene_path": "res://scenes/enemy/enemy_bird_a.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_b": {
+      "scene_path": "res://scenes/enemy/enemy_b.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_flower_a": {
+      "scene_path": "res://scenes/enemy/enemy_flower_a.tscn",
+      "spawn_weight": 1.0
+    },
+    "harpy": {
+      "scene_path": "res://scenes/enemy/harpy.tscn",
+      "spawn_weight": 1.0
+    }
+  },
+
+  "spawn_patterns": {
+    "single_random": { 
+      "type": "single_random",
+      "spawn_event_pattern": 0
+    },
+    "burst_same_pos": { 
+      "type": "burst_same_pos",
+      "spawn_event_pattern": 1
+    },
+    "line_horiz": { 
+      "type": "line_horiz",
+      "spawn_event_pattern": 2
+    },
+    "from_top_spacing": { 
+      "type": "from_top_spacing",
+      "spawn_event_pattern": 3
+    }
+  },
+
+  "dialogues": {
+    "stage1": {
+      "intro": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（うえ～？\nなんか魔物が寄ってきてない…？）"
+        },
+        {
+          "speaker_name": "フェアリー",
+          "face_left": "res://assets/gfx/sprites/fairy_sprite.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "敵が来るから準備して！"
+        }
+      ],
+      "mid_battle": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "この敵、結構強いかも..."
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "でも負けるわけにはいかない！"
+        }
+      ],
+      "victory": [
+        {
+          "speaker_name": "フェアリー",
+          "face_left": "res://assets/gfx/sprites/fairy_sprite.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "やったね！よくがんばったよ！"
+        }
+      ]
+    },
+    "boss_stage": {
+      "boss_intro": [
+        {
+          "speaker_name": "ハーピー",
+          "face_left": "res://assets/gfx/sprites/harpy_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "よくここまで来たわね..."
+        },
+        {
+          "speaker_name": "ハーピー",
+          "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "でも、ここで終わりよ！"
+        }
+      ]
+    }
+  }
+}

@@ -75,7 +75,10 @@ func initialize_all_components() -> bool:
   if not _parent_node:
     push_error("StageComponentRegistry: Parent node not set")
     return false
-  _calculate_initialization_order()
+
+  # 初期化順序を計算（循環依存チェック含む）
+  if not _calculate_initialization_order():
+    return false
 
   for component_name in _initialization_order:
     if not _initialize_component(component_name):
@@ -112,7 +115,7 @@ func is_all_components_ready() -> bool:
 
 func get_failed_components() -> Array[String]:
   """失敗したコンポーネントのリストを取得"""
-  var failed = []
+  var failed: Array[String] = []
   for component_name in _components:
     var info = _components[component_name] as ComponentInfo
     if info.status == ComponentStatus.FAILED:
@@ -125,7 +128,7 @@ func get_failed_components() -> Array[String]:
 #---------------------------------------------------------------------
 
 
-func _calculate_initialization_order() -> void:
+func _calculate_initialization_order() -> bool:
   """依存関係を考慮した初期化順序を計算"""
   _initialization_order.clear()
   var remaining = _components.keys()
@@ -168,9 +171,11 @@ func _calculate_initialization_order() -> void:
         i += 1
     if not progress_made:
       push_error(
-        "StageComponentRegistry: Circular dependency detected in components: %s" % remaining
+        "StageComponentRegistry: Circular dependency detected in components: %s" % str(remaining)
       )
-      break
+      return false
+
+  return true
 
 
 func _initialize_component(name: String) -> bool:
@@ -178,15 +183,6 @@ func _initialize_component(name: String) -> bool:
   if not name in _components:
     return false
 
-    # NodePath が空の場合はスキップ（オプショナルコンポーネント）
-
-    # インスタンス取得
-
-    # 型チェック（カスタムクラスの場合はスキップ）
-
-    # カスタムクラスの場合はscriptでチェック
-
-    # コンポーネント固有の初期化
   var info = _components[name] as ComponentInfo
   info.status = ComponentStatus.INITIALIZING
 
@@ -195,13 +191,7 @@ func _initialize_component(name: String) -> bool:
     info.status = ComponentStatus.READY
     return true
 
-    # インスタンス取得
-
-    # 型チェック（カスタムクラスの場合はスキップ）
-
-    # カスタムクラスの場合はscriptでチェック
-
-    # コンポーネント固有の初期化
+  # インスタンス取得
   info.instance = _parent_node.get_node_or_null(info.path)
   if not info.instance:
     info.error_message = "Node not found at path: %s" % info.path
@@ -210,11 +200,7 @@ func _initialize_component(name: String) -> bool:
     push_error("StageComponentRegistry: %s" % info.error_message)
     return false
 
-    # 型チェック（カスタムクラスの場合はスキップ）
-
-    # カスタムクラスの場合はscriptでチェック
-
-    # コンポーネント固有の初期化
+  # 型チェック（カスタムクラスの場合はスキップ）
   var expected_class_name = info.expected_type.get_global_name()
   if expected_class_name and not info.instance.is_class(expected_class_name):
     # カスタムクラスの場合はscriptでチェック
@@ -230,12 +216,10 @@ func _initialize_component(name: String) -> bool:
         component_failed.emit(name, info.error_message)
         push_error("StageComponentRegistry: %s" % info.error_message)
         return false
-
-      # コンポーネント固有の初期化
     else:
       pass  # カスタムクラスで型チェックをスキップ
 
-      # コンポーネント固有の初期化
+  # コンポーネント固有の初期化
   if info.instance.has_method("initialize"):
     if not info.instance.initialize(_parent_node):
       info.error_message = "Component initialization failed"

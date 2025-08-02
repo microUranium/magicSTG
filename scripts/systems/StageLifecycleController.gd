@@ -88,6 +88,10 @@ func handle_stage_cleared() -> void:
 
 func handle_stage_failed() -> void:
   """ステージ失敗処理"""
+  if _current_state != StageState.RUNNING:
+    push_warning("StageLifecycleController: Stage not running, cannot failed")
+    return
+
   if _current_state == StageState.FAILED or _current_state == StageState.COMPLETED:
     push_warning("StageLifecycleController: Stage already finished")
     return

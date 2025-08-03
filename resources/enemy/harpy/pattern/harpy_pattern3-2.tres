@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="EnemyPatternResource" load_steps=3 format=3 uid="uid://undebh40d02r"]
+[gd_resource type="Resource" script_class="EnemyPatternResource" load_steps=2 format=3 uid="uid://undebh40d02r"]
 
-[ext_resource type="Resource" uid="uid://bxmy8un46gvyu" path="res://resources/dialogue/dialogue_data/dialogue_data_test4.tres" id="1_md0wm"]
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="2_cxck4"]
 
 [resource]
@@ -9,5 +8,5 @@ move_to = Vector2(448, 144)
 move_time = 0.0
 core_to_enable = ""
 core_duration = 3.0
-dialogue = ExtResource("1_md0wm")
+dialogue_path = "test4.battle_progression"
 metadata/_custom_type_script = "uid://bps01f3m37042"

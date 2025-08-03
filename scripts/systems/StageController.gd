@@ -138,9 +138,6 @@ func _execute_dialogue_event(event: Dictionary) -> void:
     _advance_to_next_event()
     return
 
-  # StageController管理のダイアログに一意トークンを付与
-
-  # トークン付きでダイアログ実行（StageManager経由）
   var dialogue_path: String = event.get("dialogue_path", "")
   var dialogue_data: Array = event.get("dialogue_data", [])
 
@@ -157,34 +154,13 @@ func _execute_dialogue_event(event: Dictionary) -> void:
   )
   _pause_attack_cores(true)  # ダイアログ開始時は攻撃コアを停止
 
-  var dialogue_lines := _convert_json_to_dialogue_lines(dialogue_data)
-  var dialogue_data_obj := DialogueData.new()
-  dialogue_data_obj.lines = dialogue_lines
+  # DialogueConverterを使用してデータ変換
+  var dialogue_data_obj := DialogueConverter.convert_json_to_dialogue_data(dialogue_data)
 
   # トークン付きでダイアログ実行（StageManager経由）
   StageSignals.request_dialogue.emit(
     dialogue_data_obj, _on_stage_dialogue_finished.bind(_current_dialogue_token)
   )
-
-
-func _convert_json_to_dialogue_lines(json_data: Array) -> Array[DialogueLine]:
-  var dialogue_lines: Array[DialogueLine] = []
-
-  for line_data in json_data:
-    var line := DialogueLine.new()
-    line.speaker_name = line_data.get("speaker_name", "")
-    line.text = line_data.get("text", "")
-    line.speaker_side = line_data.get("speaker_side", "left")
-    line.box_direction = line_data.get("box_direction", "left")
-
-    var face_left_path = line_data.get("face_left", null)
-    if face_left_path:
-      line.face_left = load(face_left_path)
-    var face_right_path = line_data.get("face_right", null)
-    if face_right_path:
-      line.face_right = load(face_right_path)
-    dialogue_lines.append(line)
-  return dialogue_lines
 
 
 func _advance_to_next_event() -> void:

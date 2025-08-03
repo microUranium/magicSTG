@@ -12,31 +12,9 @@ func _ready() -> void:
   load_stage_data()
 
 
-func load_stage_data() -> bool:
-  var file_path := "res://resources/data/stage_data.json"
+func load_stage_data(_data: Dictionary = {}) -> bool:
+  var data: Dictionary = _data if _data else parse_json_data("res://resources/data/stage_data.json")
 
-  if not FileAccess.file_exists(file_path):
-    push_error("GameDataRegistry: stage_data.json not found at %s" % file_path)
-    return false
-  var file := FileAccess.open(file_path, FileAccess.READ)
-  if file == null:
-    push_error("GameDataRegistry: Failed to open stage_data.json")
-    return false
-  var json_text := file.get_as_text()
-  file.close()
-
-  var json := JSON.new()
-  var parse_result := json.parse(json_text)
-
-  if parse_result != OK:
-    push_error(
-      (
-        "GameDataRegistry: JSON parse error at line %d: %s"
-        % [json.get_error_line(), json.get_error_message()]
-      )
-    )
-    return false
-  var data := json.data as Dictionary
   if data == null:
     push_error("GameDataRegistry: Invalid JSON structure")
     return false
@@ -127,3 +105,43 @@ func reload_data() -> bool:
   spawn_patterns.clear()
   dialogues.clear()
   return load_stage_data()
+
+
+static func parse_json_data(file_path: String) -> Dictionary:
+  var file := FileAccess.open(file_path, FileAccess.READ)
+  if file == null:
+    push_error("GameDataRegistry: Failed to open stage data file at %s" % file_path)
+    return {}
+
+  var json_text := file.get_as_text()
+  file.close()
+
+  var json := JSON.new()
+  var parse_result := json.parse(json_text)
+
+  if parse_result != OK:
+    push_error(
+      (
+        "GameDataRegistry: JSON parse error at line %d: %s"
+        % [json.get_error_line(), json.get_error_message()]
+      )
+    )
+    return {}
+
+  return json.data as Dictionary
+
+
+static func parse_json_data_from_string(json_string: String) -> Dictionary:
+  var json := JSON.new()
+  var parse_result := json.parse(json_string)
+
+  if parse_result != OK:
+    push_error(
+      (
+        "GameDataRegistry: JSON parse error at line %d: %s"
+        % [json.get_error_line(), json.get_error_message()]
+      )
+    )
+    return {}
+
+  return json.data as Dictionary

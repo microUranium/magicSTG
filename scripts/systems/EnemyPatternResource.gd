@@ -6,15 +6,14 @@ class_name EnemyPatternResource
 @export var move_time: float = 1.0
 @export var core_to_enable: String = ""  # AttackCoreSlot 内子ノード名
 @export var core_duration: float = 3.0
-@export var dialogue: DialogueData = null  # 行動開始時に挟む会話
+@export var dialogue_path: String = ""  # stage_data.json の会話パス（新方式）
 
 
 func start(enemy: Node2D, _ai: Node, finished_cb: Callable):
-  # 1. optional dialogue
-  if dialogue:
-    print_debug("finished_cb :", finished_cb.get_object(), " - ", finished_cb.get_method())
-    StageSignals.emit_request_dialogue(dialogue, finished_cb)
-    return  # dialogueが終わったら同コールバックで再開
+  # 1. optional dialogue (新方式優先、レガシー方式フォールバック)
+  if not dialogue_path.is_empty():
+    _handle_json_dialogue(dialogue_path, finished_cb)
+    return
 
   # 2. move tween
   var tw = enemy.create_tween()
@@ -37,3 +36,13 @@ func _enable_core_then_wait(enemy: Node2D, finished_cb: Callable):
         slot.set_phased(false)
       finished_cb.call()
   )
+
+
+func _handle_json_dialogue(_dialogue_path: String, finished_cb: Callable):
+  print_debug("EnemyPatternResource: dialogue_path ", _dialogue_path)
+  var dialogue_data = DialogueConverter.get_dialogue_data_from_path(_dialogue_path)
+  if dialogue_data:
+    StageSignals.request_dialogue.emit(dialogue_data, finished_cb)
+  else:
+    print_debug("EnemyPatternResource: dialogue_path not found: ", _dialogue_path)
+    finished_cb.call()  # 会話データが見つからない場合は即座に続行

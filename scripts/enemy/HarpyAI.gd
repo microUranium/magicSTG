@@ -28,13 +28,13 @@ func _initialize_attack_patterns():
   """攻撃パターンの初期化（パターンが未設定の場合のフォールバック）"""
   if phase1_patterns.is_empty():
     # Phase 1: 基本的なプレイヤー狙い射撃
-    phase1_patterns = [create_harpy_phase1_barrier()]
-    phase1_patterns.append(create_harpy_phase1_pattern())
+    phase1_patterns = create_harpy_phase1_pattern()
+    phase1_patterns.append(create_harpy_phase1_barrier())
 
   if phase3_patterns_1.is_empty():
     # Phase 3-1: バリア弾パターン
-    phase3_patterns_1 = [create_harpy_phase3_barrier2()]
-    phase3_patterns_1.append(create_harpy_phase1_pattern())
+    phase3_patterns_1 = create_harpy_phase1_pattern()
+    phase3_patterns_1.append(create_harpy_phase3_barrier2())
 
   if phase3_patterns_2.is_empty():
     # Phase 3-2: 高密度バリア弾
@@ -73,8 +73,10 @@ func _next_pattern():
   super._next_pattern()
 
   if _phase_idx == 3 and _idx % patterns.size() == 10:
+    _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
   elif _phase_idx == 3 and _idx % patterns.size() == 0:
+    _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_1)
 
 
@@ -134,19 +136,36 @@ func _clear_all_pattern_cores():
   _pattern_cores.clear()
 
 
-func create_harpy_phase1_pattern() -> AttackPattern:
-  """ハーピーPhase1相当のパターンを作成"""
-  var pattern = AttackPatternFactory.create_rapid_fire(
-    AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.1, 3
-  )
-  pattern.target_group = "players"
-  pattern.burst_delay = 1
+func create_harpy_phase1_pattern() -> Array[AttackPattern]:
+  """Phase1相当のパターンを作成"""
+  var _patterns: Array[AttackPattern] = []
 
-  var movement_config = BulletMovementConfig.new()
-  movement_config.initial_speed = 500.0
-  pattern.bullet_movement_config = movement_config
+  for i in range(3):
+    var pattern = AttackPatternFactory.create_rapid_fire(
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1, 1
+    )
+    pattern.target_group = "players"
+    pattern.burst_delay = 3
+    pattern.bullet_count = 3
+    pattern.angle_spread = 30.0  # 各パターンで角度をずらす
+    pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
 
-  return pattern
+    var visual_config = (
+      preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+    )
+    visual_config.scale = 1.5
+    visual_config.texture = preload("res://assets/gfx/sprites/bullet_harpy_sprite.png")
+    pattern.bullet_visual_config = visual_config
+
+    var movement_config = BulletMovementConfig.new()
+    movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
+    movement_config.initial_speed = 500.0
+    movement_config.deceleration_rate = 200.0
+    movement_config.min_speed = 500.0 - (i * 50.0)
+    pattern.bullet_movement_config = movement_config
+    _patterns.append(pattern)
+
+  return _patterns
 
 
 func create_harpy_phase1_barrier() -> AttackPattern:

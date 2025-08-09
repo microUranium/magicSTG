@@ -25,3 +25,5 @@ var pattern: int = Pattern.SINGLE_RANDOM
 # 基準座標（BURST 等で使用）
 #------------------------------
 @export var base_pos: Vector2 = Vector2.ZERO
+
+@export var parameters: Dictionary = {}  # 敵に渡すパラメータ

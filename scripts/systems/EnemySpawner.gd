@@ -49,7 +49,6 @@ func start_layer(layer_id: String, events: Array[SpawnEvent]) -> void:
   _layer_states[layer_id] = layer_state
   _active_layers.append(layer_id)
 
-  print_debug("EnemySpawner: Starting layer '%s' with %d events" % [layer_id, events.size()])
   _play_next_layer_event(layer_state)
 
 
@@ -148,7 +147,6 @@ func _finish_layer(layer_id: String) -> void:
   _layer_states.erase(layer_id)
   _active_layers.erase(layer_id)
 
-  print_debug("EnemySpawner: Layer '%s' finished" % layer_id)
   layer_finished.emit(layer_id)
 
 
@@ -159,6 +157,13 @@ func _spawn_layer_enemy(layer_state: LayerState, pos: Vector2) -> void:
     return  # 出現シーン未設定
   var scene: PackedScene = layer_state.current_event.enemy_scenes.pick_random()
   var enemy := scene.instantiate()
+  if layer_state.current_event.parameters:
+    for param_name in layer_state.current_event.parameters.keys():
+      var param_value = layer_state.current_event.parameters[param_name]
+      if enemy.has_method("set_parameter"):
+        enemy.set_parameter(param_name, param_value)
+      else:
+        push_warning("EnemySpawner: Enemy %s does not support set_parameter" % enemy.name)
   get_tree().current_scene.add_child(enemy)
   enemy.global_position = pos
 
@@ -235,13 +240,6 @@ func _check_layer_clear(layer_id: String) -> void:
     if is_instance_valid(enemy) and not enemy.is_queued_for_deletion():
       alive_enemies.append(enemy)
   layer_state.spawned_enemies = alive_enemies
-
-  print_debug(
-    (
-      "EnemySpawner: Checking layer '%s' clear, spawn events completed: %s, enemies alive: %d"
-      % [layer_id, layer_state.spawn_events_completed, layer_state.spawned_enemies.size()]
-    )
-  )
 
   # SpawnEvent完了 & 生存敵0 ⇒ レイヤー完了
   if layer_state.spawn_events_completed and layer_state.spawned_enemies.is_empty():

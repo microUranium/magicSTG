@@ -1,0 +1,272 @@
+[gd_scene load_steps=35 format=3 uid="uid://dhspfyxcmu4pv"]
+
+[ext_resource type="Script" uid="uid://cettgc1308lxy" path="res://scripts/enemy/BossBird.gd" id="1_trrge"]
+[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_5g4h4"]
+[ext_resource type="Texture2D" uid="uid://byppkiitjy8p5" path="res://assets/gfx/sprites/enemy_boss_bird.png" id="3_oeuat"]
+[ext_resource type="Script" uid="uid://bwbmge46hb4ib" path="res://scripts/enemy/BossBirdAI.gd" id="4_1lmri"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_hyn3k"]
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="6_5g4h4"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_el5v6"]
+[ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="7_oeuat"]
+[ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="8_ngv7u"]
+[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="11_oeuat"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="12_n5io8"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="13_2wdkw"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="14_ktlex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngv7u"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0ufh"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hyn3k"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v5i53"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_el5v6"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5g4h4"]
+atlas = ExtResource("3_oeuat")
+region = Rect2(1280, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngv7u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0ufh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hyn3k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v5i53")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_el5v6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5g4h4")
+}],
+"loop": true,
+"name": &"rush",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(40, 88)
+
+[sub_resource type="Resource" id="Resource_ngv7u"]
+script = ExtResource("6_5g4h4")
+movement_type = 0
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s1d11.battle_conversation"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_v5i53"]
+script = ExtResource("6_el5v6")
+patterns = Array[ExtResource("6_5g4h4")]([ExtResource("7_oeuat"), ExtResource("8_ngv7u"), SubResource("Resource_ngv7u")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_clw6s"]
+script = ExtResource("6_5g4h4")
+movement_type = 0
+move_to = Vector2(296, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_f0ufh"]
+script = ExtResource("6_5g4h4")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_mnf1d"]
+script = ExtResource("6_5g4h4")
+movement_type = 0
+move_to = Vector2(600, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_aaifb"]
+script = ExtResource("6_5g4h4")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_el5v6"]
+script = ExtResource("6_el5v6")
+patterns = Array[ExtResource("6_5g4h4")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_sw3l5"]
+script = ExtResource("6_5g4h4")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 2
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_5g4h4"]
+script = ExtResource("6_5g4h4")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 1
+move_angle = 0.0
+move_speed = 700.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = true
+animation_name = "rush"
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_oeuat"]
+script = ExtResource("6_5g4h4")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 0.5
+direction_type = 3
+move_angle = 0.0
+move_speed = 200.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_hyn3k"]
+script = ExtResource("6_5g4h4")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_amn40"]
+script = ExtResource("6_el5v6")
+patterns = Array[ExtResource("6_5g4h4")]([SubResource("Resource_sw3l5"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_hyn3k")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5g4h4"]
+size = Vector2(255, 35)
+
+[node name="BossBird" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_trrge")
+destroy_particles_scene = ExtResource("2_5g4h4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.487225
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -36)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("4_hyn3k")
+max_hp = 400
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("4_1lmri")
+phases = Array[ExtResource("6_el5v6")]([SubResource("Resource_v5i53"), SubResource("Resource_el5v6"), SubResource("Resource_amn40")])
+attack_core_slot = NodePath("../AttackCoreSlot")
+_bgm = ExtResource("11_oeuat")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("12_n5io8")]
+script = ExtResource("13_2wdkw")
+default_core_scene = ExtResource("14_ktlex")
+attack_pattern = null
+auto_create_core = true
+
+[node name="CollisionShape_attack" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -48.5)
+shape = SubResource("RectangleShape2D_5g4h4")

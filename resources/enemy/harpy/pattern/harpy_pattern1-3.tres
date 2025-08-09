@@ -4,9 +4,16 @@
 
 [resource]
 script = ExtResource("1_0fum8")
+movement_type = 0
 move_to = Vector2(448, 144)
 move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
 core_to_enable = ""
 core_duration = 3.0
-dialogue_path = "test3.main_conversation"
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s1d12.battle_conversation"
 metadata/_custom_type_script = "uid://bps01f3m37042"

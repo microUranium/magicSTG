@@ -106,7 +106,14 @@ func _select_wave_from_pool(pool_name: String) -> String:
   # 重みベースの選択
   var total_weight := 0
   for wave_data in pool_waves.values():
-    total_weight += wave_data.get("weight", 1)
+    var weight = wave_data.get("weight", 1)
+    # 型安全性を確保（不正な値は1に変換）
+    if weight is int:
+      total_weight += weight
+    elif weight is String and weight.is_valid_int():
+      total_weight += weight.to_int()
+    else:
+      total_weight += 1
 
   if total_weight <= 0:
     return pool_waves.keys()[0]
@@ -116,7 +123,15 @@ func _select_wave_from_pool(pool_name: String) -> String:
 
   for wave_name in pool_waves.keys():
     var wave_data = pool_waves[wave_name]
-    current_weight += wave_data.get("weight", 1)
+    var weight = wave_data.get("weight", 1)
+    # 型安全性を確保（不正な値は1に変換）
+    if weight is int:
+      current_weight += weight
+    elif weight is String and weight.is_valid_int():
+      current_weight += weight.to_int()
+    else:
+      current_weight += 1
+
     if random_value <= current_weight:
       return wave_name
 

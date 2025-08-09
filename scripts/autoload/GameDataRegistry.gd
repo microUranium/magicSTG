@@ -4,6 +4,7 @@ var wave_templates: Dictionary = {}
 var enemies: Dictionary = {}
 var spawn_patterns: Dictionary = {}
 var dialogues: Dictionary = {}
+var wave_pools: Dictionary = {}
 
 var _data_loaded: bool = false
 
@@ -22,12 +23,19 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   enemies = data.get("enemies", {})
   spawn_patterns = data.get("spawn_patterns", {})
   dialogues = data.get("dialogues", {})
+  wave_pools = data.get("wave_pools", {})
 
   _data_loaded = true
   print_debug(
     (
-      "GameDataRegistry: Loaded %d wave templates, %d enemies, %d spawn patterns, %d dialogues"
-      % [wave_templates.size(), enemies.size(), spawn_patterns.size(), dialogues.size()]
+      "GameDataRegistry: Loaded %d wave templates, %d enemies, %d spawn patterns, %d dialogues, %d wave pools"
+      % [
+        wave_templates.size(),
+        enemies.size(),
+        spawn_patterns.size(),
+        dialogues.size(),
+        wave_pools.size()
+      ]
     )
   )
 
@@ -98,12 +106,61 @@ func get_all_enemy_names() -> Array[String]:
   return names
 
 
+func get_waves_by_pool(pool_name: String) -> Dictionary:
+  """指定プールに属するウェーブテンプレートを取得"""
+  var pool_waves: Dictionary = {}
+
+  for template_name in wave_templates.keys():
+    var template_data = wave_templates[template_name]
+    if template_data.get("pool", "") == pool_name:
+      pool_waves[template_name] = template_data
+
+  return pool_waves
+
+
+func get_wave_pool_info(pool_name: String) -> Dictionary:
+  """ウェーブプール情報を取得"""
+  if not wave_pools.has(pool_name):
+    push_warning("GameDataRegistry: Wave pool '%s' not found" % pool_name)
+    return {}
+  return wave_pools[pool_name]
+
+
+func get_all_pool_names() -> Array[String]:
+  """全プール名を取得"""
+  var names: Array[String] = []
+  for name in wave_pools.keys():
+    names.append(name)
+  return names
+
+
+func validate_pool_waves() -> bool:
+  """プール設定の妥当性チェック"""
+  var valid := true
+
+  for template_name in wave_templates.keys():
+    var template_data = wave_templates[template_name]
+    var pool_name: String = template_data.get("pool", "")
+
+    if not pool_name.is_empty() and not wave_pools.has(pool_name):
+      push_warning(
+        (
+          "GameDataRegistry: Wave template '%s' references unknown pool '%s'"
+          % [template_name, pool_name]
+        )
+      )
+      valid = false
+
+  return valid
+
+
 func reload_data() -> bool:
   _data_loaded = false
   wave_templates.clear()
   enemies.clear()
   spawn_patterns.clear()
   dialogues.clear()
+  wave_pools.clear()
   return load_stage_data()
 
 

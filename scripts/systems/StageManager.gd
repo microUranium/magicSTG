@@ -210,11 +210,29 @@ func _connect_stage_controller_and_start() -> void:
     player.game_over.connect(_on_game_over)
 
   # シード値でステージ開始
-  if stage_seed.is_empty():
-    stage_seed = "basic_swarm-Dstage1.intro-mixed_assault-boss_encounter-Dstage1.intro"  # デフォルト
+  _prepare_stage_seed()
 
   # Readyプロンプト後に攻撃コアが停止されているため、ステージ開始時に適切に制御される
   _stage_controller.start_stage(stage_seed)
+
+
+func _prepare_stage_seed() -> void:
+  """ステージシード値の準備処理"""
+  # 1. RandomSeedGeneratorからシード値取得を試行
+  var generated_seed := RandomSeedGenerator.get_current_seed()
+  if not generated_seed.is_empty():
+    stage_seed = generated_seed
+    print_debug("StageManager: Using generated seed from RandomSeedGenerator: '%s'" % stage_seed)
+    return
+
+  # 2. Inspector設定値がある場合はそれを使用
+  if not stage_seed.is_empty():
+    print_debug("StageManager: Using inspector-set seed: '%s'" % stage_seed)
+    return
+
+  # 3. デフォルト固定シード値
+  stage_seed = "basic_swarm-Ds1d11.intro-mixed_assault-boss_encounter-Ds1d11.resolution"
+  print_debug("StageManager: Using default seed: '%s'" % stage_seed)
 
 
 #---------------------------------------------------------------------

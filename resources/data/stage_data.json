@@ -12,6 +12,8 @@
       ]
     },
     "s112": {
+      "pool": "stage1",
+      "weight": 8,
       "layers": [
         {
           "enemy": "enemy_bird_a",
@@ -23,6 +25,8 @@
       ]
     },
     "s113": {
+      "pool": "stage1",
+      "weight": 6,
       "layers": [
         {
           "enemy": "enemy_bird_a",
@@ -34,6 +38,8 @@
       ]
     },
     "s121": {
+      "pool": "stage1",
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_bird_a_rush",
@@ -45,6 +51,8 @@
       ]
     },
     "s122": {
+      "pool": "stage1",
+      "weight": 3,
       "layers": [
         {
           "enemy": "enemy_bird_a_rush",
@@ -74,6 +82,8 @@
       ]
     },
     "s132": {
+      "pool": "stage1",
+      "weight": 7,
       "layers": [
         {
           "enemy": "enemy_b", 
@@ -85,6 +95,8 @@
       ]
     },
     "s133": {
+      "pool": "stage1",
+      "weight": 6,
       "layers": [
         {
           "enemy": "enemy_b", 
@@ -96,6 +108,8 @@
       ]
     },
     "s134": {
+      "pool": "stage1",
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_b", 
@@ -107,6 +121,8 @@
       ]
     },
     "s141": {
+      "pool": "stage1",
+      "weight": 8,
       "layers": [
         {
           "enemy": "enemy_flower_a",
@@ -118,6 +134,8 @@
       ]
     },
     "s142": {
+      "pool": "stage1",
+      "weight": 6,
       "layers": [
         {
           "enemy": "enemy_flower_a",
@@ -129,6 +147,8 @@
       ]
     },
     "s1g1": {
+      "pool": "stage1",
+      "weight": 8,
       "layers": [
         {
           "enemy": "enemy_bird_a",
@@ -147,6 +167,8 @@
       ]
     },
     "s1g2": {
+      "pool": "stage1",
+      "weight": 10,
       "layers": [
         {
           "enemy": "enemy_bird_a",
@@ -165,6 +187,8 @@
       ]
     },
     "s1g3": {
+      "pool": "stage1",
+      "weight": 10,
       "layers": [
         {
           "enemy": "enemy_b", 
@@ -190,6 +214,8 @@
       ]
     },
     "s1g4": {
+      "pool": "stage1",
+      "weight": 3,
       "layers": [
         {
           "enemy": "enemy_b", 
@@ -269,6 +295,19 @@
       ]
     },
     "s1z3": {
+      "layers": [
+        {
+          "enemy": "boss_bird_skip_dialogue_skip_bgm_change",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s1z4": {
+      "pool": "stage1_boss",
+      "weight": 10,
       "layers": [
         {
           "enemy": "boss_bird_skip_dialogue",
@@ -386,6 +425,13 @@
       "scene_path": "res://scenes/enemy/enemy_boss_bird.tscn",
       "spawn_weight": 1.0,
       "parameters": {
+        "skip_dialogue": "true"
+      }
+    },
+    "boss_bird_skip_dialogue_skip_bgm_change": {
+      "scene_path": "res://scenes/enemy/enemy_boss_bird.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
         "skip_dialogue": "true",
         "skip_bgm_change": "true",
         "skip_boss_defeat_effect": "true"
@@ -409,6 +455,15 @@
     "from_top_spacing": { 
       "type": "from_top_spacing",
       "spawn_event_pattern": 3
+    }
+  },
+
+  "wave_pools": {
+    "stage1": {
+      "description": "Stage 1 Waves - Simple enemy patterns"
+    },
+    "stage1_boss": {
+      "description": "Stage 1 Boss Waves - Boss encounters"
     }
   },
 
@@ -743,7 +798,15 @@
           "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "今日あたし機嫌が悪いんだよね。お前の引き連れた魔物のせいで遅刻だし。昔の恨みもあるし。"
+          "text": "今日あたし機嫌が悪いんだよね。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "お前の引き連れた魔物のせいで遅刻だし。昔の恨みもあるし。"
         },
         {
           "speaker_name": "フェリス",

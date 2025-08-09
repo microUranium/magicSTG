@@ -32,6 +32,7 @@ EquipSignals="*res://scripts/autoload/EquipSignals.gd"
 Ephemeralnventory="*res://scripts/autoload/Ephemeralnventory.gd"
 TargetService="*res://scripts/autoload/TargetService.gd"
 GameDataRegistry="*res://scripts/autoload/GameDataRegistry.gd"
+RandomSeedGenerator="*res://scripts/autoload/RandomSeedGenerator.gd"
 
 [display]
 

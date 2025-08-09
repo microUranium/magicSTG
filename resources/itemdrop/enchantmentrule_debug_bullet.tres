@@ -13,7 +13,7 @@ count_weights = {
 }
 level_weights = {
 1: 1.0,
-2: 0.0,
+2: 0.2,
 3: 0.0
 }
 pool = Array[ExtResource("1_3lrwi")]([ExtResource("2_3lrwi")])

@@ -16,6 +16,7 @@ class_name UniversalBullet
 # === 内部状態 ===
 var _movement_timer: float = 0.0
 var _original_speed: float
+var _prev_position: Vector2 = Vector2.ZERO
 
 
 func _ready():
@@ -88,6 +89,13 @@ func _process(delta):
 
   if movement_config:
     _update_advanced_movement(delta)
+
+  # 角度を移動方向に合わせる
+  var _direction = (global_position - _prev_position).normalized()
+  if _direction != Vector2.ZERO:
+    var rotation_angle = _direction.angle() + PI / 2
+    rotation = rotation_angle
+  _prev_position = global_position
 
 
 func _update_advanced_movement(delta: float):

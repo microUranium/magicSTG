@@ -129,6 +129,8 @@ func _convert_layer_to_spawn_events(layer: Dictionary) -> Array[SpawnEvent]:
     push_warning("WaveExecutor: No scene path for enemy '%s'" % enemy_name)
     return spawn_events
 
+  var enemy_parameter: Dictionary = enemy_data.get("parameters", {})
+
   var enemy_scene := load(scene_path) as PackedScene
   if not enemy_scene:
     push_error("WaveExecutor: Failed to load enemy scene '%s'" % scene_path)
@@ -140,6 +142,10 @@ func _convert_layer_to_spawn_events(layer: Dictionary) -> Array[SpawnEvent]:
   spawn_event.interval = interval
   spawn_event.pattern = _get_spawn_event_pattern_enum(pattern_name)
   spawn_event.base_pos = Vector2.ZERO
+  if !scene_path.is_empty():
+    spawn_event.parameters = enemy_parameter
+  else:
+    spawn_event.parameters = {}
 
   spawn_events.append(spawn_event)
   return spawn_events

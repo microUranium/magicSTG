@@ -6,6 +6,7 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var slot := $AttackCoreSlot
 @export var drop_table: Array[DropTableEntry] = []
+@export var skip_boss_defeat_effect: bool = false  # ボス撃破エフェクトをスキップするかどうか
 
 
 func _ready():
@@ -40,3 +41,8 @@ func _spawn_destroy_particles():
 func _drop_item() -> void:
   if drop_table.size() > 0:
     LootSystem.spawn_drop(global_position, drop_table)
+
+
+func set_parameter(_name: String, _value: String) -> void:
+  # 継承先で実装されることを期待
+  pass

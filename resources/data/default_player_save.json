@@ -4,30 +4,20 @@
       {
         "uid": "attackcore_magic_bullet_1",
         "id": "attackcore_magic_bullet",
-        "enchantments": [
-          {
-            "id": "cooldown_pct",
-            "level": 2.0
-          }
-        ]
+        "enchantments": []
       },
       {
         "uid": "attackcore_magic_bullet_2",
         "id": "attackcore_magic_bullet",
-        "enchantments": [
-          {
-            "id": "cooldown_pct",
-            "level": 1.0
-          }
-        ]
-      },
-      {
-        "uid": "attackcore_normal_beam_1",
-        "id": "attackcore_normal_beam",
         "enchantments": []
       },
       {
-        "uid": "attackcore_normal_beam_2",
+        "uid": "attackcore_magic_bullet_3",
+        "id": "attackcore_magic_bullet",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_normal_beam_1",
         "id": "attackcore_normal_beam",
         "enchantments": []
       }
@@ -47,7 +37,7 @@
   },
   "equipped": [
     "attackcore_magic_bullet_1",
-    "attackcore_normal_beam_1",
-    "blessing_regen_1"
+    "attackcore_magic_bullet_2",
+    "attackcore_magic_bullet_3"
   ]
 }

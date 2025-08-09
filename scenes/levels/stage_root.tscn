@@ -33,7 +33,7 @@ position = Vector2(448, 748)
 [node name="EnemySpawner" parent="." instance=ExtResource("4_end45")]
 
 [node name="StageManager" parent="." instance=ExtResource("5_y2ubk")]
-stage_seed = "Dtest1.intro-basic_swarm-Dtest2.progression-mixed_assault-boss_encounter-Dtest5.resolution"
+stage_seed = "Ds1d12.intro-s113-s122-s1g3-s113-s142-Ds1d12.progression-s134-s1g2-s1g4-s1g3-s1g5-s1z3-s1z2-Ds1d12.resolution"
 player_path = NodePath("../Player")
 stage_controller_path = NodePath("../StageController")
 wave_executor_path = NodePath("../WaveExecuter")

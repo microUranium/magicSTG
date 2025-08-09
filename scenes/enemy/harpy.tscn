@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://uh0qd5u61qs7" path="res://scripts/enemy/Harpy.gd" id="1_l4g2j"]
 [ext_resource type="Texture2D" uid="uid://ctbnimw6slxdk" path="res://assets/gfx/sprites/harpy_sprite.png" id="2_f2sx0"]
-[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_harpy.tscn" id="2_njnvt"]
+[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_njnvt"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_wdiqv"]
 [ext_resource type="Script" uid="uid://dvnqgbnjws8av" path="res://scripts/enemy/HarpyAI.gd" id="4_mmm4h"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="5_f01p3"]

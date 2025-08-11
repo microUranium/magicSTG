@@ -49,6 +49,7 @@ theme_override_font_sizes/font_size = 72
 text = "装備画面"
 
 [node name="SwitchToStageButton_S1-1" type="Button" parent="."]
+layout_mode = 0
 offset_left = 179.0
 offset_top = 816.0
 offset_right = 475.0
@@ -57,6 +58,7 @@ theme_override_font_sizes/font_size = 72
 text = "S1-イントロ"
 
 [node name="SwitchToStageButton_S1-2" type="Button" parent="."]
+layout_mode = 0
 offset_left = 806.0
 offset_top = 814.0
 offset_right = 1102.0

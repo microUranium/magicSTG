@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bh68hvfympwiu"]
 
-[ext_resource type="Texture2D" uid="uid://csgys65memynf" path="res://assets/gfx/backgrounds/background_forest.png" id="1_20pmh"]
+[ext_resource type="Texture2D" uid="uid://bpsaurnexjihk" path="res://assets/gfx/backgrounds/background_sea.png" id="2_qy2i1"]
 [ext_resource type="Script" uid="uid://h30kkxh0p8n7" path="res://scripts/ui/Background.gd" id="2_uakm4"]
 
 [node name="Background" type="ParallaxBackground" node_paths=PackedStringArray("sprite")]
@@ -14,5 +14,5 @@ motion_mirroring = Vector2(0, 3072)
 
 [node name="BackgroundTexture" type="Sprite2D" parent="ParallaxLayer"]
 scale = Vector2(3, 3)
-texture = ExtResource("1_20pmh")
+texture = ExtResource("2_qy2i1")
 centered = false

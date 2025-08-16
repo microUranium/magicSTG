@@ -29,7 +29,7 @@ func _ready():
     owner_node = get_node(owner_path)
 
 
-func initialize(_owner_node: Node2D, _damage: int) -> void:
+func initialize(_owner_node: Node2D, _damage: int, _beam_direction: Vector2) -> void:
   """ビームの初期化"""
   self.owner_node = _owner_node
   self.damage = _damage

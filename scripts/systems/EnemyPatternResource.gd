@@ -14,6 +14,8 @@ enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS
 @export var direction_type: DirectionType = DirectionType.FIXED_ANGLE
 @export var move_angle: float = 0.0  # 度数で指定（0=右、90=下、180=左、270=上）
 @export var move_speed: float = 100.0
+@export var use_movement_bounds: bool = false  # 移動範囲制限を使用するか
+@export var movement_bounds: Rect2 = Rect2(0.0, 0.0, 1.0, 1.0)  # 移動可能範囲（PlayArea基準の割合 0.0-1.0）
 
 @export_group("Core Control")
 @export var core_to_enable: String = ""  # AttackCoreSlot 内子ノード名
@@ -71,6 +73,10 @@ func _execute_directional_movement(enemy: Node2D, ai: Node, finished_cb: Callabl
   var direction_vector = _get_direction_vector(enemy, ai)
   var start_position = enemy.global_position
   var target_position = start_position + direction_vector * move_speed * move_time
+
+  # Apply movement bounds if enabled
+  if use_movement_bounds:
+    target_position = _clamp_position_to_bounds(target_position)
 
   var tw = enemy.create_tween()
   tw.tween_property(enemy, "global_position", target_position, move_time)
@@ -145,6 +151,24 @@ func _get_player_position(enemy: Node2D) -> Vector2:
   return Vector2.ZERO
 
 
+func _clamp_position_to_bounds(position: Vector2) -> Vector2:
+  var play_rect = PlayArea.get_play_rect()
+
+  # Convert normalized bounds (0.0-1.0) to actual PlayArea coordinates
+  var actual_bounds = Rect2(
+    play_rect.position.x + movement_bounds.position.x * play_rect.size.x,
+    play_rect.position.y + movement_bounds.position.y * play_rect.size.y,
+    movement_bounds.size.x * play_rect.size.x,
+    movement_bounds.size.y * play_rect.size.y
+  )
+
+  print_debug("EnemyPatternResource: Clamping position ", position, " to bounds ", actual_bounds)
+  return Vector2(
+    clamp(position.x, actual_bounds.position.x, actual_bounds.position.x + actual_bounds.size.x),
+    clamp(position.y, actual_bounds.position.y, actual_bounds.position.y + actual_bounds.size.y)
+  )
+
+
 func _enable_core_then_wait(enemy: Node2D, finished_cb: Callable):
   var slot = enemy.slot.get_node_or_null(core_to_enable)
   if slot:
@@ -195,7 +219,7 @@ func _on_pattern_complete(enemy: Node2D, original_callback: Callable):
         print_debug("EnemyPatternResource: Restored animation to ", _original_animation)
 
   # Call the original callback
-  if enemy.is_inside_tree():
+  if enemy and enemy.is_inside_tree():
     original_callback.call()
 
 

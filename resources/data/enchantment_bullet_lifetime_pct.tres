@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://dck1crqkk2ov5"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_grfdq"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2_m35x8"]
+[ext_resource type="Resource" uid="uid://d6uvju42om4k" path="res://resources/data/tiers/tier_bullet_lifetime_pct_1.tres" id="3_grfdq"]
+[ext_resource type="Resource" uid="uid://dx4abclrkfg55" path="res://resources/data/tiers/tier_bullet_lifetime_pct_2.tres" id="4_m35x8"]
+[ext_resource type="Resource" uid="uid://bokck2apkv8v7" path="res://resources/data/tiers/tier_bullet_lifetime_pct_3.tres" id="5_ngsbc"]
+
+[resource]
+script = ExtResource("1_grfdq")
+id = &"bullet_lifetime_pct"
+display_name = "残留"
+description = "弾がより長く留まり続けます。"
+tiers = Array[ExtResource("2_m35x8")]([ExtResource("3_grfdq"), ExtResource("4_m35x8"), ExtResource("5_ngsbc")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

@@ -318,6 +318,111 @@
         }
       ]
     },
+    "s211": {
+      "pool": "stage2",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_a",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s221": {
+      "pool": "stage2",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 2,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s231": {
+      "pool": "stage2",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s2g1": {
+      "pool": "stage2",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_a",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 2,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 5.0
+        }
+      ]
+    },
+    "s2z1": {
+      "pool": "stage2_boss",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "boss_stingray",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s2z2": {
+      "pool": "stage2_boss",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "boss_snake",
+          "count": 1,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s2z3": {
+      "pool": "stage2_boss",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "boss_stingray_skip_dialogue_skip_bgm_change",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
     "basic_swarm": {
       "layers": [
         {
@@ -413,6 +518,18 @@
       "scene_path": "res://scenes/enemy/enemy_flower_a.tscn",
       "spawn_weight": 1.0
     },
+    "enemy_starfish_a": {
+      "scene_path": "res://scenes/enemy/enemy_starfish_a.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_fugu_a": {
+      "scene_path": "res://scenes/enemy/enemy_fugu_a.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_sea_bird": {
+      "scene_path": "res://scenes/enemy/enemy_sea_bird.tscn",
+      "spawn_weight": 1.0
+    },
     "harpy": {
       "scene_path": "res://scenes/enemy/harpy.tscn",
       "spawn_weight": 1.0
@@ -436,6 +553,23 @@
         "skip_bgm_change": "true",
         "skip_boss_defeat_effect": "true"
       }
+    },
+    "boss_stingray": {
+      "scene_path": "res://scenes/enemy/enemy_boss_stingray.tscn",
+      "spawn_weight": 1.0
+    },
+    "boss_stingray_skip_dialogue_skip_bgm_change": {
+      "scene_path": "res://scenes/enemy/enemy_boss_stingray.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true",
+        "skip_bgm_change": "true",
+        "skip_boss_defeat_effect": "true"
+      }
+    },
+    "boss_snake": {
+      "scene_path": "res://scenes/enemy/enemy_boss_snake.tscn",
+      "spawn_weight": 1.0
     }
   },
 
@@ -887,6 +1021,232 @@
           "speaker_side": "left",
           "box_direction": "left",
           "text": "（はあ、もう完全に遅刻だけど、ギルドに行くか…。）"
+        }
+      ]
+    },
+    "s2d11": {
+      "intro": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "はぁ。なんであたしがこんなことを…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "シスターが言うにはこの先にコウモリ遺跡があるみたいだけど…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "さっさと依頼を片付けて帰ろう。"
+        }
+      ],
+      "progression": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（たしかこの辺りって鉱石エイが出る地域だったよね。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（あれに出くわすと厄介だからさっさと通り抜けちゃお。）"
+        }
+      ],
+      "battle_conversation": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "なっ…。言ったそばから…！"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "出てくるの早すぎでしょ！そんなことある！？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（あたしってホントに運が悪い…。）"
+        }
+      ],
+      "resolution": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（やっと倒せた…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（一人で相手する敵じゃないってあんなの。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…………"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "なんであたし一人でこんなことしてるんだろ。"
+        }
+      ]
+    },
+    "s2d12": {
+      "intro": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ずいぶん遠くまで来たなあ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "疲れたからちょっと休憩……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（潮のせいで髪も肌もベトベト。はぁ、町に戻ってお風呂に入りたい…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…………なんの音？"
+        }
+      ],
+      "battle_conversation": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "あいつは、サンドパイソン……！？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（まずい…！あれは普通に強いやつ…！）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（囲まれたらやばい…振り切らないと…！）"
+        }
+      ],
+      "resolution": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "はぁ……はぁ……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "た、倒したの…？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（良かった…。マジで食べられるかと思った…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（ギルドの奴らって普段こんな強いのと戦ってるの？考えらんないんだけど…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（日も暮れるし、潮風と汗でベトベトだしホント最悪。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（今すぐにでも休みたいけどあの遺跡にそんな場所、あるわけ無いよね。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "べ、別に期待はしてないけどね……。"
         }
       ]
     },

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3j84y1csppui"
-path="res://.godot/imported/water_beam_sprite.png-4b0cafb9d88d7c22fdad58ddcbc825a9.ctex"
+uid="uid://dbdsfucgb16g8"
+path="res://.godot/imported/enemy_snake_body.png-c28a38d36c249dea8255ce51d723ed05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/audio/bgm/water_beam_sprite.png"
-dest_files=["res://.godot/imported/water_beam_sprite.png-4b0cafb9d88d7c22fdad58ddcbc825a9.ctex"]
+source_file="res://assets/gfx/sprites/enemy_snake_body.png"
+dest_files=["res://.godot/imported/enemy_snake_body.png-c28a38d36c249dea8255ce51d723ed05.ctex"]
 
 [params]
 

@@ -1,9 +1,35 @@
-[gd_scene load_steps=6 format=3 uid="uid://phoaomysa03n"]
+[gd_scene load_steps=11 format=3 uid="uid://phoaomysa03n"]
 
 [ext_resource type="Script" uid="uid://dwfltd8qe8ou" path="res://scripts/core/UniversalBullet.gd" id="1_6vpcq"]
 [ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="2_ek0ve"]
 [ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="2_nji8l"]
 [ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="3_2d55w"]
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_10qvo"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.489655, 1)
+colors = PackedColorArray(0.42656, 0.3956, 0.86, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gmgwi"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_10qvo")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nji8l"]
 radius = 8.0
@@ -12,6 +38,11 @@ radius = 8.0
 script = ExtResource("1_6vpcq")
 bullet_config = ExtResource("2_nji8l")
 movement_config = ExtResource("3_2d55w")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 16
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_gmgwi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_ek0ve")

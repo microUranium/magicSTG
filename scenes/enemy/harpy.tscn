@@ -81,8 +81,8 @@ max_hp = 500
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("4_mmm4h")
 phases = Array[ExtResource("5_f01p3")]([ExtResource("6_jooee"), ExtResource("7_q13j7"), ExtResource("8_jooee"), ExtResource("9_gkiv5")])
-attack_core_slot = NodePath("../AttackCoreSlot")
 _bgm = ExtResource("15_dotlt")
+attack_core_slot = NodePath("../AttackCoreSlot")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("5_jmlbr")]
 script = ExtResource("17_81vii")

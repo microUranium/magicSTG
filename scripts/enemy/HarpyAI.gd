@@ -2,7 +2,6 @@ extends EnemyPatternedAIBase
 class_name HarpyAI
 
 @export var phases: Array[PhaseResource] = []  # 各 Phase のパターンリソース
-@export var attack_core_slot: UniversalAttackCoreSlot = null  # 攻撃コアをセットするスロット
 @export var phase1_patterns: Array[AttackPattern]
 @export var phase3_patterns_1: Array[AttackPattern]
 @export var phase3_patterns_2: Array[AttackPattern]
@@ -11,8 +10,6 @@ class_name HarpyAI
 @export var bgm_fade_in := 2.0
 
 var _phase_idx := 0
-var _pattern_cores: Array[UniversalAttackCore] = []
-var core_scene: PackedScene = preload("res://scenes/attackCores/universal_attack_core.tscn")
 
 
 func _ready():

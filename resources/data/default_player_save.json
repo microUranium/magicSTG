@@ -4,22 +4,81 @@
       {
         "uid": "attackcore_magic_bullet_1",
         "id": "attackcore_magic_bullet",
-        "enchantments": []
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
       },
       {
         "uid": "attackcore_magic_bullet_2",
         "id": "attackcore_magic_bullet",
-        "enchantments": []
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
       },
       {
         "uid": "attackcore_magic_bullet_3",
         "id": "attackcore_magic_bullet",
-        "enchantments": []
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
       },
       {
         "uid": "attackcore_normal_beam_1",
         "id": "attackcore_normal_beam",
         "enchantments": []
+      },
+      {
+        "uid": "attackcore_fireball_1",
+        "id": "attackcore_fireball",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_fireball_2",
+        "id": "attackcore_fireball",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_bubble_shot_1",
+        "id": "attackcore_bubble_shot",
+        "enchantments": [
+          {
+            "id": "bullet_lifetime_pct",
+            "level": 2
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_bubble_shot_2",
+        "id": "attackcore_bubble_shot",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
       }
     ],
     "blessings": [
@@ -38,6 +97,7 @@
   "equipped": [
     "attackcore_magic_bullet_1",
     "attackcore_magic_bullet_2",
-    "attackcore_magic_bullet_3"
+    "attackcore_magic_bullet_3",
+    "blessing_shield_1"
   ]
 }

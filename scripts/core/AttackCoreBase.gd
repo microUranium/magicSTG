@@ -55,6 +55,10 @@ func _on_pattern_changed(old_pattern: AttackPattern, new_pattern: AttackPattern)
   if new_pattern and new_pattern.burst_delay > 0:
     cooldown_sec = new_pattern.burst_delay
 
+  # 自動発射設定をパターンから更新
+  if new_pattern:
+    auto_start = new_pattern.auto_start
+
     # 子クラスでの追加処理
   _on_pattern_changed_impl(old_pattern, new_pattern)
 

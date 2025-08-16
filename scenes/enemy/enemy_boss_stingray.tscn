@@ -1,0 +1,294 @@
+[gd_scene load_steps=39 format=3 uid="uid://dr6vsncc5ib1w"]
+
+[ext_resource type="Script" uid="uid://ci0qfur25d4yq" path="res://scripts/enemy/BossStingray.gd" id="1_cx5sj"]
+[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_yhp0k"]
+[ext_resource type="Texture2D" uid="uid://cobww1ppxyqd4" path="res://assets/gfx/sprites/boss_stingray_sprite.png" id="3_fd8xa"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_5xo3n"]
+[ext_resource type="Script" uid="uid://bx0uu2to4fmfy" path="res://scripts/enemy/BossStingrayAI.gd" id="5_lommv"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_lxd5g"]
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="7_o36s2"]
+[ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="8_8l0xc"]
+[ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="9_mmmnc"]
+[ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="10_5xo3n"]
+[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="10_odphr"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="11_78n74"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="11_tc0dn"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_0pyda"]
+[ext_resource type="Texture2D" uid="uid://iap3lqatqmod" path="res://assets/gfx/sprites/bullet_bubble_sprite.png" id="12_lxd5g"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_hqa8d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sl4ln"]
+atlas = ExtResource("3_fd8xa")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gajbe"]
+atlas = ExtResource("3_fd8xa")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cx5sj"]
+atlas = ExtResource("3_fd8xa")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhp0k"]
+atlas = ExtResource("3_fd8xa")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sl4ln")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gajbe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cx5sj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yhp0k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(232, 112)
+
+[sub_resource type="Resource" id="Resource_ngv7u"]
+script = ExtResource("7_o36s2")
+movement_type = 0
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s2d11.battle_conversation"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cx5sj"]
+script = ExtResource("6_lxd5g")
+patterns = Array[ExtResource("7_o36s2")]([ExtResource("8_8l0xc"), ExtResource("9_mmmnc"), SubResource("Resource_ngv7u")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_clw6s"]
+script = ExtResource("7_o36s2")
+movement_type = 0
+move_to = Vector2(296, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_f0ufh"]
+script = ExtResource("7_o36s2")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_mnf1d"]
+script = ExtResource("7_o36s2")
+movement_type = 0
+move_to = Vector2(600, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_aaifb"]
+script = ExtResource("7_o36s2")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_yhp0k"]
+script = ExtResource("6_lxd5g")
+patterns = Array[ExtResource("7_o36s2")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_5xo3n"]
+script = ExtResource("7_o36s2")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 1
+move_angle = 0.0
+move_speed = 200.0
+use_movement_bounds = true
+movement_bounds = Rect2(0, 0, 1, 0.75)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_78n74"]
+script = ExtResource("7_o36s2")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 3
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = true
+movement_bounds = Rect2(0, 0, 1, 0.75)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_lxd5g"]
+script = ExtResource("7_o36s2")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_ei8n3"]
+script = ExtResource("6_lxd5g")
+patterns = Array[ExtResource("7_o36s2")]([SubResource("Resource_5xo3n"), SubResource("Resource_78n74"), SubResource("Resource_lxd5g")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Curve" id="Curve_6l0x7"]
+_data = [Vector2(0, 0.818115), 0.0, 0.0, 0, 0, Vector2(0.589286, 0.483063), -1.34021, -1.34021, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_pwxes"]
+curve = SubResource("Curve_6l0x7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6l0x7"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+spread = 180.0
+initial_velocity_min = 204.41
+initial_velocity_max = 308.18
+scale_min = 2.0
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_pwxes")
+
+[sub_resource type="Resource" id="Resource_pwxes"]
+script = ExtResource("10_5xo3n")
+explosion_particle_material = SubResource("ParticleProcessMaterial_6l0x7")
+explosion_scale = 1.0
+explosion_duration = 0.5
+explosion_damage = 0
+explosion_radius = 0.0
+damage_falloff = false
+friendly_fire = false
+explosion_type = 0
+knockback_force = 0.0
+screen_shake_intensity = 0.0
+metadata/_custom_type_script = "uid://cmf38edjntyfq"
+
+[sub_resource type="Resource" id="Resource_o36s2"]
+script = ExtResource("11_78n74")
+texture = ExtResource("12_lxd5g")
+scale = 2.0
+color = Color(1, 0.25, 0.25, 1)
+collision_radius = 16.0
+enable_particles = false
+animation_name = ""
+explosion_config = SubResource("Resource_pwxes")
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="BossStingray" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_cx5sj")
+destroy_particles_scene = ExtResource("2_yhp0k")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame = 3
+frame_progress = 0.855812
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -60)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("4_5xo3n")
+max_hp = 800
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("5_lommv")
+phases = Array[ExtResource("6_lxd5g")]([SubResource("Resource_cx5sj"), SubResource("Resource_yhp0k"), SubResource("Resource_ei8n3")])
+visual_config = SubResource("Resource_o36s2")
+_bgm = ExtResource("10_odphr")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("11_tc0dn")]
+script = ExtResource("12_0pyda")
+default_core_scene = ExtResource("13_hqa8d")
+attack_pattern = null
+auto_create_core = true

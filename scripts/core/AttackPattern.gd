@@ -13,6 +13,9 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var bullet_scene: PackedScene
 @export var target_group: String = "players"
 @export var damage: int = 5
+@export var bullet_range: float = 0.0  # 弾丸の射程距離 0なら無限
+@export var bullet_lifetime: float = 0.0  # 弾丸の有効時間 0なら無限
+@export var auto_start: bool = true  # AttackCoreの自動発射設定
 
 # === 弾丸外観、動作設定 ===
 @export var bullet_visual_config: BulletVisualConfig  # 弾丸の外観設定
@@ -46,6 +49,8 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var beam_duration: float = 1.0
 @export var beam_scene: PackedScene
 @export var continuous_damage: bool = false  # ビームが持続的にダメージを与えるかどうか
+@export var beam_visual_config: BeamVisualConfig  # ビーム外観設定
+@export var beam_direction_override: Vector2 = Vector2.ZERO  # ビーム方向の上書き（ZERO時は direction_type を使用）
 
 # === カスタム設定 ===
 @export var custom_script: GDScript  # カスタム動作用
@@ -68,7 +73,7 @@ func calculate_base_direction(from_pos: Vector2, target_pos: Vector2) -> Vector2
 
       # カスタムスクリプトで計算
     DirectionType.RANDOM:
-      return Vector2.from_angle(randf() * TAU)
+      return base_direction.normalized()
 
       # カスタムスクリプトで計算
     DirectionType.CUSTOM:
@@ -95,6 +100,20 @@ func calculate_spread_direction(index: int, total_count: int, base_dir: Vector2)
   var step = spread_rad / (total_count - 1)
   var angle = -spread_rad * 0.5 + step * index + deg_to_rad(angle_offset)
   return base_dir.rotated(angle)
+
+
+# 不等間隔扇状配置での個別弾の方向を計算（RANDOMタイプ用）
+func calculate_random_spread_direction(base_dir: Vector2) -> Vector2:
+  # angle_spreadが設定されていない場合は通常のランダム
+  if angle_spread <= 0.0:
+    return Vector2.from_angle(randf() * TAU)
+
+  # 扇状範囲内でランダムな角度を生成
+  var spread_rad = deg_to_rad(angle_spread)
+  var random_angle = randf_range(-spread_rad * 0.5, spread_rad * 0.5)
+  var total_angle = random_angle + deg_to_rad(angle_offset)
+
+  return base_dir.rotated(total_angle)
 
 
 # パターンが複合型かどうか

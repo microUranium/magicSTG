@@ -27,7 +27,8 @@ func _start_stage_with_random_seed() -> void:
 
 func _on_switch_to_s1_intro_pressed() -> void:
   """S1イントロボタン - 固定シード設定"""
-  var fixed_seed := "Ds1d11.intro-s111-s112-s131-s1g1-Ds1d11.progression-s121-s1g1-s112-s141-s112-s1z1-Ds1d11.resolution"
+  #var fixed_seed := "Ds1d11.intro-s2g1-s221-s211-s111-s112-s131-s1g1-Ds1d11.progression-s121-s1g1-s112-s141-s112-s1z1-Ds1d11.resolution"
+  var fixed_seed := "s2z3-s2z2"
   RandomSeedGenerator.set_current_seed(fixed_seed)
   print("TitleScreen: Set fixed intro seed: %s" % fixed_seed)
   GameFlow.start_stage()

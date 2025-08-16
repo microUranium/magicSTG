@@ -1,4 +1,23 @@
 {
+  "stage_configs": {
+    "stage1": {
+      "background_texture": "res://assets/gfx/backgrounds/background_forest.png",
+      "bgm_path": "res://assets/audio/bgm/testStage_bgm.mp3",
+      "boss_bgm_path": "res://assets/audio/bgm/testBoss_bgm.mp3",
+      "clear_bgm_path": "res://assets/audio/bgm/stageclear_bgm.mp3",
+      "scroll_speed": 600.0,
+      "pools": ["stage1"]
+    },
+    "stage2": {
+      "background_texture": "res://assets/gfx/backgrounds/background_sea.png",
+      "bgm_path": "res://assets/audio/bgm/stage2_bgm_kari.mp3",
+      "boss_bgm_path": "res://assets/audio/bgm/stage2_boss_bgm_kari.mp3",
+      "clear_bgm_path": "res://assets/audio/bgm/stageclear_bgm.mp3",
+      "scroll_speed": 600.0,
+      "pools": ["stage2"]
+    }
+  },
+
   "wave_templates": {
     "s111": {
       "layers": [

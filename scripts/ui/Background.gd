@@ -28,6 +28,22 @@ func _change_scroll_speed(new_speed: float, change_time: float) -> void:
   tween.play()
 
 
+func set_background_texture(texture: Texture2D) -> void:
+  """背景テクスチャを設定"""
+  if sprite:
+    sprite.texture = texture
+    background_width = texture.get_size().x * sprite.scale.x
+
+    # 位置を再計算
+    if PlayArea.get_play_rect().size.x <= background_width:
+      sprite.position.x = -(background_width - PlayArea.get_play_rect().size.x) / 2
+
+
+func set_scroll_speed(new_speed: float) -> void:
+  """スクロール速度を設定"""
+  scroll_speed = new_speed
+
+
 func _start_vibration() -> void:
   var default_pos = sprite.position.x if sprite else 0
   var vibration_pos_min = -(background_width - PlayArea.get_play_rect().size.x)

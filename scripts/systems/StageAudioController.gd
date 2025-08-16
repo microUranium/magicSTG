@@ -10,8 +10,23 @@ class_name StageAudioController
 @export var bgm_fade_out: float = 1.0
 
 #---------------------------------------------------------------------
+# Private Properties
+#---------------------------------------------------------------------
+var current_stage_config: Dictionary = {}
+
+#---------------------------------------------------------------------
 # Public Interface
 #---------------------------------------------------------------------
+
+
+func set_stage_config(config: Dictionary) -> void:
+  """ステージ設定を適用してBGMをロード"""
+  current_stage_config = config
+
+  # ステージBGMをロード
+  var bgm_path = config.get("bgm_path", "")
+  if not bgm_path.is_empty():
+    stage_bgm = load(bgm_path)
 
 
 func play_stage_bgm() -> void:

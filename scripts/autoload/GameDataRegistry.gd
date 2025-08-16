@@ -1,5 +1,6 @@
 extends Node
 
+var stage_configs: Dictionary = {}
 var wave_templates: Dictionary = {}
 var enemies: Dictionary = {}
 var spawn_patterns: Dictionary = {}
@@ -19,6 +20,7 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   if data == null:
     push_error("GameDataRegistry: Invalid JSON structure")
     return false
+  stage_configs = data.get("stage_configs", {})
   wave_templates = data.get("wave_templates", {})
   enemies = data.get("enemies", {})
   spawn_patterns = data.get("spawn_patterns", {})
@@ -28,8 +30,9 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   _data_loaded = true
   print_debug(
     (
-      "GameDataRegistry: Loaded %d wave templates, %d enemies, %d spawn patterns, %d dialogues, %d wave pools"
+      "GameDataRegistry: Loaded %d stage configs, %d wave templates, %d enemies, %d spawn patterns, %d dialogues, %d wave pools"
       % [
+        stage_configs.size(),
         wave_templates.size(),
         enemies.size(),
         spawn_patterns.size(),
@@ -65,6 +68,13 @@ func get_spawn_pattern(pattern_name: String) -> Dictionary:
     push_warning("GameDataRegistry: Spawn pattern '%s' not found" % pattern_name)
     return {}
   return spawn_patterns[pattern_name]
+
+
+func get_stage_config(stage_name: String) -> Dictionary:
+  if not stage_configs.has(stage_name):
+    push_warning("GameDataRegistry: Stage config '%s' not found" % stage_name)
+    return {}
+  return stage_configs[stage_name]
 
 
 func get_dialogue_data(dialogue_path: String) -> Array:
@@ -156,6 +166,7 @@ func validate_pool_waves() -> bool:
 
 func reload_data() -> bool:
   _data_loaded = false
+  stage_configs.clear()
   wave_templates.clear()
   enemies.clear()
   spawn_patterns.clear()

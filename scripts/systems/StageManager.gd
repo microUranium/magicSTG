@@ -35,6 +35,12 @@ func _ready() -> void:
   # ダイアログシステム統合
   _setup_dialogue_integration()
 
+  # シード値準備（即座に実行）
+  _prepare_stage_seed()
+
+  # ステージ設定を即座に適用（背景とBGM設定）
+  _apply_stage_config_immediately()
+
   # UIコントローラーからReady Prompt表示
   var ui_controller = _component_registry.get_component("ui")
   if ui_controller and ui_controller.has_ready_prompt():
@@ -48,6 +54,22 @@ func _ready() -> void:
 #---------------------------------------------------------------------
 # Initialization
 #---------------------------------------------------------------------
+func _apply_stage_config_immediately() -> void:
+  """シーン読み込み時にステージ設定を即座に適用"""
+  var current_stage = _determine_current_stage()
+  var stage_config = GameDataRegistry.get_stage_config(current_stage)
+
+  # 背景を即座に設定
+  var environment_setup = _component_registry.get_component("environment")
+  if environment_setup:
+    environment_setup.setup_stage_background(stage_config)
+
+  # BGM設定を準備（再生はしない）
+  var audio_controller = _component_registry.get_component("audio")
+  if audio_controller:
+    audio_controller.set_stage_config(stage_config)
+
+
 func _setup_stage_environment() -> void:
   var lifecycle_controller = _component_registry.get_component("lifecycle")
   if lifecycle_controller and lifecycle_controller.is_initialized():
@@ -57,12 +79,12 @@ func _setup_stage_environment() -> void:
   if lifecycle_controller:
     lifecycle_controller.start_initialization()
 
-  # 環境セットアップ
+  # 環境セットアップ（背景設定は既に完了済み）
   var environment_setup = _component_registry.get_component("environment")
   if environment_setup:
     environment_setup.setup_stage_environment()
 
-  # BGM開始
+  # BGM開始（設定は既に完了済み）
   var audio_controller = _component_registry.get_component("audio")
   if audio_controller:
     audio_controller.handle_stage_start()
@@ -209,11 +231,16 @@ func _connect_stage_controller_and_start() -> void:
   if player:
     player.game_over.connect(_on_game_over)
 
-  # シード値でステージ開始
-  _prepare_stage_seed()
-
   # Readyプロンプト後に攻撃コアが停止されているため、ステージ開始時に適切に制御される
   _stage_controller.start_stage(stage_seed)
+
+
+func _determine_current_stage() -> String:
+  """現在のステージを判定"""
+  # シード値からステージを判定
+  if stage_seed.contains("s2"):
+    return "stage2"
+  return "stage1"  # デフォルト
 
 
 func _prepare_stage_seed() -> void:

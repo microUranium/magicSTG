@@ -1,0 +1,122 @@
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=17 format=3 uid="uid://b8wgybr7gmojq"]
+
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_6l0x7"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="1_pwxes"]
+[ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="2_pwxes"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="3_1j6lm"]
+[ext_resource type="Texture2D" uid="uid://iap3lqatqmod" path="res://assets/gfx/sprites/bullet_bubble_sprite.png" id="3_eeeht"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="5_ipoek"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="6_0kx4j"]
+[ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="7_v66y7"]
+[ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="8_x25hv"]
+
+[sub_resource type="Resource" id="Resource_1j6lm"]
+script = ExtResource("1_pwxes")
+movement_type = 1
+initial_speed = 200.0
+deceleration_rate = 100.0
+min_speed = 50.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_turn_rate = 2.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+bounce_factor = 0.0
+air_resistance = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Curve" id="Curve_6l0x7"]
+_data = [Vector2(0, 0.818115), 0.0, 0.0, 0, 0, Vector2(0.589286, 0.483063), -1.34021, -1.34021, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_pwxes"]
+curve = SubResource("Curve_6l0x7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6l0x7"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+spread = 180.0
+initial_velocity_min = 204.41
+initial_velocity_max = 308.18
+scale_min = 2.0
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_pwxes")
+
+[sub_resource type="Resource" id="Resource_pwxes"]
+script = ExtResource("2_pwxes")
+explosion_particle_material = SubResource("ParticleProcessMaterial_6l0x7")
+explosion_scale = 1.0
+explosion_duration = 0.5
+explosion_damage = 0
+explosion_radius = 0.0
+damage_falloff = false
+friendly_fire = false
+explosion_type = 0
+knockback_force = 0.0
+screen_shake_intensity = 0.0
+metadata/_custom_type_script = "uid://cmf38edjntyfq"
+
+[sub_resource type="Resource" id="Resource_6l0x7"]
+script = ExtResource("3_1j6lm")
+texture = ExtResource("3_eeeht")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = false
+animation_name = ""
+explosion_config = SubResource("Resource_pwxes")
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_kmwrv"]
+script = ExtResource("5_ipoek")
+pattern_type = 1
+bullet_scene = ExtResource("1_6l0x7")
+target_group = "enemies"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 3.0
+auto_start = true
+bullet_visual_config = SubResource("Resource_6l0x7")
+bullet_movement_config = SubResource("Resource_1j6lm")
+bullet_count = 1
+rapid_fire_count = 8
+rapid_fire_interval = 0.05
+burst_delay = 0.5
+direction_type = 2
+base_direction = Vector2(0, -1)
+angle_spread = 60.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("5_ipoek")]([])
+layer_delays = Array[float]([])
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[resource]
+script = ExtResource("8_x25hv")
+pattern_type = 0
+core_scene = ExtResource("6_0kx4j")
+damage_base = 2.0
+cooldown_sec_base = 1.0
+base_modifiers = {
+"bullet_speed": 100.0
+}
+attack_pattern = SubResource("Resource_kmwrv")
+id = &"attackcore_bubble_shot"
+item_type = 1
+display_name = "バブルショット"
+description = "ゆっくり拡散する短距離の泡を発射します。"
+icon = ExtResource("7_v66y7")
+metadata/_custom_type_script = "uid://31siypvcpkwh"

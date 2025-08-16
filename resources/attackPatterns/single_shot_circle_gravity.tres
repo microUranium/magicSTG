@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="AttackPattern" load_steps=5 format=3 uid="uid://c1krxaf1u6fjn"]
+
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="1_u1g5h"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_wwcpt"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="2_u1g5h"]
+
+[sub_resource type="Resource" id="Resource_d7w3k"]
+script = ExtResource("1_u1g5h")
+movement_type = 5
+initial_speed = 200.0
+deceleration_rate = 100.0
+min_speed = 50.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_turn_rate = 2.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+bounce_factor = 0.0
+air_resistance = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[resource]
+script = ExtResource("2_u1g5h")
+pattern_type = 0
+bullet_scene = ExtResource("1_wwcpt")
+target_group = "players"
+damage = 2
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+bullet_movement_config = SubResource("Resource_d7w3k")
+bullet_count = 8
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.5
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 400.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("2_u1g5h")]([])
+layer_delays = Array[float]([])
+metadata/_custom_type_script = "uid://su05ub25qwt5"

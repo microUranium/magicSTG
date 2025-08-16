@@ -10,6 +10,8 @@ enum PatternType { SINGLE_SHOT, BEAM, CUSTOM }
 @export var cooldown_sec_base: float = 0.2  # 基本クールダウン時間
 @export var base_modifiers: Dictionary = {}  # 攻撃核の基本的なパラメータ
 
+@export var attack_pattern: AttackPattern = null  # 攻撃パターン
+
 
 func _init() -> void:
   item_type = ItemType.ATTACK_CORE

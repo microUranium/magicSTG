@@ -17,7 +17,7 @@ func _ready():
 
 func take_damage(amount: int) -> void:
   $HpNode.take_damage(amount)
-  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, 0, 0)
+  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, -10, 0)
   FlashUtility.flash_white(animated_sprite)
 
 

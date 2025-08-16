@@ -12,26 +12,33 @@ static func create_pattern_from_item_instance(item_inst: ItemInstance) -> Attack
 
   var attack_core_item = item_inst.prototype as AttackCoreItem
   var pattern = AttackPattern.new()
+  if not attack_core_item.attack_pattern:
+    # コアタイプによってパターンタイプを決定
+    _determine_pattern_type(pattern, attack_core_item)
+
+    # プレイヤー用のデフォルト設定
+    pattern.target_group = "enemies"
+    pattern.bullet_count = 1
+    pattern.direction_type = AttackPattern.DirectionType.FIXED
+    pattern.base_direction = Vector2.UP
+  else:
+    # 既存のパターンを使用
+    pattern = attack_core_item.attack_pattern.duplicate() as AttackPattern
 
   # 基本設定をAttackCoreItemから取得
-  pattern.damage = attack_core_item.damage_base
-  pattern.burst_delay = attack_core_item.cooldown_sec_base
-  pattern.target_group = "enemies"
+  if attack_core_item.damage_base > 0:
+    pattern.damage = attack_core_item.damage_base
+
+  if attack_core_item.cooldown_sec_base > 0:
+    pattern.burst_delay = attack_core_item.cooldown_sec_base
 
   # 弾丸シーンの設定
-  pattern.bullet_scene = attack_core_item.projectile_scene
+  if attack_core_item.projectile_scene:
+    pattern.bullet_scene = attack_core_item.projectile_scene
 
   # 基本修正値から弾速を取得
   var base_speed = attack_core_item.base_modifiers.get("bullet_speed", 400.0)
   pattern.bullet_speed = base_speed
-
-  # コアタイプによってパターンタイプを決定
-  _determine_pattern_type(pattern, attack_core_item)
-
-  # プレイヤー用のデフォルト設定
-  pattern.bullet_count = 1
-  pattern.direction_type = AttackPattern.DirectionType.FIXED
-  pattern.base_direction = Vector2.UP
 
   return pattern
 
@@ -69,6 +76,15 @@ static func update_pattern_from_enchantments(
   # 弾速の更新
   var base_speed = item_inst.prototype.base_modifiers.get("bullet_speed", 400.0)
   pattern.bullet_speed = _apply_enchantment_modifiers(item_inst, base_speed, "bullet_speed")
+
+  # 残留時間の更新
+  var base_lifetime = pattern.bullet_lifetime
+  if base_lifetime > 0:
+    pattern.bullet_lifetime = _apply_enchantment_modifiers(
+      item_inst, base_lifetime, "bullet_lifetime"
+    )
+  else:
+    pattern.bullet_lifetime = 0.0  # デフォルトは無限
 
   # クールダウン時間の更新
   var cooldown_sec = _apply_enchantment_modifiers(

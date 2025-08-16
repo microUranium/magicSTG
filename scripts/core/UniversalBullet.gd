@@ -17,6 +17,7 @@ class_name UniversalBullet
 var _movement_timer: float = 0.0
 var _original_speed: float
 var _prev_position: Vector2 = Vector2.ZERO
+var _velocity: Vector2 = Vector2.ZERO
 
 
 func _ready():
@@ -82,6 +83,7 @@ func apply_movement_config(config: BulletMovementConfig = null):
     return
   speed = movement_config.initial_speed
   _original_speed = speed
+  _velocity = direction * speed
 
 
 func _process(delta):
@@ -114,6 +116,8 @@ func _update_advanced_movement(delta: float):
       _update_sine_wave(delta)
     BulletMovementConfig.MovementType.HOMING:
       _update_homing(delta)
+    BulletMovementConfig.MovementType.GRAVITY:
+      _update_gravity(delta)
 
 
 func _update_deceleration(delta: float):
@@ -167,3 +171,71 @@ func _find_homing_target() -> Node2D:
         closest_distance = distance
         closest_target = target
   return closest_target
+
+
+func _update_gravity(delta: float):
+  """重力処理"""
+  # 重力による加速度を速度に加算
+  _velocity += movement_config.gravity_direction * movement_config.gravity_strength * delta
+
+  # 空気抵抗を適用
+  if movement_config.air_resistance > 0:
+    _velocity *= (1.0 - movement_config.air_resistance * delta)
+
+  # 速度ベースで位置を更新
+  position += _velocity * delta
+
+  # PlayArea境界での衝突判定（バウンス処理）
+  if movement_config.bounce_factor > 0:
+    _handle_boundary_bounce()
+
+
+func _handle_boundary_bounce():
+  """境界でのバウンス処理"""
+  var play_rect = PlayArea.get_play_rect()
+
+  # 下端での衝突
+  if global_position.y >= play_rect.position.y + play_rect.size.y:
+    global_position.y = play_rect.position.y + play_rect.size.y
+    _velocity.y *= -movement_config.bounce_factor
+
+  # 上端での衝突
+  if global_position.y <= play_rect.position.y:
+    global_position.y = play_rect.position.y
+    _velocity.y *= -movement_config.bounce_factor
+
+  # 左右端での衝突
+  if global_position.x <= play_rect.position.x:
+    global_position.x = play_rect.position.x
+    _velocity.x *= -movement_config.bounce_factor
+  elif global_position.x >= play_rect.position.x + play_rect.size.x:
+    global_position.x = play_rect.position.x + play_rect.size.x
+    _velocity.x *= -movement_config.bounce_factor
+
+
+func _handle_particle_cleanup():
+  """軌跡パーティクルの分離処理"""
+  if particles and particles.emitting and bullet_config and bullet_config.enable_particles:
+    # 新規パーティクル生成を停止
+    particles.emitting = false
+
+    # パーティクルを現在のシーンに分離して残存させる
+    var scene_root = get_tree().current_scene
+    if scene_root:
+      particles.reparent(scene_root)
+
+      # パーティクルのライフタイム後にクリーンアップ
+      var cleanup_delay = particles.lifetime + 0.1
+      get_tree().create_timer(cleanup_delay).timeout.connect(
+        func():
+          if is_instance_valid(particles):
+            particles.queue_free()
+      )
+
+
+func _create_explosion_effect():
+  """爆発エフェクトの生成"""
+  if bullet_config and bullet_config.explosion_config:
+    ExplosionFactory.create_explosion(
+      bullet_config.explosion_config, global_position, "player_bullets"
+    )

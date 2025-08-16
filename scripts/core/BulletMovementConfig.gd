@@ -1,7 +1,7 @@
 # 弾丸の移動設定
 class_name BulletMovementConfig extends Resource
 
-enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾
+enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力
 
 @export var movement_type: MovementType = MovementType.STRAIGHT
 @export var initial_speed: float = 200.0
@@ -20,3 +20,9 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING }  # 直
 
 # 追尾設定
 @export var homing_turn_rate: float = 2.0
+
+# 重力設定
+@export var gravity_strength: float = 980.0  # ピクセル/秒²
+@export var gravity_direction: Vector2 = Vector2.DOWN
+@export var bounce_factor: float = 0.0  # 0-1, 地面との衝突時の反発係数
+@export var air_resistance: float = 0.0  # 0-1, 空気抵抗

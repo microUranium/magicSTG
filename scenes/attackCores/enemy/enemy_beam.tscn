@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://be5bkq7jemq4n"]
+
+[ext_resource type="Script" uid="uid://nd8f8s26247f" path="res://scripts/core/UniversalBeam.gd" id="1_0a5vt"]
+[ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="2_j8k3m"]
+[ext_resource type="Texture2D" uid="uid://d3j84y1csppui" path="res://assets/gfx/sprites/water_beam_sprite.png" id="3_cnvlc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_enemy"]
+shader = ExtResource("2_j8k3m")
+shader_parameter/frame_count = 3
+shader_parameter/fps = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
+size = Vector2(8, 40)
+
+[node name="EnemyBeam" type="Area2D"]
+script = ExtResource("1_0a5vt")
+target_group = "players"
+offset = Vector2(0, 50)
+beam_direction = Vector2(0, 1)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 1000)
+collide_with_areas = true
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+material = SubResource("ShaderMaterial_enemy")
+offset_left = -16.0
+offset_right = 16.0
+offset_bottom = 40.0
+texture = ExtResource("3_cnvlc")
+region_rect = Rect2(32, 0, 128, 64)
+patch_margin_top = 16
+patch_margin_bottom = 16
+axis_stretch_vertical = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_enemy")
+
+[node name="DamageTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+visible = false
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="MuzzleFlashPoint" type="Node2D" parent="."]
+
+[node name="ImpactEffectPoint" type="Node2D" parent="."]
+position = Vector2(0, 1000)

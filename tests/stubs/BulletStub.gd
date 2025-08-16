@@ -5,6 +5,8 @@ var initialized := false
 var damage := 0.0
 var speed := 0.0
 var pierce := 0
+var bullet_range := 0.0
+var bullet_lifetime := 0.0
 var direction: Vector2 = Vector2.UP
 var target_group: String = "enemies"
 

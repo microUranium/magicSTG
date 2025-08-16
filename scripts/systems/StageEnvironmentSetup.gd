@@ -29,6 +29,28 @@ func setup_stage_environment() -> void:
   _setup_additional_services()
 
 
+func setup_stage_background(stage_config: Dictionary) -> void:
+  """ステージ背景のセットアップ"""
+  var background_texture_path = stage_config.get("background_texture", "")
+  if background_texture_path.is_empty():
+    return
+
+  var background = get_node_or_null("../Background")
+  if background and background.has_method("set_background_texture"):
+    var texture = load(background_texture_path)
+    background.set_background_texture(texture)
+
+    var scroll_speed = stage_config.get("scroll_speed", 100.0)
+    if background.has_method("set_scroll_speed"):
+      background.set_scroll_speed(scroll_speed)
+
+    print_debug("StageEnvironmentSetup: Background texture set to: %s" % background_texture_path)
+  else:
+    push_warning(
+      "StageEnvironmentSetup: Background node not found or missing set_background_texture method"
+    )
+
+
 #---------------------------------------------------------------------
 # Private Methods
 #---------------------------------------------------------------------
@@ -57,9 +79,15 @@ func validate_environment() -> bool:
     push_warning("StageEnvironmentSetup: BulletLayer validation failed")
     is_valid = false
 
-    # TargetServiceのチェック
+  # TargetServiceのチェック
   if not TargetService.has_bullet_parent():
     push_warning("StageEnvironmentSetup: TargetService validation failed")
+    is_valid = false
+
+  # Backgroundのチェック
+  var background = get_node_or_null("../Background")
+  if not background:
+    push_warning("StageEnvironmentSetup: Background validation failed")
     is_valid = false
   return is_valid
 

@@ -49,7 +49,8 @@ func test_universal_attack_core_with_instance() -> void:
   core.auto_start = false
 
   add_child(core)
-  core.trigger()  # 1 発撃たせる
+  core._start_cooldown()
+  await core.core_fired  # トリガーして弾を生成
 
   await get_tree().process_frame
 

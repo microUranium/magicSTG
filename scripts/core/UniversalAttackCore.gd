@@ -74,10 +74,8 @@ func _do_fire() -> bool:
   if not attack_pattern:
     push_warning("UniversalAttackCore: AttackPattern is not set.")
     return false
-
   if not _validate_firing_conditions():
     return false
-
   # デバッグ情報更新
   if show_debug_info and OS.is_debug_build():
     _update_debug_display()
@@ -127,6 +125,8 @@ func _execute_composite_pattern() -> bool:
   var success = true
 
   for i in range(attack_pattern.pattern_layers.size()):
+    if attack_pattern.pattern_layers.size() <= i:
+      return false
     var layer_pattern = attack_pattern.pattern_layers[i]
     var delay = attack_pattern.layer_delays[i] if i < attack_pattern.layer_delays.size() else 0.0
 
@@ -141,6 +141,7 @@ func _execute_composite_pattern() -> bool:
 
 func _execute_single_pattern(pattern: AttackPattern) -> bool:
   """単一パターンを実行"""
+  print_debug("Executing pattern: ", pattern.pattern_type, " with bullets: ", pattern.bullet_count)
   var executor = _pattern_executors.get(pattern.pattern_type)
   if not executor:
     push_warning("UniversalAttackCore: Unknown pattern type: %s" % pattern.pattern_type)
@@ -163,6 +164,9 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     if pattern.direction_type == AttackPattern.DirectionType.CIRCLE:
       # 円形配置の場合、方向を計算
       bullet_dir = pattern.calculate_circle_direction(i, pattern.bullet_count, base_dir)
+    elif pattern.direction_type == AttackPattern.DirectionType.RANDOM:
+      # RANDOMタイプの場合、不等間隔発射（扇状設定の有無は内部で判定）
+      bullet_dir = pattern.calculate_random_spread_direction(base_dir)
     else:
       # 通常の方向計算
       bullet_dir = pattern.calculate_spread_direction(i, pattern.bullet_count, base_dir)
@@ -177,10 +181,17 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
 
 func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   """連射"""
+  var target_pos = _get_player_position()
   var success = true
 
   for burst in range(pattern.rapid_fire_count):
-    if not await _execute_single_shot(pattern):
+    if pattern.angle_spread > 0 and pattern.direction_type == AttackPattern.DirectionType.FIXED:
+      # 角度スプレッドがある場合はランダム方向を計算
+      var base_dir = pattern.calculate_base_direction(_owner_actor.global_position, target_pos)
+      var bullet_dir = pattern.calculate_spread_direction(burst, pattern.rapid_fire_count, base_dir)
+      if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
+        success = false
+    elif not await _execute_single_shot(pattern):
       success = false
 
     if burst < pattern.rapid_fire_count - 1:
@@ -231,7 +242,7 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
 
 
 func _execute_beam(pattern: AttackPattern) -> bool:
-  """ビーム攻撃"""
+  """ビーム攻撃（複数ビーム対応）"""
   if not pattern.beam_scene:
     push_warning("UniversalAttackCore: Beam pattern has no beam scene.")
     return false
@@ -241,35 +252,54 @@ func _execute_beam(pattern: AttackPattern) -> bool:
     push_warning("UniversalAttackCore: No valid parent node found for beam.")
     return false
 
-  var beam_instance = pattern.beam_scene.instantiate()
-  parent.add_child(beam_instance)
-
-  if _owner_actor:
-    beam_instance.global_position = _owner_actor.global_position
-  else:
-    push_warning("UniversalAttackCore: Owner actor is not set for beam.")
-
   # エンチャント適用済み値で初期化
   var modified_duration = pattern.beam_duration
   var modified_damage = pattern.damage
-
-  # 視覚・動作設定の適用
-  _apply_bullet_configs(beam_instance, pattern)
-
-  # ビーム専用初期化
-  if beam_instance.has_method("initialize"):
-    beam_instance.initialize(_owner_actor, modified_damage)
+  var beam_count = max(1, pattern.bullet_count)  # bullet_countを使用
 
   # ターゲットグループ設定
   var target_group = (
     override_target_group if not override_target_group.is_empty() else pattern.target_group
   )
-  if beam_instance.has_method("set_target_group"):
-    beam_instance.set_target_group(target_group)
 
-  # 生成したビームを追跡リストに追加
-  _spawned_projectiles.append(beam_instance)
-  beam_instance.tree_exiting.connect(_on_projectile_destroyed.bind(beam_instance))
+  # 複数ビームの生成
+  var created_beams: Array[Node] = []
+
+  for i in range(beam_count):
+    var beam_instance = pattern.beam_scene.instantiate()
+    parent.add_child(beam_instance)
+
+    if _owner_actor:
+      beam_instance.global_position = _owner_actor.global_position
+    else:
+      push_warning("UniversalAttackCore: Owner actor is not set for beam.")
+
+    # 視覚・動作設定の適用
+    _apply_bullet_configs(beam_instance, pattern)
+
+    # ビーム方向の計算（複数ビーム対応）
+    var beam_direction = _calculate_multi_beam_direction(pattern, i, beam_count)
+
+    # ビーム専用初期化（方向を含む）
+    if beam_instance.has_method("initialize"):
+      beam_instance.initialize(_owner_actor, modified_damage, beam_direction)
+
+    # 方向設定メソッドがある場合は個別に設定
+    if beam_instance.has_method("set_beam_direction"):
+      beam_instance.set_beam_direction(beam_direction)
+
+    # ターゲットグループ設定
+    if beam_instance.has_method("set_target_group"):
+      beam_instance.set_target_group(target_group)
+
+    # ビーム視覚設定の適用
+    if pattern.beam_visual_config and beam_instance.has_method("apply_visual_config"):
+      beam_instance.apply_visual_config(pattern.beam_visual_config)
+
+    # 生成したビームを追跡リストに追加
+    _spawned_projectiles.append(beam_instance)
+    beam_instance.tree_exiting.connect(_on_projectile_destroyed.bind(beam_instance))
+    created_beams.append(beam_instance)
 
   # ビーム持続時間タイマーを設定（ゲージ表示用）
   _beam_duration_timer = get_tree().create_timer(modified_duration)
@@ -280,11 +310,104 @@ func _execute_beam(pattern: AttackPattern) -> bool:
 
   # 一定時間後にビームを削除
   await _beam_duration_timer.timeout
-  if is_instance_valid(beam_instance):
-    beam_instance.queue_free()
+  for beam in created_beams:
+    if is_instance_valid(beam):
+      beam.queue_free()
 
   _beam_duration_timer = null
   return true
+
+
+func _calculate_beam_direction(pattern: AttackPattern) -> Vector2:
+  """ビーム方向の計算"""
+  # 方向の上書き指定がある場合はそれを使用
+  if pattern.beam_direction_override != Vector2.ZERO:
+    return pattern.beam_direction_override.normalized()
+
+  # DirectionType に基づいて方向を計算
+  var direction = Vector2.ZERO
+
+  match pattern.direction_type:
+    AttackPattern.DirectionType.FIXED:
+      direction = pattern.base_direction
+    AttackPattern.DirectionType.TO_PLAYER:
+      var player_pos = _get_player_position()
+      if player_pos != Vector2.ZERO and _owner_actor:
+        direction = (player_pos - _owner_actor.global_position).normalized()
+      else:
+        direction = pattern.base_direction
+    AttackPattern.DirectionType.RANDOM:
+      var angle = randf() * 2 * PI
+      direction = Vector2(cos(angle), sin(angle))
+    AttackPattern.DirectionType.CIRCLE, AttackPattern.DirectionType.CUSTOM:
+      # 円形やカスタムの場合はデフォルト方向
+      direction = pattern.base_direction
+
+  # 角度オフセットを適用
+  if pattern.angle_offset != 0.0:
+    var offset_radians = deg_to_rad(pattern.angle_offset)
+    direction = direction.rotated(offset_radians)
+
+  return direction.normalized() if direction != Vector2.ZERO else Vector2.UP
+
+
+func _calculate_multi_beam_direction(
+  pattern: AttackPattern, beam_index: int, total_beams: int
+) -> Vector2:
+  """複数ビーム用の方向計算"""
+  # ベース方向を取得
+  var base_direction = _get_base_direction(pattern)
+
+  # 単発ビームの場合はそのまま返す
+  if total_beams == 1:
+    return base_direction
+
+  var angle_offset_rad = 0.0
+
+  if pattern.direction_type == AttackPattern.DirectionType.CIRCLE:
+    # 円形配置：360度を等分
+    var angle_step = (2.0 * PI) / total_beams
+    angle_offset_rad = beam_index * angle_step + deg_to_rad(pattern.angle_offset)
+  else:
+    # 扇形配置：angle_spreadを等分
+    if total_beams > 1:
+      var spread_rad = deg_to_rad(pattern.angle_spread)
+      var angle_step = spread_rad / (total_beams - 1)
+      angle_offset_rad = -spread_rad / 2.0 + beam_index * angle_step
+
+    # angle_offsetを適用
+    angle_offset_rad += deg_to_rad(pattern.angle_offset)
+
+  # 方向を回転
+  return base_direction.rotated(angle_offset_rad).normalized()
+
+
+func _get_base_direction(pattern: AttackPattern) -> Vector2:
+  """ベース方向の取得"""
+  # 方向の上書き指定がある場合はそれを使用
+  if pattern.beam_direction_override != Vector2.ZERO:
+    return pattern.beam_direction_override.normalized()
+
+  # DirectionType に基づいて方向を計算
+  var direction = Vector2.ZERO
+
+  match pattern.direction_type:
+    AttackPattern.DirectionType.FIXED:
+      direction = pattern.base_direction
+    AttackPattern.DirectionType.TO_PLAYER:
+      var player_pos = _get_player_position()
+      if player_pos != Vector2.ZERO and _owner_actor:
+        direction = (player_pos - _owner_actor.global_position).normalized()
+      else:
+        direction = pattern.base_direction
+    AttackPattern.DirectionType.RANDOM:
+      var angle = randf() * 2 * PI
+      direction = Vector2(cos(angle), sin(angle))
+    AttackPattern.DirectionType.CIRCLE, AttackPattern.DirectionType.CUSTOM:
+      # 円形やカスタムの場合はデフォルト方向
+      direction = pattern.base_direction
+
+  return direction.normalized() if direction != Vector2.ZERO else Vector2.UP
 
 
 func _execute_custom(pattern: AttackPattern) -> bool:
@@ -321,6 +444,8 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   bullet.direction = direction
   bullet.speed = pattern.bullet_speed
   bullet.damage = pattern.damage
+  bullet.bullet_range = pattern.bullet_range
+  bullet.bullet_lifetime = pattern.bullet_lifetime
 
   # ターゲットグループ設定
   var target_group = (

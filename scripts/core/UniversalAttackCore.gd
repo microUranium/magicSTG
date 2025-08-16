@@ -74,10 +74,8 @@ func _do_fire() -> bool:
   if not attack_pattern:
     push_warning("UniversalAttackCore: AttackPattern is not set.")
     return false
-
   if not _validate_firing_conditions():
     return false
-
   # デバッグ情報更新
   if show_debug_info and OS.is_debug_build():
     _update_debug_display()
@@ -143,6 +141,7 @@ func _execute_composite_pattern() -> bool:
 
 func _execute_single_pattern(pattern: AttackPattern) -> bool:
   """単一パターンを実行"""
+  print_debug("Executing pattern: ", pattern.pattern_type, " with bullets: ", pattern.bullet_count)
   var executor = _pattern_executors.get(pattern.pattern_type)
   if not executor:
     push_warning("UniversalAttackCore: Unknown pattern type: %s" % pattern.pattern_type)

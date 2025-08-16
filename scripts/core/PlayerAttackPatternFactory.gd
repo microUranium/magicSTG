@@ -83,7 +83,6 @@ static func update_pattern_from_enchantments(
     pattern.bullet_lifetime = _apply_enchantment_modifiers(
       item_inst, base_lifetime, "bullet_lifetime"
     )
-    print_debug("Updated bullet lifetime: ", pattern.bullet_lifetime, " for item: ", item_inst.uid)
   else:
     pattern.bullet_lifetime = 0.0  # デフォルトは無限
 
@@ -110,6 +109,5 @@ static func _sum_enchant_modifier(item_inst: ItemInstance, key: String) -> float
     return total
   for enc in item_inst.enchantments:
     var modifiers: Dictionary = enc.get_modifiers(item_inst.enchantments[enc])
-    print_debug("Enchantment: ", enc.id, " Modifiers: ", enc.tiers[0].modifiers, " Key: ", key)
     total += modifiers.get(key, 0.0)
   return total

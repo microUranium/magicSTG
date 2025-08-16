@@ -29,7 +29,7 @@ func _ready():
 func _process(_delta):
   frame_counter += 1
 
-  if frame_counter % update_every_frames == 0:
+  if update_every_frames != 0 and frame_counter % update_every_frames == 0:
     _record_position()
 
 

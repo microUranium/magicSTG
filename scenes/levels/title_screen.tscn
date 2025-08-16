@@ -55,7 +55,7 @@ offset_top = 816.0
 offset_right = 475.0
 offset_bottom = 923.0
 theme_override_font_sizes/font_size = 72
-text = "S1-イントロ"
+text = "S2-ボス"
 
 [node name="SwitchToStageButton_S1-2" type="Button" parent="."]
 layout_mode = 0

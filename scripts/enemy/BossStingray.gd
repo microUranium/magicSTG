@@ -22,9 +22,7 @@ func _ready():
 func take_damage(amount: int) -> void:
   if ai._phase_idx == 0:
     return  # Phase 0ではダメージを受け付けない
-  $HpNode.take_damage(amount)
-  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, 0, 0)
-  FlashUtility.flash_white(animated_sprite)
+  super.take_damage(amount)
 
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
@@ -37,11 +35,11 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
       StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
       StageSignals.emit_request_change_background_scroll_speed(0, 2.5)  # スクロール速度を0に
       StageSignals.emit_request_start_vibration()  # Start vibration
-      StageSignals.emit_destroy_bullet()  # Destroy bullet
       StageSignals.emit_bgm_stop_requested(1.0)  # BGM停止リクエスト
       StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     else:
       StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
+    StageSignals.emit_destroy_bullet()
     _spawn_destroy_particles()
     queue_free()
 

@@ -10,6 +10,8 @@ signal change_body_attack(_phase_idx: int)  # ボディアタックの変更を�
 var destruction_thresholds: Array[float] = []  # 節破壊のHPしきい値
 var segments_destroyed: int = 0  # 破壊済み節数
 
+var _is_destroyed: bool = false  # ボスが破壊されたかどうか
+
 
 func _ready():
   super._ready()
@@ -33,20 +35,18 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
   """HP変更時の処理"""
   if current_hp <= max_hp * 0.3 and ai._phase_idx == 2:
     # Phase 2でHPが30%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)
   elif current_hp <= max_hp * 0.2 and ai._phase_idx == 3:
     # Phase 3でHPが20%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)
   elif current_hp <= max_hp * 0.1 and ai._phase_idx == 4:
     # Phase 4でHPが10%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)
-  elif current_hp <= 0:
+  elif current_hp <= 0 and not _is_destroyed:
+    _is_destroyed = true  # ボスが破壊されたフラグ（複数の節からのHP減少フラグ受取りを防ぐため）
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     StageSignals.emit_request_change_background_scroll_speed(0, 2.5)  # スクロール速度を0に
     StageSignals.emit_request_start_vibration()  # Start vibration

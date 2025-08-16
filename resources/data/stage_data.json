@@ -1154,7 +1154,7 @@
           "face_right": null,
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "（潮のせいで髪も肌もベトベト。はぁ、町に戻ってお風呂に入りたい…。）"
+          "text": "（潮のせいで髪も肌もベタベタ。はぁ、町に戻ってお風呂に入りたい…。）"
         },
         {
           "speaker_name": "フェリス",
@@ -1210,11 +1210,11 @@
         },
         {
           "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
           "face_right": null,
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "（良かった…。マジで食べられるかと思った…。）"
+          "text": "良かった…。マジで終わったかと思った…。"
         },
         {
           "speaker_name": "フェリス",
@@ -1222,31 +1222,23 @@
           "face_right": null,
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "（ギルドの奴らって普段こんな強いのと戦ってるの？考えらんないんだけど…。）"
+          "text": "ん？あそこになにか…。もしかしてあれが遺跡？"
         },
         {
           "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
           "face_right": null,
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "（日も暮れるし、潮風と汗でベトベトだしホント最悪。）"
+          "text": "うぅ、なんかこうしてみるとめっちゃ不気味なんだけど…。"
         },
         {
           "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
           "face_right": null,
           "speaker_side": "left",
           "box_direction": "left",
-          "text": "（今すぐにでも休みたいけどあの遺跡にそんな場所、あるわけ無いよね。）"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "べ、別に期待はしてないけどね……。"
+          "text": "はぁ。でも行くしかないか。ギルドクビにされたくないし…。"
         }
       ]
     },

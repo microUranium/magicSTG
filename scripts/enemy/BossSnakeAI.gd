@@ -6,9 +6,7 @@ class_name BossSnakeAI
 var _phase_idx: int = 0
 
 @export var _bgm: AudioStream
-@export var bgm_fade_in := 2.0
-
-var phase1_patterns: Array[AttackPattern] = []
+@export var bgm_fade_in := 1.0
 
 
 func _ready():
@@ -34,7 +32,7 @@ func _next_phase():
     else:
       push_error("Enemy node does not have a setup method.")
     if not skip_bgm_change:
-      StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
+      StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -10)  # BGM再生リクエスト
 
   if _phase_idx >= phases.size():
     StageSignals.emit_request_hud_flash(0.3)

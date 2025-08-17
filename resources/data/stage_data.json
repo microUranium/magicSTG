@@ -338,8 +338,6 @@
       ]
     },
     "s211": {
-      "pool": "stage2",
-      "weight": 3,
       "layers": [
         {
           "enemy": "enemy_starfish_a",
@@ -350,9 +348,46 @@
         }
       ]
     },
-    "s221": {
+    "s212": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_a",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s213": {
       "pool": "stage2",
       "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_a",
+          "count": 4,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s221": {
+      "layers": [
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s222": {
+      "pool": "stage2",
+      "weight": 10,
       "layers": [
         {
           "enemy": "enemy_fugu_a",
@@ -363,9 +398,33 @@
         }
       ]
     },
-    "s231": {
+    "s223": {
       "pool": "stage2",
-      "weight": 3,
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 3,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s231": {
+      "layers": [
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 1,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s232": {
+      "pool": "stage2",
+      "weight": 10,
       "layers": [
         {
           "enemy": "enemy_sea_bird",
@@ -376,13 +435,295 @@
         }
       ]
     },
-    "s2g1": {
+    "s233": {
+      "pool": "stage2",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s234": {
+      "layers": [
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s241": {
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 1,
+          "pattern": "from_top_spacing", 
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s242": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s243": {
       "pool": "stage2",
       "weight": 3,
       "layers": [
         {
+          "enemy": "enemy_flower_b",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s251": {
+      "pool": "stage2",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s252": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 5,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s253": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 1.5
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s2g1": {
+      "pool": "stage2",
+      "weight": 5,
+      "layers": [
+        {
           "enemy": "enemy_starfish_a",
+          "count": 1,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s2g2": {
+      "pool": "stage2",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_a",
+          "count": 1,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s2g3": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 1.0
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s2g4": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s2g5": {
+      "pool": "stage2",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "enemy_fugu_a",
           "count": 2,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s2g6": {
+      "pool": "stage2",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 3,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s2g7": {
+      "pool": "stage2",
+      "weight": 1,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s2g8": {
+      "pool": "stage2",
+      "weight": 1,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 3,
           "pattern": "from_top_spacing", 
           "interval": 0.0,
           "delay": 0.0
@@ -393,19 +734,99 @@
           "pattern": "line_horiz", 
           "interval": 0.0,
           "delay": 2.0
+        }
+      ]
+    },
+    "s2g9": {
+      "layers": [
+        {
+          "enemy": "enemy_flower_b",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 1.0
+        },
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 2,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s2ga": {
+      "layers": [
+        {
+          "enemy": "enemy_starfish_b",
+          "count": 5,
+          "pattern": "single_random",
+          "interval": 0.4,
+          "delay": 0.0
         },
         {
           "enemy": "enemy_sea_bird",
-          "count": 3,
+          "count": 2,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 2,
           "pattern": "single_random", 
           "interval": 0.2,
           "delay": 5.0
+        },
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 2,
+          "pattern": "single_random", 
+          "interval": 0.2,
+          "delay": 8.0
+        }
+      ]
+    },
+    "s2gb": {
+      "layers": [
+        {
+          "enemy": "enemy_sea_bird",
+          "count": 5,
+          "pattern": "single_random", 
+          "interval": 1.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_fugu_a",
+          "count": 2,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_flower_b",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 2.0
         }
       ]
     },
     "s2z1": {
-      "pool": "stage2_boss",
-      "weight": 3,
       "layers": [
         {
           "enemy": "boss_stingray",
@@ -417,8 +838,6 @@
       ]
     },
     "s2z2": {
-      "pool": "stage2_boss",
-      "weight": 3,
       "layers": [
         {
           "enemy": "boss_snake",
@@ -430,8 +849,6 @@
       ]
     },
     "s2z3": {
-      "pool": "stage2_boss",
-      "weight": 3,
       "layers": [
         {
           "enemy": "boss_stingray_skip_dialogue_skip_bgm_change",
@@ -442,77 +859,14 @@
         }
       ]
     },
-    "basic_swarm": {
+    "s2z4": {
+      "pool": "stage2_boss",
+      "weight": 3,
       "layers": [
         {
-          "enemy": "enemy_bird_a",
-          "count": 5,
-          "pattern": "single_random",
-          "interval": 1.0,
-          "delay": 0.0
-        },
-        {
-          "enemy": "enemy_bird_a",
-          "count": 5,
-          "pattern": "single_random",
-          "interval": 1.0,
-          "delay": 2.0
-        }
-      ]
-    },
-    "basic_swarm_rush": {
-      "layers": [
-        {
-          "enemy": "enemy_bird_a_rush",
-          "count": 5,
-          "pattern": "burst_same_pos",
-          "interval": 0.2,
-          "delay": 0.0
-        }
-      ]
-    },
-    "mixed_assault": {
-      "layers": [
-        {
-          "enemy": "enemy_bird_a",
-          "count": 8,
-          "pattern": "burst_same_pos",
-          "interval": 0.4,
-          "delay": 0.0
-        },
-        {
-          "enemy": "enemy_b", 
-          "count": 3,
-          "pattern": "line_horiz",
-          "interval": 0.0,
-          "delay": 2.0
-        },
-        {
-          "enemy": "enemy_flower_a",
-          "count": 2,
-          "pattern": "from_top_spacing", 
-          "interval": 1.5,
-          "delay": 5.0
-        }
-      ]
-    },
-    "boss_encounter": {
-      "layers": [
-        {
-          "enemy": "harpy",
+          "enemy": "boss_stingray_skip_dialogue",
           "count": 1,
-          "pattern": "line_horiz",
-          "interval": 0.0,
-          "delay": 0.0
-        }
-      ]
-    },
-    "boss_encounter_bird": {
-      "layers": [
-        {
-          "enemy": "boss_bird",
-          "count": 1,
-          "pattern": "line_horiz",
+          "pattern": "line_horiz", 
           "interval": 0.0,
           "delay": 0.0
         }
@@ -537,8 +891,16 @@
       "scene_path": "res://scenes/enemy/enemy_flower_a.tscn",
       "spawn_weight": 1.0
     },
+    "enemy_flower_b": {
+      "scene_path": "res://scenes/enemy/enemy_flower_b.tscn",
+      "spawn_weight": 1.0
+    },
     "enemy_starfish_a": {
       "scene_path": "res://scenes/enemy/enemy_starfish_a.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_starfish_b": {
+      "scene_path": "res://scenes/enemy/enemy_starfish_b.tscn",
       "spawn_weight": 1.0
     },
     "enemy_fugu_a": {
@@ -576,6 +938,13 @@
     "boss_stingray": {
       "scene_path": "res://scenes/enemy/enemy_boss_stingray.tscn",
       "spawn_weight": 1.0
+    },
+    "boss_stingray_skip_dialogue": {
+      "scene_path": "res://scenes/enemy/enemy_boss_stingray.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true"
+      }
     },
     "boss_stingray_skip_dialogue_skip_bgm_change": {
       "scene_path": "res://scenes/enemy/enemy_boss_stingray.tscn",
@@ -617,6 +986,12 @@
     },
     "stage1_boss": {
       "description": "Stage 1 Boss Waves - Boss encounters"
+    },
+    "stage2": {
+      "description": "Stage 2 Waves - More complex enemy patterns"
+    },
+    "stage2_boss": {
+      "description": "Stage 2 Boss Waves - Boss encounters"
     }
   },
 
@@ -1258,250 +1633,6 @@
           "speaker_side": "left",
           "box_direction": "left",
           "text": "はぁ。でも行くしかないか。ギルドクビにされたくないし…。"
-        }
-      ]
-    },
-    "test3": {
-      "main_conversation": [
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "あら、誰かと思えばシィルじゃない。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "げっお前は…。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "（昔よくあたしに襲いかかってきたやつだ…。）"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "へぇ。前に比べて一段と魔力を蓄えてるようね。貰い甲斐がありそう♪"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "悪いけどさ、あんまり相手にしてる暇ないんだよねー。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "早く家に帰ってダラダラするっていう大事な用があってさ。"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "（それって大事な用なの…？）"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "…ふふん、それならあたしが手伝ってあげる。"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "たっぷり可愛がった後にその魔力をぜーんぶ吸い尽くして…"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "3️日は起き上がれないようにしてあげる！"
-        }
-      ]
-    },
-    "test4": {
-      "battle_progression": [
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "な、なかなかやるじゃない…。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "もう諦めたら？\nお互い疲れるだけでしょー？"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "ぐぬぬ…。生意気な…！"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "こうなったら徹底的にあんたを叩きのめして分からせてあげる！"
-        }
-      ]
-    },
-    "test5": {
-      "resolution": [
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "そんな…。あたしがこんな子どもに…！！"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "…。"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "な、なにをする気…！？"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "そういえばギルドにハーピーの討伐依頼が貼り出されてたのを思い出してさー。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "ちょうどいいし、お前にトドメを刺してから依頼を受けられないかなーって。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "楽に報酬が貰えるチャンスだし、それにもう付き纏わられるのうんざりだし。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "（ぜんぶ嘘だけど。）"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "やっやめて…！お願いだから…！！"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "わかった！もうあんた…シィルさんに絡まないから！すぐに消えますからー！！"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "…そう。"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "じゃあさっさとどっか行ってよね。\nもう二度と近寄らないで。"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "あ、ありがとうございますう！！"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "あ、でももう飛べる体力が…。\nそのほうきに乗せてもらえないかしら…？"
-        },
-        {
-          "speaker_name": "フェリス",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "はあ？そんなの歩いて帰れば？\nほら早く。（げしっげしっ）"
-        },
-        {
-          "speaker_name": "ハーピー",
-          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-          "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "痛っ！ちょっと蹴るな…蹴らないでくださいよお！！"
         }
       ]
     }

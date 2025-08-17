@@ -244,7 +244,6 @@ explosion_duration = 0.5
 explosion_damage = 0
 explosion_radius = 0.0
 damage_falloff = false
-friendly_fire = false
 explosion_type = 0
 knockback_force = 0.0
 screen_shake_intensity = 0.0

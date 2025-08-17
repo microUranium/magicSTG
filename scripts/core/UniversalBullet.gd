@@ -236,6 +236,4 @@ func _handle_particle_cleanup():
 func _create_explosion_effect():
   """爆発エフェクトの生成"""
   if bullet_config and bullet_config.explosion_config:
-    ExplosionFactory.create_explosion(
-      bullet_config.explosion_config, global_position, "player_bullets"
-    )
+    ExplosionFactory.create_explosion(bullet_config.explosion_config, global_position, target_group)

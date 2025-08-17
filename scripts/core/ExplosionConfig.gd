@@ -11,7 +11,6 @@ class_name ExplosionConfig extends Resource
 @export var explosion_damage: int = 0  # 0 = ダメージなし
 @export var explosion_radius: float = 0.0
 @export var damage_falloff: bool = true  # 距離による減衰
-@export var friendly_fire: bool = false
 
 @export_group("Advanced")
 @export var explosion_type: ExplosionType = ExplosionType.NORMAL

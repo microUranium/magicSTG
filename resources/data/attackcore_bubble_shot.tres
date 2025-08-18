@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://iap3lqatqmod" path="res://assets/gfx/sprites/bullet_bubble_sprite.png" id="3_eeeht"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="5_ipoek"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="6_0kx4j"]
-[ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="7_v66y7"]
+[ext_resource type="Texture2D" uid="uid://btdu721kaieqq" path="res://assets/gfx/sprites/icon_magic_bubble_shot.png" id="8_pwxes"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="8_x25hv"]
 
 [sub_resource type="Resource" id="Resource_1j6lm"]
@@ -53,7 +53,6 @@ explosion_duration = 0.5
 explosion_damage = 0
 explosion_radius = 0.0
 damage_falloff = false
-friendly_fire = false
 explosion_type = 0
 knockback_force = 0.0
 screen_shake_intensity = 0.0
@@ -118,5 +117,5 @@ id = &"attackcore_bubble_shot"
 item_type = 1
 display_name = "バブルショット"
 description = "ゆっくり拡散する短距離の泡を発射します。"
-icon = ExtResource("7_v66y7")
+icon = ExtResource("8_pwxes")
 metadata/_custom_type_script = "uid://31siypvcpkwh"

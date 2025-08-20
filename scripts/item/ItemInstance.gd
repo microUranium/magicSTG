@@ -7,11 +7,11 @@ enum RarityTier { NORMAL = 0, COMMON = 1, UNCOMMON = 2, RARE = 3, EPIC = 4, LEGE
 
 const RARITY_COLORS = {
   RarityTier.NORMAL: Color("#808080"),  # 灰色
-  RarityTier.COMMON: Color("#00FF00"),  # 緑色
-  RarityTier.UNCOMMON: Color("#0080FF"),  # 青色
-  RarityTier.RARE: Color("#8000FF"),  # 紫色
-  RarityTier.EPIC: Color("#FFD700"),  # 黄色（ゴールド）
-  RarityTier.LEGENDARY: Color("#FF0000")  # 赤色
+  RarityTier.COMMON: Color("#45A356"),  # 緑色
+  RarityTier.UNCOMMON: Color("#457AA3"),  # 青色
+  RarityTier.RARE: Color("#8528C0"),  # 紫色
+  RarityTier.EPIC: Color("#C49824"),  # 黄色（ゴールド）
+  RarityTier.LEGENDARY: Color("#D3153E")  # 赤色
 }
 
 var uid: String = ""  # ユニークID

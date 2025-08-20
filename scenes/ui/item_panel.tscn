@@ -11,6 +11,9 @@ texture = ExtResource("1_ogmfo")
 theme_override_styles/panel = SubResource("StyleBoxTexture_eojn8")
 script = ExtResource("1_0k6an")
 
+[node name="FrameRect" type="TextureRect" parent="."]
+layout_mode = 2
+
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
 texture = ExtResource("1_oqpv0")

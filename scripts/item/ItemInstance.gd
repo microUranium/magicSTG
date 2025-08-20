@@ -3,6 +3,17 @@ class_name ItemInstance
 
 signal enchantment_added(enchant: Enchantment, level: int)
 
+enum RarityTier { NORMAL = 0, COMMON = 1, UNCOMMON = 2, RARE = 3, EPIC = 4, LEGENDARY = 5 }  # 0: 灰色  # 1,2: 緑色  # 3,4: 青色  # 5,6: 紫色  # 7,8: 黄色  # 9+: 赤色
+
+const RARITY_COLORS = {
+  RarityTier.NORMAL: Color("#808080"),  # 灰色
+  RarityTier.COMMON: Color("#00FF00"),  # 緑色
+  RarityTier.UNCOMMON: Color("#0080FF"),  # 青色
+  RarityTier.RARE: Color("#8000FF"),  # 紫色
+  RarityTier.EPIC: Color("#FFD700"),  # 黄色（ゴールド）
+  RarityTier.LEGENDARY: Color("#FF0000")  # 赤色
+}
+
 var uid: String = ""  # ユニークID
 var prototype: ItemBase
 var enchantments: Dictionary[Enchantment, int] = {}  # enchant: level
@@ -31,3 +42,31 @@ func _init(p: ItemBase, _uid: String = "") -> void:
 func add_enchantment(enc: Enchantment, level: int) -> void:
   enchantments.set(enc, level)
   emit_signal("enchantment_added", enc, level)
+
+
+func get_rarity_level() -> int:
+  var total_level = 0
+  for enchantment in enchantments:
+    total_level += enchantments[enchantment]
+  return total_level
+
+
+func get_rarity_tier() -> RarityTier:
+  var level = get_rarity_level()
+  match level:
+    0:
+      return RarityTier.NORMAL
+    1, 2:
+      return RarityTier.COMMON
+    3, 4:
+      return RarityTier.UNCOMMON
+    5, 6:
+      return RarityTier.RARE
+    7, 8:
+      return RarityTier.EPIC
+    _:
+      return RarityTier.LEGENDARY
+
+
+func get_rarity_color() -> Color:
+  return RARITY_COLORS.get(get_rarity_tier(), Color.WHITE)

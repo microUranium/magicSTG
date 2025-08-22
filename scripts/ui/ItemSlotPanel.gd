@@ -10,9 +10,11 @@ signal slot_changed(new_item: ItemInstance)
 
 ## Constants -----------------------------------------------------------
 const EMPTY_ICON: Texture2D = preload("res://assets/gfx/sprites/item_panel_base.png")
+const ITEM_FRAME: Texture2D = preload("res://assets/gfx/sprites/item_frame.png")
 
 ## Ready ---------------------------------------------------------------
 @onready var icon: TextureRect = $TextureRect
+@onready var frame: TextureRect = $FrameRect
 
 
 func _ready():
@@ -24,6 +26,11 @@ func _ready():
 ## Private helpers -----------------------------------------------------
 func _refresh():
   icon.texture = EMPTY_ICON if data == null else data.inst.prototype.icon
+  if data != null:
+    frame.texture = ITEM_FRAME
+    frame.modulate = data.inst.get_rarity_color()
+  else:
+    frame.texture = null
   queue_redraw()
 
 
@@ -32,9 +39,18 @@ func _refresh():
 func _get_drag_data(_pos):
   if data == null:
     return null
-  var preview := TextureRect.new()
-  preview.texture = icon.texture
-  set_drag_preview(preview)
+  var preview_container := Control.new()
+  var preview_icon := TextureRect.new()
+  var preview_frame := TextureRect.new()
+
+  preview_icon.texture = icon.texture
+  preview_frame.texture = ITEM_FRAME
+  preview_frame.modulate = data.inst.get_rarity_color()
+
+  preview_container.add_child(preview_icon)
+  preview_container.add_child(preview_frame)
+
+  set_drag_preview(preview_container)
   EquipSignals.drag_started.emit({"inst": data.inst, "src": self})
   return {"type": "item", "inst": data.inst, "src": self}
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1_qkv0m"]
 [ext_resource type="PackedScene" uid="uid://byxyawydpds61" path="res://scenes/blessings/defensive_blessing.tscn" id="1_xq25p"]
-[ext_resource type="Texture2D" uid="uid://uh3ylg2y3bxw" path="res://assets/gfx/sprites/blessing_common_sprite.png" id="2_skbd8"]
+[ext_resource type="Texture2D" uid="uid://cyinsxb4l6mma" path="res://assets/gfx/sprites/icon_blessing_shield.png" id="2_skbd8"]
 
 [resource]
 script = ExtResource("1_qkv0m")

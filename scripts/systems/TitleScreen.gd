@@ -37,7 +37,7 @@ func _on_switch_to_s1_intro_pressed() -> void:
 func _on_switch_to_s1_boss_pressed() -> void:
   """S1ボスボタン - 固定シード設定"""
   #var fixed_seed := "Ds1d12.intro-s113-s122-s1g3-s113-s142-Ds1d12.progression-s134-s1g2-s1g4-s1g3-s1g5-s1z3-s1z2-Ds1d12.resolution"
-  var fixed_seed := "s213-s2g7-s234-s2g6-s213-s2g9-s2ga-s2g8-s2gb-s2z3-s2z2-Ds2d12.resolution"
+  var fixed_seed := "s223-s213-s2g7-s234-s2g6-s213-s2g9-s2ga-s2g8-s2gb-s2z3-s2z2-Ds2d12.resolution"
   RandomSeedGenerator.set_current_seed(fixed_seed)
   print("TitleScreen: Set fixed boss seed: %s" % fixed_seed)
   GameFlow.start_stage()

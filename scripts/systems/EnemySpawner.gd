@@ -21,6 +21,8 @@ var _layer_queues: Dictionary = {}  # layer_id -> Array[SpawnEvent]
 var _layer_states: Dictionary = {}  # layer_id -> LayerState
 var _active_layers: Array[String] = []  # 現在アクティブなレイヤーID
 
+@onready var enemy_layer: Node = get_tree().current_scene.get_node("EnemyLayer")  # 敵を生成するレイヤー
+
 
 class LayerState:
   var layer_id: String
@@ -164,7 +166,11 @@ func _spawn_layer_enemy(layer_state: LayerState, pos: Vector2) -> void:
         enemy.set_parameter(param_name, param_value)
       else:
         push_warning("EnemySpawner: Enemy %s does not support set_parameter" % enemy.name)
-  get_tree().current_scene.add_child(enemy)
+  if enemy_layer:
+    enemy_layer.add_child(enemy)
+  else:
+    push_warning("EnemySpawner: EnemyLayer not found, adding to current scene")
+    get_tree().current_scene.add_child(enemy)
   enemy.global_position = pos
 
   # レイヤーの敵リストに追加

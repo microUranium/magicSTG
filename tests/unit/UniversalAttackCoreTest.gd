@@ -220,3 +220,114 @@ func test_spread_direction_calculation():
   # 各方向が単位ベクトルであることを確認
   for dir in directions:
     assert_that(abs(dir.length() - 1.0)).is_less(0.01)
+
+
+# === 警告線機能のテスト ===
+
+
+func test_show_attack_warning_with_empty_configs():
+  # Given - 警告設定が空の場合
+  test_pattern.warning_configs = []
+  universal_core.attack_pattern = test_pattern
+
+  # When
+  await universal_core._show_attack_warning()
+
+  # Then - 何も起こらず即座に完了
+  assert_that(true).is_true()  # 正常完了の確認
+
+
+func test_show_attack_warning_with_single_config():
+  # Given - 単一の警告設定
+  var warning_config = AttackWarningConfig.new()
+  warning_config.warning_duration = 0.1  # テスト用に短縮
+  warning_config.warning_length = 100.0
+  warning_config.angle_degrees = 0.0
+  warning_config.position_offset = Vector2.ZERO
+  warning_config.use_relative_position = true
+
+  test_pattern.warning_configs = [warning_config]
+  universal_core.attack_pattern = test_pattern
+
+  # When
+  await universal_core._show_attack_warning()
+
+  # Then - 警告線が生成される（警告完了後に確認）
+  var scene_children = get_tree().current_scene.get_children()
+  var warning_found = false
+  for child in scene_children:
+    if child is AttackWarning:
+      warning_found = true
+      break
+
+  assert_that(warning_found).is_true()
+
+
+func test_show_attack_warning_with_multiple_configs():
+  # Given - 複数の警告設定
+  var config1 = AttackWarningConfig.new()
+  config1.warning_duration = 0.1
+  config1.angle_degrees = 0.0
+  config1.position_offset = Vector2.ZERO
+  config1.use_relative_position = true
+
+  var config2 = AttackWarningConfig.new()
+  config2.warning_duration = 0.1
+  config2.angle_degrees = 90.0
+  config2.position_offset = Vector2(10, 0)
+  config2.use_relative_position = true
+
+  var config3 = AttackWarningConfig.new()
+  config3.warning_duration = 0.1
+  config3.angle_degrees = -90.0
+  config3.position_offset = Vector2(-10, 0)
+  config3.use_relative_position = false  # 絶対座標
+
+  test_pattern.warning_configs = [config1, config2, config3]
+  universal_core.attack_pattern = test_pattern
+
+  # When
+  await universal_core._show_attack_warning()
+
+  # Then - 3つの警告線が生成される（警告完了後に確認）
+  var scene_children = get_tree().current_scene.get_children()
+  var warning_count = 0
+  for child in scene_children:
+    if child is AttackWarning:
+      warning_count += 1
+
+  assert_that(warning_count).is_equal(3)
+
+
+func test_warning_line_relative_vs_absolute_position():
+  # Given - 相対座標と絶対座標の混在
+  var relative_config = AttackWarningConfig.new()
+  relative_config.warning_duration = 0.05
+  relative_config.position_offset = Vector2(25, -15)
+  relative_config.use_relative_position = true
+
+  var absolute_config = AttackWarningConfig.new()
+  absolute_config.warning_duration = 0.05
+  absolute_config.position_offset = Vector2(200, 200)
+  absolute_config.use_relative_position = false
+
+  test_pattern.warning_configs = [relative_config, absolute_config]
+  universal_core.attack_pattern = test_pattern
+
+  # When
+  await universal_core._show_attack_warning()
+
+  # Then - 両方の警告線が生成される（警告完了後に確認）
+  var scene_children = get_tree().current_scene.get_children()
+  var relative_warnings = 0
+  var absolute_warnings = 0
+
+  for child in scene_children:
+    if child is AttackWarning:
+      if child.owner_node != null:
+        relative_warnings += 1
+      else:
+        absolute_warnings += 1
+
+  assert_that(relative_warnings).is_equal(1)
+  assert_that(absolute_warnings).is_equal(1)

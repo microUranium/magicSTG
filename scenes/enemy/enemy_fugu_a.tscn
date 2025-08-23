@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ob3ou4sx8l8b"]
+[gd_scene load_steps=26 format=3 uid="uid://ob3ou4sx8l8b"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_32cxq"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_l7y43"]
@@ -15,6 +15,7 @@
 [ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="12_w2olb"]
 [ext_resource type="Script" uid="uid://bci33nkpd7hly" path="res://scripts/core/BeamVisualConfig.gd" id="13_c8edp"]
 [ext_resource type="Texture2D" uid="uid://d3j84y1csppui" path="res://assets/gfx/sprites/water_beam_sprite.png" id="14_b4qv4"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_c8edp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7y43"]
 atlas = ExtResource("5_32cxq")
@@ -71,6 +72,19 @@ enable_particles = false
 volume = 1.0
 metadata/_custom_type_script = "uid://bci33nkpd7hly"
 
+[sub_resource type="Resource" id="Resource_b4qv4"]
+script = ExtResource("16_c8edp")
+base_color = Color(0.501961, 0.0980392, 0.0980392, 1)
+glow_width = 16.0
+outline_width = 16.0
+warning_duration = 1.0
+glow_intensity = 2.0
+warning_length = 1000.0
+angle_degrees = 90.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
+metadata/_custom_type_script = "uid://cisl1a65xgxeq"
+
 [sub_resource type="Resource" id="Resource_vk5w5"]
 script = ExtResource("12_hm5sp")
 pattern_type = 4
@@ -79,13 +93,13 @@ damage = 1
 bullet_range = 0.0
 bullet_lifetime = 0.0
 auto_start = true
-bullet_count = 2
+bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
 burst_delay = 3.0
 direction_type = 0
 base_direction = Vector2(0, 1)
-angle_spread = 30.0
+angle_spread = 0.0
 angle_offset = 0.0
 circle_radius = 100.0
 rotation_speed = 90.0
@@ -102,6 +116,7 @@ beam_direction_override = Vector2(0, 0)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("12_hm5sp")]([])
 layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_c8edp")]([SubResource("Resource_b4qv4")])
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyFuguA" type="Area2D" groups=["enemies"]]

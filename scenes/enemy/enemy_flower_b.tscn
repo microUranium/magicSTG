@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://ce1ffkd1p8vj"]
+[gd_scene load_steps=33 format=3 uid="uid://ce1ffkd1p8vj"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_on5ix"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_j3hvo"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="13_h1a4l"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="14_bsg2j"]
 [ext_resource type="Texture2D" uid="uid://eeykk5dmkswh" path="res://assets/gfx/sprites/bullet_enemy_sprite_2.png" id="15_bsg2j"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="17_2nqia"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h1a4l"]
 atlas = ExtResource("5_j3hvo")
@@ -156,6 +157,7 @@ beam_direction_override = Vector2(0, 0)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("12_xicvl")]([])
 layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("17_2nqia")]([])
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyFlowerB" type="Area2D" groups=["enemies"]]

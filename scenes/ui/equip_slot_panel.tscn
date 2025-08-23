@@ -10,6 +10,9 @@ texture = ExtResource("1_bf2uw")
 theme_override_styles/panel = SubResource("StyleBoxTexture_ygg06")
 script = ExtResource("1_ygg06")
 
+[node name="FrameRect" type="TextureRect" parent="."]
+layout_mode = 2
+
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
 texture = ExtResource("1_bf2uw")

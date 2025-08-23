@@ -5,9 +5,9 @@
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="1_rjsk6"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="2_10qvo"]
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="2_canmk"]
-[ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="2_rjsk6"]
 [ext_resource type="Texture2D" uid="uid://vtlu4gks4qom" path="res://assets/gfx/sprites/bullet_fireball_sprite.png" id="3_canmk"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_58abv"]
+[ext_resource type="Texture2D" uid="uid://csphlt7lv3s2i" path="res://assets/gfx/sprites/icon_magic_fireball.png" id="7_10qvo"]
 
 [sub_resource type="Curve" id="Curve_5ssc0"]
 _data = [Vector2(0, 0.975222), 0.0, 0.0, 0, 0, Vector2(0.661392, 0.966963), 0.0, 0.0, 0, 0, Vector2(1, 0.066709), -6.52478, 0.0, 0, 0]
@@ -134,5 +134,5 @@ id = &"attackcore_fireball"
 item_type = 1
 display_name = "ファイアボール"
 description = "着弾時に爆発する中距離の魔弾を発射します。"
-icon = ExtResource("2_rjsk6")
+icon = ExtResource("7_10qvo")
 metadata/_custom_type_script = "uid://31siypvcpkwh"

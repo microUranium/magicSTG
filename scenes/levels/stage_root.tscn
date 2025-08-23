@@ -49,10 +49,12 @@ position = Vector2(448, 748)
 z_index = 10
 
 [node name="BulletLayer" type="Node2D" parent="."]
+z_index = 25
 
 [node name="Background" parent="." instance=ExtResource("17_vhqjk")]
 
 [node name="DialogueRunner" parent="." instance=ExtResource("18_o2yuv")]
+layer = 30
 
 [node name="WaveExecuter" type="Node" parent="."]
 script = ExtResource("20_yuom2")

@@ -19,6 +19,7 @@
 [node name="Main" type="Node2D"]
 
 [node name="Hud" parent="." instance=ExtResource("1_58tok")]
+layer = 10
 player_path = NodePath("../Player")
 
 [node name="GaugeManager" parent="Hud" instance=ExtResource("2_sk5mj")]
@@ -26,9 +27,6 @@ offset_left = 930.0
 offset_top = 193.0
 offset_right = 930.0
 offset_bottom = 193.0
-
-[node name="Player" parent="." instance=ExtResource("3_yuom2")]
-position = Vector2(448, 748)
 
 [node name="EnemySpawner" parent="." instance=ExtResource("4_end45")]
 
@@ -43,11 +41,18 @@ ui_controller_path = NodePath("../UIController")
 environment_setup_path = NodePath("../EnvironmentSetup")
 lifecycle_controller_path = NodePath("../LifecycleController")
 
+[node name="Player" parent="." instance=ExtResource("3_yuom2")]
+z_index = 20
+position = Vector2(448, 748)
+
+[node name="EnemyLayer" type="Node2D" parent="."]
+z_index = 10
+
+[node name="BulletLayer" type="Node2D" parent="."]
+
 [node name="Background" parent="." instance=ExtResource("17_vhqjk")]
 
 [node name="DialogueRunner" parent="." instance=ExtResource("18_o2yuv")]
-
-[node name="BulletLayer" type="Node" parent="."]
 
 [node name="WaveExecuter" type="Node" parent="."]
 script = ExtResource("20_yuom2")

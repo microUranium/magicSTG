@@ -60,6 +60,9 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var pattern_layers: Array[AttackPattern] = []  # 複数パターンの組み合わせ
 @export var layer_delays: Array[float] = []  # 各レイヤーの発動遅延
 
+# === 警告設定 ===
+@export var warning_config: AttackWarningConfig  # 警告設定（nullの場合は警告なし）
+
 
 # パターンの基本方向を計算
 func calculate_base_direction(from_pos: Vector2, target_pos: Vector2) -> Vector2:

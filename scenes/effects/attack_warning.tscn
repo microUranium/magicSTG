@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cahav11g42ua5"]
+
+[ext_resource type="Script" uid="uid://bpvee1wbsnmep" path="res://scripts/effects/AttackWarning.gd" id="1_wbtwj"]
+
+[node name="AttackWarning" type="Node2D"]
+script = ExtResource("1_wbtwj")
+
+[node name="GlowLine" type="Line2D" parent="."]
+
+[node name="OutlineRect" type="Node2D" parent="."]

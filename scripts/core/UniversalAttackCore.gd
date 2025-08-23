@@ -80,6 +80,10 @@ func _do_fire() -> bool:
   if show_debug_info and OS.is_debug_build():
     _update_debug_display()
 
+  # 警告表示（warning_configが存在する場合のみ）
+  if attack_pattern.warning_config:
+    await _show_attack_warning()
+
   # 実行コンテキストを作成
   _current_execution = ExecutionContext.new(attack_pattern)
 
@@ -642,6 +646,22 @@ func get_debug_info() -> Dictionary:
 
 func _on_projectile_destroyed(projectile: Node) -> void:
   _spawned_projectiles.erase(projectile)
+
+
+func _show_attack_warning() -> void:
+  var warning_scene = preload("res://scenes/effects/attack_warning.tscn")
+  var warning = warning_scene.instantiate()
+  get_tree().current_scene.add_child(warning)
+
+  var start_pos = _owner_actor.global_position
+  var target_pos = _get_player_position()
+  var direction = attack_pattern.calculate_base_direction(start_pos, target_pos)
+  var end_pos = start_pos + direction * attack_pattern.warning_config.warning_length
+
+  warning.initialize(start_pos, end_pos, attack_pattern.warning_config)
+
+  # 警告時間だけ待機
+  await get_tree().create_timer(attack_pattern.warning_config.warning_duration).timeout
 
 
 func cleanup_on_death() -> void:

@@ -80,6 +80,9 @@ outline_width = 16.0
 warning_duration = 1.0
 glow_intensity = 2.0
 warning_length = 1000.0
+angle_degrees = 90.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
 metadata/_custom_type_script = "uid://cisl1a65xgxeq"
 
 [sub_resource type="Resource" id="Resource_vk5w5"]
@@ -90,13 +93,13 @@ damage = 1
 bullet_range = 0.0
 bullet_lifetime = 0.0
 auto_start = true
-bullet_count = 2
+bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
 burst_delay = 3.0
 direction_type = 0
 base_direction = Vector2(0, 1)
-angle_spread = 30.0
+angle_spread = 0.0
 angle_offset = 0.0
 circle_radius = 100.0
 rotation_speed = 90.0
@@ -113,7 +116,7 @@ beam_direction_override = Vector2(0, 0)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("12_hm5sp")]([])
 layer_delays = Array[float]([])
-warning_config = SubResource("Resource_b4qv4")
+warning_configs = Array[ExtResource("16_c8edp")]([SubResource("Resource_b4qv4")])
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyFuguA" type="Area2D" groups=["enemies"]]

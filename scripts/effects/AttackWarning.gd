@@ -10,8 +10,21 @@ var outline_width: float
 var outline_length: float
 var rect_direction: Vector2
 
+# 追従機能用
+var owner_node: Node2D = null
+var position_offset: Vector2 = Vector2.ZERO
 
-func initialize(start_pos: Vector2, end_pos: Vector2, config: AttackWarningConfig):
+
+func initialize(
+  start_pos: Vector2, end_pos: Vector2, config: AttackWarningConfig, owner: Node2D = null
+):
+  # 相対座標の場合の設定
+  if config.use_relative_position and owner:
+    owner_node = owner
+    position_offset = config.position_offset
+    # 初期位置を設定
+    global_position = owner.global_position + config.position_offset
+
   _setup_glow_line(start_pos, end_pos, config)
   _setup_outline_rect(start_pos, end_pos, config)
   _start_fade_in(config.warning_duration)
@@ -35,6 +48,10 @@ func _setup_glow_line(start: Vector2, end: Vector2, config: AttackWarningConfig)
 
 
 func _setup_outline_rect(start: Vector2, end: Vector2, config: AttackWarningConfig):
+  if config.use_relative_position and owner_node:
+    start += owner_node.global_position
+    end += owner_node.global_position
+
   # 長方形パラメータを設定
   outline_color = config.base_color
   outline_color.a = 0.0  # 初期透明
@@ -62,6 +79,12 @@ func _update_glow_progress(progress: float):
 func _update_outline_rect_alpha(alpha: float):
   outline_color.a = alpha
   outline_rect.queue_redraw()
+
+
+# 座標追従処理
+func _process(_delta: float) -> void:
+  if owner_node:
+    global_position = owner_node.global_position + position_offset
 
 
 # 長方形の外郭を描画

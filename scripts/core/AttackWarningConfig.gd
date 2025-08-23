@@ -8,3 +8,8 @@ class_name AttackWarningConfig extends Resource
 @export var warning_duration: float = 1.0  # 警告表示時間（フェードイン時間と同一）
 @export var glow_intensity: float = 2.0  # グロー強度
 @export var warning_length: float = 500.0  # 警告線の長さ
+
+# === 警告線の方向・位置設定 ===
+@export var angle_degrees: float = 0.0  # 警告線の角度（度）
+@export var position_offset: Vector2 = Vector2.ZERO  # 位置オフセット
+@export var use_relative_position: bool = true  # 相対座標（true）か絶対座標（false）か

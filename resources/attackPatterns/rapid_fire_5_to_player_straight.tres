@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="AttackPattern" load_steps=3 format=3 uid="uid://ckrdr26x4uy2"]
+[gd_resource type="Resource" script_class="AttackPattern" load_steps=4 format=3 uid="uid://ckrdr26x4uy2"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_y4uat"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="2_xmg32"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="3_xmg32"]
 
 [resource]
 script = ExtResource("2_xmg32")
@@ -33,4 +34,5 @@ beam_direction_override = Vector2(0, 0)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("2_xmg32")]([])
 layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("3_xmg32")]([])
 metadata/_custom_type_script = "uid://su05ub25qwt5"

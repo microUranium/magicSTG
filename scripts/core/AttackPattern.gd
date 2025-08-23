@@ -61,7 +61,7 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var layer_delays: Array[float] = []  # 各レイヤーの発動遅延
 
 # === 警告設定 ===
-@export var warning_config: AttackWarningConfig  # 警告設定（nullの場合は警告なし）
+@export var warning_configs: Array[AttackWarningConfig] = []  # 複数の警告設定（空の場合は警告なし）
 
 
 # パターンの基本方向を計算

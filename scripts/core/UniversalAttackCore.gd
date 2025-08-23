@@ -81,7 +81,7 @@ func _do_fire() -> bool:
     _update_debug_display()
 
   # 警告表示（warning_configが存在する場合のみ）
-  if attack_pattern.warning_config:
+  if !attack_pattern.warning_configs.is_empty():
     await _show_attack_warning()
 
   # 実行コンテキストを作成
@@ -649,19 +649,37 @@ func _on_projectile_destroyed(projectile: Node) -> void:
 
 
 func _show_attack_warning() -> void:
-  var warning_scene = preload("res://scenes/effects/attack_warning.tscn")
-  var warning = warning_scene.instantiate()
-  get_tree().current_scene.add_child(warning)
+  var max_duration: float = 0.0
 
-  var start_pos = _owner_actor.global_position
-  var target_pos = _get_player_position()
-  var direction = attack_pattern.calculate_base_direction(start_pos, target_pos)
-  var end_pos = start_pos + direction * attack_pattern.warning_config.warning_length
+  # 各警告設定に対して警告線を生成
+  for warning_config in attack_pattern.warning_configs:
+    var warning_scene = preload("res://scenes/effects/attack_warning.tscn")
+    var warning = warning_scene.instantiate()
+    get_tree().current_scene.add_child(warning)
 
-  warning.initialize(start_pos, end_pos, attack_pattern.warning_config)
+    # 警告線の開始座標を計算
+    var start_pos: Vector2
+    start_pos = warning_config.position_offset
 
-  # 警告時間だけ待機
-  await get_tree().create_timer(attack_pattern.warning_config.warning_duration).timeout
+    # 警告線の終点座標を計算（角度を使用）
+    var angle_rad = deg_to_rad(warning_config.angle_degrees)
+    var direction = Vector2(cos(angle_rad), sin(angle_rad))
+    var end_pos = start_pos + direction * warning_config.warning_length
+
+    # 警告線を初期化（相対座標の場合はowner_actorを渡す）
+    warning.initialize(
+      start_pos,
+      end_pos,
+      warning_config,
+      _owner_actor if warning_config.use_relative_position else null
+    )
+
+    # 最長の警告時間を記録
+    max_duration = max(max_duration, warning_config.warning_duration)
+
+  # 最長の警告時間だけ待機
+  if max_duration > 0.0:
+    await get_tree().create_timer(max_duration).timeout
 
 
 func cleanup_on_death() -> void:

@@ -13,6 +13,7 @@ var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
 var _beam_duration_timer: SceneTreeTimer = null  # ビーム持続時間タイマー
 var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追跡
+var _rear_firing_mode: bool = false  # 後方発射モード
 
 
 class ExecutionContext:
@@ -322,39 +323,6 @@ func _execute_beam(pattern: AttackPattern) -> bool:
   return true
 
 
-func _calculate_beam_direction(pattern: AttackPattern) -> Vector2:
-  """ビーム方向の計算"""
-  # 方向の上書き指定がある場合はそれを使用
-  if pattern.beam_direction_override != Vector2.ZERO:
-    return pattern.beam_direction_override.normalized()
-
-  # DirectionType に基づいて方向を計算
-  var direction = Vector2.ZERO
-
-  match pattern.direction_type:
-    AttackPattern.DirectionType.FIXED:
-      direction = pattern.base_direction
-    AttackPattern.DirectionType.TO_PLAYER:
-      var player_pos = _get_player_position()
-      if player_pos != Vector2.ZERO and _owner_actor:
-        direction = (player_pos - _owner_actor.global_position).normalized()
-      else:
-        direction = pattern.base_direction
-    AttackPattern.DirectionType.RANDOM:
-      var angle = randf() * 2 * PI
-      direction = Vector2(cos(angle), sin(angle))
-    AttackPattern.DirectionType.CIRCLE, AttackPattern.DirectionType.CUSTOM:
-      # 円形やカスタムの場合はデフォルト方向
-      direction = pattern.base_direction
-
-  # 角度オフセットを適用
-  if pattern.angle_offset != 0.0:
-    var offset_radians = deg_to_rad(pattern.angle_offset)
-    direction = direction.rotated(offset_radians)
-
-  return direction.normalized() if direction != Vector2.ZERO else Vector2.UP
-
-
 func _calculate_multi_beam_direction(
   pattern: AttackPattern, beam_index: int, total_beams: int
 ) -> Vector2:
@@ -411,6 +379,9 @@ func _get_base_direction(pattern: AttackPattern) -> Vector2:
       # 円形やカスタムの場合はデフォルト方向
       direction = pattern.base_direction
 
+  if _rear_firing_mode:
+    direction = -direction
+
   return direction.normalized() if direction != Vector2.ZERO else Vector2.UP
 
 
@@ -439,6 +410,10 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   if not parent:
     push_warning("UniversalAttackCore: No valid parent node found.")
     return false
+
+  # 後方発射モード時は方向を反転
+  if _rear_firing_mode:
+    direction = -direction
 
   var bullet = pattern.bullet_scene.instantiate()
   parent.add_child(bullet)
@@ -688,3 +663,8 @@ func cleanup_on_death() -> void:
       projectile.queue_free()
   _spawned_projectiles.clear()
   _beam_duration_timer = null
+
+
+func set_rear_firing_mode(enabled: bool) -> void:
+  """後方発射モードの設定"""
+  _rear_firing_mode = enabled

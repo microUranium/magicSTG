@@ -30,6 +30,7 @@ func _ready():
 
   owner.connect("sneak_state_changed", Callable(self, "_on_sneak_state_changed"))
   owner.connect("game_over", Callable(self, "_on_player_game_over"))
+  owner.connect("attack_mode_changed", Callable(self, "_on_change_attack_mode"))
 
   _spawn_all_from_cores()  # 装備リストぶん精霊を出す
 
@@ -192,3 +193,9 @@ func _on_player_game_over() -> void:
       fairy.queue_free()
   fairies.clear()
   attack_core_nodes.clear()
+
+
+func _on_change_attack_mode(rear_mode: bool) -> void:
+  for core in attack_core_nodes:
+    if core and core is UniversalAttackCore:
+      (core as UniversalAttackCore).set_rear_firing_mode(rear_mode)

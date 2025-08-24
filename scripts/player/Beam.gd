@@ -33,6 +33,7 @@ func initialize(_owner_node: Node2D, _damage: int, _beam_direction: Vector2) -> 
   """ビームの初期化"""
   self.owner_node = _owner_node
   self.damage = _damage
+  rotation = _beam_direction.angle() + deg_to_rad(90)  # 上向きが0度なので調整
 
 
 func _process(_delta: float) -> void:

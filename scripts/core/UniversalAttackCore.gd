@@ -146,7 +146,6 @@ func _execute_composite_pattern() -> bool:
 
 func _execute_single_pattern(pattern: AttackPattern) -> bool:
   """単一パターンを実行"""
-  print_debug("Executing pattern: ", pattern.pattern_type, " with bullets: ", pattern.bullet_count)
   var executor = _pattern_executors.get(pattern.pattern_type)
   if not executor:
     push_warning("UniversalAttackCore: Unknown pattern type: %s" % pattern.pattern_type)
@@ -161,7 +160,9 @@ func _execute_single_pattern(pattern: AttackPattern) -> bool:
 func _execute_single_shot(pattern: AttackPattern) -> bool:
   """単発射撃"""
   var target_pos = _get_player_position()
-  var base_dir = pattern.calculate_base_direction(_owner_actor.global_position, target_pos)
+  var base_dir = pattern.calculate_base_direction(
+    _owner_actor.global_position, target_pos, _rear_firing_mode
+  )
 
   var success = true
   for i in range(pattern.bullet_count):
@@ -192,7 +193,9 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   for burst in range(pattern.rapid_fire_count):
     if pattern.angle_spread > 0 and pattern.direction_type == AttackPattern.DirectionType.FIXED:
       # 角度スプレッドがある場合はランダム方向を計算
-      var base_dir = pattern.calculate_base_direction(_owner_actor.global_position, target_pos)
+      var base_dir = pattern.calculate_base_direction(
+        _owner_actor.global_position, target_pos, _rear_firing_mode
+      )
       var bullet_dir = pattern.calculate_spread_direction(burst, pattern.rapid_fire_count, base_dir)
       if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
         success = false
@@ -229,7 +232,9 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
 func _execute_spiral(pattern: AttackPattern) -> bool:
   """螺旋射撃"""
   var target_pos = _get_player_position()
-  var base_dir = pattern.calculate_base_direction(_owner_actor.global_position, target_pos)
+  var base_dir = pattern.calculate_base_direction(
+    _owner_actor.global_position, target_pos, _rear_firing_mode
+  )
 
   var success = true
   for i in range(pattern.bullet_count):
@@ -366,6 +371,8 @@ func _get_base_direction(pattern: AttackPattern) -> Vector2:
   match pattern.direction_type:
     AttackPattern.DirectionType.FIXED:
       direction = pattern.base_direction
+      if _rear_firing_mode:
+        direction = -direction
     AttackPattern.DirectionType.TO_PLAYER:
       var player_pos = _get_player_position()
       if player_pos != Vector2.ZERO and _owner_actor:
@@ -375,12 +382,13 @@ func _get_base_direction(pattern: AttackPattern) -> Vector2:
     AttackPattern.DirectionType.RANDOM:
       var angle = randf() * 2 * PI
       direction = Vector2(cos(angle), sin(angle))
+      if _rear_firing_mode:
+        direction = -direction
     AttackPattern.DirectionType.CIRCLE, AttackPattern.DirectionType.CUSTOM:
       # 円形やカスタムの場合はデフォルト方向
       direction = pattern.base_direction
-
-  if _rear_firing_mode:
-    direction = -direction
+      if _rear_firing_mode:
+        direction = -direction
 
   return direction.normalized() if direction != Vector2.ZERO else Vector2.UP
 
@@ -410,10 +418,6 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   if not parent:
     push_warning("UniversalAttackCore: No valid parent node found.")
     return false
-
-  # 後方発射モード時は方向を反転
-  if _rear_firing_mode:
-    direction = -direction
 
   var bullet = pattern.bullet_scene.instantiate()
   parent.add_child(bullet)

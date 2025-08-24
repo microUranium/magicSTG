@@ -65,9 +65,13 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 
 
 # パターンの基本方向を計算
-func calculate_base_direction(from_pos: Vector2, target_pos: Vector2) -> Vector2:
+func calculate_base_direction(
+  from_pos: Vector2, target_pos: Vector2, _rear_firing: bool = false
+) -> Vector2:
   match direction_type:
     DirectionType.FIXED:
+      if _rear_firing:
+        return -base_direction.normalized()
       return base_direction.normalized()
 
       # カスタムスクリプトで計算
@@ -76,6 +80,8 @@ func calculate_base_direction(from_pos: Vector2, target_pos: Vector2) -> Vector2
 
       # カスタムスクリプトで計算
     DirectionType.RANDOM:
+      if _rear_firing:
+        return -base_direction.normalized()
       return base_direction.normalized()
 
       # カスタムスクリプトで計算
@@ -83,8 +89,12 @@ func calculate_base_direction(from_pos: Vector2, target_pos: Vector2) -> Vector2
       # カスタムスクリプトで計算
       if custom_script and custom_script.has_method("calculate_direction"):
         return custom_script.calculate_direction(from_pos, target_pos, custom_parameters)
+      if _rear_firing:
+        return -base_direction.normalized()
       return base_direction.normalized()
     _:
+      if _rear_firing:
+        return -base_direction.normalized()
       return base_direction.normalized()
 
 

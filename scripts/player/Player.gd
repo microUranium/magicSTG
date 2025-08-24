@@ -5,6 +5,7 @@ signal damage_received(damage)
 signal game_over
 signal healing_received(amount)
 signal sneak_state_changed(is_sneaking: bool)
+signal attack_mode_changed(rear_mode: bool)
 
 @export var speed: float = 200.0
 @export var sneak_multiplier: float = 0.5
@@ -19,6 +20,7 @@ signal sneak_state_changed(is_sneaking: bool)
 var player_size
 var direction: Vector2
 var _is_sneaking: bool = false
+var _rear_mode: bool = false  # 後方攻撃モード
 
 
 func _ready() -> void:
@@ -49,6 +51,10 @@ func _handle_input(delta):
   if sneaking != _is_sneaking:
     _is_sneaking = sneaking
     emit_signal("sneak_state_changed", _is_sneaking)
+
+  if Input.is_action_just_pressed("ui_attack_rear"):  # Space 判定
+    _rear_mode = !_rear_mode
+    emit_signal("attack_mode_changed", _rear_mode)
 
   var effective_speed := speed * (sneak_multiplier if sneaking else 1.0)
   position += direction * effective_speed * delta

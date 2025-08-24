@@ -13,6 +13,7 @@ var attack_core_instance: Array[ItemInstance] = []  # ★ 装備中の攻撃核�
 var attack_core_nodes: Array[AttackCoreBase] = []  # ★ プレイヤー装備中の攻撃核
 var fairies: Array = []  # 生成済みの精霊
 var _circle_angle := 0.0
+var _rear_firing_mode := false  # 後方攻撃モード
 
 
 func _ready():
@@ -146,6 +147,9 @@ func update_offsets() -> void:
     # Tweenを設定
     tw.tween_property(fairy, "offset", offset, 0.2)
     tw.set_parallel()
+
+    if fairy.has_method("set_firing_sprite"):
+      fairy.set_firing_sprite(_rear_firing_mode)
   tw.play()
 
 
@@ -156,9 +160,15 @@ func _recalc_offset_for(idx: int) -> Vector2:
   var offset = Vector2.ZERO
   match formation:
     0:  # CIRCLE
-      offset = Vector2(0, -circle_radius).rotated(angle_rad)
+      if _rear_firing_mode:
+        offset = Vector2(0, circle_radius).rotated(angle_rad)  # 後方攻撃モード時は下に配置
+      else:
+        offset = Vector2(0, -circle_radius).rotated(angle_rad)
     1:  # LINE
-      offset = Vector2(circle_radius / 2 * sin(angle_rad), -circle_radius)
+      if _rear_firing_mode:
+        offset = Vector2(-circle_radius / 2 * sin(angle_rad), circle_radius)  # 後方攻撃モード時は下に配置
+      else:
+        offset = Vector2(circle_radius / 2 * sin(angle_rad), -circle_radius)
     _:
       return offset
   return offset
@@ -196,6 +206,11 @@ func _on_player_game_over() -> void:
 
 
 func _on_change_attack_mode(rear_mode: bool) -> void:
+  """ 後方攻撃モードの切り替え """
+  _rear_firing_mode = rear_mode
+
   for core in attack_core_nodes:
     if core and core is UniversalAttackCore:
       (core as UniversalAttackCore).set_rear_firing_mode(rear_mode)
+
+  update_offsets()

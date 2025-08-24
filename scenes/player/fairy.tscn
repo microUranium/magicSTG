@@ -1,16 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://dypijchgmf00l"]
+[gd_scene load_steps=7 format=3 uid="uid://dypijchgmf00l"]
 
 [ext_resource type="Script" uid="uid://5edflsdac8ar" path="res://scripts/player/Fairy.gd" id="1_ac1c3"]
 [ext_resource type="Texture2D" uid="uid://bydxdctg7u4to" path="res://assets/gfx/sprites/fairy_sprite.png" id="2_24ktk"]
+[ext_resource type="Texture2D" uid="uid://bcoq03f2omwdp" path="res://assets/gfx/sprites/fairy_rear_sprite.png" id="3_3xe6k"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="3_rivsa"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="4_3foel"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="5_ifqgt"]
 
 [node name="Fairy" type="Node2D"]
 script = ExtResource("1_ac1c3")
+sprite_forward = ExtResource("2_24ktk")
+sprite_rear = ExtResource("3_3xe6k")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_24ktk")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("3_rivsa")]

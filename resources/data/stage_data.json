@@ -15,6 +15,14 @@
       "clear_bgm_path": "res://assets/audio/bgm/stageclear_bgm.mp3",
       "scroll_speed": 600.0,
       "pools": ["stage2"]
+    },
+    "stage3": {
+      "background_texture": "res://assets/gfx/backgrounds/background_ruins.png",
+      "bgm_path": "res://assets/audio/bgm/stage3_bgm_kari.mp3",
+      "boss_bgm_path": "res://assets/audio/bgm/stage3_boss_bgm_kari.mp3",
+      "clear_bgm_path": "res://assets/audio/bgm/stageclear_bgm.mp3",
+      "scroll_speed": 200.0,
+      "pools": ["stage3"]
     }
   },
 

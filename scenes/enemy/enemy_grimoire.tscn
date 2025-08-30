@@ -112,8 +112,9 @@ homing_duration = 0.0
 max_turn_angle_per_second = 180.0
 gravity_strength = 980.0
 gravity_direction = Vector2(0, 1)
-bounce_factor = 0.0
 air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
 metadata/_custom_type_script = "uid://urppv4s7es6g"
 
 [sub_resource type="Curve" id="Curve_58abv"]

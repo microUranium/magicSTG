@@ -19,6 +19,7 @@ var _original_speed: float
 var _prev_position: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _homing_timer: float = 0.0  # 追尾経過時間
+var _bounce_count: int = 0  # 反射回数
 
 
 func _ready():
@@ -92,6 +93,10 @@ func _process(delta):
 
   if movement_config:
     _update_advanced_movement(delta)
+
+    # 全ての移動タイプで境界反射をチェック
+    if movement_config.bounce_factor > 0:
+      _handle_boundary_bounce()
 
   # 角度を移動方向に合わせる
   var _direction = (global_position - _prev_position).normalized()
@@ -207,32 +212,59 @@ func _update_gravity(delta: float):
   # 速度ベースで位置を更新
   position += _velocity * delta
 
-  # PlayArea境界での衝突判定（バウンス処理）
-  if movement_config.bounce_factor > 0:
-    _handle_boundary_bounce()
-
 
 func _handle_boundary_bounce():
-  """境界でのバウンス処理"""
+  """境界でのバウンス処理（反射回数制限付き）"""
+  # 反射回数制限チェック
+  if movement_config.max_bounces > 0 and _bounce_count >= movement_config.max_bounces:
+    return
+
   var play_rect = PlayArea.get_play_rect()
+  var bounced = false
+  var bounce_margin = 4.0  # 境界から内側のマージン
 
-  # 下端での衝突
-  if global_position.y >= play_rect.position.y + play_rect.size.y:
-    global_position.y = play_rect.position.y + play_rect.size.y
-    _velocity.y *= -movement_config.bounce_factor
+  # GRAVITY以外の移動タイプでは、directionベースの反射を使用
+  var use_velocity = movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY
 
-  # 上端での衝突
-  if global_position.y <= play_rect.position.y:
-    global_position.y = play_rect.position.y
-    _velocity.y *= -movement_config.bounce_factor
+  # 下端での衝突（マージン付き）
+  if global_position.y >= play_rect.position.y + play_rect.size.y - bounce_margin:
+    global_position.y = play_rect.position.y + play_rect.size.y - bounce_margin
+    if use_velocity:
+      _velocity.y *= -movement_config.bounce_factor
+    else:
+      direction.y *= -movement_config.bounce_factor
+    bounced = true
 
-  # 左右端での衝突
-  if global_position.x <= play_rect.position.x:
-    global_position.x = play_rect.position.x
-    _velocity.x *= -movement_config.bounce_factor
-  elif global_position.x >= play_rect.position.x + play_rect.size.x:
-    global_position.x = play_rect.position.x + play_rect.size.x
-    _velocity.x *= -movement_config.bounce_factor
+  # 上端での衝突（マージン付き）
+  if global_position.y <= play_rect.position.y + bounce_margin:
+    global_position.y = play_rect.position.y + bounce_margin
+    if use_velocity:
+      _velocity.y *= -movement_config.bounce_factor
+    else:
+      direction.y *= -movement_config.bounce_factor
+    bounced = true
+
+  # 左端での衝突（マージン付き）
+  if global_position.x <= play_rect.position.x + bounce_margin:
+    global_position.x = play_rect.position.x + bounce_margin
+    if use_velocity:
+      _velocity.x *= -movement_config.bounce_factor
+    else:
+      direction.x *= -movement_config.bounce_factor
+    bounced = true
+
+  # 右端での衝突（マージン付き）
+  elif global_position.x >= play_rect.position.x + play_rect.size.x - bounce_margin:
+    global_position.x = play_rect.position.x + play_rect.size.x - bounce_margin
+    if use_velocity:
+      _velocity.x *= -movement_config.bounce_factor
+    else:
+      direction.x *= -movement_config.bounce_factor
+    bounced = true
+
+  # 反射が発生した場合はカウンターを増加
+  if bounced:
+    _bounce_count += 1
 
 
 func _handle_particle_cleanup():

@@ -25,5 +25,8 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY
 # 重力設定
 @export var gravity_strength: float = 980.0  # ピクセル/秒²
 @export var gravity_direction: Vector2 = Vector2.DOWN
-@export var bounce_factor: float = 0.0  # 0-1, 地面との衝突時の反発係数
 @export var air_resistance: float = 0.0  # 0-1, 空気抵抗
+
+# 反射設定（全ての移動タイプで使用可能）
+@export var bounce_factor: float = 0.0  # 0-1, 境界との衝突時の反発係数
+@export var max_bounces: int = 0  # 最大反射回数、0なら無制限

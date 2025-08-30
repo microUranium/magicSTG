@@ -19,7 +19,8 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY
 @export var wave_frequency: float = 2.0
 
 # 追尾設定
-@export var homing_turn_rate: float = 2.0
+@export var homing_duration: float = 3.0  # 追尾時間（秒）、0なら永続的
+@export var max_turn_angle_per_second: float = 180.0  # 1秒あたりの最大回転角度（度）
 
 # 重力設定
 @export var gravity_strength: float = 980.0  # ピクセル/秒²

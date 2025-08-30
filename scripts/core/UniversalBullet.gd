@@ -18,6 +18,7 @@ var _movement_timer: float = 0.0
 var _original_speed: float
 var _prev_position: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
+var _homing_timer: float = 0.0  # 追尾経過時間
 
 
 func _ready():
@@ -147,11 +148,32 @@ func _update_sine_wave(delta: float):
 
 func _update_homing(delta: float):
   """追尾処理"""
+  # 追尾時間の更新
+  _homing_timer += delta
+
+  # 追尾時間が経過した場合は追尾を停止（0の場合は永続的）
+  if movement_config.homing_duration > 0 and _homing_timer > movement_config.homing_duration:
+    return
+
   var target = _find_homing_target()
   if target:
     var target_direction = (target.global_position - global_position).normalized()
-    var turn_rate = movement_config.homing_turn_rate
-    direction = direction.slerp(target_direction, turn_rate * delta)
+    var current_angle = direction.angle()
+    var target_angle = target_direction.angle()
+
+    # 角度差を計算（-π〜π の範囲に正規化）
+    var angle_diff = target_angle - current_angle
+    while angle_diff > PI:
+      angle_diff -= TAU
+    while angle_diff < -PI:
+      angle_diff += TAU
+
+    # 最大回転角度を適用
+    var max_turn_radians = deg_to_rad(movement_config.max_turn_angle_per_second) * delta
+    var actual_turn = clamp(angle_diff, -max_turn_radians, max_turn_radians)
+
+    # 新しい方向を設定
+    direction = Vector2.from_angle(current_angle + actual_turn)
 
 
 func _find_homing_target() -> Node2D:

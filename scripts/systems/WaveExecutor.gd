@@ -161,6 +161,8 @@ func _get_spawn_event_pattern_enum(pattern_name: String) -> int:
       return SpawnEvent.Pattern.LINE_HORIZ
     "from_top_spacing":
       return SpawnEvent.Pattern.FROM_TOP_SPACING
+    "perimeter_sequential":
+      return SpawnEvent.Pattern.PERIMETER_SEQUENTIAL
     _:
       push_warning("WaveExecutor: Unknown pattern '%s', using SINGLE_RANDOM" % pattern_name)
       return SpawnEvent.Pattern.SINGLE_RANDOM

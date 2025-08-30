@@ -4,9 +4,11 @@ class_name SpawnEvent
 #------------------------------
 # 出現パターン
 #------------------------------
-enum Pattern { SINGLE_RANDOM, BURST_SAME_POS, LINE_HORIZ, FROM_TOP_SPACING }  # 1 体をランダム位置  # N 体を同座標・等間隔  # 左→右に横一列（追加例）
+enum Pattern { SINGLE_RANDOM, BURST_SAME_POS, LINE_HORIZ, FROM_TOP_SPACING, PERIMETER_SEQUENTIAL }  # 1 体をランダム位置  # N 体を同座標・等間隔  # 左→右に横一列（追加例）  # PlayArea周囲を順次スポーン
 
-@export_enum("SINGLE_RANDOM", "BURST_SAME_POS", "LINE_HORIZ", "FROM_TOP_SPACING")
+@export_enum(
+  "SINGLE_RANDOM", "BURST_SAME_POS", "LINE_HORIZ", "FROM_TOP_SPACING", "PERIMETER_SEQUENTIAL"
+)
 var pattern: int = Pattern.SINGLE_RANDOM
 
 #------------------------------

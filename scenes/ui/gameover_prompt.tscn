@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="1_1lmml"]
 
 [node name="GameOverPrompt" type="CanvasLayer"]
+layer = 60
 
 [node name="GameOverLabel" type="RichTextLabel" parent="."]
 modulate = Color(0.345, 0, 0.45, 1)

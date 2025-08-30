@@ -4,6 +4,7 @@
 [ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_bf0ab"]
 
 [node name="ReadyPrompt" type="CanvasLayer"]
+layer = 60
 script = ExtResource("1_577t6")
 
 [node name="ReadyLabel" type="Label" parent="."]

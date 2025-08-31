@@ -4,7 +4,11 @@ class_name WarpUtility
 
 # プレイヤーの背後座標を計算（揺らぎ付き）
 static func calculate_behind_position(
-  player_pos: Vector2, player_facing: Vector2, distance_range: Vector2, angle_variation: float  # x=min, y=max  # ±度の揺らぎ
+  player_pos: Vector2,
+  player_facing: Vector2,
+  distance_range: Vector2,
+  angle_variation: float,  # x=min, y=max  # ±度の揺らぎ
+  accept_clamp: bool = true
 ) -> Vector2:
   # プレイヤーの向きが基準
   var base_angle = player_facing.angle()
@@ -21,7 +25,10 @@ static func calculate_behind_position(
   var result = player_pos + offset
 
   # PlayArea境界内にクランプ
-  return clamp_to_play_area(result)
+  if accept_clamp:
+    return clamp_to_play_area(result)
+  else:
+    return result
 
 
 # 座標をPlayArea境界内にクランプ

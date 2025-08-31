@@ -79,6 +79,7 @@ damage = 3
 bullet_range = 0.0
 bullet_lifetime = 0.0
 auto_start = true
+penetration_count = 0
 bullet_visual_config = SubResource("Resource_1etxb")
 bullet_movement_config = SubResource("Resource_hr08y")
 bullet_count = 1

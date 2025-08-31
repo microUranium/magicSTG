@@ -164,6 +164,7 @@ damage = 10
 bullet_range = 0.0
 bullet_lifetime = 7.0
 auto_start = true
+penetration_count = 0
 bullet_visual_config = SubResource("Resource_nm61o")
 bullet_movement_config = SubResource("Resource_hdcbw")
 bullet_count = 1

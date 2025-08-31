@@ -136,6 +136,7 @@ damage = 2
 bullet_range = 0.0
 bullet_lifetime = 1.25
 auto_start = true
+penetration_count = 0
 bullet_visual_config = SubResource("Resource_1bhtf")
 bullet_movement_config = SubResource("Resource_pnsch")
 bullet_count = 1

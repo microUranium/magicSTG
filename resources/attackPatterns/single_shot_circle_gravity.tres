@@ -33,6 +33,7 @@ damage = 2
 bullet_range = 0.0
 bullet_lifetime = 0.0
 auto_start = true
+penetration_count = 0
 bullet_movement_config = SubResource("Resource_d7w3k")
 bullet_count = 8
 rapid_fire_count = 1

@@ -143,9 +143,16 @@ func apply_barrier_movement_config(_movement_config: BarrierBulletMovement = nul
 
 func _process(delta):
   # 画面外チェック
-  if not PlayArea.get_play_rect().has_point(global_position):
+  if (
+    not PlayArea.get_play_rect().has_point(global_position)
+    and _current_phase == BarrierBulletMovement.Phase.PROJECTILE
+  ):
     queue_free()
     return
+
+  if owner_node.has_node("AnimatedSprite2D"):
+    sprite.modulate.a = owner_node.get_node("AnimatedSprite2D").modulate.a
+    particles.modulate.a = owner_node.get_node("AnimatedSprite2D").modulate.a
 
     # オーナーが無効になったら削除
   if owner_node == null or not owner_node.is_inside_tree():
@@ -183,7 +190,7 @@ func _update_approach_phase(delta: float):
 
 func _update_orbit_phase(delta: float):
   """軌道回転フェーズ"""
-  if _phase_timer >= movement_config.orbit_duration:
+  if _phase_timer >= movement_config.orbit_duration and movement_config.orbit_duration >= 0:
     _transition_to_projectile()
     return
 

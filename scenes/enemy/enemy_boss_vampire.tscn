@@ -1,0 +1,746 @@
+[gd_scene load_steps=64 format=3 uid="uid://dhym3c4ao25nr"]
+
+[ext_resource type="Script" uid="uid://dpkpdmta4uel8" path="res://scripts/enemy/BossVampire.gd" id="1_cpn46"]
+[ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_6r602"]
+[ext_resource type="Texture2D" uid="uid://cjgapdfuxrkjc" path="res://assets/gfx/sprites/enemy_boss_vampire_sprite.png" id="3_u3ffy"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_u5oi5"]
+[ext_resource type="Script" uid="uid://b16c847ut0tfv" path="res://scripts/enemy/BossVampireAI.gd" id="5_cpn46"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_vmo6y"]
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="7_ex3q3"]
+[ext_resource type="AudioStream" uid="uid://db3443x8hucyx" path="res://assets/audio/bgm/stage3_boss_bgm_kari.mp3" id="8_817ac"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="9_ex3q3"]
+[ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="10_817ac"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_7vmf2"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_uu8hs"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_ahaiq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6ydq"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71wx1"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(1280, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qamhn"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(1536, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cpn46"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmo6y"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ex3q3"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_817ac"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wv3pu"]
+atlas = ExtResource("3_u3ffy")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6ydq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71wx1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qamhn")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpn46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmo6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ex3q3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmo6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpn46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmo6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ex3q3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmo6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpn46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_817ac")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wv3pu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmo6y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wvsr4"]
+radius = 19.0
+height = 94.0
+
+[sub_resource type="Resource" id="Resource_wv3pu"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, -128)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_wvsr4"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_6r602"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s3d12.battle_conversation"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_u8iun"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wv3pu"), SubResource("Resource_wvsr4"), SubResource("Resource_6r602")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_u5oi5"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_817ac"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(122, 512)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_npgnb"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_886se"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(785, 512)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_dkucv"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_gck8h"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_icsnu"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_u5oi5"), SubResource("Resource_817ac"), SubResource("Resource_npgnb"), SubResource("Resource_886se"), SubResource("Resource_dkucv"), SubResource("Resource_gck8h")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_cpn46"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s3d12.battle_progression_1"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_vmo6y"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = true
+animation_name = "attack"
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_1btcl"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s3d12.battle_progression_2"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_ex3q3"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wvsr4"), SubResource("Resource_cpn46"), SubResource("Resource_vmo6y"), SubResource("Resource_1btcl")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_5v4m6"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(122, 480)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_hqj3m"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 704)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_ahaiq"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_nn1x5"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(785, 480)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_jrp6c"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_3trdo"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 3.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_uu8hs"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_u5oi5"), SubResource("Resource_5v4m6"), SubResource("Resource_npgnb"), SubResource("Resource_hqj3m"), SubResource("Resource_ahaiq"), SubResource("Resource_nn1x5"), SubResource("Resource_jrp6c"), SubResource("Resource_3trdo")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_u6ygb"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s3d12.battle_progression_3"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_7vmf2"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wvsr4"), SubResource("Resource_u6ygb")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_aqvku"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 5.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = true
+animation_name = "attack"
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_5c0kx"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_otfo7"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(122, 480)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_g0syn"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_w7qpw"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 704)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_4cg32"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_dcy1t"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(785, 480)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_vlpnf"]
+script = ExtResource("7_ex3q3")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_ytk1c"]
+script = ExtResource("7_ex3q3")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_viq2f"]
+script = ExtResource("6_vmo6y")
+patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_aqvku"), SubResource("Resource_5c0kx"), SubResource("Resource_otfo7"), SubResource("Resource_g0syn"), SubResource("Resource_w7qpw"), SubResource("Resource_4cg32"), SubResource("Resource_dcy1t"), SubResource("Resource_vlpnf"), SubResource("Resource_ytk1c")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_10qvo"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.474453, 1)
+colors = PackedColorArray(0.217, 0.031, 0.31, 1, 0.7189, 0.3367, 0.91, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nm61o"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_10qvo")
+
+[sub_resource type="Resource" id="Resource_7cesk"]
+script = ExtResource("9_ex3q3")
+texture = ExtResource("10_817ac")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_nm61o")
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="BossVampire" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_cpn46")
+destroy_particles_scene = ExtResource("2_6r602")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.35966
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(11, -15)
+shape = SubResource("CapsuleShape2D_wvsr4")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("4_u5oi5")
+max_hp = 2400
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("5_cpn46")
+phases = Array[ExtResource("6_vmo6y")]([SubResource("Resource_u8iun"), SubResource("Resource_icsnu"), SubResource("Resource_ex3q3"), SubResource("Resource_uu8hs"), SubResource("Resource_7vmf2"), SubResource("Resource_viq2f")])
+_bgm = ExtResource("8_817ac")
+visual_config_dark = SubResource("Resource_7cesk")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("14_7vmf2")]
+script = ExtResource("15_uu8hs")
+default_core_scene = ExtResource("16_ahaiq")
+attack_pattern = null
+auto_create_core = true

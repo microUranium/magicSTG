@@ -150,7 +150,7 @@ func _process(delta):
     queue_free()
     return
 
-  if owner_node.has_node("AnimatedSprite2D"):
+  if is_instance_valid(owner_node) and owner_node.has_node("AnimatedSprite2D"):
     sprite.modulate.a = owner_node.get_node("AnimatedSprite2D").modulate.a
     particles.modulate.a = owner_node.get_node("AnimatedSprite2D").modulate.a
 

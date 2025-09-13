@@ -273,6 +273,9 @@ func _handle_animation_change(enemy: Node2D):
 
 
 func _on_pattern_complete(enemy: Node2D, original_callback: Callable):
+  if not enemy or not enemy.is_inside_tree():
+    print_debug("EnemyPatternResource: Enemy is no longer valid, skipping completion")
+    return
   # Restore original animation if needed
   if restore_animation and change_animation and not _original_animation.is_empty():
     var animated_sprite = enemy.get_node_or_null("AnimatedSprite2D")

@@ -1,0 +1,104 @@
+[gd_scene load_steps=20 format=3 uid="uid://dxsq1w8n3j4ga"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_5pkhx"]
+[ext_resource type="Texture2D" uid="uid://b7loyro504i55" path="res://assets/gfx/sprites/enemy_bat_a_sprite.png" id="4_dctf7"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="5_s7w41"]
+[ext_resource type="Script" uid="uid://dywf4iby1702k" path="res://scripts/enemy/BatDecoyAI.gd" id="6_5vkqr"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_jxp61"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_ei7fd"]
+[ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="8_ggxpy"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_be0f8"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="12_hrafj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38f5m"]
+atlas = ExtResource("4_dctf7")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbroa"]
+atlas = ExtResource("4_dctf7")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38f5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vbroa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(44, 70)
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_10qvo"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.474453, 1)
+colors = PackedColorArray(0.217, 0.031, 0.31, 1, 0.7189, 0.3367, 0.91, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nm61o"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_10qvo")
+
+[sub_resource type="Resource" id="Resource_dctf7"]
+script = ExtResource("12_hrafj")
+texture = ExtResource("8_ggxpy")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_nm61o")
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="EnemyBatA" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_5pkhx")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.855413
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("5_s7w41")
+max_hp = 150
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("6_5vkqr")
+visual_config_dark = SubResource("Resource_dctf7")
+base_speed = 300.0
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("7_jxp61")]
+script = ExtResource("8_ei7fd")
+default_core_scene = ExtResource("9_be0f8")
+attack_pattern = null
+auto_create_core = true

@@ -1,0 +1,99 @@
+[gd_scene load_steps=18 format=3 uid="uid://d4h5bfpwrb1g7"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_ihvi0"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_g8sar"]
+[ext_resource type="Script" uid="uid://de3ieosanpmah" path="res://scripts/enemy/BossVampireFireRushAI.gd" id="4_a0rx6"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="5_bwti6"]
+[ext_resource type="Texture2D" uid="uid://dklpvgy02hrw8" path="res://assets/gfx/sprites/bullet_fireball_red.png" id="6_yekxv"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="7_0qc50"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_54sqd"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_yrtbi"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_2ywyq"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="Curve" id="Curve_x5b8e"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_a0rx6"]
+curve = SubResource("Curve_x5b8e")
+
+[sub_resource type="Gradient" id="Gradient_yekxv"]
+offsets = PackedFloat32Array(0.474453, 1)
+colors = PackedColorArray(0.734146, 0.134278, 0.143547, 1, 1, 0.83, 0.832833, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0qc50"]
+gradient = SubResource("Gradient_yekxv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nqqov"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 40.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 20.0
+scale_max = 60.0
+color_ramp = SubResource("GradientTexture1D_0qc50")
+alpha_curve = SubResource("CurveTexture_a0rx6")
+
+[sub_resource type="Resource" id="Resource_nqqov"]
+script = ExtResource("5_bwti6")
+texture = ExtResource("6_yekxv")
+scale = 8.0
+color = Color(1, 1, 1, 1)
+collision_radius = 64.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_nqqov")
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_20wtt"]
+script = ExtResource("7_0qc50")
+base_color = Color(0.501961, 0.0980392, 0.0980392, 1)
+glow_width = 128.0
+outline_width = 128.0
+warning_duration = 0.75
+glow_intensity = 4.0
+warning_length = 1000.0
+angle_degrees = 0.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
+metadata/_custom_type_script = "uid://cisl1a65xgxeq"
+
+[node name="EnemyBossVampireFireRush" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_ihvi0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.855413
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_g8sar")
+max_hp = 150
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("4_a0rx6")
+visual_config_fire = SubResource("Resource_nqqov")
+warning_config = SubResource("Resource_20wtt")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("7_54sqd")]
+script = ExtResource("8_yrtbi")
+default_core_scene = ExtResource("9_2ywyq")
+attack_pattern = null
+auto_create_core = true

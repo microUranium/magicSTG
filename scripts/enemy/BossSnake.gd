@@ -123,7 +123,7 @@ func _destroy_segment():
     # 破壊エフェクト
     var sprite = last_segment.get_node("AnimatedSprite2D")
     if sprite:
-      FlashUtility.flash_white(sprite)
+      flash_white()
 
     # パーティクル効果（可能であれば）
     (

@@ -8,6 +8,8 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 @export var drop_table: Array[DropTableEntry] = []
 @export var skip_boss_defeat_effect: bool = false  # ボス撃破エフェクトをスキップするかどうか
 
+var _damage_flash_time: float
+
 
 func _ready():
   add_to_group("enemies")
@@ -18,7 +20,7 @@ func _ready():
 func take_damage(amount: int) -> void:
   $HpNode.take_damage(amount)
   StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, -10, 0)
-  FlashUtility.flash_white(animated_sprite)
+  flash_white()
 
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
@@ -46,3 +48,22 @@ func _drop_item() -> void:
 func set_parameter(_name: String, _value: String) -> void:
   # 継承先で実装されることを期待
   pass
+
+
+func _process(delta: float) -> void:
+  _update_flashing(delta)
+
+
+func _update_flashing(delta):
+  if _damage_flash_time > 0.0:
+    _damage_flash_time -= delta
+    animated_sprite.modulate = Color(1.0, 0.35, 0.35, animated_sprite.modulate.a)
+
+  if _damage_flash_time <= 0.0:
+    animated_sprite.modulate = Color(1.0, 1.0, 1.0, animated_sprite.modulate.a)
+    _damage_flash_time = 0.0
+
+
+func flash_white(duration := 0.1):
+  print_debug("EnemyBase: Flashing white for ", duration, " seconds")
+  _damage_flash_time = duration

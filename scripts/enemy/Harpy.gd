@@ -7,9 +7,7 @@ func take_damage(amount: int) -> void:
   if ai._phase_idx == 0 or ai._phase_idx == 2:
     return  # Phase 0,2ではダメージを受け付けない
 
-  $HpNode.take_damage(amount)
-  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, 0, 0)
-  FlashUtility.flash_white(animated_sprite)
+  super.take_damage(amount)
 
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:

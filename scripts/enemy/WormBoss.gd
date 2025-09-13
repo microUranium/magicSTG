@@ -78,7 +78,7 @@ func _flash_all_segments():
     if segment and is_instance_valid(segment):
       var sprite = segment.get_node("AnimatedSprite2D")
       if sprite:
-        FlashUtility.flash_white(sprite)
+        flash_white()
 
 
 func _process(delta):

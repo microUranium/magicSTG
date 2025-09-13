@@ -879,6 +879,120 @@
           "delay": 0.0
         }
       ]
+    },
+    "s311": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 1,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s312": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s321": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_grimoire",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s322": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_grimoire",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s331": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_bat_a",
+          "count": 10,
+          "pattern": "perimeter_sequential", 
+          "interval": 0.5,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3g1": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 3,
+          "pattern": "from_top_spacing", 
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s3z1": {
+      "layers": [
+        {
+          "enemy": "boss_robe",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3z2": {
+      "layers": [
+        {
+          "enemy": "boss_vampire",
+          "count": 1,
+          "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
     }
   },
   
@@ -917,6 +1031,18 @@
     },
     "enemy_sea_bird": {
       "scene_path": "res://scenes/enemy/enemy_sea_bird.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_lantern": {
+      "scene_path": "res://scenes/enemy/enemy_lantern.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_grimoire": {
+      "scene_path": "res://scenes/enemy/enemy_grimoire.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_bat_a": {
+      "scene_path": "res://scenes/enemy/enemy_bat_a.tscn",
       "spawn_weight": 1.0
     },
     "harpy": {
@@ -966,6 +1092,14 @@
     "boss_snake": {
       "scene_path": "res://scenes/enemy/enemy_boss_snake.tscn",
       "spawn_weight": 1.0
+    },
+    "boss_robe": {
+      "scene_path": "res://scenes/enemy/enemy_boss_robe.tscn",
+      "spawn_weight": 1.0
+    },
+    "boss_vampire": {
+      "scene_path": "res://scenes/enemy/enemy_boss_vampire.tscn",
+      "spawn_weight": 1.0
     }
   },
 
@@ -985,6 +1119,10 @@
     "from_top_spacing": { 
       "type": "from_top_spacing",
       "spawn_event_pattern": 3
+    },
+    "perimeter_sequential": { 
+      "type": "perimeter_sequential",
+      "spawn_event_pattern": 4
     }
   },
 
@@ -1641,6 +1779,846 @@
           "speaker_side": "left",
           "box_direction": "left",
           "text": "はぁ。でも行くしかないか。ギルドクビにされたくないし…。"
+        }
+      ]
+    },
+    "s3d11": {
+      "intro": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（ここがコウモリ遺跡…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（ふーん。中は思ったより綺麗じゃん。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（ここの主ってやつが手入れでもしてるのかね。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（そいつにこれから会いに行くんだけどさ。）"
+        }
+      ],
+      "progression": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "敵が多い…。めんどくさ…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "コウモリって単体で見れば可愛いのに、群がられると逆に気持ち悪いっていうか…。"
+        },
+        {
+          "speaker_name": "精霊",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "……！！"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "えー？お前らのことじゃないよ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "猫なんていればいるほどいいでしょ。\n（なでなで）"
+        },
+        {
+          "speaker_name": "精霊",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "……♪"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ほら～もう前に集中する！"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（まったく、可愛いやつらなんだから。）"
+        }
+      ],
+      "battle_conversation": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "誰かいる…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "あのさ、あんたがこの遺跡の主？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ねえ、この遺跡の主かって聞いてるんだけど。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…………。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（なんか違うっぽい。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（別に案内してくれる雰囲気じゃないし、侵入者を排除する魔物かな。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（倒さないと先に進めなさそうだし、相手するかあ。）"
+        }
+      ],
+      "resolution": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…なるほど、魔力で構成された精霊ってわけね。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（クスッ）お前らと一緒だ。"
+        },
+        {
+          "speaker_name": "精霊",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/faily_full_body.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "……！……！"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ま、それなら魔力切れにしちゃえばただの布切れ…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（うっ…カビくさ…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（とりあえず急ごう…。この布からまだ魔力を感じるし、また復活するかも…。）"
+        }
+      ]
+    },
+    "s3d12": {
+      "intro": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（まだつかないのかな。もう結構進んだ気がするんだけど。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（進めど進めど同じ景色で、自分がどこにいるのかすらわからなくなってきた…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（はぁ。敵の数も増えてきたし、少なくとも進めているのかな…。）"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（……多分。）"
+        }
+      ],
+      "battle_conversation": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": null,
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "！？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（あの見た目、もしかして吸血鬼…！？）"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "おや、久々のお客さんだ。しかも人間とは…珍しいね。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…………。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっボクのことを見た人間はみんなそんな顔をするよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "それで、わざわざボクに会いに来たってことは、目的も大方予想はつくけど…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "そ、そう。それなら話は早いんだけど。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "最近この地域に入り込んだ魔族を追ってるんだけどさ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "あ、あんたならそいつがどこにいるか知ってるんでしょ？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっ知っているよ。そのせいでボクの下僕たちが最近騒がしいんだ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "マジで？それじゃあ……"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "情報を渡すのはいいけど、キミはボクに何をくれるのかな？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "え？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "情報を得るためには対価を払うものでしょ？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "それに、わざわざこんな遺跡の深くにまで来るなんて、"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "人間たちが知り得ない、よっぽど貴重な情報だと思うけどな。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "い、いくら払えばいいの……？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっ普段ならキミの血液を少し分けてもらうところだけど、"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "…………っ！！"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっそんなに驚かないで。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "今はお腹いっぱいだし、なによりキミに少し興味が湧いているんだ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ボクもこうして会えるのを楽しみにしていたんだよ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……なにが言いたいの？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "キミの魔法をボクにも見せてよ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……は？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ボクと戦って、勝ったら情報を渡してあげる。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "お金もいらないし、なにより血を吸われずに済むよ？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ちょっと、戦うって…。ここまで来るのに結構苦労したんだけど。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "そう？断るっていうのなら止めないよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "だけど、情報がないとキミのギルドでの立場が危ういんじゃないかなあ？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ど、どうしてそれを…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "わ、分かったよ。戦う、戦うから…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "（い、いざとなったら逃げればいいよね。命より重いものはなし…。うぅ…。）"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "あはは、いいね。それじゃあ、始めようか。"
+        }
+      ],
+      "battle_progression_1": [
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "実はキミのことはずっと見ていたんだ。夕焼け海岸を通ってここまで来るのをね。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "もちろん、あのサンドパイソンを一人で倒したことも。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "すごいね。キミのようなまだ若い魔術師がたった一人でここまで来るんだから。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "いや、そこの精霊も頭数に入れたほうがいいのかな？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "それで？もう気は済んだ？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっまだ始まったばかりだよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "それじゃあ、ボクも下僕たちと一緒に戦おうかな？"
+        }
+      ],
+      "battle_progression_2": [
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "！？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "この子たちは他のコウモリよりちょっと手強いよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "頑張って攻撃を躱してね。"
+        }
+      ],
+      "battle_progression_3": [
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "なるほど。キミの周りいる子はただの精霊ではないようだ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "姿形は違うのに、まるでキミの分身と戦っているみたい。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……あたしの魔力からできてるからね。見たことない？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "驚いた…。全部キミの魔力でできているの？"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "1体1体が人間並みか、それ以上の魔力を持っているようだけど…。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ふふっ人間離れした魔力を持っているという噂は本当のようだ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "……。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "それだけの魔力を人間一人で抱えるのは到底不可能だ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "抱えきれない魔力を精霊という形で外に出しているのか。ふふっ面白いね。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "はぁ。もういいでしょ？付き合ってらんないんだけど。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "う～ん、キミの欲しい情報の対価としてはまだ足りないかな。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ボクも少し熱くなってきたし、もうちょっと付き合ってもらうよ？"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "あーもう！！"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "そっちがその気ならこの遺跡ぶっ壊すつもりでいくから！"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "あはは！そうこなくっちゃ！"
+        }
+      ],
+      "resolution": [
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "はぁ…はぁ…。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "……こんなに面白い戦いは久しぶりだよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ボクも体力が落ちたなあ。たまには遺跡の外に出ないとね…。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "最悪…。服の裾がちょっと焦げてる…。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "…キミは本当に面白いね。ますます興味が湧いてきたよ。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "ま、まだやる気…？もう限界なんだけど…。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ううん、もう十分満足したよ。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "今度はボクがキミに約束を果たす番だね。"
+        },
+        {
+          "speaker_name": "フェリス",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "left",
+          "box_direction": "left",
+          "text": "じゃ、じゃあ…。"
+        },
+        {
+          "speaker_name": "吸血鬼",
+          "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+          "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+          "speaker_side": "right",
+          "box_direction": "right",
+          "text": "ついてきて、ボクの部屋で少し休んでから話そうか。"
         }
       ]
     }

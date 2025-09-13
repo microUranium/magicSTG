@@ -42,6 +42,9 @@ func _process(delta):
 
 
 func _update_flashing(delta):
+  if !animated_sprite:
+    return
+
   if _damage_flash_time > 0.0:
     _damage_flash_time -= delta
     animated_sprite.modulate = Color(1.0, 0.35, 0.35, animated_sprite.modulate.a)

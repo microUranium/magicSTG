@@ -7,13 +7,15 @@ class StubBeam:
   extends Area2D
   var initialize_called: bool = false
   var damage: int
+  var beam_direction: Vector2
   var desired_length: float
   var owner_path: NodePath
   var enemy_group: String
 
-  func initialize(_actor, _damage):
+  func initialize(_actor, _damage, _direction):
     initialize_called = true
     damage = _damage
+    beam_direction = _direction
 
   func set_target_group(group: String):
     enemy_group = group

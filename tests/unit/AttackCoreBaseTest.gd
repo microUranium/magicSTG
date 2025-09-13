@@ -16,6 +16,7 @@ func before_test():
   mock_pattern = AttackPattern.new()
   mock_pattern.burst_delay = 2.0
   mock_pattern.bullet_scene = preload("res://scenes/bullets/universal_bullet.tscn")
+  mock_pattern.auto_start = false
 
   # AttackCoreBase の具象実装クラスを作成
   attack_core = TestAttackCore.new()

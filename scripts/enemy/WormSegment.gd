@@ -27,6 +27,7 @@ var trail_system: TrailFollowSystem  # 前の節のTrailFollowSystem
 # 内部状態
 var current_velocity: Vector2 = Vector2.ZERO
 var is_initialized: bool = false
+var _damage_flash_time: float = 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -66,6 +67,21 @@ func _process(delta):
 
   _update_follow_movement(delta)
   _apply_distance_constraints(delta)
+  _update_flashing(delta)
+
+
+func _update_flashing(delta):
+  if _damage_flash_time > 0.0:
+    _damage_flash_time -= delta
+    animated_sprite.modulate = Color(1.0, 0.35, 0.35, animated_sprite.modulate.a)
+
+  if _damage_flash_time <= 0.0:
+    animated_sprite.modulate = Color(1.0, 1.0, 1.0, animated_sprite.modulate.a)
+    _damage_flash_time = 0.0
+
+
+func flash_white(duration := 0.1):
+  _damage_flash_time = duration
 
 
 func _update_follow_movement(delta):

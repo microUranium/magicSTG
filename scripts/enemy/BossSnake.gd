@@ -120,11 +120,6 @@ func _destroy_segment():
 
   var last_segment = segments[-1]
   if last_segment and is_instance_valid(last_segment):
-    # 破壊エフェクト
-    var sprite = last_segment.get_node("AnimatedSprite2D")
-    if sprite:
-      flash_white()
-
     # パーティクル効果（可能であれば）
     (
       last_segment._spawn_destroy_particles()

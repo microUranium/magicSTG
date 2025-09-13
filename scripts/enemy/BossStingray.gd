@@ -58,6 +58,7 @@ func _on_animation_changed():
 
 
 func _process(delta: float) -> void:
+  super._process(delta)
   if animated_sprite.animation == "rush":
     # 角度を移動方向に合わせる
     var direction := (global_position - prev_position).normalized()

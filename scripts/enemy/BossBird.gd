@@ -22,9 +22,7 @@ func _ready():
 func take_damage(amount: int) -> void:
   if ai._phase_idx == 0:
     return  # Phase 0ではダメージを受け付けない
-  $HpNode.take_damage(amount)
-  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, 0, 0)
-  FlashUtility.flash_white(animated_sprite)
+  super.take_damage(amount)
 
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
@@ -60,6 +58,7 @@ func _on_animation_changed():
 
 
 func _process(delta: float) -> void:
+  super._process(delta)
   if animated_sprite.animation == "rush":
     # 角度を移動方向に合わせる
     var direction := (global_position - prev_position).normalized()

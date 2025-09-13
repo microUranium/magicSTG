@@ -21,6 +21,7 @@ var player_size
 var direction: Vector2
 var _is_sneaking: bool = false
 var _rear_mode: bool = false  # 後方攻撃モード
+var _damage_flash_time: float = 0.0
 
 
 func _ready() -> void:
@@ -37,6 +38,25 @@ func _ready() -> void:
 func _process(delta):
   _handle_input(delta)
   _clamp_inside_playrect()
+  _update_flashing(delta)
+
+
+func _update_flashing(delta):
+  if !animated_sprite:
+    return
+
+  if _damage_flash_time > 0.0:
+    _damage_flash_time -= delta
+    animated_sprite.modulate = Color(1.0, 0.35, 0.35, animated_sprite.modulate.a)
+
+  if _damage_flash_time <= 0.0:
+    animated_sprite.modulate = Color(1.0, 1.0, 1.0, animated_sprite.modulate.a)
+    _damage_flash_time = 0.0
+
+
+func flash_white(duration := 0.1):
+  print_debug("EnemyBase: Flashing white for ", duration, " seconds")
+  _damage_flash_time = duration
 
 
 func _handle_input(delta):
@@ -83,7 +103,7 @@ func take_damage(amount: int) -> void:
 func _apply_damage(damage):
   $HpNode.take_damage(damage)
   StageSignals.emit_signal("sfx_play_requested", "hit_player", global_position, 0, 0)
-  FlashUtility.flash_white(animated_sprite)
+  flash_white()
 
 
 func _on_heal_received(amount: int) -> void:

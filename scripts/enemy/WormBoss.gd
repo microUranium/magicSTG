@@ -76,12 +76,12 @@ func _flash_all_segments():
 
   for segment in segment_manager.get_all_segments():
     if segment and is_instance_valid(segment):
-      var sprite = segment.get_node("AnimatedSprite2D")
-      if sprite:
-        FlashUtility.flash_white(sprite)
+      if segment.has_method("flash_white"):
+        segment.flash_white()
 
 
 func _process(delta):
+  super._process(delta)
   # ワームシステムの状態チェック
   if is_worm_initialized and segment_manager:
     _check_segment_health()

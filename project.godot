@@ -18,7 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 BgmController="*res://scripts/autoload/BGMController.gd"
-FlashUtility="*res://scripts/autoload/FlashUtility.gd"
 GameFlow="*res://scripts/autoload/GameFlow.gd"
 PlayArea="*res://scripts/autoload/PlayArea.gd"
 SfxManager="*res://scripts/autoload/SFXManager.gd"

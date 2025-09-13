@@ -3,7 +3,6 @@ class_name AttackWarningTest
 extends GdUnitTestSuite
 @warning_ignore("unused_variable")
 @warning_ignore("unused_parameter")
-
 # TestSuite generated from
 const __source = "res://scripts/effects/AttackWarning.gd"
 

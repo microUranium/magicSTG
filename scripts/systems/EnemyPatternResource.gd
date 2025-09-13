@@ -4,7 +4,7 @@ class_name EnemyPatternResource
 
 enum MovementType { MOVE_TO_POSITION, MOVE_DIRECTION, STAY_IN_PLACE }  # 特定座標への移動（既存）  # 方向とスピードで移動  # その場で停止
 
-enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS }  # 固定角度  # プレイヤー方向  # プレイヤーから離れる方向  # 前のパターンの移動方向を継続
+enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS, HOMING_PLAYER }  # 固定角度  # プレイヤー方向  # プレイヤーから離れる方向  # 前のパターンの移動方向を継続  # プレイヤーを追尾
 
 @export var movement_type: MovementType = MovementType.MOVE_TO_POSITION
 @export var move_to: Vector2 = Vector2.ZERO
@@ -14,6 +14,7 @@ enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS
 @export var direction_type: DirectionType = DirectionType.FIXED_ANGLE
 @export var move_angle: float = 0.0  # 度数で指定（0=右、90=下、180=左、270=上）
 @export var move_speed: float = 100.0
+@export var max_turn_angle_per_second: float = 180.0  # 1秒あたりの最大回転角度（度）
 @export var use_movement_bounds: bool = false  # 移動範囲制限を使用するか
 @export var movement_bounds: Rect2 = Rect2(0.0, 0.0, 1.0, 1.0)  # 移動可能範囲（PlayArea基準の割合 0.0-1.0）
 
@@ -47,7 +48,10 @@ func start(enemy: Node2D, _ai: Node, finished_cb: Callable):
     MovementType.MOVE_TO_POSITION:
       return _execute_move_to_position(enemy, _ai, wrapped_callback)
     MovementType.MOVE_DIRECTION:
-      return _execute_directional_movement(enemy, _ai, wrapped_callback)
+      if direction_type == DirectionType.HOMING_PLAYER:
+        return _execute_homing_movement(enemy, _ai, wrapped_callback)
+      else:
+        return _execute_directional_movement(enemy, _ai, wrapped_callback)
     MovementType.STAY_IN_PLACE:
       return _execute_stay_in_place(enemy, wrapped_callback)
 
@@ -110,6 +114,52 @@ func _execute_stay_in_place(enemy: Node2D, finished_cb: Callable):
     return null
 
 
+func _execute_homing_movement(enemy: Node2D, ai: Node, finished_cb: Callable):
+  var tw = enemy.create_tween()
+  var current_direction = _get_direction_vector(enemy, ai)
+
+  # Store initial movement direction for AI
+  if ai and ai.has_method("set_last_movement_direction"):
+    ai.set_last_movement_direction(current_direction)
+
+  # Use tween_method to create custom homing behavior
+  tw.tween_method(
+    func(progress: float):
+      var delta = enemy.get_process_delta_time()
+      var player_pos = _get_player_position(enemy)
+      var _current_direction = _get_direction_vector(enemy, ai)
+
+      if player_pos != Vector2.ZERO:
+        var to_player = (player_pos - enemy.global_position).normalized()
+        var max_turn_this_frame = deg_to_rad(max_turn_angle_per_second * delta)
+        var angle_diff = _current_direction.angle_to(to_player)
+        angle_diff = clamp(angle_diff, -max_turn_this_frame, max_turn_this_frame)
+        var new_angle = _current_direction.angle() + angle_diff
+        _current_direction = Vector2.from_angle(new_angle)
+
+      var movement = _current_direction * move_speed * delta
+      var new_position = enemy.global_position + movement
+
+      if use_movement_bounds:
+        new_position = _clamp_position_to_bounds(new_position)
+
+      enemy.global_position = new_position
+
+      if ai and ai.has_method("set_last_movement_direction"):
+        ai.set_last_movement_direction(_current_direction),
+    0.0,
+    1.0,
+    move_time
+  )
+
+  if core_to_enable.is_empty():
+    tw.tween_callback(finished_cb)
+  else:
+    tw.tween_callback(func(): _enable_core_then_wait(enemy, finished_cb))
+
+  return tw
+
+
 func _get_direction_vector(enemy: Node2D, ai: Node = null) -> Vector2:
   match direction_type:
     DirectionType.FIXED_ANGLE:
@@ -140,6 +190,14 @@ func _get_direction_vector(enemy: Node2D, ai: Node = null) -> Vector2:
           return Vector2.RIGHT
       else:
         print_debug("EnemyPatternResource: AI doesn't support direction tracking, using default")
+        return Vector2.RIGHT
+    DirectionType.HOMING_PLAYER:
+      # HOMING_PLAYER is handled by _execute_homing_movement
+      var player_pos = _get_player_position(enemy)
+      if player_pos != Vector2.ZERO:
+        return (player_pos - enemy.global_position).normalized()
+      else:
+        print_debug("EnemyPatternResource: Player not found for homing, using default direction")
         return Vector2.RIGHT
   return Vector2.RIGHT  # デフォルトは右方向
 
@@ -207,6 +265,9 @@ func _handle_animation_change(enemy: Node2D):
 
 
 func _on_pattern_complete(enemy: Node2D, original_callback: Callable):
+  if not enemy or not enemy.is_inside_tree():
+    print_debug("EnemyPatternResource: Enemy is no longer valid, skipping completion")
+    return
   # Restore original animation if needed
   if restore_animation and change_animation and not _original_animation.is_empty():
     var animated_sprite = enemy.get_node_or_null("AnimatedSprite2D")

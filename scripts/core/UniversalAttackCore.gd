@@ -429,6 +429,8 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   bullet.damage = pattern.damage
   bullet.bullet_range = pattern.bullet_range
   bullet.bullet_lifetime = pattern.bullet_lifetime
+  if "penetration_count" in bullet:
+    bullet.penetration_count = pattern.penetration_count
 
   # ターゲットグループ設定
   var target_group = (
@@ -504,6 +506,10 @@ func _start_barrier_bullet(bullet, pattern: AttackPattern):
 
 func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
   """弾丸に視覚・動作設定を適用"""
+  # 貫通設定の適用
+  if "penetration_count" in bullet:
+    bullet.penetration_count = pattern.penetration_count
+
   # 視覚設定の適用
   if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
     bullet.apply_visual_config(pattern.bullet_visual_config)

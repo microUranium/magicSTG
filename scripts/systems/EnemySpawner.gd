@@ -10,7 +10,7 @@ signal layer_finished(layer_id: String)  # 単一レイヤーの再生完了
 #----------------------------------------------------------------------
 # Export / Tweak
 #----------------------------------------------------------------------
-@export var max_concurrent := 20  # 同時出現上限（全 Wave 共用）
+@export var max_concurrent := 100  # 同時出現上限（全 Wave 共用）
 @export var line_horiz_spacing := 48.0  # LINE_HORIZ の横間隔
 
 #----------------------------------------------------------------------
@@ -111,6 +111,8 @@ func _spawn_layer_by_pattern(layer_state: LayerState) -> void:
       _spawn_layer_line_horiz(layer_state)
     SpawnEvent.Pattern.FROM_TOP_SPACING:
       _spawn_layer_from_top_spacing(layer_state)
+    SpawnEvent.Pattern.PERIMETER_SEQUENTIAL:
+      _spawn_layer_perimeter_sequential(layer_state)
     _:
       push_warning("EnemySpawner: Unknown pattern %s" % ev.pattern)
 
@@ -142,6 +144,45 @@ func _spawn_layer_from_top_spacing(layer_state: LayerState) -> void:
     _spawn_layer_enemy(layer_state, pos)
 
 
+func _spawn_layer_perimeter_sequential(layer_state: LayerState) -> void:
+  var ev := layer_state.current_event
+
+  # 初回のみ周囲座標を事前計算
+  if layer_state.event_counter == 0:
+    var play_rect = PlayArea.get_play_rect()
+    var params = _get_perimeter_params(ev.parameters)
+
+    # パラメータ妥当性チェック
+    if not PerimeterSpawnUtil.validate_perimeter_params(params):
+      push_warning("EnemySpawner: Invalid perimeter parameters, using defaults")
+      params = PerimeterSpawnUtil.get_default_params()
+
+    var positions = PerimeterSpawnUtil.calculate_perimeter_positions(ev.count, params, play_rect)
+
+    # LayerStateに座標配列を保存
+    ev.parameters["_calculated_positions"] = positions
+
+  # 事前計算した座標からスポーン
+  var positions = ev.parameters.get("_calculated_positions", [])
+  if layer_state.event_counter < positions.size():
+    var spawn_pos = positions[layer_state.event_counter]
+    _spawn_layer_enemy(layer_state, spawn_pos)
+  else:
+    push_warning("EnemySpawner: Perimeter spawn index out of range")
+
+
+func _get_perimeter_params(params: Dictionary) -> Dictionary:
+  # デフォルト値を取得
+  var default_params = PerimeterSpawnUtil.get_default_params()
+
+  # ユーザー指定値でオーバーライド
+  for key in params.keys():
+    if key in default_params:
+      default_params[key] = params[key]
+
+  return default_params
+
+
 func _finish_layer(layer_id: String) -> void:
   if not _layer_states.has(layer_id):
     return
@@ -163,7 +204,7 @@ func _spawn_layer_enemy(layer_state: LayerState, pos: Vector2) -> void:
     for param_name in layer_state.current_event.parameters.keys():
       var param_value = layer_state.current_event.parameters[param_name]
       if enemy.has_method("set_parameter"):
-        enemy.set_parameter(param_name, param_value)
+        enemy.set_parameter(param_name, str(param_value))
       else:
         push_warning("EnemySpawner: Enemy %s does not support set_parameter" % enemy.name)
   if enemy_layer:

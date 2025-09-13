@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="AttackPattern" load_steps=5 format=3 uid="uid://cwqftwgjojxq"]
+[gd_resource type="Resource" script_class="AttackPattern" load_steps=6 format=3 uid="uid://cwqftwgjojxq"]
 
 [ext_resource type="Resource" uid="uid://cbh7mfqi4d552" path="res://resources/bullet_movements/decelerate_to_slow.tres" id="1_qxmlh"]
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="2_txqe0"]
 [ext_resource type="Resource" uid="uid://drmkisrnexa4l" path="res://resources/bulletVisuals/basic_bullet_slow.tres" id="3_eniqf"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="4_wbsm8"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="5_txqe0"]
 
 [resource]
 script = ExtResource("4_wbsm8")
@@ -11,6 +12,10 @@ pattern_type = 1
 bullet_scene = ExtResource("2_txqe0")
 target_group = "players"
 damage = 1
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
 bullet_visual_config = ExtResource("3_eniqf")
 bullet_movement_config = ExtResource("1_qxmlh")
 bullet_count = 16
@@ -30,7 +35,9 @@ curve_strength = 0.0
 orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
+beam_direction_override = Vector2(0, 0)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("4_wbsm8")]([])
 layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("5_txqe0")]([])
 metadata/_custom_type_script = "uid://su05ub25qwt5"

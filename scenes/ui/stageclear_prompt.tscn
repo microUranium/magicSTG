@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="1_xxm40"]
 
 [node name="StageClearPrompt" type="CanvasLayer"]
+layer = 60
 
 [node name="StageClearLabel" type="RichTextLabel" parent="."]
 modulate = Color(1, 0.966667, 0, 1)

@@ -1,0 +1,70 @@
+[gd_scene load_steps=12 format=3 uid="uid://dh2dnnxq7llvf"]
+
+[ext_resource type="Texture2D" uid="uid://d3i2xeghpwsbr" path="res://assets/gfx/sprites/enemy_robe_sprite.png" id="2_ria55"]
+[ext_resource type="Script" uid="uid://ctfas7ya54p0v" path="res://scripts/enemy/BossRobeCloneAI.gd" id="3_4q3wh"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="11_jotyq"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_wkqid"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_m7n2g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgl2v"]
+atlas = ExtResource("2_ria55")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bo1r"]
+atlas = ExtResource("2_ria55")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ul17m"]
+atlas = ExtResource("2_ria55")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5t5pq"]
+atlas = ExtResource("2_ria55")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lws1y"]
+atlas = ExtResource("2_ria55")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgl2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7bo1r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ul17m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5t5pq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lws1y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="EnemyBossRobeClone" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.284888
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("animated_sprite", "attack_core_slot")]
+script = ExtResource("3_4q3wh")
+animated_sprite = NodePath("../AnimatedSprite2D")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("11_jotyq")]
+script = ExtResource("12_wkqid")
+default_core_scene = ExtResource("13_m7n2g")
+attack_pattern = null
+auto_create_core = true

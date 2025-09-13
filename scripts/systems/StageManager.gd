@@ -238,6 +238,8 @@ func _connect_stage_controller_and_start() -> void:
 func _determine_current_stage() -> String:
   """現在のステージを判定"""
   # シード値からステージを判定
+  if stage_seed.contains("s3"):
+    return "stage3"
   if stage_seed.contains("s2"):
     return "stage2"
   return "stage1"  # デフォルト

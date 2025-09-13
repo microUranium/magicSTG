@@ -16,6 +16,7 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var bullet_range: float = 0.0  # 弾丸の射程距離 0なら無限
 @export var bullet_lifetime: float = 0.0  # 弾丸の有効時間 0なら無限
 @export var auto_start: bool = true  # AttackCoreの自動発射設定
+@export var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
 
 # === 弾丸外観、動作設定 ===
 @export var bullet_visual_config: BulletVisualConfig  # 弾丸の外観設定

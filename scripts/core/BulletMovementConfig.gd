@@ -19,10 +19,14 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY
 @export var wave_frequency: float = 2.0
 
 # 追尾設定
-@export var homing_turn_rate: float = 2.0
+@export var homing_duration: float = 3.0  # 追尾時間（秒）、0なら永続的
+@export var max_turn_angle_per_second: float = 180.0  # 1秒あたりの最大回転角度（度）
 
 # 重力設定
 @export var gravity_strength: float = 980.0  # ピクセル/秒²
 @export var gravity_direction: Vector2 = Vector2.DOWN
-@export var bounce_factor: float = 0.0  # 0-1, 地面との衝突時の反発係数
 @export var air_resistance: float = 0.0  # 0-1, 空気抵抗
+
+# 反射設定（全ての移動タイプで使用可能）
+@export var bounce_factor: float = 0.0  # 0-1, 境界との衝突時の反発係数
+@export var max_bounces: int = 0  # 最大反射回数、0なら無制限

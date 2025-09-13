@@ -1,0 +1,224 @@
+[gd_scene load_steps=38 format=3 uid="uid://hfpv5mpgr26q"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_3xngf"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_nm61o"]
+[ext_resource type="Resource" uid="uid://bpvxkjd10aoum" path="res://resources/itemdrop/droptableentry_debug_core.tres" id="3_84bg0"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="4_hdcbw"]
+[ext_resource type="Texture2D" uid="uid://dr7te4bd08tan" path="res://assets/gfx/sprites/enemy_fugu_sprite.png" id="5_kfxd3"]
+[ext_resource type="Texture2D" uid="uid://ba025xmdwjhmo" path="res://assets/gfx/sprites/enemy_grimoire_sprite.png" id="6_3xngf"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="7_eqixl"]
+[ext_resource type="Script" uid="uid://msmw2mp81k5n" path="res://scripts/enemy/WarpBehindAI.gd" id="8_nm61o"]
+[ext_resource type="PackedScene" uid="uid://d1mkn4f8wk5at" path="res://scenes/effects/warp_effect.tscn" id="9_84bg0"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="9_cr8bh"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="10_a8p4w"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="11_g465n"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="12_nm61o"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="12_wdpme"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="13_4gfs8"]
+[ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="14_3xngf"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_vg3nm"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_g5mi1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7y43"]
+atlas = ExtResource("5_kfxd3")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nm61o"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84bg0"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdcbw"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfxd3"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxr01"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eqixl"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1v5r4"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cr8bh"]
+atlas = ExtResource("6_3xngf")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l7y43")
+}],
+"loop": true,
+"name": &"charging",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nm61o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84bg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdcbw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kfxd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxr01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eqixl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1v5r4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cr8bh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(93, 56)
+
+[sub_resource type="Resource" id="Resource_hdcbw"]
+script = ExtResource("12_nm61o")
+movement_type = 4
+initial_speed = 100.0
+deceleration_rate = 100.0
+min_speed = 50.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 0.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_10qvo"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.474453, 1)
+colors = PackedColorArray(0.217, 0.031, 0.31, 1, 0.7189, 0.3367, 0.91, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nm61o"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_10qvo")
+
+[sub_resource type="Resource" id="Resource_nm61o"]
+script = ExtResource("13_4gfs8")
+texture = ExtResource("14_3xngf")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_nm61o")
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_84bg0"]
+script = ExtResource("15_vg3nm")
+pattern_type = 0
+bullet_scene = ExtResource("12_wdpme")
+target_group = "players"
+damage = 10
+bullet_range = 0.0
+bullet_lifetime = 7.0
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_nm61o")
+bullet_movement_config = SubResource("Resource_hdcbw")
+bullet_count = 1
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 3.0
+direction_type = 1
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 3
+bullet_speed = 100.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("15_vg3nm")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_g5mi1")]([])
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemyGrimoire" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_3xngf")
+drop_table = Array[ExtResource("2_nm61o")]([ExtResource("3_84bg0"), ExtResource("4_hdcbw")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.724231
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.5, -2)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("7_eqixl")
+max_hp = 60
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("8_nm61o")
+angle_variation = 120.0
+warp_effect_duration = 0.5
+warp_out_effect = ExtResource("9_84bg0")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("9_cr8bh")]
+script = ExtResource("10_a8p4w")
+default_core_scene = ExtResource("11_g465n")
+attack_pattern = SubResource("Resource_84bg0")
+auto_create_core = true

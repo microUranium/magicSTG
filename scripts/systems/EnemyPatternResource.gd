@@ -132,17 +132,9 @@ func _execute_homing_movement(enemy: Node2D, ai: Node, finished_cb: Callable):
       if player_pos != Vector2.ZERO:
         var to_player = (player_pos - enemy.global_position).normalized()
         var max_turn_this_frame = deg_to_rad(max_turn_angle_per_second * delta)
-        print_debug("Homing movement: max_turn_this_frame ", max_turn_this_frame)
         var angle_diff = _current_direction.angle_to(to_player)
-        print_debug("Homing movement: angle_diff ", angle_diff)
         angle_diff = clamp(angle_diff, -max_turn_this_frame, max_turn_this_frame)
         var new_angle = _current_direction.angle() + angle_diff
-        print_debug(
-          "Homing movement: current_direction.angle() ",
-          _current_direction.angle(),
-          " new_angle ",
-          new_angle
-        )
         _current_direction = Vector2.from_angle(new_angle)
 
       var movement = _current_direction * move_speed * delta

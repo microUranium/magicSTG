@@ -3,6 +3,8 @@ extends Node
 signal request_dialogue(dialogue_data, finished_cb)
 signal request_hud_flash(fade_duration)
 signal request_change_background_scroll_speed(new_speed: float, change_time: float)
+signal request_background_fade
+signal request_background_change(texture: Texture2D)
 signal request_start_vibration
 signal destroy_bullet
 signal attack_cores_pause_requested(paused: bool)

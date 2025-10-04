@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnvr7vnfgrj0o"]
+
+[ext_resource type="Script" uid="uid://cwyntf4n88cdu" path="res://scripts/ui/StageButtonController.gd" id="1_baru5"]
+[ext_resource type="Texture2D" uid="uid://b4dok6iokkqs0" path="res://assets/gfx/sprites/stage_select_button.png" id="1_qqqam"]
+[ext_resource type="Texture2D" uid="uid://cbxghykxoao3x" path="res://assets/gfx/sprites/dialogue_enable.png" id="2_baru5"]
+
+[node name="SelectStageContainer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_baru5")
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Control"]
+layout_mode = 2
+offset_right = 192.0
+offset_bottom = 64.0
+scale = Vector2(4, 4)
+texture = ExtResource("1_qqqam")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 8
+patch_margin_right = 8
+
+[node name="ClickArea" type="Control" parent="Control/NinePatchRect"]
+anchors_preset = 0
+offset_top = 15.0
+offset_right = 64.0
+offset_bottom = 53.0
+
+[node name="StageName" type="Label" parent="Control"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 0
+offset_left = 16.0
+offset_top = 80.0
+offset_right = 846.0
+offset_bottom = 169.0
+theme_override_colors/font_color = Color(0.25, 0.25, 0.25, 1)
+theme_override_font_sizes/font_size = 64
+text = "1-1 馬車道の異変"
+
+[node name="DialogueToggleButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 36.0
+offset_right = 672.0
+offset_bottom = 108.0
+scale = Vector2(2, 2)
+icon = ExtResource("2_baru5")
+flat = true
+
+[node name="LockOverlay" type="Control" parent="Control"]
+modulate = Color(0.43, 0.43, 0.43, 0.698039)
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LockIcon" type="TextureRect" parent="Control/LockOverlay"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LockBackground" type="ColorRect" parent="Control/LockOverlay"]
+layout_mode = 0
+offset_top = 60.0
+offset_right = 768.0
+offset_bottom = 212.0
+
+[node name="StageButton" type="Button" parent="Control"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_top = 60.0
+offset_right = 594.0
+offset_bottom = 212.0
+theme_override_colors/icon_disabled_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_hover_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_focus_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_normal_color = Color(0, 0, 0, 0)
+flat = true

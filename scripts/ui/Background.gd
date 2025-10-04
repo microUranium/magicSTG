@@ -16,6 +16,19 @@ func _ready() -> void:
 
   StageSignals.request_change_background_scroll_speed.connect(_change_scroll_speed)
   StageSignals.request_start_vibration.connect(_start_vibration)
+  StageSignals.request_background_fade.connect(
+    func():
+      modulate_fade(Color(0, 0, 0, 1), 0.3)
+      await get_tree().create_timer(0.3).timeout
+      modulate_fade(Color(1, 1, 1, 1), 0.3)
+  )
+  StageSignals.request_background_change.connect(
+    func(texture: Texture2D):
+      modulate_fade(Color(0, 0, 0, 1), 0.3)
+      await get_tree().create_timer(0.3).timeout
+      set_background_texture(texture)
+      modulate_fade(Color(1, 1, 1, 1), 0.3)
+  )
 
 
 func _process(delta: float) -> void:
@@ -61,3 +74,9 @@ func _start_vibration() -> void:
     tween.tween_interval(0.1)
     tween.tween_property(sprite, "position:x", default_pos, 0)
     tween.play()
+
+
+func modulate_fade(to_color: Color, duration: float) -> void:
+  var tween = create_tween()
+  tween.tween_property(sprite, "modulate", to_color, duration)
+  tween.play()

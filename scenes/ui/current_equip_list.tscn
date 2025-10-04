@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://cgqlqeegx1n8i"]
+
+[ext_resource type="Script" uid="uid://bm68bxgux0e7b" path="res://scripts/ui/CurrentEquipList.gd" id="1_2ec0a"]
+[ext_resource type="Texture2D" uid="uid://blumcv3j6ckbi" path="res://assets/gfx/sprites/item_panel_base.png" id="4_1anlb"]
+[ext_resource type="Texture2D" uid="uid://b1omyy0mqfhly" path="res://assets/gfx/sprites/generic_gauge_progress.png" id="4_6y3fq"]
+[ext_resource type="Texture2D" uid="uid://bpdd4hh4gi8bg" path="res://assets/gfx/sprites/icon_blessing_regen.png" id="5_cp3hg"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="6_1anlb"]
+[ext_resource type="Texture2D" uid="uid://dfr4awpvxbje0" path="res://assets/gfx/sprites/item_frame.png" id="6_6y3fq"]
+
+[node name="CurrentEquipList" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 10.0
+offset_bottom = 100.0
+script = ExtResource("1_2ec0a")
+
+[node name="Bar" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = -146.0
+offset_right = 128.0
+offset_bottom = -18.0
+scale = Vector2(3, 3)
+texture = ExtResource("4_6y3fq")
+
+[node name="Back" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_1anlb")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("5_cp3hg")
+expand_mode = 1
+
+[node name="Frame" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("6_6y3fq")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 21.0
+offset_right = 245.0
+offset_bottom = 65.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_1anlb")
+theme_override_font_sizes/font_size = 30
+text = "防壁の加護"

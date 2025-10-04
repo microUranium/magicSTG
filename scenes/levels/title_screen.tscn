@@ -23,45 +23,20 @@ grow_horizontal = 2
 theme_override_font_sizes/normal_font_size = 120
 text = "魔術師STG プロトタイプ"
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -142.5
-offset_top = -49.5
-offset_right = 142.5
-offset_bottom = 49.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/normal_font_size = 40
-text = "Press Any Key"
+[node name="SwitchToStageSelectButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 763.0
+offset_top = 678.0
+offset_right = 1134.0
+offset_bottom = 785.0
+theme_override_font_sizes/font_size = 72
+text = "ステージ選択"
 
 [node name="SwitchToEquipmentButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 483.0
+offset_left = 181.0
 offset_top = 676.0
-offset_right = 779.0
+offset_right = 477.0
 offset_bottom = 783.0
 theme_override_font_sizes/font_size = 72
 text = "装備画面"
-
-[node name="SwitchToStageButton_S1-1" type="Button" parent="."]
-layout_mode = 0
-offset_left = 179.0
-offset_top = 816.0
-offset_right = 475.0
-offset_bottom = 923.0
-theme_override_font_sizes/font_size = 72
-text = "S2-ボス"
-
-[node name="SwitchToStageButton_S1-2" type="Button" parent="."]
-layout_mode = 0
-offset_left = 806.0
-offset_top = 814.0
-offset_right = 1102.0
-offset_bottom = 921.0
-theme_override_font_sizes/font_size = 72
-text = "S1-ボス"

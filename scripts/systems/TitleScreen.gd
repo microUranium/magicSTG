@@ -1,19 +1,21 @@
 extends Control
 
 @onready var switch_to_equipment_button: Button = $SwitchToEquipmentButton
-@onready var switch_to_s1_intro_button: Button = $"SwitchToStageButton_S1-1"
-@onready var switch_to_s1_boss_button: Button = $"SwitchToStageButton_S1-2"
+@onready var switch_to_stage_select_button: Button = $SwitchToStageSelectButton
+#@onready var switch_to_s1_intro_button: Button = $"SwitchToStageButton_S1-1"
+#@onready var switch_to_s1_boss_button: Button = $"SwitchToStageButton_S1-2"
 
 
 func _ready() -> void:
   switch_to_equipment_button.pressed.connect(_on_switch_to_equipment_pressed)
-  switch_to_s1_intro_button.pressed.connect(_on_switch_to_s1_intro_pressed)
-  switch_to_s1_boss_button.pressed.connect(_on_switch_to_s1_boss_pressed)
+  #switch_to_s1_intro_button.pressed.connect(_on_switch_to_s1_intro_pressed)
+  #switch_to_s1_boss_button.pressed.connect(_on_switch_to_s1_boss_pressed)
+  switch_to_stage_select_button.pressed.connect(_on_switch_to_stage_select_pressed)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-  if event.is_pressed():
-    _start_stage_with_random_seed()
+#func _unhandled_input(event: InputEvent) -> void:
+#  if event.is_pressed():
+#    _start_stage_with_random_seed()
 
 
 func _start_stage_with_random_seed() -> void:
@@ -47,3 +49,7 @@ func _on_switch_to_s1_boss_pressed() -> void:
 
 func _on_switch_to_equipment_pressed() -> void:
   GameFlow.start_equipment_screen()
+
+
+func _on_switch_to_stage_select_pressed() -> void:
+  GameFlow.start_stage_select_screen()

@@ -1,0 +1,124 @@
+[gd_scene load_steps=10 format=3 uid="uid://bi3dwcyblil0o"]
+
+[ext_resource type="Script" uid="uid://mb6vqnw8g23g" path="res://scripts/ui/StageSelectController.gd" id="1_gn162"]
+[ext_resource type="PackedScene" uid="uid://bh68hvfympwiu" path="res://scenes/ui/background.tscn" id="1_i3kq2"]
+[ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="2_gn162"]
+[ext_resource type="Texture2D" uid="uid://dqj525odhm4t8" path="res://assets/gfx/sprites/stage_back_button.png" id="3_2fl3e"]
+[ext_resource type="Texture2D" uid="uid://yi4gdgtkjmmm" path="res://assets/gfx/sprites/stage_forward_button.png" id="4_3qv83"]
+[ext_resource type="Script" uid="uid://doog04k3yauxp" path="res://scripts/ui/CurrentEquipContainer.gd" id="6_2fl3e"]
+[ext_resource type="Texture2D" uid="uid://oby7obaj8gsn" path="res://assets/gfx/sprites/button_to_equip.png" id="7_fh8sw"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="8_6ffpe"]
+[ext_resource type="Texture2D" uid="uid://h55gt52cq56p" path="res://assets/gfx/sprites/back_button.png" id="9_vbpid"]
+
+[node name="StageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gn162")
+
+[node name="Background" parent="." instance=ExtResource("1_i3kq2")]
+scroll_speed = 100.0
+
+[node name="ChapterSelectContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 110.0
+offset_right = 853.0
+offset_bottom = 254.0
+theme_override_constants/separation = 70
+
+[node name="Control" type="Control" parent="ChapterSelectContainer"]
+layout_mode = 2
+
+[node name="ChapterChangeBack" type="Button" parent="ChapterSelectContainer/Control"]
+layout_mode = 2
+offset_left = -76.0
+offset_right = -4.0
+offset_bottom = 89.0
+scale = Vector2(2, 2)
+icon = ExtResource("3_2fl3e")
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ChapterSelectContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -140
+theme_override_constants/margin_top = 165
+theme_override_constants/margin_right = -140
+
+[node name="ChapterName" type="Label" parent="ChapterSelectContainer/MarginContainer"]
+custom_minimum_size = Vector2(830, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "Stage1 馬車道の森"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="ChapterSelectContainer"]
+layout_mode = 2
+
+[node name="ChapterChangeNext" type="Button" parent="ChapterSelectContainer/Control2"]
+layout_mode = 2
+offset_left = -76.0
+offset_right = -4.0
+offset_bottom = 89.0
+scale = Vector2(2, 2)
+icon = ExtResource("4_3qv83")
+flat = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 260.0
+offset_right = 104.0
+offset_bottom = 640.0
+theme_override_constants/separation = 190
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 896.0
+offset_right = 1088.0
+offset_bottom = 480.0
+grow_horizontal = 0
+scale = Vector2(2, 2)
+texture = ExtResource("2_gn162")
+stretch_mode = 1
+
+[node name="CurrentEquipmentContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 897.0
+offset_top = 192.0
+offset_right = 937.0
+offset_bottom = 332.0
+theme_override_constants/separation = 100
+script = ExtResource("6_2fl3e")
+
+[node name="ToEquipSceneButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 912.0
+offset_top = 12.0
+offset_right = 1016.0
+offset_bottom = 84.0
+scale = Vector2(2, 2)
+icon = ExtResource("7_fh8sw")
+flat = true
+
+[node name="Label" type="Label" parent="ToEquipSceneButton"]
+layout_mode = 0
+offset_left = 19.5
+offset_top = 18.5
+offset_right = 81.5
+offset_bottom = 63.5
+theme_override_colors/font_color = Color(0.289368, 0.061528, 0.197414, 1)
+theme_override_fonts/font = ExtResource("8_6ffpe")
+theme_override_font_sizes/font_size = 31
+text = "装備"
+
+[node name="ReturnButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1124.0
+offset_top = 44.0
+offset_right = 1196.0
+offset_bottom = 100.0
+scale = Vector2(2, 2)
+icon = ExtResource("9_vbpid")
+flat = true

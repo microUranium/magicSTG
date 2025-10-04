@@ -1,0 +1,162 @@
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=19 format=3 uid="uid://dtmqpbvr6bhmq"]
+
+[ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
+[ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
+[ext_resource type="Texture2D" uid="uid://csgys65memynf" path="res://assets/gfx/backgrounds/background_forest.png" id="2_cu45u"]
+[ext_resource type="Script" uid="uid://ckbh7pwpofpdd" path="res://scripts/resources/StageData.gd" id="3_stage"]
+[ext_resource type="Texture2D" uid="uid://bpsaurnexjihk" path="res://assets/gfx/backgrounds/background_sea.png" id="4_ljvmy"]
+[ext_resource type="Texture2D" uid="uid://bv4gwdx2ixvpn" path="res://assets/gfx/backgrounds/background_ruins.png" id="5_x38wm"]
+
+[sub_resource type="Resource" id="StageData_1_1"]
+script = ExtResource("3_stage")
+stage_name = "1-1 森の異変"
+chapter_id = "chapter1"
+stage_id = "stage1_1"
+is_seed_fixed = true
+fixed_seed = "Ds1d11.intro-s111-s112-s131-s1g1-Ds1d11.progression-s121-s1g1-s112-s141-s112-s1z1-Ds1d11.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+
+[sub_resource type="Resource" id="Resource_7e28f"]
+script = ExtResource("3_stage")
+stage_name = "1-2 鳥獣退治"
+chapter_id = "chapter1"
+stage_id = "stage1_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage1"
+}, {
+"count": 1,
+"pool": "stage1_boss"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="StageData_1_2"]
+script = ExtResource("3_stage")
+stage_name = "1-3 鳥獣の縄張り"
+chapter_id = "chapter1"
+stage_id = "stage1_3"
+is_seed_fixed = true
+fixed_seed = "Ds1d12.intro-s113-s122-s1g3-s113-s142-Ds1d12.progression-s134-s1g2-s1g4-s1g3-s1g5-s1z3-s1z2-Ds1d12.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+
+[sub_resource type="Resource" id="Resource_0rge8"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter1"
+chapter_name = "第1章 馬車道の森"
+stages = Array[ExtResource("3_stage")]([SubResource("StageData_1_1"), SubResource("Resource_7e28f"), SubResource("StageData_1_2")])
+is_unlocked = true
+background_texture = ExtResource("2_cu45u")
+
+[sub_resource type="Resource" id="Resource_hp741"]
+script = ExtResource("3_stage")
+stage_name = "2-1 いざ遺跡へ"
+chapter_id = "chapter2"
+stage_id = "stage2_1"
+is_seed_fixed = true
+fixed_seed = "Ds2d11.intro-s231-s211-s241-s2g1-s231-s211-s221-Ds2d11.progression-s2z1-Ds2d11.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_112c6"]
+script = ExtResource("3_stage")
+stage_name = "2-2 海獣討伐"
+chapter_id = "chapter2"
+stage_id = "stage2_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage2"
+}, {
+"count": 1,
+"pool": "stage2_boss"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_cu45u"]
+script = ExtResource("3_stage")
+stage_name = "2-3 砂の大蛇"
+chapter_id = "chapter2"
+stage_id = "stage2_3"
+is_seed_fixed = true
+fixed_seed = "s223-s213-s2g7-s234-s2g6-s213-s2g9-s2ga-s2g8-s2gb-s2z3-s2z2-Ds2d12.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_r0atf"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter2"
+chapter_name = "第2章 夕焼け海岸"
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_hp741"), SubResource("Resource_112c6"), SubResource("Resource_cu45u")])
+is_unlocked = true
+background_texture = ExtResource("4_ljvmy")
+
+[sub_resource type="Resource" id="Resource_ljvmy"]
+script = ExtResource("3_stage")
+stage_name = "3-1 魔力人形"
+chapter_id = "chapter3"
+stage_id = "stage3_1"
+is_seed_fixed = true
+fixed_seed = "Ds3d11.intro-s331-s321-s311-s331-Ds3d11.progression-s322-s312-s3g1-s3z1-Ds3d11.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_x38wm"]
+script = ExtResource("3_stage")
+stage_name = "3-2 遺跡探索"
+chapter_id = "chapter3"
+stage_id = "stage3_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage3"
+}, {
+"count": 1,
+"pool": "stage3_boss"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_vynet"]
+script = ExtResource("3_stage")
+stage_name = "3-3 遺跡の主"
+chapter_id = "chapter3"
+stage_id = "stage3_3"
+is_seed_fixed = true
+fixed_seed = "Ds3d12.intro-s3z2-Ds3d12.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_1lwtj"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter3"
+chapter_name = "第3章 コウモリ遺跡"
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_ljvmy"), SubResource("Resource_x38wm"), SubResource("Resource_vynet")])
+is_unlocked = true
+background_texture = ExtResource("5_x38wm")
+metadata/_custom_type_script = "uid://dnqf62vu42hqi"
+
+[resource]
+script = ExtResource("2_1ifpm")
+chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj")])
+metadata/_custom_type_script = "uid://dpox3am3xjmyy"

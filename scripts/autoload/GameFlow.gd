@@ -4,6 +4,7 @@ extends Node
 @export_file("*.tscn") var stage_scene := "res://scenes/levels/stage_root.tscn"
 @export_file("*.tscn") var equipment_scene := "res://scenes/levels/equipment_root.tscn"
 @export_file("*.tscn") var result_inventory_scene := "res://scenes/levels/result_inventory.tscn"
+@export_file("*.tscn") var stage_select_scene := "res://scenes/levels/stage_select.tscn"
 
 
 #-------------------------------------------------
@@ -21,5 +22,9 @@ func start_equipment_screen():
 
 func start_result_inventory():
   get_tree().change_scene_to_file(result_inventory_scene)
+
+
+func start_stage_select_screen():
+  get_tree().change_scene_to_file(stage_select_scene)
 
 #-------------------------------------------------

@@ -1,12 +1,16 @@
 extends Area2D
 class_name EnemyBase
 
+signal received_damage(amount: int, isInvincible: bool)
+signal destroyed
+
 @export
 var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_particle.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var slot := $AttackCoreSlot
 @export var drop_table: Array[DropTableEntry] = []
 @export var skip_boss_defeat_effect: bool = false  # ボス撃破エフェクトをスキップするかどうか
+@export var isInvincible: bool = false  # 無敵状態かどうか
 
 var _damage_flash_time: float
 
@@ -18,6 +22,9 @@ func _ready():
 
 
 func take_damage(amount: int) -> void:
+  emit_signal("received_damage", amount, isInvincible)
+  if isInvincible:  # 無敵状態ならダメージを受けない
+    return
   $HpNode.take_damage(amount)
   StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, -10, 0)
   flash_white()
@@ -26,6 +33,7 @@ func take_damage(amount: int) -> void:
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= 0:
+    emit_signal("destroyed")
     _spawn_destroy_particles()
     _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)

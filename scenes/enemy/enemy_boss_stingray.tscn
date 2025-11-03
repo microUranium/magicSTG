@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dr6vsncc5ib1w"]
+[gd_scene load_steps=40 format=3 uid="uid://dr6vsncc5ib1w"]
 
 [ext_resource type="Script" uid="uid://ci0qfur25d4yq" path="res://scripts/enemy/BossStingray.gd" id="1_cx5sj"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_yhp0k"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_0pyda"]
 [ext_resource type="Texture2D" uid="uid://iap3lqatqmod" path="res://assets/gfx/sprites/bullet_bubble_sprite.png" id="12_lxd5g"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_hqa8d"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_78n74"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sl4ln"]
 atlas = ExtResource("3_fd8xa")
@@ -298,4 +299,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("12_0pyda")
 default_core_scene = ExtResource("13_hqa8d")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("17_78n74")]([])
 auto_create_core = true

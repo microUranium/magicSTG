@@ -66,10 +66,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("11_enptm")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("12_jiha3")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemySeaBird" type="Area2D" groups=["enemies"]]
@@ -100,4 +104,5 @@ base_speed = 130.0
 script = ExtResource("8_ysdii")
 default_core_scene = ExtResource("9_0eqa2")
 attack_pattern = SubResource("Resource_j6wwq")
+attack_patterns_additive = Array[ExtResource("11_enptm")]([])
 auto_create_core = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c4c77cdqptgq8"]
+[gd_scene load_steps=22 format=3 uid="uid://c4c77cdqptgq8"]
 
 [ext_resource type="Script" uid="uid://cbm4inu0l5omw" path="res://scripts/enemy/BossSnake.gd" id="1_dhpoj"]
 [ext_resource type="Texture2D" uid="uid://cvor1sxuokmka" path="res://assets/gfx/sprites/enemy_snake_head.png" id="2_vuglt"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="5_dhpoj"]
 [ext_resource type="AudioStream" uid="uid://b6a4xqfrrc100" path="res://assets/audio/bgm/stage2_boss_bgm_kari.mp3" id="5_vuglt"]
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="6_p22mw"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="11_p22mw"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_wxu4v"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_pdwag"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_dmrm3"]
@@ -174,4 +175,5 @@ base_speed = 250.0
 script = ExtResource("15_pdwag")
 default_core_scene = ExtResource("16_dmrm3")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("11_p22mw")]([])
 auto_create_core = true

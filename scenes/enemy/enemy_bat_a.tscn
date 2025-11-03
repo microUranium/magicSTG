@@ -58,6 +58,13 @@ gravity_direction = Vector2(0, 1)
 air_resistance = 0.0
 bounce_factor = 1.0
 max_bounces = 1
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
 metadata/_custom_type_script = "uid://urppv4s7es6g"
 
 [sub_resource type="Resource" id="Resource_1etxb"]
@@ -100,10 +107,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("12_sgjgc")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("13_xlcf0")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyBatA" type="Area2D" groups=["enemies"]]
@@ -138,4 +149,5 @@ base_speed = 300.0
 script = ExtResource("8_hr08y")
 default_core_scene = ExtResource("9_liw1r")
 attack_pattern = SubResource("Resource_liw1r")
+attack_patterns_additive = Array[ExtResource("12_sgjgc")]([])
 auto_create_core = true

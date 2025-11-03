@@ -107,10 +107,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("15_duwbf")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [sub_resource type="Resource" id="Resource_je4w4"]
@@ -142,10 +146,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("15_duwbf")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [sub_resource type="Resource" id="Resource_oep7i"]
@@ -177,10 +185,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("15_duwbf")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [sub_resource type="Resource" id="Resource_rd5me"]
@@ -212,10 +224,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("15_duwbf")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyLantern" type="Area2D" groups=["enemies"]]
@@ -245,22 +261,26 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("9_xah6n")
 default_core_scene = ExtResource("10_uord8")
 attack_pattern = SubResource("Resource_0qglt")
+attack_patterns_additive = Array[ExtResource("15_duwbf")]([])
 auto_create_core = true
 
 [node name="AttackCoreSlot2" parent="." instance=ExtResource("8_bu5m4")]
 script = ExtResource("9_xah6n")
 default_core_scene = ExtResource("10_uord8")
 attack_pattern = SubResource("Resource_je4w4")
+attack_patterns_additive = Array[ExtResource("15_duwbf")]([])
 auto_create_core = true
 
 [node name="AttackCoreSlot3" parent="." instance=ExtResource("8_bu5m4")]
 script = ExtResource("9_xah6n")
 default_core_scene = ExtResource("10_uord8")
 attack_pattern = SubResource("Resource_oep7i")
+attack_patterns_additive = Array[ExtResource("15_duwbf")]([])
 auto_create_core = true
 
 [node name="AttackCoreSlot4" parent="." instance=ExtResource("8_bu5m4")]
 script = ExtResource("9_xah6n")
 default_core_scene = ExtResource("10_uord8")
 attack_pattern = SubResource("Resource_rd5me")
+attack_patterns_additive = Array[ExtResource("15_duwbf")]([])
 auto_create_core = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dxsq1w8n3j4ga"]
+[gd_scene load_steps=21 format=3 uid="uid://dxsq1w8n3j4ga"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_5pkhx"]
 [ext_resource type="Texture2D" uid="uid://b7loyro504i55" path="res://assets/gfx/sprites/enemy_bat_a_sprite.png" id="4_dctf7"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_ei7fd"]
 [ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="8_ggxpy"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_be0f8"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="10_c0vjp"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="12_hrafj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_38f5m"]
@@ -101,4 +102,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("8_ei7fd")
 default_core_scene = ExtResource("9_be0f8")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("10_c0vjp")]([])
 auto_create_core = true

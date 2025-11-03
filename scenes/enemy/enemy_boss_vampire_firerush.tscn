@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://d4h5bfpwrb1g7"]
+[gd_scene load_steps=19 format=3 uid="uid://d4h5bfpwrb1g7"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_ihvi0"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_g8sar"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_54sqd"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_yrtbi"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_2ywyq"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="10_a0rx6"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
 animations = [{
@@ -96,4 +97,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("8_yrtbi")
 default_core_scene = ExtResource("9_2ywyq")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("10_a0rx6")]([])
 auto_create_core = true

@@ -14,6 +14,7 @@ var _current_execution: ExecutionContext = null
 var _beam_duration_timer: SceneTreeTimer = null  # ビーム持続時間タイマー
 var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追跡
 var _rear_firing_mode: bool = false  # 後方発射モード
+var _base_dir_cached: Vector2 = Vector2.ZERO  # ベース方向のキャッシュ
 
 
 class ExecutionContext:
@@ -83,7 +84,7 @@ func _do_fire() -> bool:
 
   # 警告表示（warning_configが存在する場合のみ）
   if !attack_pattern.warning_configs.is_empty():
-    await _show_attack_warning()
+    _base_dir_cached = await _show_attack_warning()
 
   # 実行コンテキストを作成
   _current_execution = ExecutionContext.new(attack_pattern)
@@ -176,7 +177,7 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     else:
       # 通常の方向計算
       bullet_dir = pattern.calculate_spread_direction(i, pattern.bullet_count, base_dir)
-    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
+    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, i):
       success = false
 
   if is_inside_tree():
@@ -197,7 +198,7 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
         _owner_actor.global_position, target_pos, _rear_firing_mode
       )
       var bullet_dir = pattern.calculate_spread_direction(burst, pattern.rapid_fire_count, base_dir)
-      if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
+      if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, burst):
         success = false
     elif not await _execute_single_shot(pattern):
       success = false
@@ -242,7 +243,7 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
     var spiral_angle = (TAU / pattern.bullet_count) * i
     var bullet_dir = base_dir.rotated(spiral_angle)
 
-    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position):
+    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, i):
       success = false
 
     # 螺旋の時間差
@@ -292,7 +293,7 @@ func _execute_beam(pattern: AttackPattern) -> bool:
 
     # ビーム専用初期化（方向を含む）
     if beam_instance.has_method("initialize"):
-      beam_instance.initialize(_owner_actor, modified_damage, beam_direction)
+      beam_instance.initialize(_owner_actor, modified_damage, beam_direction, pattern.beam_offset)
 
     # 方向設定メソッドがある場合は個別に設定
     if beam_instance.has_method("set_beam_direction"):
@@ -332,8 +333,15 @@ func _calculate_multi_beam_direction(
   pattern: AttackPattern, beam_index: int, total_beams: int
 ) -> Vector2:
   """複数ビーム用の方向計算"""
+  var base_direction: Vector2
   # ベース方向を取得
-  var base_direction = _get_base_direction(pattern)
+  if pattern.warning_configs.size() > 0:
+    base_direction = _base_dir_cached
+  else:
+    var target_pos = _get_player_position()
+    base_direction = pattern.calculate_base_direction(
+      _owner_actor.global_position, target_pos, _rear_firing_mode
+    )
 
   # 単発ビームの場合はそのまま返す
   if total_beams == 1:
@@ -406,7 +414,9 @@ func _execute_custom(pattern: AttackPattern) -> bool:
 # === ヘルパーメソッド ===
 
 
-func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2) -> bool:
+func _spawn_bullet(
+  pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2, bullet_index: int = -1
+) -> bool:
   """基本的な弾丸を生成"""
   if not pattern.bullet_scene:
     return false
@@ -438,8 +448,14 @@ func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector
   )
   bullet.target_group = target_group
 
+  # persist_offscreen設定の適用
+  if "persist_offscreen" in bullet:
+    bullet.persist_offscreen = pattern.persist_offscreen
+    bullet.max_offscreen_distance = pattern.max_offscreen_distance
+    bullet.forced_lifetime = pattern.forced_lifetime
+
   # 視覚・動作設定の適用
-  _apply_bullet_configs(bullet, pattern)
+  _apply_bullet_configs(bullet, pattern, bullet_index)
 
   # 生成した弾丸を追跡リストに追加
   _spawned_projectiles.append(bullet)
@@ -504,7 +520,7 @@ func _start_barrier_bullet(bullet, pattern: AttackPattern):
     bullet.start_rotation(pattern.rotation_duration, pattern.rotation_speed)
 
 
-func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
+func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: int = -1):
   """弾丸に視覚・動作設定を適用"""
   # 貫通設定の適用
   if "penetration_count" in bullet:
@@ -516,7 +532,20 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern):
 
   # 動作設定の適用
   if pattern.bullet_movement_config and bullet.has_method("apply_movement_config"):
-    bullet.apply_movement_config(pattern.bullet_movement_config)
+    # 螺旋移動の場合、インデックスに応じて位相オフセットを設定
+    if (
+      bullet_index >= 0
+      and pattern.bullet_movement_config.movement_type == BulletMovementConfig.MovementType.SPIRAL
+      and pattern.direction_type == AttackPattern.DirectionType.CIRCLE
+      and pattern.bullet_count > 0
+    ):
+      # movement_configを複製して位相オフセットを設定
+      var modified_config = pattern.bullet_movement_config.duplicate()
+      var phase_step = 360.0 / pattern.bullet_count
+      modified_config.spiral_phase_offset += bullet_index * phase_step
+      bullet.apply_movement_config(modified_config)
+    else:
+      bullet.apply_movement_config(pattern.bullet_movement_config)
 
   # バリア弾の動作設定
   if pattern.barrier_movement_config and bullet.has_method("apply_barrier_movement_config"):
@@ -633,8 +662,12 @@ func _on_projectile_destroyed(projectile: Node) -> void:
   _spawned_projectiles.erase(projectile)
 
 
-func _show_attack_warning() -> void:
+func _show_attack_warning() -> Vector2:
   var max_duration: float = 0.0
+  var player_pos = _get_player_position()
+  var base_dir = attack_pattern.calculate_base_direction(
+    _owner_actor.global_position, player_pos, _rear_firing_mode
+  )
 
   # 各警告設定に対して警告線を生成
   for warning_config in attack_pattern.warning_configs:
@@ -647,7 +680,7 @@ func _show_attack_warning() -> void:
     start_pos = warning_config.position_offset
 
     # 警告線の終点座標を計算（角度を使用）
-    var angle_rad = deg_to_rad(warning_config.angle_degrees)
+    var angle_rad = base_dir.angle()
     var direction = Vector2(cos(angle_rad), sin(angle_rad))
     var end_pos = start_pos + direction * warning_config.warning_length
 
@@ -665,6 +698,8 @@ func _show_attack_warning() -> void:
   # 最長の警告時間だけ待機
   if max_duration > 0.0:
     await get_tree().create_timer(max_duration).timeout
+
+  return base_dir
 
 
 func cleanup_on_death() -> void:

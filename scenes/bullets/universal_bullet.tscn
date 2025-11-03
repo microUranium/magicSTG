@@ -35,6 +35,8 @@ alpha_curve = SubResource("CurveTexture_nji8l")
 radius = 8.0
 
 [node name="UniversalBullet" type="Area2D"]
+position = Vector2(0, -1)
+collision_layer = 2
 script = ExtResource("1_6vpcq")
 bullet_config = ExtResource("2_nji8l")
 movement_config = ExtResource("3_2d55w")

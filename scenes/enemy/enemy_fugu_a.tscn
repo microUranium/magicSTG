@@ -114,10 +114,14 @@ beam_scene = ExtResource("11_l7y43")
 continuous_damage = true
 beam_visual_config = SubResource("Resource_c8edp")
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("12_hm5sp")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_c8edp")]([SubResource("Resource_b4qv4")])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyFuguA" type="Area2D" groups=["enemies"]]
@@ -147,4 +151,5 @@ base_speed = 200.0
 script = ExtResource("9_s4dh8")
 default_core_scene = ExtResource("10_f1eah")
 attack_pattern = SubResource("Resource_vk5w5")
+attack_patterns_additive = Array[ExtResource("12_hm5sp")]([])
 auto_create_core = true

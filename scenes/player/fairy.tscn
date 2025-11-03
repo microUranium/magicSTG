@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dypijchgmf00l"]
+[gd_scene load_steps=8 format=3 uid="uid://dypijchgmf00l"]
 
 [ext_resource type="Script" uid="uid://5edflsdac8ar" path="res://scripts/player/Fairy.gd" id="1_ac1c3"]
 [ext_resource type="Texture2D" uid="uid://bydxdctg7u4to" path="res://assets/gfx/sprites/fairy_sprite.png" id="2_24ktk"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="3_rivsa"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="4_3foel"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="5_ifqgt"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="7_deoqq"]
 
 [node name="Fairy" type="Node2D"]
 script = ExtResource("1_ac1c3")
@@ -19,4 +20,5 @@ texture = ExtResource("2_24ktk")
 script = ExtResource("4_3foel")
 default_core_scene = ExtResource("5_ifqgt")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("7_deoqq")]([])
 auto_create_core = true

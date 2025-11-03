@@ -1,0 +1,64 @@
+[gd_scene load_steps=12 format=3 uid="uid://xfsf7fy74cpk"]
+
+[ext_resource type="Script" uid="uid://d1162chtcf17" path="res://scripts/enemy/EnemyLivingWood.gd" id="1_8ellf"]
+[ext_resource type="Texture2D" uid="uid://c74kld5b5pjju" path="res://assets/gfx/sprites/enemy_living_wood_sprite.png" id="5_wlw01"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_6d0vy"]
+[ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="7_d703w"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_1rak8"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_d3lmj"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_301yv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6y7ro"]
+atlas = ExtResource("5_wlw01")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q41ug"]
+atlas = ExtResource("5_wlw01")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6y7ro")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q41ug")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(133, 181)
+
+[node name="EnemyLivingWood" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_8ellf")
+shield_amount = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame = 1
+frame_progress = 0.915537
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(6.5, 32.5)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("6_6d0vy")
+max_hp = 500
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("7_d703w")
+base_speed = 150.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("8_1rak8")]
+script = ExtResource("9_d3lmj")
+default_core_scene = ExtResource("10_301yv")
+attack_pattern = null
+auto_create_core = false

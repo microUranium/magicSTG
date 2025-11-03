@@ -38,11 +38,14 @@ func _ready():
   _setup_collision_signals()
 
 
-func initialize(_owner_node: Node2D, _damage: int, direction: Vector2 = Vector2.UP) -> void:
+func initialize(
+  _owner_node: Node2D, _damage: int, direction: Vector2 = Vector2.UP, offset: Vector2 = Vector2.ZERO
+) -> void:
   """ビームの初期化"""
   self.owner_node = _owner_node
   self.damage = _damage
   self.beam_direction = direction.normalized()
+  self.offset = offset
   _setup_raycast()
 
 

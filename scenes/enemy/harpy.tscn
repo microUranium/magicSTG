@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cjoen8mdlmhks"]
+[gd_scene load_steps=23 format=3 uid="uid://cjoen8mdlmhks"]
 
 [ext_resource type="Script" uid="uid://uh0qd5u61qs7" path="res://scripts/enemy/Harpy.gd" id="1_l4g2j"]
 [ext_resource type="Texture2D" uid="uid://ctbnimw6slxdk" path="res://assets/gfx/sprites/harpy_sprite.png" id="2_f2sx0"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://tgegwq2bima6" path="res://resources/enemy/harpy/phase/harpy_phase2.tres" id="7_q13j7"]
 [ext_resource type="Resource" uid="uid://bn6iihbcjnyfj" path="res://resources/enemy/harpy/phase/harpy_phase3.tres" id="8_jooee"]
 [ext_resource type="Resource" uid="uid://b62fimtgpgajo" path="res://resources/enemy/harpy/phase/harpy_phase4.tres" id="9_gkiv5"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_1xhvu"]
 [ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="15_dotlt"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="17_81vii"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="18_l66gx"]
@@ -69,8 +70,10 @@ destroy_particles_scene = ExtResource("2_njnvt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.540716
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -12.5)
 shape = SubResource("RectangleShape2D_4utyh")
 
@@ -88,4 +91,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("17_81vii")
 default_core_scene = ExtResource("18_l66gx")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("15_1xhvu")]([])
 auto_create_core = true

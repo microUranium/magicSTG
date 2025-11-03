@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=22 format=3 uid="uid://cf4ukfoq110xo"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=23 format=3 uid="uid://cf4ukfoq110xo"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_58abv"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_illxl"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="2_canmk"]
 [ext_resource type="Texture2D" uid="uid://vtlu4gks4qom" path="res://assets/gfx/sprites/bullet_fireball_sprite.png" id="3_canmk"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_58abv"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="6_canmk"]
 [ext_resource type="Texture2D" uid="uid://csphlt7lv3s2i" path="res://assets/gfx/sprites/icon_magic_fireball.png" id="7_10qvo"]
 
 [sub_resource type="Curve" id="Curve_5ssc0"]
@@ -57,8 +58,8 @@ point_count = 2
 curve = SubResource("Curve_58abv")
 
 [sub_resource type="Gradient" id="Gradient_nji8l"]
-offsets = PackedFloat32Array(0.489655, 1)
-colors = PackedColorArray(0.42656, 0.3956, 0.86, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0.489362, 1)
+colors = PackedColorArray(0.73, 0.13359, 0.1022, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
 gradient = SubResource("Gradient_nji8l")
@@ -96,6 +97,7 @@ damage = 5
 bullet_range = 500.0
 bullet_lifetime = 0.0
 auto_start = true
+penetration_count = 0
 bullet_visual_config = SubResource("Resource_48lne")
 bullet_count = 1
 rapid_fire_count = 1
@@ -115,9 +117,14 @@ orbit_radius = 50.0
 beam_duration = 1.0
 continuous_damage = false
 beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
 custom_parameters = {}
 pattern_layers = Array[ExtResource("1_rjsk6")]([])
 layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("6_canmk")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]

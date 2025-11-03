@@ -4,7 +4,9 @@ class_name TestableUniversalAttackCore
 var spawned_bullets: Array[Node2D] = []
 
 
-func _spawn_bullet(pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2) -> bool:
+func _spawn_bullet(
+  pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2, bullet_index: int = -1
+) -> bool:
   """テスト用：実際の弾丸生成をスキップ"""
   # モック弾丸を作成
   var mock_bullet = Node2D.new()

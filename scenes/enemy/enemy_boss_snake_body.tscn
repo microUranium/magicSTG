@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://do52vk4pepigq"]
+[gd_scene load_steps=11 format=3 uid="uid://do52vk4pepigq"]
 
 [ext_resource type="Script" uid="uid://bvv1qplqgrmlq" path="res://scripts/enemy/WormSegment.gd" id="1_6corl"]
 [ext_resource type="Texture2D" uid="uid://dbdsfucgb16g8" path="res://assets/gfx/sprites/enemy_snake_body.png" id="1_w4ngx"]
 [ext_resource type="Script" uid="uid://xc41q0ft0mgm" path="res://scripts/enemy/BossSnakeBodyAI.gd" id="3_0mm15"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_3p4xr"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="6_63nsg"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="7_06ef4"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="7_6wjai"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6corl"]
@@ -48,4 +49,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("6_63nsg")
 default_core_scene = ExtResource("7_6wjai")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("7_06ef4")]([])
 auto_create_core = true

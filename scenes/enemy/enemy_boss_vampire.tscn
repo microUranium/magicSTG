@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://dhym3c4ao25nr"]
+[gd_scene load_steps=65 format=3 uid="uid://dhym3c4ao25nr"]
 
 [ext_resource type="Script" uid="uid://dpkpdmta4uel8" path="res://scripts/enemy/BossVampire.gd" id="1_cpn46"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_6r602"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="9_ex3q3"]
 [ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="10_817ac"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_7vmf2"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_817ac"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_uu8hs"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_ahaiq"]
 
@@ -743,4 +744,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("15_uu8hs")
 default_core_scene = ExtResource("16_ahaiq")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("14_817ac")]([])
 auto_create_core = true

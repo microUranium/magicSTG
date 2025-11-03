@@ -1,0 +1,118 @@
+[gd_scene load_steps=19 format=3 uid="uid://dekjqnw1crdbc"]
+
+[ext_resource type="Script" uid="uid://b6584rk0rv3d4" path="res://scripts/enemy/EnemyLivingWoodShield.gd" id="1_fwp04"]
+[ext_resource type="Script" uid="uid://cefontpaxh8fs" path="res://scripts/enemy/OrbitAI.gd" id="4_fwp04"]
+[ext_resource type="Texture2D" uid="uid://bkmlxr58kwn1l" path="res://assets/gfx/sprites/enemy_living_wood_shield_sprite.png" id="5_s0deh"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_57i17"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_3rqqi"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="8_k27sa"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_b76vi"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="9_qgmle"]
+[ext_resource type="Texture2D" uid="uid://fkmp3vsc6jdb" path="res://assets/gfx/sprites/bullet_spike.png" id="10_k3odr"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_kind0"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="11_57i17"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="12_ttyrg"]
+[ext_resource type="Script" uid="uid://s5whf1i7qbyj" path="res://scripts/enemy/CounterAttackAI.gd" id="13_3rqqi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cla33"]
+atlas = ExtResource("5_s0deh")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cla33")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(120, 20)
+
+[sub_resource type="Resource" id="Resource_b76vi"]
+script = ExtResource("9_qgmle")
+texture = ExtResource("10_k3odr")
+scale = 1.5
+color = Color(1, 1, 1, 1)
+collision_radius = 10.0
+enable_particles = false
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_kind0"]
+script = ExtResource("11_57i17")
+pattern_type = 0
+bullet_scene = ExtResource("8_k27sa")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = false
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_b76vi")
+bullet_count = 1
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.02
+direction_type = 1
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 850.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("11_57i17")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("12_ttyrg")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemyLivingWoodSheld" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_fwp04")
+isInvincible = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.915537
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("6_57i17")
+max_hp = 100
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("4_fwp04")
+orbit_radius = 200.0
+rotation_speed = 1.0
+rotate_sprite = true
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("8_3rqqi")]
+script = ExtResource("9_b76vi")
+default_core_scene = ExtResource("10_kind0")
+attack_pattern = SubResource("Resource_kind0")
+attack_patterns_additive = Array[ExtResource("11_57i17")]([])
+auto_create_core = true
+
+[node name="CounterAttackAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("13_3rqqi")
+attack_core_slot = NodePath("../AttackCoreSlot")

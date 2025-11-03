@@ -12,7 +12,7 @@ class StubBeam:
   var owner_path: NodePath
   var enemy_group: String
 
-  func initialize(_actor, _damage, _direction):
+  func initialize(_actor, _damage, _direction, _beam_offset = Vector2.ZERO):
     initialize_called = true
     damage = _damage
     beam_direction = _direction

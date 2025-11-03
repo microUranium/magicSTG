@@ -7,7 +7,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       },
@@ -17,7 +17,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       },
@@ -27,7 +27,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       },
@@ -42,7 +42,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       },
@@ -52,7 +52,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       },
@@ -62,11 +62,11 @@
         "enchantments": [
           {
             "id": "bullet_lifetime_pct",
-            "level": 2
+            "level": 3
           },
           {
             "id": "cooldown_pct",
-            "level": 1
+            "level": 3
           }
         ]
       },
@@ -76,7 +76,7 @@
         "enchantments": [
           {
             "id": "cooldown_pct",
-            "level": 2
+            "level": 3
           }
         ]
       }
@@ -85,12 +85,22 @@
       {
         "uid": "blessing_shield_1",
         "id": "blessing_shield",
-        "enchantments": []
+        "enchantments": [
+          {
+            "id": "shield_hp_pct",
+            "level": 3
+          }
+        ]
       },
       {
         "uid": "blessing_regen_1",
         "id": "blessing_regen",
-        "enchantments": []
+        "enchantments": [
+          {
+            "id": "regen_interval_sec_pct",
+            "level": 3
+          }
+        ]
       }
     ]
   },

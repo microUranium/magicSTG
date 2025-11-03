@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvbeyhe0dkmwx"]
+[gd_scene load_steps=16 format=3 uid="uid://bvbeyhe0dkmwx"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_knrwt"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_lyful"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="8_4t73b"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_fpsli"]
 [ext_resource type="Resource" uid="uid://dysglhbm8dk24" path="res://resources/attackPatterns/single_shot_to_player_straight.tres" id="10_qfbl5"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="11_qfbl5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_erd6v"]
 atlas = ExtResource("4_qfbl5")
@@ -63,4 +64,5 @@ base_speed = 200.0
 script = ExtResource("8_fpsli")
 default_core_scene = ExtResource("8_4t73b")
 attack_pattern = ExtResource("10_qfbl5")
+attack_patterns_additive = Array[ExtResource("11_qfbl5")]([])
 auto_create_core = true

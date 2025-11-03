@@ -1,0 +1,199 @@
+[gd_scene load_steps=34 format=3 uid="uid://c2q4rtji2tmda"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_ft50w"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_8oi5m"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_3anjb"]
+[ext_resource type="Texture2D" uid="uid://cvw2jwyu25khv" path="res://assets/gfx/sprites/enemy_spike_sprite.png" id="4_ft50w"]
+[ext_resource type="Script" uid="uid://c2byioq2pbss3" path="res://scripts/enemy/SpriteSpiralling.gd" id="5_41ssa"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_kca73"]
+[ext_resource type="Script" uid="uid://ce8r8dpvey3lb" path="res://scripts/enemy/RushAttackAI.gd" id="7_swddm"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_hx7fp"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_6go45"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_8gign"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="11_8gign"]
+[ext_resource type="Script" uid="uid://bnbk37mwnx1aa" path="res://scripts/enemy/OnDestroyAttackAI.gd" id="11_8oi5m"]
+[ext_resource type="Script" uid="uid://dwfltd8qe8ou" path="res://scripts/core/UniversalBullet.gd" id="12_q5qd8"]
+[ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="13_1twkh"]
+[ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="14_5kp8c"]
+[ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="15_cw220"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="16_dx3bb"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_bspui"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="18_iw78k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8oi5m"]
+atlas = ExtResource("4_ft50w")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8oi5m")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xk8s5"]
+radius = 32.0
+
+[sub_resource type="Resource" id="Resource_q5qd8"]
+script = ExtResource("11_8gign")
+movement_type = 1
+initial_speed = 700.0
+deceleration_rate = 500.0
+min_speed = 200.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nji8l"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.489655, 1)
+colors = PackedColorArray(0.42656, 0.3956, 0.86, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gmgwi"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_nji8l")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nji8l"]
+radius = 8.0
+
+[sub_resource type="PackedScene" id="PackedScene_1twkh"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("UniversalBullet", "script", "bullet_config", "movement_config", "Area2D", "GPUParticles2D", "amount", "lifetime", "process_material", "Sprite2D", "texture", "CollisionShape2D", "shape", "AnimationPlayer"),
+"node_count": 5,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 4, 0, -1, 3, 1, 0, 2, 1, 3, 2, 0, 0, 0, 5, 5, -1, 3, 6, 3, 7, 4, 8, 5, 0, 0, 0, 9, 9, -1, 1, 10, 6, 0, 0, 0, 11, 11, -1, 1, 12, 7, 0, 0, 0, 13, 13, -1, 0, 0),
+"variants": [ExtResource("12_q5qd8"), ExtResource("13_1twkh"), ExtResource("14_5kp8c"), 16, 0.3, SubResource("ParticleProcessMaterial_gmgwi"), ExtResource("15_cw220"), SubResource("CircleShape2D_nji8l")],
+"version": 3
+}
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5kp8c"]
+load_path = "res://.godot/imported/bullet_spike.png-efcbdffff87e1bf85152530099582e05.ctex"
+
+[sub_resource type="Resource" id="Resource_cw220"]
+script = ExtResource("16_dx3bb")
+texture = SubResource("CompressedTexture2D_5kp8c")
+scale = 1.5
+color = Color(1, 1, 1, 1)
+collision_radius = 10.0
+enable_particles = false
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_dx3bb"]
+script = ExtResource("17_bspui")
+pattern_type = 0
+bullet_scene = SubResource("PackedScene_1twkh")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = false
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_cw220")
+bullet_movement_config = SubResource("Resource_q5qd8")
+bullet_count = 20
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.02
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 850.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("17_bspui")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("18_iw78k")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemySpike" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_ft50w")
+drop_table = Array[ExtResource("2_8oi5m")]([ExtResource("3_3anjb")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -43)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.953131
+script = ExtResource("5_41ssa")
+spiral_speed = 6.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -64)
+shape = SubResource("CircleShape2D_xk8s5")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("6_kca73")
+max_hp = 15
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("7_swddm")
+damage = 10
+target_speed = 200.0
+base_speed = 200.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("8_hx7fp")]
+script = ExtResource("9_6go45")
+default_core_scene = ExtResource("10_8gign")
+attack_pattern = SubResource("Resource_dx3bb")
+attack_patterns_additive = Array[ExtResource("17_bspui")]([])
+auto_create_core = true
+
+[node name="EnemyAI2" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("11_8oi5m")
+attack_core_slot = NodePath("../AttackCoreSlot")

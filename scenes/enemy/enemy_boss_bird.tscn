@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dhspfyxcmu4pv"]
+[gd_scene load_steps=36 format=3 uid="uid://dhspfyxcmu4pv"]
 
 [ext_resource type="Script" uid="uid://cettgc1308lxy" path="res://scripts/enemy/BossBird.gd" id="1_trrge"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_5g4h4"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="12_n5io8"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="13_2wdkw"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="14_ktlex"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_oeuat"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ngv7u"]
 atlas = ExtResource("3_oeuat")
@@ -292,6 +293,7 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("13_2wdkw")
 default_core_scene = ExtResource("14_ktlex")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("14_oeuat")]([])
 auto_create_core = true
 
 [node name="CollisionShape_attack" type="CollisionShape2D" parent="."]

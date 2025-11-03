@@ -40,6 +40,12 @@ func before() -> void:
   blessing.heal_interval = 0.1  # テストを高速化
   blessing.heal_amount = 3
   blessing._proto = _proto
+
+  ## item_instを設定（_sum_pct が正しく動作するため）
+  var item_instance = ItemInstance.new(_proto)
+  # enchantmentsは既にコンストラクタで初期化されている（空のDictionary[Enchantment, int]）
+  blessing.item_inst = item_instance
+
   get_tree().root.add_child(blessing)
   blessing.add_child(_heal_timer)
 

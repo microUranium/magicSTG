@@ -40,7 +40,7 @@ shader = ExtResource("5_5gtgg")
 
 [node name="Player" type="Area2D" groups=["players"]]
 script = ExtResource("1_h6syq")
-speed = 400.0
+speed = 600.0
 metadata/_edit_lock_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

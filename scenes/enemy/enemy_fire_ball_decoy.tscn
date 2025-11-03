@@ -1,0 +1,114 @@
+[gd_scene load_steps=22 format=3 uid="uid://ou7sxfnnlbf5"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_fwcd2"]
+[ext_resource type="Texture2D" uid="uid://cif53pmcrnb25" path="res://assets/gfx/sprites/enemy_bird_fire_ball_sprite.png" id="2_fwcd2"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_41trl"]
+[ext_resource type="Script" uid="uid://cwib5irs4nlxp" path="res://scripts/enemy/FireBallDecoyAI.gd" id="4_7aii1"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="5_w155f"]
+[ext_resource type="Texture2D" uid="uid://dklpvgy02hrw8" path="res://assets/gfx/sprites/bullet_fireball_red.png" id="6_41trl"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_g4hog"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_nuobi"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_l42eh"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="10_sbbp6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mq28"]
+atlas = ExtResource("2_fwcd2")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w155f"]
+atlas = ExtResource("2_fwcd2")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jpy47"]
+atlas = ExtResource("2_fwcd2")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mq28")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w155f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jpy47")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4hog"]
+radius = 23.5372
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_10qvo"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.489362, 1)
+colors = PackedColorArray(0.73, 0.13359, 0.1022, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fwcd2"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 30.0
+scale_max = 80.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_10qvo")
+
+[sub_resource type="Resource" id="Resource_nuobi"]
+script = ExtResource("5_w155f")
+texture = ExtResource("6_41trl")
+scale = 4.0
+color = Color(1, 1, 1, 1)
+collision_radius = 32.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_fwcd2")
+animation_name = ""
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="EnemyFireBallDecoy" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_fwcd2")
+isInvincible = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.855413
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 29)
+shape = SubResource("CircleShape2D_g4hog")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_41trl")
+max_hp = 150
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("4_7aii1")
+visual_config_dark = SubResource("Resource_nuobi")
+positions = Array[Vector2]([Vector2(64, 64), Vector2(448, 64), Vector2(832, 64)])
+base_speed = 300.0
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("7_g4hog")]
+script = ExtResource("8_nuobi")
+default_core_scene = ExtResource("9_l42eh")
+attack_pattern = null
+attack_patterns_additive = Array[ExtResource("10_sbbp6")]([])
+auto_create_core = true

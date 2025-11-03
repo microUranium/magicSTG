@@ -21,6 +21,12 @@ var _velocity: Vector2 = Vector2.ZERO
 var _homing_timer: float = 0.0  # 追尾経過時間
 var _bounce_count: int = 0  # 反射回数
 
+# 螺旋移動用の内部状態
+var _spiral_current_radius: float = 0.0  # 現在の螺旋半径
+var _spiral_angle: float = 0.0  # 現在の回転角度（ラジアン）
+var _spiral_center: Vector2 = Vector2.ZERO  # 螺旋の中心位置
+var _spiral_current_speed: float = 0.0  # 現在の速度（加速・減速用）
+
 
 func _ready():
   super._ready()
@@ -87,6 +93,13 @@ func apply_movement_config(config: BulletMovementConfig = null):
   _original_speed = speed
   _velocity = direction * speed
 
+  # 螺旋移動の初期化
+  if movement_config.movement_type == BulletMovementConfig.MovementType.SPIRAL:
+    _spiral_center = global_position
+    _spiral_current_radius = 0.0
+    _spiral_angle = 0.0
+    _spiral_current_speed = movement_config.initial_speed
+
 
 func _process(delta):
   super._process(delta)
@@ -94,8 +107,11 @@ func _process(delta):
   if movement_config:
     _update_advanced_movement(delta)
 
-    # 全ての移動タイプで境界反射をチェック
-    if movement_config.bounce_factor > 0:
+    # 螺旋移動以外で境界反射をチェック
+    if (
+      movement_config.bounce_factor > 0
+      and movement_config.movement_type != BulletMovementConfig.MovementType.SPIRAL
+    ):
       _handle_boundary_bounce()
 
   # 角度を移動方向に合わせる
@@ -124,6 +140,8 @@ func _update_advanced_movement(delta: float):
       _update_homing(delta)
     BulletMovementConfig.MovementType.GRAVITY:
       _update_gravity(delta)
+    BulletMovementConfig.MovementType.SPIRAL:
+      _update_spiral(delta)
 
 
 func _update_deceleration(delta: float):
@@ -211,6 +229,58 @@ func _update_gravity(delta: float):
 
   # 速度ベースで位置を更新
   position += _velocity * delta
+
+
+func _update_spiral(delta: float):
+  """螺旋移動処理
+
+  数学的定義:
+    x = center_x + radius * cos(angle + phase_offset)
+    y = center_y + radius * sin(angle + phase_offset)
+
+  where:
+    - radius: 時間経過で増加/減少する半径
+    - angle: 回転角度（rotation_speedで変化）
+    - phase_offset: 初期角度のオフセット
+    - center: 前進方向に移動する中心点
+  """
+  # === 1. 速度の更新（加速・減速処理） ===
+  if movement_config.spiral_acceleration != 0.0:
+    _spiral_current_speed += movement_config.spiral_acceleration * delta
+    _spiral_current_speed = clamp(
+      _spiral_current_speed, movement_config.spiral_min_speed, movement_config.spiral_max_speed
+    )
+  else:
+    _spiral_current_speed = movement_config.initial_speed
+
+  # === 2. 螺旋の中心を前進方向に移動 ===
+  _spiral_center += direction * _spiral_current_speed * delta
+
+  # === 3. 半径の更新（広がり/収束） ===
+  _spiral_current_radius += movement_config.spiral_radius_growth * delta
+  # 半径が負にならないようにクランプ（内向き螺旋の終端処理）
+  _spiral_current_radius = max(0.0, _spiral_current_radius)
+
+  # === 4. 回転角度の更新（回転方向を考慮） ===
+  var rotation_direction = 1.0 if movement_config.spiral_clockwise else -1.0
+  _spiral_angle += deg_to_rad(movement_config.spiral_rotation_speed) * rotation_direction * delta
+
+  # === 5. 位相オフセットを適用した最終角度 ===
+  var total_angle = _spiral_angle + deg_to_rad(movement_config.spiral_phase_offset)
+
+  # === 6. 螺旋座標の計算 ===
+  # 螺旋を2D平面（極座標）で計算
+  var spiral_offset_local = Vector2(
+    _spiral_current_radius * cos(total_angle), _spiral_current_radius * sin(total_angle)
+  )
+
+  # === 7. 前進方向に合わせて座標を回転 ===
+  # directionの角度を取得して、螺旋オフセットを回転
+  var direction_angle = direction.angle()
+  var rotated_offset = spiral_offset_local.rotated(direction_angle)
+
+  # === 8. 最終位置の設定 ===
+  global_position = _spiral_center + rotated_offset
 
 
 func _handle_boundary_bounce():

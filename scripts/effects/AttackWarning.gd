@@ -31,6 +31,10 @@ func initialize(
 
 
 func _setup_glow_line(start: Vector2, end: Vector2, config: AttackWarningConfig):
+  if config.use_relative_position and owner_node:
+    start += owner_node.global_position - glow_line.global_position
+    end += owner_node.global_position - glow_line.global_position
+
   glow_line.clear_points()
   glow_line.add_point(start)
   glow_line.add_point(end)

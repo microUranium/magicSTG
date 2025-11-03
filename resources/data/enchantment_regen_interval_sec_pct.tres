@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://bsuqagbovywcw"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_lbf8n"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2_hn1f1"]
+
+[sub_resource type="Resource" id="Resource_afg53"]
+script = ExtResource("2_hn1f1")
+level = 1
+modifiers = {
+"regen_interval_sec_pct": 0.8
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[sub_resource type="Resource" id="Resource_x7pqb"]
+script = ExtResource("2_hn1f1")
+level = 2
+modifiers = {
+"regen_interval_sec_pct": 0.5
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[sub_resource type="Resource" id="Resource_3qxek"]
+script = ExtResource("2_hn1f1")
+level = 3
+modifiers = {
+"regen_interval_sec_pct": 0.2
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[resource]
+script = ExtResource("1_lbf8n")
+id = &"regen_interval_sec_pct"
+display_name = "速治"
+description = "回復力が上がります。"
+tiers = Array[ExtResource("2_hn1f1")]([SubResource("Resource_afg53"), SubResource("Resource_x7pqb"), SubResource("Resource_3qxek")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

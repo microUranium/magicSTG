@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StageSelectData" load_steps=19 format=3 uid="uid://dtmqpbvr6bhmq"]
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=24 format=3 uid="uid://dtmqpbvr6bhmq"]
 
 [ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
 [ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://ckbh7pwpofpdd" path="res://scripts/resources/StageData.gd" id="3_stage"]
 [ext_resource type="Texture2D" uid="uid://bpsaurnexjihk" path="res://assets/gfx/backgrounds/background_sea.png" id="4_ljvmy"]
 [ext_resource type="Texture2D" uid="uid://bv4gwdx2ixvpn" path="res://assets/gfx/backgrounds/background_ruins.png" id="5_x38wm"]
+[ext_resource type="Texture2D" uid="uid://b5ql47ydr08qy" path="res://assets/gfx/backgrounds/background_swamp.png" id="6_ljvmy"]
 
 [sub_resource type="Resource" id="StageData_1_1"]
 script = ExtResource("3_stage")
@@ -156,7 +157,58 @@ is_unlocked = true
 background_texture = ExtResource("5_x38wm")
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
+[sub_resource type="Resource" id="Resource_a27gh"]
+script = ExtResource("3_stage")
+stage_name = "4-1 霧立ち込めて"
+chapter_id = "chapter4"
+stage_id = "stage4_1"
+is_seed_fixed = true
+fixed_seed = "Ds4d11.intro-s441-s411-s431-Ds4d11.progression-s441-s411-s431-Ds4d11.progression2-s4z1-Ds4d11.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_o304x"]
+script = ExtResource("3_stage")
+stage_name = "4-2 湖沼捜索"
+chapter_id = "chapter4"
+stage_id = "stage4_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage4"
+}, {
+"count": 1,
+"pool": "stage4_boss"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_eo1bx"]
+script = ExtResource("3_stage")
+stage_name = "4-3 暴れ鳥"
+chapter_id = "chapter4"
+stage_id = "stage4_3"
+is_seed_fixed = true
+fixed_seed = "Ds4d12.intro-s441-s411-s431-Ds4d12.progression-s441-Ds4d12.progression2-s4z2-Ds4d12.resolution"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_wg655"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter4"
+chapter_name = "第4章 帰らずの沼"
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_a27gh"), SubResource("Resource_o304x"), SubResource("Resource_eo1bx")])
+is_unlocked = true
+background_texture = ExtResource("6_ljvmy")
+metadata/_custom_type_script = "uid://dnqf62vu42hqi"
+
 [resource]
 script = ExtResource("2_1ifpm")
-chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj")])
+chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj"), SubResource("Resource_wg655")])
 metadata/_custom_type_script = "uid://dpox3am3xjmyy"

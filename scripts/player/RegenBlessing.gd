@@ -15,7 +15,7 @@ func on_equip(player):
   heal_amount = _proto.base_modifiers.get("regen_amount", heal_amount)
   heal_interval = (
     _proto.base_modifiers.get("regen_interval_sec", heal_interval)
-    * _sum_pct("regen_interval_sec_pct")
+    * (1.0 + _sum_pct("regen_interval_sec_pct"))
   )
 
   player_ref = player

@@ -7,7 +7,7 @@
 script = ExtResource("2_hn1f1")
 level = 1
 modifiers = {
-"regen_interval_sec_pct": 0.8
+"regen_interval_sec_pct": -0.2
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 
@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 script = ExtResource("2_hn1f1")
 level = 2
 modifiers = {
-"regen_interval_sec_pct": 0.5
+"regen_interval_sec_pct": -0.5
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 
@@ -23,7 +23,7 @@ metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 script = ExtResource("2_hn1f1")
 level = 3
 modifiers = {
-"regen_interval_sec_pct": 0.2
+"regen_interval_sec_pct": -0.8
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 

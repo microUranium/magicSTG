@@ -8,6 +8,7 @@ signal pattern_changed(new_pattern)
 @export var default_core_scene: PackedScene
 @export var attack_pattern: AttackPattern:
   set = set_attack_pattern
+@export var attack_patterns_additive: Array[AttackPattern] = []  # 追加パターン
 @export var auto_create_core: bool = true
 
 var _cores: Array[AttackCoreBase] = []  # 複数コア対応
@@ -17,6 +18,13 @@ var _pattern_update_pending: bool = false
 func _ready() -> void:
   if auto_create_core and default_core_scene and _cores.is_empty():
     set_core(default_core_scene)
+    if attack_patterns_additive.size() > 0:
+      # 追加パターン用のコアを生成
+      for pattern in attack_patterns_additive:
+        var new_core = add_core(default_core_scene)
+        if new_core:
+          new_core.attack_pattern = pattern
+          new_core.cooldown_sec = pattern.burst_delay
 
 
 # === パターン設定の改善 ===
@@ -56,11 +64,10 @@ func add_core(core_input) -> AttackCoreBase:
   var new_core: AttackCoreBase = _create_core_from_input(core_input)
   if not new_core:
     return null
+  _setup_core(new_core)
 
   _cores.append(new_core)
   add_child(new_core)
-
-  _setup_core(new_core)
 
   emit_signal("core_changed", new_core)
   return new_core

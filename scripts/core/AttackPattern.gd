@@ -52,6 +52,7 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var continuous_damage: bool = false  # ビームが持続的にダメージを与えるかどうか
 @export var beam_visual_config: BeamVisualConfig  # ビーム外観設定
 @export var beam_direction_override: Vector2 = Vector2.ZERO  # ビーム方向の上書き（ZERO時は direction_type を使用）
+@export var beam_offset: Vector2 = Vector2(0, 50)  # ビームのオフセット位置
 
 # === カスタム設定 ===
 @export var custom_script: GDScript  # カスタム動作用
@@ -63,6 +64,12 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 
 # === 警告設定 ===
 @export var warning_configs: Array[AttackWarningConfig] = []  # 複数の警告設定（空の場合は警告なし）
+
+# === 弾丸の存続設定 ===
+@export_group("Bullet Persistence")
+@export var persist_offscreen: bool = false  # 画面外でも消えない
+@export var max_offscreen_distance: float = 2000.0  # 画面から最大2000pxまで（安全リミット）
+@export var forced_lifetime: float = 30.0  # 強制削除までの時間（デフォルト30秒）
 
 
 # パターンの基本方向を計算
@@ -77,7 +84,11 @@ func calculate_base_direction(
 
       # カスタムスクリプトで計算
     DirectionType.TO_PLAYER:
-      return (target_pos - from_pos).normalized()
+      if !pattern_type == PatternType.BEAM:
+        return (target_pos - from_pos).normalized()
+      else:
+        print("Beam attack calculating direction with offset: ", beam_offset)
+        return (target_pos - beam_offset - from_pos).normalized()
 
       # カスタムスクリプトで計算
     DirectionType.RANDOM:

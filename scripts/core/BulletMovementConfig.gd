@@ -1,7 +1,7 @@
 # 弾丸の移動設定
 class_name BulletMovementConfig extends Resource
 
-enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力
+enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋
 
 @export var movement_type: MovementType = MovementType.STRAIGHT
 @export var initial_speed: float = 200.0
@@ -30,3 +30,13 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY
 # 反射設定（全ての移動タイプで使用可能）
 @export var bounce_factor: float = 0.0  # 0-1, 境界との衝突時の反発係数
 @export var max_bounces: int = 0  # 最大反射回数、0なら無制限
+
+# 螺旋設定
+@export_group("Spiral Settings")
+@export var spiral_radius_growth: float = 50.0  # 1秒あたりの半径増加量（ピクセル/秒）、負の値で内向き螺旋
+@export var spiral_rotation_speed: float = 360.0  # 回転速度（度/秒）
+@export var spiral_clockwise: bool = true  # true=時計回り, false=反時計回り
+@export_range(0.0, 360.0, 0.1, "radians_as_degrees") var spiral_phase_offset: float = 0.0  # 開始角度オフセット（度）
+@export var spiral_acceleration: float = 0.0  # 加速度（ピクセル/秒²）、0なら等速
+@export var spiral_max_speed: float = 500.0  # 最大速度（加速時の制限）
+@export var spiral_min_speed: float = 10.0  # 最小速度（減速時の制限）

@@ -10,12 +10,14 @@ signal advance_requested
 @export var fade_time := 0.25  # フェード秒数
 @export var slide_distance_face := 300.0
 @export var slide_distance_box := 100.0
+@export var box_sprite_neutral: Texture2D  # 中立フキダシ用スプライト
+@export var box_sprite_left_right: Texture2D  # 右、左向きフキダシ用スプライト
 
 @onready var _face_left: TextureRect = $"FaceLeft"
 @onready var _face_right: TextureRect = $"FaceRight"
 @onready var _label: RichTextLabel = $"Label"
 @onready var _click_area: ColorRect = $"ClickableArea"
-@onready var _box: Control = $"Box"  # フキダシの親
+@onready var _box: NinePatchRect = $"Box"  # フキダシの親
 
 #-------------------------------------------------
 # Typing state
@@ -50,7 +52,12 @@ func _ready() -> void:
 # Public API : DialogueRunner が呼ぶ
 # --------------------------------------------------
 func set_face_textures(left_tex: Texture2D, right_tex: Texture2D = null) -> void:
-  _face_left.texture = left_tex
+  if left_tex:
+    _face_left.texture = left_tex
+    _face_left.show()
+  else:
+    _face_left.hide()
+
   if right_tex:
     _face_right.texture = right_tex
     _face_right.show()
@@ -76,10 +83,17 @@ func fade_in(box_direction: String = "left"):
   if box_direction == "left":
     _box.scale.x = 2.0  # フキダシの向きは左側
     _label.position = _label_home
-  else:  # "right"
+    _box.texture = box_sprite_left_right
+  elif box_direction == "right":
     _box.scale.x = -2.0  # フキダシの向きは右側
     _box.position.x = -_box_home.x  # フキダシ位置を反転
     _label.position.x = _label_home.x - 256  # ラベル位置を調整
+    _box.texture = box_sprite_left_right
+  else:  # "neutral"
+    _box.scale.x = 2.0  # フキダシの向きは中立
+    _box.position.x = -_box.size.x  # 中央寄せ
+    _label.position.x = _label_home.x - 128  # ラベル位置を調整
+    _box.texture = box_sprite_neutral
 
   _click_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -90,8 +104,10 @@ func fade_in(box_direction: String = "left"):
 
   if box_direction == "left":
     tw.parallel().tween_property(_box, "position", _box_home, fade_time)
-  else:  # "right"
+  elif box_direction == "right":
     tw.parallel().tween_property(_box, "position", Vector2(-_box_home.x, _box_home.y), fade_time)
+  else:  # "neutral"
+    tw.parallel().tween_property(_box, "position", Vector2(-_box.size.x, _box_home.y), fade_time)
 
   await tw.finished
 
@@ -179,10 +195,17 @@ func _set_box_direction(direction: String) -> void:
     _box.scale.x = 2.0
     _box.position = _box_home
     _label.position = _label_home
-  else:  # "right"
+    _box.texture = box_sprite_left_right
+  elif direction == "right":
     _box.scale.x = -2.0
     _box.position.x = -_box_home.x
     _label.position.x = _label_home.x - 256
+    _box.texture = box_sprite_left_right
+  else:  # "neutral"
+    _box.scale.x = 2.0
+    _box.position.x = -_box.size.x
+    _label.position.x = _label_home.x - 128
+    _box.texture = box_sprite_neutral
 
 
 #=================================================

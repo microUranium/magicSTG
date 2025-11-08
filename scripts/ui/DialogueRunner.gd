@@ -56,8 +56,13 @@ func start_dialogue_lines(dialogue_lines: Array[DialogueLine]) -> void:
 func _read_faces(_current_dialog_line: DialogueLine) -> void:
   if _current_dialog_line.face_left:
     _side_face["left"] = _current_dialog_line.face_left
+  else:
+    _side_face["left"] = null  # 明示的にクリア
+
   if _current_dialog_line.face_right:
     _side_face["right"] = _current_dialog_line.face_right
+  else:
+    _side_face["right"] = null  # 明示的にクリア
 
   _msgbox.set_face_textures(_side_face["left"], _side_face["right"])
 

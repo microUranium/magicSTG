@@ -46,6 +46,7 @@ func _ready() -> void:
   if ui_controller and ui_controller.has_ready_prompt():
     StageSignals.emit_signal("attack_cores_pause_requested", true)
     StageSignals.emit_signal("blessings_pause_requested", true)
+    StageSignals.emit_signal("player_control_pause_requested", true)
     ui_controller.ready_prompt_finished.connect(_setup_stage_environment)
     ui_controller.show_ready_prompt()
   else:
@@ -123,6 +124,7 @@ func _on_stage_cleared() -> void:
 func _on_game_over() -> void:
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)
+  StageSignals.emit_signal("player_control_pause_requested", true)
 
   # ライフサイクル処理
   var lifecycle_controller = _component_registry.get_component("lifecycle")
@@ -199,6 +201,7 @@ func _handle_dialogue_request(dd: DialogueData, finished_cb: Callable) -> void:
   """ダイアログ要求の処理"""
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)
+  StageSignals.emit_signal("player_control_pause_requested", true)
   _drunner.start_with_callback(dd, finished_cb)
 
 

@@ -22,6 +22,7 @@ var direction: Vector2
 var _is_sneaking: bool = false
 var _rear_mode: bool = false  # 後方攻撃モード
 var _damage_flash_time: float = 0.0
+var _paused: bool = false  # ポーズ状態
 
 
 func _ready() -> void:
@@ -33,6 +34,7 @@ func _ready() -> void:
   $HpNode.connect("hp_changed", Callable(self, "_on_hp_changed"))
   self.healing_received.connect(_on_heal_received)
   TargetService.register_player(self)
+  add_to_group("player_controllable")  # ポーズ管理用グループに追加
 
 
 func _process(delta):
@@ -60,6 +62,9 @@ func flash_white(duration := 0.1):
 
 
 func _handle_input(delta):
+  if _paused:  # ポーズ中は入力を無視
+    return
+
   direction = (
     Vector2(
       Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
@@ -91,6 +96,9 @@ func _clamp_inside_playrect():
 
 
 func take_damage(amount: int) -> void:
+  if _paused:  # ポーズ中はダメージを受けない
+    return
+
   var final_damage = amount
   if blessing_container:
     final_damage = blessing_container.process_damage(self, final_damage)
@@ -126,6 +134,13 @@ func _spawn_destroy_particles():
     get_tree().current_scene.add_child(p)
     p.global_position = global_position
     p.restart()
+
+
+func set_paused(paused: bool) -> void:
+  """ポーズ状態を設定"""
+  if _paused == paused:
+    return
+  _paused = paused
 
 
 func _exit_tree():

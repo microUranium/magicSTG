@@ -12,14 +12,24 @@ var _current: EnemyPatternResource
 var _token: int = 0
 var _active_tw: Tween = null
 var _last_movement_direction: Vector2 = Vector2.ZERO  # 前回の移動方向を記憶
+var _stage_lifecycle: StageLifecycleController = null
 
 
 func _ready():
   super._ready()
+  _stage_lifecycle = (
+    get_tree().root.get_node_or_null("Main/LifecycleController") as StageLifecycleController
+  )
+  if _stage_lifecycle == null:
+    print_debug("EnemyPatternedAIBase: StageLifecycleController not found in scene tree")
   _next_pattern()
 
 
 func _next_pattern():
+  if _stage_lifecycle and not _stage_lifecycle.is_stage_running():
+    print_debug("EnemyPatternedAIBase: Stage not running, skipping pattern execution")
+    return
+
   _current = (
     patterns[randi() % patterns.size()] if loop_type == 1 else patterns[_idx % patterns.size()]
   )
@@ -40,6 +50,11 @@ func _on_pattern_finished(cb_token: int) -> void:
   print_debug("Pattern finished, token: ", cb_token, " current token: ", _token)
   if cb_token != _token:  # 古いパターンは無視
     return
+
+  if _stage_lifecycle and not _stage_lifecycle.is_stage_running():
+    print_debug("EnemyPatternedAIBase: Stage not running, skipping pattern execution")
+    return
+
   _next_pattern()
 
 

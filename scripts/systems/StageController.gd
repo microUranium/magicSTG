@@ -33,6 +33,7 @@ func _ready() -> void:
 
   # StageSignalsからの攻撃コア停止要求を処理
   StageSignals.attack_cores_pause_requested.connect(_pause_attack_cores)
+  StageSignals.blessings_pause_requested.connect(_pause_blessings)
 
 
 func set_dependencies(wave_executor: WaveExecutor, dialogue_runner: DialogueRunner) -> void:
@@ -200,6 +201,7 @@ func _on_wave_failed() -> void:
 
 func _on_dialogue_completed(_dialogue_data: DialogueData) -> void:
   _pause_attack_cores(false)
+  _pause_blessings(false)
   # 敵などの外部ダイアログ完了は無視（トークン付きコールバックのみ処理）
 
 
@@ -243,3 +245,9 @@ func _pause_attack_cores(paused: bool) -> void:
   for core in get_tree().get_nodes_in_group("attack_cores"):
     if core.has_method("set_paused"):
       core.set_paused(paused)
+
+
+func _pause_blessings(paused: bool) -> void:
+  for blessing in get_tree().get_nodes_in_group("blessings"):
+    if blessing.has_method("set_paused"):
+      blessing.set_paused(paused)

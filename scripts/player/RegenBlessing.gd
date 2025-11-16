@@ -7,8 +7,18 @@ signal healing_done
 var player_ref
 var _healable: bool = false
 var _cooling: bool = false
+var heal_timer: Timer
 
-@onready var heal_timer: Timer = $HealTimer
+
+func _ready() -> void:
+  super._ready()
+
+  # HealTimerの初期化（シーンから取得するか、動的に作成）
+  heal_timer = get_node_or_null("HealTimer")
+  if not heal_timer:
+    heal_timer = Timer.new()
+    heal_timer.name = "HealTimer"
+    add_child(heal_timer)
 
 
 func on_equip(player):
@@ -25,6 +35,7 @@ func on_equip(player):
 
   heal_timer.wait_time = heal_interval
   heal_timer.timeout.connect(_on_heal_tick)
+  register_timer(heal_timer)  # ポーズ管理対象として登録
   heal_timer.start()
   _cooling = true
 

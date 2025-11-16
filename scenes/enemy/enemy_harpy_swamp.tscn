@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://w71mug48k1yx"]
+[gd_scene load_steps=30 format=3 uid="uid://w71mug48k1yx"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_cljp7"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_hpe1h"]
@@ -156,6 +156,25 @@ restore_animation = true
 dialogue_path = ""
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
+[sub_resource type="Resource" id="Resource_j6mvf"]
+script = ExtResource("7_ybftl")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
 [sub_resource type="Resource" id="Resource_638n6"]
 script = ExtResource("7_ybftl")
 movement_type = 2
@@ -177,7 +196,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u02ya"]
 script = ExtResource("6_8tou6")
-patterns = Array[ExtResource("7_ybftl")]([SubResource("Resource_ybftl"), SubResource("Resource_tak31"), SubResource("Resource_638n6")])
+patterns = Array[ExtResource("7_ybftl")]([SubResource("Resource_ybftl"), SubResource("Resource_tak31"), SubResource("Resource_j6mvf"), SubResource("Resource_638n6")])
 loop_type = 0
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 

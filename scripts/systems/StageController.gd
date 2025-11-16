@@ -33,6 +33,8 @@ func _ready() -> void:
 
   # StageSignalsからの攻撃コア停止要求を処理
   StageSignals.attack_cores_pause_requested.connect(_pause_attack_cores)
+  StageSignals.blessings_pause_requested.connect(_pause_blessings)
+  StageSignals.player_control_pause_requested.connect(_pause_player_control)
 
 
 func set_dependencies(wave_executor: WaveExecutor, dialogue_runner: DialogueRunner) -> void:
@@ -66,6 +68,8 @@ func start_stage(seed_value: String) -> bool:
     "StageController: Starting stage with seed '%s', %d events" % [seed_value, _event_queue.size()]
   )
   _pause_attack_cores(false)  # ステージ開始時は攻撃コアを有効化
+  _pause_blessings(false)  # ステージ開始時はBlessingを有効化
+  _pause_player_control(false)  # ステージ開始時はプレイヤー操作を有効化
   _execute_next_event()
   return true
 
@@ -129,6 +133,8 @@ func _execute_wave_event(event: Dictionary) -> void:
   var template_data: Dictionary = event.get("template_data", {})
 
   _pause_attack_cores(false)  # ウェーブ開始時は攻撃コアを有効化
+  _pause_blessings(false)  # ウェーブ開始時はBlessingを有効化
+  _pause_player_control(false)  # ウェーブ開始時はプレイヤー操作を有効化
   _wave_executor.execute_wave_template(template_data)
 
 
@@ -153,6 +159,8 @@ func _execute_dialogue_event(event: Dictionary) -> void:
     )
   )
   _pause_attack_cores(true)  # ダイアログ開始時は攻撃コアを停止
+  _pause_blessings(true)  # ダイアログ開始時はBlessingを停止
+  _pause_player_control(true)  # ダイアログ開始時はプレイヤー操作を無効化
 
   # DialogueConverterを使用してデータ変換
   var dialogue_data_obj := DialogueConverter.convert_json_to_dialogue_data(dialogue_data)
@@ -177,12 +185,16 @@ func _advance_to_next_event() -> void:
 func _complete_stage() -> void:
   _is_running = false
   _pause_attack_cores(true)  # ステージ完了時は攻撃コアを停止
+  _pause_blessings(true)  # ステージ完了時はBlessingを停止
+  _pause_player_control(true)  # ステージ完了時はプレイヤー操作を無効化
   stage_completed.emit()
 
 
 func _fail_stage() -> void:
   _is_running = false
   _pause_attack_cores(true)  # ステージ失敗時は攻撃コアを停止
+  _pause_blessings(true)  # ステージ失敗時はBlessingを停止
+  _pause_player_control(true)  # ステージ失敗時はプレイヤー操作を無効化
   stage_failed.emit()
 
 
@@ -200,6 +212,8 @@ func _on_wave_failed() -> void:
 
 func _on_dialogue_completed(_dialogue_data: DialogueData) -> void:
   _pause_attack_cores(false)
+  _pause_blessings(false)
+  _pause_player_control(false)
   # 敵などの外部ダイアログ完了は無視（トークン付きコールバックのみ処理）
 
 
@@ -213,12 +227,16 @@ func _on_stage_dialogue_finished(token: String) -> void:
 func stop_stage() -> void:
   _is_running = false
   _pause_attack_cores(true)  # ステージ停止時は攻撃コアを停止
+  _pause_blessings(true)  # ステージ停止時はBlessingを停止
+  _pause_player_control(true)  # ステージ停止時はプレイヤー操作を無効化
   if _wave_executor:
     _wave_executor.stop_current_wave()
 
 
 func pause_stage(paused: bool) -> void:
   _pause_attack_cores(paused)  # ステージ一時停止時は攻撃コアも同期
+  _pause_blessings(paused)  # ステージ一時停止時はBlessingも同期
+  _pause_player_control(paused)  # ステージ一時停止時はプレイヤー操作も同期
   if _wave_executor:
     _wave_executor.set_paused(paused)
 
@@ -243,3 +261,15 @@ func _pause_attack_cores(paused: bool) -> void:
   for core in get_tree().get_nodes_in_group("attack_cores"):
     if core.has_method("set_paused"):
       core.set_paused(paused)
+
+
+func _pause_blessings(paused: bool) -> void:
+  for blessing in get_tree().get_nodes_in_group("blessings"):
+    if blessing.has_method("set_paused"):
+      blessing.set_paused(paused)
+
+
+func _pause_player_control(paused: bool) -> void:
+  for player in get_tree().get_nodes_in_group("player_controllable"):
+    if player.has_method("set_paused"):
+      player.set_paused(paused)

@@ -88,3 +88,7 @@ script = ExtResource("1_4yxmm")
 [node name="ShieldSprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_rgy23")
 animation = &"idle"
+
+[node name="RecoverTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true

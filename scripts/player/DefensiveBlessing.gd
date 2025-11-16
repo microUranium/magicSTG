@@ -10,7 +10,19 @@ var recover_delay: float = 5.0
 var is_broken: bool = false
 
 var player_ref
+var recover_timer: Timer
 @onready var shield_sprite = get_node_or_null("ShieldSprite")
+
+
+func _ready() -> void:
+  super._ready()
+
+  # RecoverTimerの初期化（シーンから取得するか、動的に作成）
+  recover_timer = get_node_or_null("RecoverTimer")
+  if not recover_timer:
+    recover_timer = Timer.new()
+    recover_timer.name = "RecoverTimer"
+    add_child(recover_timer)
 
 
 func _recalc_stats() -> void:
@@ -33,6 +45,11 @@ func on_equip(player):
 
   shield_current = shield_max
   is_broken = false
+
+  # RecoverTimerのセットアップ
+  recover_timer.one_shot = true
+  recover_timer.timeout.connect(recover_shield)
+  register_timer(recover_timer)  # ポーズ管理に登録
 
   # プレイヤー被弾シグナルへ接続
   if not player_ref.is_connected("damage_received", Callable(self, "on_player_damaged")):
@@ -68,6 +85,9 @@ func process_damage(_player, damage):
 
 
 func on_player_damaged(damage):
+  if _paused:  # ポーズ中は処理しない
+    return
+
   if is_broken:
     return  # シールド破壊時は介入しない
 
@@ -87,11 +107,13 @@ func on_player_damaged(damage):
       shield_sprite.play("break")
     StageSignals.sfx_play_requested.emit("break_shield", player_ref.global_position, 0, 1.0)
     emit_signal("shield_broken")
-    # 復活タイマー起動
-    get_tree().create_timer(recover_delay).connect("timeout", Callable(self, "recover_shield"))
+    # 復活タイマー起動（Timerノードを使用）
+    recover_timer.wait_time = recover_delay
+    recover_timer.start()
 
 
 func recover_shield():
+  # Timerノードが自動的にポーズを管理するため、ポーズチェック不要
   shield_current = shield_max
   set_gauge(shield_current)  # 汎用ゲージの値を更新
   is_broken = false
@@ -102,5 +124,7 @@ func recover_shield():
 
 
 func _return_to_idle():
+  if _paused:  # ポーズ中は処理しない
+    return
   if not is_broken:
     shield_sprite.play("idle")

@@ -5,6 +5,7 @@ var current_chapter_index: int = 0
 var prev_chapter_index: int = -1
 var selected_stage: StageData = null
 var stage_buttons: Array[StageButtonController] = []
+var button_cooldown_timer: Timer = null
 
 @onready var chapter_name_label: Label = $ChapterSelectContainer/MarginContainer/ChapterName
 @onready var stage_container: Control = $VBoxContainer
@@ -15,6 +16,13 @@ var stage_buttons: Array[StageButtonController] = []
 
 
 func _ready() -> void:
+  # Setup cooldown timer
+  button_cooldown_timer = Timer.new()
+  button_cooldown_timer.wait_time = 0.5
+  button_cooldown_timer.one_shot = true
+  button_cooldown_timer.timeout.connect(_on_button_cooldown_timeout)
+  add_child(button_cooldown_timer)
+
   if chapter_prev_btn:
     chapter_prev_btn.pressed.connect(_on_chapter_prev_pressed)
   if chapter_next_btn:
@@ -50,13 +58,16 @@ func update_chapter_display() -> void:
   if chapter_name_label:
     chapter_name_label.text = current_chapter.chapter_name
 
+  StageSignals.request_background_change.emit(current_chapter.background_texture)
+  populate_stage_buttons(current_chapter)
+
+
+func _update_chapter_button_states() -> void:
+  var chapters = StageDataManager.get_unlocked_chapters()
   if chapter_prev_btn:
     chapter_prev_btn.disabled = (current_chapter_index <= 0)
   if chapter_next_btn:
     chapter_next_btn.disabled = (current_chapter_index >= chapters.size() - 1)
-
-  StageSignals.request_background_change.emit(current_chapter.background_texture)
-  populate_stage_buttons(current_chapter)
 
 
 func populate_stage_buttons(chapter: ChapterData) -> void:
@@ -99,11 +110,24 @@ func clear_stage_buttons(fade_direction: Vector2) -> void:
   await get_tree().create_timer(0.35).timeout
 
 
+func _disable_chapter_buttons() -> void:
+  if chapter_prev_btn:
+    chapter_prev_btn.disabled = true
+  if chapter_next_btn:
+    chapter_next_btn.disabled = true
+
+
+func _on_button_cooldown_timeout() -> void:
+  _update_chapter_button_states()
+
+
 func _on_chapter_prev_pressed() -> void:
   if current_chapter_index > 0:
     prev_chapter_index = current_chapter_index
     current_chapter_index -= 1
+    _disable_chapter_buttons()
     update_chapter_display()
+    button_cooldown_timer.start()
 
 
 func _on_chapter_next_pressed() -> void:
@@ -111,7 +135,9 @@ func _on_chapter_next_pressed() -> void:
   if current_chapter_index < chapters.size() - 1:
     prev_chapter_index = current_chapter_index
     current_chapter_index += 1
+    _disable_chapter_buttons()
     update_chapter_display()
+    button_cooldown_timer.start()
 
 
 func _on_stage_selected(stage_data: StageData) -> void:

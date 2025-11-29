@@ -85,6 +85,12 @@ func _schedule_next_layer_spawn(layer_state: LayerState, delay: float) -> void:
 
 
 func _on_layer_timer_spawn(layer_state: LayerState) -> void:
+  # ポーズ中はスポーン処理をスキップ
+  if get_tree().paused:
+    # ポーズ解除後に再スケジュール
+    _schedule_next_layer_spawn(layer_state, 0.1)
+    return
+
   if not layer_state.is_active or layer_state.current_event == null:
     return
 

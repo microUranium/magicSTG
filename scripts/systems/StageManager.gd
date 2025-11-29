@@ -13,6 +13,7 @@ class_name StageManager
 @export_node_path("StageUIController") var ui_controller_path: NodePath
 @export_node_path("StageEnvironmentSetup") var environment_setup_path: NodePath
 @export_node_path("StageLifecycleController") var lifecycle_controller_path: NodePath
+@export_node_path("PausePanelController") var pause_panel_path: NodePath
 
 #---------------------------------------------------------------------
 # Runtime
@@ -24,6 +25,10 @@ var _drunner: DialogueRunner
 # Component Registry
 var _component_registry: StageComponentRegistry
 
+# Pause System
+var _pause_panel: PausePanelController
+var _is_stage_paused: bool = false
+
 
 #---------------------------------------------------------------------
 # Life-cycle
@@ -34,6 +39,9 @@ func _ready() -> void:
 
   # ダイアログシステム統合
   _setup_dialogue_integration()
+
+  # ポーズシステム統合
+  _setup_pause_system()
 
   # シード値準備（即座に実行）
   _prepare_stage_seed()
@@ -95,6 +103,10 @@ func _setup_stage_environment() -> void:
   if lifecycle_controller:
     lifecycle_controller.complete_initialization()
 
+  # ポーズ有効化（ステージ開始時）
+  if _pause_panel:
+    _pause_panel.enable_pause()
+
   _connect_stage_controller_and_start()
 
 
@@ -102,6 +114,10 @@ func _setup_stage_environment() -> void:
 # Callbacks
 #---------------------------------------------------------------------
 func _on_stage_cleared() -> void:
+  # ポーズ無効化
+  if _pause_panel:
+    _pause_panel.disable_pause()
+
   # ライフサイクル処理
   var lifecycle_controller = _component_registry.get_component("lifecycle")
   if lifecycle_controller:
@@ -122,6 +138,10 @@ func _on_stage_cleared() -> void:
 
 
 func _on_game_over() -> void:
+  # ポーズ無効化
+  if _pause_panel:
+    _pause_panel.disable_pause()
+
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)
   StageSignals.emit_signal("player_control_pause_requested", true)
@@ -199,10 +219,24 @@ func _setup_dialogue_integration() -> void:
 
 func _handle_dialogue_request(dd: DialogueData, finished_cb: Callable) -> void:
   """ダイアログ要求の処理"""
+  # ダイアログ中はポーズ無効化
+  if _pause_panel:
+    _pause_panel.disable_pause()
+
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)
   StageSignals.emit_signal("player_control_pause_requested", true)
-  _drunner.start_with_callback(dd, finished_cb)
+
+  # ダイアログ終了後にポーズ再有効化
+  _drunner.start_with_callback(
+    dd,
+    func():
+      finished_cb.call()
+      # ステージ実行中のみポーズ再有効化
+      var lifecycle_controller = _component_registry.get_component("lifecycle")
+      if _pause_panel and lifecycle_controller and lifecycle_controller.is_stage_running():
+        _pause_panel.enable_pause()
+  )
 
 
 # -------------------------------------------------
@@ -285,3 +319,85 @@ func _handle_lifecycle_stage_cleared() -> void:
 func _handle_lifecycle_stage_failed() -> void:
   """ライフサイクルコントローラーからのステージ失敗通知"""
   print_debug("StageManager: Received lifecycle stage failed signal")
+
+
+#---------------------------------------------------------------------
+# Pause System
+#---------------------------------------------------------------------
+
+
+func _setup_pause_system() -> void:
+  """ポーズシステムのセットアップ"""
+  if not pause_panel_path:
+    return
+
+  _pause_panel = get_node_or_null(pause_panel_path)
+  if _pause_panel:
+    _pause_panel.pause_requested.connect(_handle_pause_requested)
+    _pause_panel.resume_requested.connect(_handle_resume_requested)
+    _pause_panel.quit_requested.connect(_handle_quit_requested)
+    print_debug("StageManager: Pause system initialized")
+  else:
+    push_warning("StageManager: PausePanel not found at path: %s" % pause_panel_path)
+
+
+func _handle_pause_requested() -> void:
+  """ポーズ要求の処理"""
+  var lifecycle_controller = _component_registry.get_component("lifecycle")
+  if not lifecycle_controller or not lifecycle_controller.is_stage_running():
+    return  # ステージ実行中のみポーズ可能
+
+  # ライフサイクル状態更新
+  lifecycle_controller.pause_stage()
+
+  # ツリー全体をポーズ
+  get_tree().paused = true
+  _is_stage_paused = true
+
+  # ポーズシグナル発行（既存システムとの互換性）
+  StageSignals.emit_signal("attack_cores_pause_requested", true)
+  StageSignals.emit_signal("blessings_pause_requested", true)
+  StageSignals.emit_signal("player_control_pause_requested", true)
+
+  # パネル表示
+  if _pause_panel:
+    _pause_panel.show_panel()
+
+  print_debug("StageManager: Stage paused")
+
+
+func _handle_resume_requested() -> void:
+  """再開要求の処理"""
+  if not _is_stage_paused:
+    return
+
+  # ツリーのポーズ解除
+  get_tree().paused = false
+  _is_stage_paused = false
+
+  # ライフサイクル状態更新
+  var lifecycle_controller = _component_registry.get_component("lifecycle")
+  if lifecycle_controller:
+    lifecycle_controller.resume_stage()
+
+  # ポーズ解除シグナル発行（既存システムとの互換性）
+  StageSignals.emit_signal("attack_cores_pause_requested", false)
+  StageSignals.emit_signal("blessings_pause_requested", false)
+  StageSignals.emit_signal("player_control_pause_requested", false)
+
+  # パネル非表示
+  if _pause_panel:
+    _pause_panel.hide_panel()
+
+  print_debug("StageManager: Stage resumed")
+
+
+func _handle_quit_requested() -> void:
+  """退出要求の処理"""
+  # ポーズ解除（シーン遷移のため）
+  if _is_stage_paused:
+    get_tree().paused = false
+    _is_stage_paused = false
+
+  # ステージ失敗として扱う
+  StageSignals.emit_signal("player_defeat_requested")

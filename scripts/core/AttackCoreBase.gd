@@ -211,6 +211,13 @@ func _start_cooldown():
 
 
 func _on_cooldown_finished():
+  # ポーズ中またはポーズフラグが立っている場合はスキップ
+  if get_tree().paused or _paused:
+    # ポーズ解除後に再試行
+    _cool_timer = get_tree().create_timer(0.1)
+    _cool_timer.timeout.connect(_on_cooldown_finished)
+    return
+
   _cooling = false
   emit_signal("core_ready_to_fire")
   emit_signal("core_cooldown_updated", cooldown_sec, cooldown_sec)

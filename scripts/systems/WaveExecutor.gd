@@ -80,6 +80,13 @@ func execute_wave_template(template_data: Dictionary) -> bool:
 
 
 func _execute_layer(layer_index: int) -> void:
+  # ポーズ中はレイヤー開始をスキップ
+  if get_tree().paused:
+    # ポーズ解除後に再試行（短い遅延で再スケジュール）
+    var retry_timer := get_tree().create_timer(0.1)
+    retry_timer.timeout.connect(_execute_layer.bind(layer_index))
+    return
+
   if not _is_executing or _is_paused:
     return
 

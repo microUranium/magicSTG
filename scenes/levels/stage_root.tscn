@@ -1,10 +1,18 @@
-[gd_scene load_steps=16 format=3 uid="uid://4jn460oodppl"]
+[gd_scene load_steps=24 format=3 uid="uid://4jn460oodppl"]
 
 [ext_resource type="PackedScene" uid="uid://b2qf1txmx5iug" path="res://scenes/ui/hud.tscn" id="1_58tok"]
+[ext_resource type="PackedScene" uid="uid://ga3wcqvh73oa" path="res://scenes/ui/pause_panel.tscn" id="2_p1fty"]
 [ext_resource type="PackedScene" uid="uid://b1315qexpkx2j" path="res://scenes/ui/controller/gauge_manager.tscn" id="2_sk5mj"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_58tok"]
 [ext_resource type="PackedScene" uid="uid://bk5e3tn2k0vcl" path="res://scenes/player/player.tscn" id="3_yuom2"]
 [ext_resource type="PackedScene" uid="uid://dkebraj3c7ik8" path="res://scenes/managers/enemy_spawner.tscn" id="4_end45"]
+[ext_resource type="Texture2D" uid="uid://bcnc3lqov4530" path="res://assets/gfx/sprites/key_arrow.png" id="4_sk5mj"]
 [ext_resource type="PackedScene" uid="uid://dxte2v852483q" path="res://scenes/managers/stage_manager.tscn" id="5_y2ubk"]
+[ext_resource type="Texture2D" uid="uid://jxq3lf58tunv" path="res://assets/gfx/sprites/key_wasd.png" id="5_yuom2"]
+[ext_resource type="Texture2D" uid="uid://qe3xiwxybqw" path="res://assets/gfx/sprites/key_shift.png" id="6_y2ubk"]
+[ext_resource type="Texture2D" uid="uid://diosbeb4yhqgj" path="res://assets/gfx/sprites/key_space.png" id="7_p1fty"]
+[ext_resource type="Texture2D" uid="uid://bnyvtvls4bof0" path="res://assets/gfx/sprites/key_esc.png" id="8_srajf"]
+[ext_resource type="Texture2D" uid="uid://s616i144gshl" path="res://assets/gfx/sprites/key_123.png" id="9_msijp"]
 [ext_resource type="Script" uid="uid://c5c6ig5pjyfhj" path="res://scripts/systems/StageAudioController.gd" id="10_m2w43"]
 [ext_resource type="AudioStream" uid="uid://bm1j3r5n5ni01" path="res://assets/audio/bgm/stage2_bgm_kari.mp3" id="11_clcak"]
 [ext_resource type="Script" uid="uid://ba5gf6vo77l0d" path="res://scripts/systems/StageEnvironmentSetup.gd" id="13_clcak"]
@@ -18,6 +26,13 @@
 
 [node name="Main" type="Node2D"]
 
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 100
+
+[node name="PausePanel" parent="PauseLayer" instance=ExtResource("2_p1fty")]
+z_index = 1
+
 [node name="Hud" parent="." instance=ExtResource("1_58tok")]
 layer = 10
 player_path = NodePath("../Player")
@@ -27,6 +42,89 @@ offset_left = 930.0
 offset_top = 193.0
 offset_right = 930.0
 offset_bottom = 193.0
+
+[node name="Control" type="VBoxContainer" parent="Hud"]
+offset_left = 923.0
+offset_top = 612.0
+offset_right = 1019.0
+offset_bottom = 948.0
+
+[node name="WASD" type="TextureRect" parent="Hud/Control"]
+layout_mode = 2
+texture = ExtResource("5_yuom2")
+
+[node name="Arrow" type="TextureRect" parent="Hud/Control/WASD"]
+layout_mode = 0
+offset_left = 98.0
+offset_right = 194.0
+offset_bottom = 64.0
+texture = ExtResource("4_sk5mj")
+
+[node name="Label2" type="Label" parent="Hud/Control/WASD"]
+layout_mode = 0
+offset_left = 220.0
+offset_right = 300.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.939333, 0.86, 1, 1)
+theme_override_fonts/font = ExtResource("3_58tok")
+theme_override_font_sizes/font_size = 32
+text = "移動"
+
+[node name="Shift" type="TextureRect" parent="Hud/Control"]
+layout_mode = 2
+texture = ExtResource("6_y2ubk")
+
+[node name="Label" type="Label" parent="Hud/Control/Shift"]
+layout_mode = 0
+offset_left = 185.0
+offset_right = 345.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.939333, 0.86, 1, 1)
+theme_override_fonts/font = ExtResource("3_58tok")
+theme_override_font_sizes/font_size = 32
+text = "スニーク"
+
+[node name="Space" type="TextureRect" parent="Hud/Control"]
+layout_mode = 2
+texture = ExtResource("7_p1fty")
+
+[node name="Label3" type="Label" parent="Hud/Control/Space"]
+layout_mode = 0
+offset_left = 127.0
+offset_right = 367.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.939333, 0.86, 1, 1)
+theme_override_fonts/font = ExtResource("3_58tok")
+theme_override_font_sizes/font_size = 32
+text = "攻撃方向反転"
+
+[node name="123" type="TextureRect" parent="Hud/Control"]
+layout_mode = 2
+texture = ExtResource("9_msijp")
+
+[node name="Label5" type="Label" parent="Hud/Control/123"]
+layout_mode = 0
+offset_left = 185.0
+offset_right = 305.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.939333, 0.86, 1, 1)
+theme_override_fonts/font = ExtResource("3_58tok")
+theme_override_font_sizes/font_size = 32
+text = "加護発動"
+
+[node name="ESC" type="TextureRect" parent="Hud/Control"]
+layout_mode = 2
+texture = ExtResource("8_srajf")
+
+[node name="Label4" type="Label" parent="Hud/Control/ESC"]
+layout_mode = 0
+offset_left = 204.0
+offset_right = 444.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.939333, 0.86, 1, 1)
+theme_override_fonts/font = ExtResource("3_58tok")
+theme_override_font_sizes/font_size = 32
+text = "ポーズ"
 
 [node name="EnemySpawner" parent="." instance=ExtResource("4_end45")]
 
@@ -40,6 +138,7 @@ audio_controller_path = NodePath("../AudioController")
 ui_controller_path = NodePath("../UIController")
 environment_setup_path = NodePath("../EnvironmentSetup")
 lifecycle_controller_path = NodePath("../LifecycleController")
+pause_panel_path = NodePath("../PauseLayer/PausePanel")
 
 [node name="Player" parent="." instance=ExtResource("3_yuom2")]
 z_index = 20

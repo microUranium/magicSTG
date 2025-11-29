@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=14 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=16 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -13,6 +13,8 @@
 [ext_resource type="AudioStream" uid="uid://cju7cocrjg6vu" path="res://assets/audio/sfx/shot_beam.wav" id="11_mkvwg"]
 [ext_resource type="AudioStream" uid="uid://bgj3ek276cp5b" path="res://assets/audio/sfx/break_shield.wav" id="12_t4efp"]
 [ext_resource type="AudioStream" uid="uid://dk4dnkdshixd5" path="res://assets/audio/sfx/hit_wood.wav" id="13_x0pdt"]
+[ext_resource type="AudioStream" uid="uid://35kps0ih7ou6" path="res://assets/audio/sfx/ui_cancel.wav" id="14_qh1xs"]
+[ext_resource type="AudioStream" uid="uid://co2t4xwn1wjpu" path="res://assets/audio/sfx/ui_hover.wav" id="15_a31j7"]
 
 [resource]
 script = ExtResource("1_tnkwu")
@@ -27,7 +29,10 @@ table = Dictionary[String, AudioStream]({
 "hit_player": ExtResource("6_hxujo"),
 "hit_shield": ExtResource("10_iwsf2"),
 "hit_wood": ExtResource("13_x0pdt"),
+"pause_close": ExtResource("14_qh1xs"),
+"pause_open": ExtResource("14_qh1xs"),
 "power_up_boss": ExtResource("8_1e7oh"),
-"shot_beam": ExtResource("11_mkvwg")
+"shot_beam": ExtResource("11_mkvwg"),
+"ui_hover": ExtResource("15_a31j7")
 })
 metadata/_custom_type_script = "uid://de03wt8svtbcg"

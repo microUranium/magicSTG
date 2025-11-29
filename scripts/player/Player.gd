@@ -32,6 +32,7 @@ func _ready() -> void:
     animated_sprite.sprite_frames.get_frame_texture("default", 0).get_size() * animated_sprite.scale
   )
   $HpNode.connect("hp_changed", Callable(self, "_on_hp_changed"))
+  StageSignals.connect("player_defeat_requested", Callable(self, "_defeated"))
   self.healing_received.connect(_on_heal_received)
   TargetService.register_player(self)
   add_to_group("player_controllable")  # ポーズ管理用グループに追加
@@ -120,12 +121,7 @@ func _on_heal_received(amount: int) -> void:
 
 func _on_hp_changed(current_hp: int, max_hp: int) -> void:
   if current_hp <= 0:
-    StageSignals.emit_request_change_background_scroll_speed(0, 0)  # Stop background scroll
-    StageSignals.emit_request_start_vibration()  # Start vibration
-    StageSignals.emit_signal("sfx_play_requested", "destroy_player", global_position, 0, 0)
-    _spawn_destroy_particles()
-    game_over.emit()
-    queue_free()
+    _defeated()
 
 
 func _spawn_destroy_particles():
@@ -145,3 +141,12 @@ func set_paused(paused: bool) -> void:
 
 func _exit_tree():
   TargetService.unregister_player()
+
+
+func _defeated():
+  StageSignals.emit_request_change_background_scroll_speed(0, 0)  # Stop background scroll
+  StageSignals.emit_request_start_vibration()  # Start vibration
+  StageSignals.emit_signal("sfx_play_requested", "destroy_player", global_position, 0, 0)
+  _spawn_destroy_particles()
+  game_over.emit()
+  queue_free()

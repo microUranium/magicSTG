@@ -50,25 +50,71 @@ MagicSTG is a bullet-hell shoot-em-up game built in Godot 4.4. The game features
 ## Development Commands
 
 ### Testing
-Run unit tests with gdUnit4:
-```bash
-# Windows
-addons/gdUnit4/runtest.cmd --godot_bin "path/to/godot.exe"
-# Or with environment variable
-set GODOT_BIN=path/to/godot.exe
-addons/gdUnit4/runtest.cmd
 
-# Linux/Mac
-addons/gdUnit4/runtest.sh --godot_bin /path/to/godot
-# Or with environment variable
-export GODOT_BIN=/path/to/godot
-addons/gdUnit4/runtest.sh
+#### Godot Binary Path
+This project uses Godot 4.4.1 Mono. The binary path is:
+```
+E:\Godot_v4.4.1-stable_mono_win64\Godot_v4.4.1-stable_mono_win64.exe
 ```
 
+#### Running Tests
+Run unit tests with gdUnit4:
+```bash
+# Windows - Using direct binary path (recommended)
+addons/gdUnit4/runtest.cmd --godot_bin "E:\Godot_v4.4.1-stable_mono_win64\Godot_v4.4.1-stable_mono_win64.exe" -a tests/unit/
+
+# Run specific test file
+addons/gdUnit4/runtest.cmd --godot_bin "E:\Godot_v4.4.1-stable_mono_win64\Godot_v4.4.1-stable_mono_win64.exe" -a tests/unit/ui/PausePanelControllerTest.gd
+
+# Or with environment variable
+set GODOT_BIN=E:\Godot_v4.4.1-stable_mono_win64\Godot_v4.4.1-stable_mono_win64.exe
+addons/gdUnit4/runtest.cmd -a tests/unit/
+
+# Linux/Mac
+addons/gdUnit4/runtest.sh --godot_bin /path/to/godot -a tests/unit/
+```
+
+#### Test Structure
 Test files are located in:
 - `tests/unit/` - Unit tests
 - `tests/integration/` - Integration tests
 - `tests/stubs/` - Test helper classes
+
+#### gdUnit4 API Notes
+When writing tests, be aware of the following:
+
+**Signal Monitoring:**
+- ✅ Use `monitor_signals(object)` - Returns a signal emitter for the object
+- ✅ Use `await assert_signal(emitter).wait_until(timeout_ms).is_emitted("signal_name", [args])`
+- ❌ Do NOT use `monitor_signal()` (singular) - This function does not exist
+- ❌ Do NOT use `GdUnitSignalCollector` - This class does not exist in current gdUnit4 version
+
+**Assertions:**
+- Use `assert_that(value)` for most assertions
+- Use `assert_int(value)`, `assert_bool(value)`, `assert_object(value)` for type-specific assertions
+- Use `await await_idle_frame()` to wait for node initialization
+- Use `await await_millis(ms)` to wait for animations/tweens
+
+**Example Signal Test:**
+```gdscript
+func test_signal_emission() -> void:
+    var emitter := monitor_signals(_controller)
+
+    _controller.do_something()
+
+    await assert_signal(emitter).wait_until(50).is_emitted("something_happened", [expected_arg])
+```
+
+**Example State Test (Preferred for simple cases):**
+```gdscript
+func test_state_change() -> void:
+    _controller.do_something()
+
+    assert_that(_controller.some_state).is_true()
+    assert_that(_controller.visible).is_false()
+```
+
+For comprehensive unit tests, prefer testing internal state changes over signal emissions when possible, as this is simpler and more reliable.
 
 ### Project Structure
 - `scripts/core/` - Core game systems and base classes

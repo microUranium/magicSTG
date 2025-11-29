@@ -1,0 +1,135 @@
+[gd_scene load_steps=5 format=3 uid="uid://ga3wcqvh73oa"]
+
+[ext_resource type="Texture2D" uid="uid://dbawqejq7exne" path="res://assets/gfx/sprites/pause_panel.png" id="1_767ou"]
+[ext_resource type="Script" uid="uid://bbxi1yeiuc4rn" path="res://scripts/ui/PausePanelController.gd" id="1_sn6ky"]
+[ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_byapq"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_byapq"]
+
+[node name="PausePanel" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sn6ky")
+
+[node name="DarkOverlay" type="ColorRect" parent="."]
+modulate = Color(0, 0, 0, 0.392157)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 405.0
+offset_top = 224.0
+offset_right = 640.0
+offset_bottom = 479.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_767ou")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 100
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="PauseLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 415.0
+offset_top = 237.0
+offset_right = 865.0
+offset_bottom = 392.0
+theme_override_colors/font_color = Color(0.970442, 0.915186, 0.962053, 1)
+theme_override_fonts/font = ExtResource("2_byapq")
+theme_override_font_sizes/font_size = 128
+text = "PAUSE"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 455.0
+offset_right = 640.0
+offset_bottom = 550.0
+theme_override_constants/separation = 95
+alignment = 1
+
+[node name="Back" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Back"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.418252, 0.485805, 0.831039, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_byapq")
+theme_override_font_sizes/font_size = 64
+text = "もどる"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="VBoxContainer/Back"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.0
+offset_top = -29.0
+offset_right = -33.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 1.76)
+
+[node name="Escape" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Escape"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.968132, 0.25534, 0.461148, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_byapq")
+theme_override_font_sizes/font_size = 64
+text = "あきらめる"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="VBoxContainer/Escape"]
+anchors_preset = 0
+offset_left = -161.0
+offset_top = -29.0
+offset_right = -97.0
+offset_bottom = 9.0
+scale = Vector2(4.96382, 1.76473)

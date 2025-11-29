@@ -10,6 +10,7 @@ signal destroy_bullet
 signal attack_cores_pause_requested(paused: bool)
 signal blessings_pause_requested(paused: bool)
 signal player_control_pause_requested(paused: bool)
+signal player_defeat_requested
 
 ## ───── BGM 系シグナル ─────
 signal bgm_play_requested(stream: AudioStream, fade_time: float)

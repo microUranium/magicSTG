@@ -6,6 +6,9 @@ var _active: AudioStreamPlayer = _a
 
 
 func _ready():
+  # ポーズ中もBGMを継続再生
+  process_mode = Node.PROCESS_MODE_ALWAYS
+
   add_child(_a)
   add_child(_b)
   _a.bus = "Music"

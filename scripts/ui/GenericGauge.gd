@@ -1,6 +1,7 @@
 extends Control
 
 var _icon: TextureRect
+var _icon_background: TextureRect
 var _bar: TextureProgressBar
 var _label: RichTextLabel
 
@@ -16,6 +17,7 @@ func init_from_provider(p: GaugeProvider) -> void:
   _provider = p
 
   _icon = $Icon
+  _icon_background = $IconBackGround
   _bar = $Bar
   _label = $Name
 
@@ -24,6 +26,7 @@ func init_from_provider(p: GaugeProvider) -> void:
     _icon.texture = p.gauge_icon
   else:
     _icon.visible = false
+    _icon_background.visible = false
 
   # 2) ラベル
   _label.text = str(p.gauge_label) if p.gauge_label != "" else str(p.name)

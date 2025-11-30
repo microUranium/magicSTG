@@ -9,6 +9,7 @@ var _managed_timers: Array[Timer] = []  # Timerノードの管理
 var item_inst: ItemInstance:
   set(v):
     item_inst = v
+    gauge_icon = v.prototype.icon
     _proto = v.prototype as BlessingItem
     _recalc_stats()
 

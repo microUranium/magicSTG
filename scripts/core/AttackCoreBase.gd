@@ -30,6 +30,7 @@ var _last_fire_success: bool = false
 var item_inst: ItemInstance:
   set(v):
     item_inst = v
+    gauge_icon = v.prototype.icon
     _proto = v.prototype as AttackCoreItem
     _update_attack_pattern_stats()
 

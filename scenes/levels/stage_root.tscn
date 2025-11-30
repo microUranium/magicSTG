@@ -39,9 +39,9 @@ player_path = NodePath("../Player")
 
 [node name="GaugeManager" parent="Hud" instance=ExtResource("2_sk5mj")]
 offset_left = 930.0
-offset_top = 193.0
+offset_top = 106.0
 offset_right = 930.0
-offset_bottom = 193.0
+offset_bottom = 106.0
 
 [node name="Control" type="VBoxContainer" parent="Hud"]
 offset_left = 923.0

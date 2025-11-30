@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2qf1txmx5iug"]
+[gd_scene load_steps=10 format=3 uid="uid://b2qf1txmx5iug"]
 
 [ext_resource type="Script" uid="uid://djv35rytt1dm7" path="res://scripts/ui/HUD.gd" id="1_jn2t8"]
 [ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="2_6axep"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dxio5rlmk5q24" path="res://assets/gfx/sprites/HPBar_over.png" id="3_6axep"]
 [ext_resource type="Script" uid="uid://dsf860vniuhha" path="res://scripts/ui/HUDFlash.gd" id="3_basyl"]
 [ext_resource type="Texture2D" uid="uid://caxwqrvh1bh3n" path="res://assets/gfx/sprites/HPBar_progress.png" id="4_basyl"]
+[ext_resource type="FontFile" uid="uid://d2gbffi61660y" path="res://assets/fonts/prstartk.ttf" id="8_h022r"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6axep"]
 
@@ -37,12 +38,25 @@ script = ExtResource("3_basyl")
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -371.0
-offset_right = -115.0
-offset_bottom = 256.0
+offset_left = -348.0
+offset_top = -49.0
+offset_right = -92.0
+offset_bottom = 207.0
 grow_horizontal = 0
 nine_patch_stretch = true
 texture_under = ExtResource("2_jggq7")
 texture_over = ExtResource("3_6axep")
 texture_progress = ExtResource("4_basyl")
 script = ExtResource("2_y0j1j")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 909.0
+offset_top = 46.0
+offset_right = 1130.0
+offset_bottom = 69.0
+theme_override_colors/font_color = Color(0.706568, 0.128738, 0.728989, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_h022r")
+theme_override_font_sizes/font_size = 17
+text = "Felis Silvest"

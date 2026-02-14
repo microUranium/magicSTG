@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://8jwe65k2neri"]
+
+[ext_resource type="Script" uid="uid://bf8orvxwee5kf" path="res://scripts/player/ScytheBullet.gd" id="1_b4r8y"]
+[ext_resource type="Texture2D" uid="uid://k553rt5crxyj" path="res://assets/gfx/sprites/bullet_enemy_scythe.png" id="4_n48s1"]
+
+[sub_resource type="Curve" id="Curve_nkjcx"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_un7sl"]
+curve = SubResource("Curve_nkjcx")
+
+[sub_resource type="Gradient" id="Gradient_di7cf"]
+offsets = PackedFloat32Array(0.141379, 0.92069)
+colors = PackedColorArray(0.956663, 0.563656, 0.793715, 1, 1, 0.868982, 0.857259, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6u5b2"]
+gradient = SubResource("Gradient_di7cf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4yv15"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 3.05
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 12.0
+color_ramp = SubResource("GradientTexture1D_6u5b2")
+alpha_curve = SubResource("CurveTexture_un7sl")
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_s8dhy"]
+points = PackedVector2Array(18.5, 23, 22, 6.5, 18, -9, 9, -19, -1.5, -25.5, -3, -23, 7, -17, 15.5, -8, 20, 6)
+
+[node name="ScytheBullet" type="Area2D"]
+position = Vector2(0, -1)
+collision_layer = 2
+script = ExtResource("1_b4r8y")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(33, -76)
+amount = 16
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_4yv15")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(28, -28)
+scale = Vector2(2, 2)
+texture = ExtResource("4_n48s1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(39, -28)
+scale = Vector2(2, 2)
+shape = SubResource("ConvexPolygonShape2D_s8dhy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

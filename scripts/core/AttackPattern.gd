@@ -8,6 +8,10 @@ enum DirectionType { FIXED, TO_PLAYER, RANDOM, CIRCLE, CUSTOM }  # 固定方向 
 
 enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # カーブ  # 軌道→直進  # 追尾
 
+enum SpawnPositionMode {
+  OWNER_POSITION, FIXED_ABSOLUTE, RELATIVE_TO_OWNER, RELATIVE_TO_TARGET, CUSTOM  # デフォルト: オーナーの位置  # 絶対座標（ワールド座標系）  # 相対座標（オーナーからのオフセット）  # 相対座標（ターゲットからのオフセット）  # カスタムスクリプトで計算
+}
+
 # === 基本設定 ===
 @export var pattern_type: PatternType = PatternType.SINGLE_SHOT
 @export var bullet_scene: PackedScene
@@ -28,6 +32,12 @@ enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # 
 @export var rapid_fire_count: int = 1
 @export var rapid_fire_interval: float = 0.1
 @export var burst_delay: float = 0.5  # 複数バースト間の間隔
+
+# === 発射位置設定 ===
+@export_group("Spawn Position")
+@export var spawn_position_mode: SpawnPositionMode = SpawnPositionMode.OWNER_POSITION
+@export var spawn_position_offset: Vector2 = Vector2.ZERO  # 固定座標またはオフセット
+@export var spawn_positions_multi: Array[Vector2] = []  # 複数位置（空なら単一位置を使用）
 
 # === 方向設定 ===
 @export var direction_type: DirectionType = DirectionType.TO_PLAYER
@@ -144,3 +154,53 @@ func calculate_random_spread_direction(base_dir: Vector2) -> Vector2:
 # パターンが複合型かどうか
 func is_composite_pattern() -> bool:
   return pattern_layers.size() > 0
+
+
+# 発射位置を計算
+func calculate_spawn_position(
+  owner_pos: Vector2, target_pos: Vector2, bullet_index: int = 0
+) -> Vector2:
+  match spawn_position_mode:
+    SpawnPositionMode.OWNER_POSITION:
+      # デフォルト: オーナーの位置
+      return owner_pos
+
+    SpawnPositionMode.FIXED_ABSOLUTE:
+      # 絶対座標（ワールド座標系）
+      if spawn_positions_multi.size() > 0:
+        # 複数位置が設定されている場合はインデックスで選択
+        var idx = bullet_index % spawn_positions_multi.size()
+        return spawn_positions_multi[idx]
+      # 単一位置の場合
+      return spawn_position_offset
+
+    SpawnPositionMode.RELATIVE_TO_OWNER:
+      # 相対座標（オーナーからのオフセット）
+      if spawn_positions_multi.size() > 0:
+        # 複数位置が設定されている場合はインデックスで選択
+        var idx = bullet_index % spawn_positions_multi.size()
+        return owner_pos + spawn_positions_multi[idx]
+      # 単一位置の場合
+      return owner_pos + spawn_position_offset
+
+    SpawnPositionMode.RELATIVE_TO_TARGET:
+      # 相対座標（ターゲットからのオフセット）
+      if spawn_positions_multi.size() > 0:
+        # 複数位置が設定されている場合はインデックスで選択
+        var idx = bullet_index % spawn_positions_multi.size()
+        return target_pos + spawn_positions_multi[idx]
+      # 単一位置の場合
+      return target_pos + spawn_position_offset
+
+    SpawnPositionMode.CUSTOM:
+      # カスタムスクリプトで計算
+      if custom_script and custom_script.has_method("calculate_spawn_position"):
+        return custom_script.calculate_spawn_position(
+          owner_pos, target_pos, bullet_index, custom_parameters
+        )
+      # カスタムスクリプトがない場合はオーナー位置にフォールバック
+      return owner_pos
+
+    _:
+      # 未知のモードの場合はオーナー位置にフォールバック
+      return owner_pos

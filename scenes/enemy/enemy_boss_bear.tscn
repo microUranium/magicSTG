@@ -1,0 +1,320 @@
+[gd_scene load_steps=40 format=3 uid="uid://c0omtihvvaieb"]
+
+[ext_resource type="Script" uid="uid://8rohnyi311pb" path="res://scripts/enemy/BossBear.gd" id="1_grr34"]
+[ext_resource type="Texture2D" uid="uid://i11btmh4g00n" path="res://assets/gfx/sprites/enemy_boss_bear_sprite.png" id="2_7infs"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_8gjqd"]
+[ext_resource type="Script" uid="uid://bal3pdrbrhyn8" path="res://scripts/enemy/BossBearAI.gd" id="4_g7xud"]
+[ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_oad3j"]
+[ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="7_bqy6d"]
+[ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="8_7msdg"]
+[ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="9_st8mf"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="11_wps4d"]
+[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="13_fsri7"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_8cehh"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_ad74b"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_q3hgb"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_r3ja4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ws6x4"]
+atlas = ExtResource("2_7infs")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iymdn"]
+atlas = ExtResource("2_7infs")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gjc13"]
+atlas = ExtResource("2_7infs")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nlkf"]
+atlas = ExtResource("2_7infs")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ws6x4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iymdn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gjc13")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nlkf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p4pu0"]
+radius = 53.0
+height = 182.0
+
+[sub_resource type="Resource" id="Resource_oovd5"]
+script = ExtResource("7_bqy6d")
+movement_type = 0
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s4d11.battle_conversation"
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_8gjqd"]
+script = ExtResource("6_oad3j")
+patterns = Array[ExtResource("7_bqy6d")]([ExtResource("8_7msdg"), ExtResource("9_st8mf"), SubResource("Resource_oovd5")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_clw6s"]
+script = ExtResource("7_bqy6d")
+movement_type = 0
+move_to = Vector2(196, 144)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_f0ufh"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_mnf1d"]
+script = ExtResource("7_bqy6d")
+movement_type = 0
+move_to = Vector2(700, 144)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_aaifb"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_g7xud"]
+script = ExtResource("6_oad3j")
+patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_ws6x4"]
+script = ExtResource("7_bqy6d")
+movement_type = 1
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 270.0
+move_speed = 200.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_gjc13"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 25.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_4nlkf"]
+script = ExtResource("7_bqy6d")
+movement_type = 0
+move_to = Vector2(448, -128)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_p4pu0"]
+script = ExtResource("7_bqy6d")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_iymdn"]
+script = ExtResource("6_oad3j")
+patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_ws6x4"), SubResource("Resource_gjc13"), SubResource("Resource_4nlkf"), SubResource("Resource_p4pu0")])
+loop_type = 0
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Curve" id="Curve_ws6x4"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_iymdn"]
+curve = SubResource("Curve_ws6x4")
+
+[sub_resource type="Gradient" id="Gradient_gjc13"]
+offsets = PackedFloat32Array(0.474453, 1)
+colors = PackedColorArray(0.217, 0.031, 0.31, 1, 0.7189, 0.3367, 0.91, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4nlkf"]
+gradient = SubResource("Gradient_gjc13")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p4pu0"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_4nlkf")
+alpha_curve = SubResource("CurveTexture_iymdn")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8gjqd"]
+load_path = "res://.godot/imported/bullet_dark.png-138f4a4e0c2515b3a2d95bbaae1835f4.ctex"
+
+[sub_resource type="Resource" id="Resource_bymuh"]
+script = ExtResource("11_wps4d")
+texture = SubResource("CompressedTexture2D_8gjqd")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_p4pu0")
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="BossBear" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_grr34")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.528244
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-13, -24)
+shape = SubResource("CapsuleShape2D_p4pu0")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("4_8gjqd")
+max_hp = 800
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("4_g7xud")
+phases = Array[ExtResource("6_oad3j")]([SubResource("Resource_8gjqd"), SubResource("Resource_g7xud"), SubResource("Resource_iymdn")])
+visual_config = SubResource("Resource_bymuh")
+_bgm = ExtResource("13_fsri7")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("14_8cehh")]
+script = ExtResource("15_ad74b")
+default_core_scene = ExtResource("16_q3hgb")
+attack_pattern = null
+attack_patterns_additive = Array[ExtResource("17_r3ja4")]([])
+auto_create_core = true

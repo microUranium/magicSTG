@@ -177,7 +177,11 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     else:
       # 通常の方向計算
       bullet_dir = pattern.calculate_spread_direction(i, pattern.bullet_count, base_dir)
-    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, i):
+
+    # 発射位置を計算
+    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
+
+    if not _spawn_bullet(pattern, bullet_dir, spawn_pos, i):
       success = false
 
   if is_inside_tree():
@@ -198,7 +202,13 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
         _owner_actor.global_position, target_pos, _rear_firing_mode
       )
       var bullet_dir = pattern.calculate_spread_direction(burst, pattern.rapid_fire_count, base_dir)
-      if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, burst):
+
+      # 発射位置を計算
+      var spawn_pos = pattern.calculate_spawn_position(
+        _owner_actor.global_position, target_pos, burst
+      )
+
+      if not _spawn_bullet(pattern, bullet_dir, spawn_pos, burst):
         success = false
     elif not await _execute_single_shot(pattern):
       success = false
@@ -217,7 +227,10 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
 
   var success = true
   for i in range(pattern.bullet_count):
-    var bullet = _create_barrier_bullet(pattern, i, bullet_group, target_pos)
+    # 発射位置を計算
+    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
+
+    var bullet = _create_barrier_bullet(pattern, i, bullet_group, spawn_pos)
 
     if bullet:
       _start_barrier_bullet(bullet, pattern)
@@ -243,7 +256,10 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
     var spiral_angle = (TAU / pattern.bullet_count) * i
     var bullet_dir = base_dir.rotated(spiral_angle)
 
-    if not _spawn_bullet(pattern, bullet_dir, _owner_actor.global_position, i):
+    # 発射位置を計算
+    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
+
+    if not _spawn_bullet(pattern, bullet_dir, spawn_pos, i):
       success = false
 
     # 螺旋の時間差
@@ -275,13 +291,17 @@ func _execute_beam(pattern: AttackPattern) -> bool:
 
   # 複数ビームの生成
   var created_beams: Array[Node] = []
+  var target_pos = _get_player_position()
 
   for i in range(beam_count):
     var beam_instance = pattern.beam_scene.instantiate()
     parent.add_child(beam_instance)
 
+    # 発射位置を計算
+    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
+
     if _owner_actor:
-      beam_instance.global_position = _owner_actor.global_position
+      beam_instance.global_position = spawn_pos
     else:
       push_warning("UniversalAttackCore: Owner actor is not set for beam.")
 
@@ -473,7 +493,7 @@ func _spawn_bullet(
 
 
 func _create_barrier_bullet(
-  pattern: AttackPattern, index: int, group_id: String, target_pos: Vector2
+  pattern: AttackPattern, index: int, group_id: String, spawn_pos: Vector2
 ):
   """バリア弾専用の弾丸を生成"""
   if not pattern.bullet_scene:
@@ -488,6 +508,9 @@ func _create_barrier_bullet(
 
   var bullet = pattern.bullet_scene.instantiate()
   parent.add_child(bullet)
+
+  # バリア弾の初期位置を設定
+  bullet.global_position = spawn_pos
 
   # 視覚・動作設定の適用
   _apply_bullet_configs(bullet, pattern)
@@ -546,6 +569,15 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: i
       bullet.apply_movement_config(modified_config)
     else:
       bullet.apply_movement_config(pattern.bullet_movement_config)
+
+    # 螺旋移動 + RELATIVE_TO_TARGET の場合、螺旋の中心をターゲット位置に設定
+    if (
+      pattern.bullet_movement_config.movement_type == BulletMovementConfig.MovementType.SPIRAL
+      and pattern.spawn_position_mode == AttackPattern.SpawnPositionMode.RELATIVE_TO_TARGET
+      and bullet.has_method("set_spiral_center")
+    ):
+      var target_pos = _get_player_position()
+      bullet.set_spiral_center(target_pos)
 
   # バリア弾の動作設定
   if pattern.barrier_movement_config and bullet.has_method("apply_barrier_movement_config"):
@@ -673,7 +705,11 @@ func _show_attack_warning() -> Vector2:
   for warning_config in attack_pattern.warning_configs:
     var warning_scene = preload("res://scenes/effects/attack_warning.tscn")
     var warning = warning_scene.instantiate()
-    get_tree().current_scene.add_child(warning)
+    # テスト環境では current_scene が null の可能性があるため、フォールバック処理を追加
+    var parent = get_tree().current_scene
+    if parent == null:
+      parent = get_tree().root
+    parent.add_child(warning)
 
     # 警告線の開始座標を計算
     var start_pos: Vector2

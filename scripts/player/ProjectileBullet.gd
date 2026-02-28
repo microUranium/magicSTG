@@ -28,6 +28,22 @@ func _ready():
     tw.play()
 
 
+func _immediate_removal():
+  """即座削除（画面外・敵ヒット時）
+  UniversalBulletでオーバーライド可能"""
+  _create_explosion_effect()
+  _handle_particle_cleanup()
+  queue_free()
+
+
+func _start_fade_out():
+  """フェードアウト開始（寿命・射程終了時）
+  UniversalBulletでオーバーライド可能"""
+  _create_explosion_effect()
+  _handle_particle_cleanup()
+  queue_free()
+
+
 func _process(delta):
   # === 移動処理 ===
   position += direction * speed * delta
@@ -45,10 +61,8 @@ func _process(delta):
 
   if not is_onscreen:
     if not persist_offscreen:
-      # 通常の削除
-      _create_explosion_effect()
-      _handle_particle_cleanup()
-      queue_free()
+      # 通常の削除（即座削除、フェードアウトなし）
+      _immediate_removal()
       return
     else:
       # 距離制限チェック
@@ -60,14 +74,12 @@ func _process(delta):
   # === 既存の削除条件（射程・寿命） ===
   _moving_distance += speed * delta
   if bullet_range > 0 and _moving_distance >= bullet_range:
-    _create_explosion_effect()
-    _handle_particle_cleanup()
-    queue_free()
+    # フェードアウト付き削除
+    _start_fade_out()
     return
 
   _lifetime_timer += delta
   if bullet_lifetime > 0 and _lifetime_timer >= bullet_lifetime:
-    _create_explosion_effect()
-    _handle_particle_cleanup()
-    queue_free()
+    # フェードアウト付き削除
+    _start_fade_out()
     return

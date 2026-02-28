@@ -88,7 +88,11 @@ func _create_single_segment(index: int, prev_node: Node2D) -> WormSegment:
     segment_instance.set_script(preload("res://scripts/enemy/WormSegment.gd"))
 
   # 節をシーンに追加
-  get_tree().current_scene.add_child(segment_instance)
+  # テスト環境では current_scene が null の可能性があるため、フォールバック処理を追加
+  var parent = get_tree().current_scene
+  if parent == null:
+    parent = get_tree().root
+  parent.add_child(segment_instance)
 
   # 追従遅延の計算（後ろの節ほど遅延が大きい）
   var delay = base_delay_frames + (index * delay_increment)

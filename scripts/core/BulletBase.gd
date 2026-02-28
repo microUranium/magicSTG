@@ -13,6 +13,13 @@ func _ready():
 
 
 func _destroy_bullet() -> void:
+  """シグナルによる弾の破壊（即座削除）"""
+  _immediate_removal()
+
+
+func _immediate_removal():
+  """即座削除（画面外・敵ヒット時）
+  ProjectileBullet/UniversalBulletでオーバーライド可能"""
   _create_explosion_effect()
   _handle_particle_cleanup()
   queue_free()
@@ -37,6 +44,5 @@ func _on_area_entered(body):
 
     # 貫通判定
     if penetration_count == 0 or (penetration_count > 0 and hit_count >= penetration_count):
-      _create_explosion_effect()
-      _handle_particle_cleanup()
-      queue_free()
+      # 敵ヒット時は即座削除（フェードアウトなし）
+      _immediate_removal()

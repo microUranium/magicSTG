@@ -104,6 +104,9 @@ bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
 burst_delay = 3.0
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
 direction_type = 1
 base_direction = Vector2(0, 1)
 angle_spread = 0.0
@@ -154,6 +157,10 @@ spiral_phase_offset = 0.0
 spiral_acceleration = 0.0
 spiral_max_speed = 500.0
 spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 0
+initial_rotation = 0.0
+angular_velocity = 0.0
 metadata/_custom_type_script = "uid://urppv4s7es6g"
 
 [sub_resource type="Curve" id="Curve_6l0x7"]
@@ -196,6 +203,9 @@ collision_radius = 16.0
 enable_particles = false
 animation_name = ""
 explosion_config = SubResource("Resource_pwxes")
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [sub_resource type="Resource" id="Resource_uiagi"]
@@ -214,6 +224,9 @@ bullet_count = 1
 rapid_fire_count = 40
 rapid_fire_interval = 0.05
 burst_delay = 2.0
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
 direction_type = 2
 base_direction = Vector2(0, 1)
 angle_spread = 360.0

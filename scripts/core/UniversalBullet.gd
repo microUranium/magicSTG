@@ -27,6 +27,14 @@ var _spiral_angle: float = 0.0  # 現在の回転角度（ラジアン）
 var _spiral_center: Vector2 = Vector2.ZERO  # 螺旋の中心位置
 var _spiral_current_speed: float = 0.0  # 現在の速度（加速・減速用）
 
+# フェード管理
+enum FadeState { NONE, FADE_IN, VISIBLE, FADE_OUT }
+var _fade_state: FadeState = FadeState.NONE
+var _fade_timer: float = 0.0
+var _base_color: Color = Color.WHITE  # config.colorの元の値を保持
+var _current_alpha: float = 1.0
+var _fade_out_start_alpha: float = 1.0  # フェードアウト開始時のアルファ値
+
 
 func _ready():
   super._ready()
@@ -57,7 +65,9 @@ func _apply_visual_settings():
     sprite.texture = config.texture
   if sprite:
     sprite.scale = Vector2(config.scale, config.scale)
-    sprite.modulate = config.color
+    # フェード用に基本カラーを保存
+    _base_color = config.color
+    # 初期カラーはフェード初期化後に設定
 
   # コリジョン設定
   if config.collision_radius > 0 and collision:
@@ -81,6 +91,9 @@ func _apply_visual_settings():
     audio_player.stream = config.spawn_sound
     audio_player.play()
 
+  # フェード初期化
+  _initialize_fade()
+
 
 func apply_movement_config(config: BulletMovementConfig = null):
   """移動設定の適用"""
@@ -93,16 +106,32 @@ func apply_movement_config(config: BulletMovementConfig = null):
   _original_speed = speed
   _velocity = direction * speed
 
+  # 初期角度の設定（FIXED/SELF_ROTATIONモードの場合）
+  if (
+    movement_config.rotation_mode == BulletMovementConfig.RotationMode.FIXED
+    or movement_config.rotation_mode == BulletMovementConfig.RotationMode.SELF_ROTATION
+  ):
+    rotation = deg_to_rad(movement_config.initial_rotation)
+
   # 螺旋移動の初期化
   if movement_config.movement_type == BulletMovementConfig.MovementType.SPIRAL:
-    _spiral_center = global_position
-    _spiral_current_radius = 0.0
+    _spiral_center = global_position  # デフォルトは弾の生成位置
+    _spiral_current_radius = movement_config.spiral_initial_radius
     _spiral_angle = 0.0
     _spiral_current_speed = movement_config.initial_speed
 
 
+func set_spiral_center(center_pos: Vector2) -> void:
+  """螺旋の中心位置を外部から設定する（RELATIVE_TO_TARGET等で使用）"""
+  _spiral_center = center_pos
+
+
 func _process(delta):
   super._process(delta)
+
+  # フェード更新（FADE_INまたはFADE_OUTの場合のみ）
+  if _fade_state == FadeState.FADE_IN or _fade_state == FadeState.FADE_OUT:
+    _update_fade(delta)
 
   if movement_config:
     _update_advanced_movement(delta)
@@ -114,11 +143,24 @@ func _process(delta):
     ):
       _handle_boundary_bounce()
 
-  # 角度を移動方向に合わせる
-  var _direction = (global_position - _prev_position).normalized()
-  if _direction != Vector2.ZERO:
-    var rotation_angle = _direction.angle() + PI / 2
-    rotation = rotation_angle
+  # 回転モードに応じて弾を回転
+  if movement_config:
+    match movement_config.rotation_mode:
+      BulletMovementConfig.RotationMode.MOVEMENT_DIRECTION:
+        # 移動方向に合わせる
+        var _direction = (global_position - _prev_position).normalized()
+        if _direction != Vector2.ZERO:
+          var rotation_angle = _direction.angle() + PI / 2
+          rotation = rotation_angle
+
+      BulletMovementConfig.RotationMode.SELF_ROTATION:
+        # 角速度で自転
+        rotation += deg_to_rad(movement_config.angular_velocity) * delta
+
+      BulletMovementConfig.RotationMode.FIXED:
+        # 回転しない（何もしない）
+        pass
+
   _prev_position = global_position
 
 
@@ -259,7 +301,7 @@ func _update_spiral(delta: float):
   # === 3. 半径の更新（広がり/収束） ===
   _spiral_current_radius += movement_config.spiral_radius_growth * delta
   # 半径が負にならないようにクランプ（内向き螺旋の終端処理）
-  _spiral_current_radius = max(0.0, _spiral_current_radius)
+  # _spiral_current_radius = max(0.0, _spiral_current_radius)
 
   # === 4. 回転角度の更新（回転方向を考慮） ===
   var rotation_direction = 1.0 if movement_config.spiral_clockwise else -1.0
@@ -275,12 +317,15 @@ func _update_spiral(delta: float):
   )
 
   # === 7. 前進方向に合わせて座標を回転 ===
-  # directionの角度を取得して、螺旋オフセットを回転
-  var direction_angle = direction.angle()
-  var rotated_offset = spiral_offset_local.rotated(direction_angle)
+  # initial_speedが0の場合（中心が固定）、directionによる回転を適用しない
+  var spiral_offset = spiral_offset_local
+  if _spiral_current_speed != 0.0:
+    # 中心が移動する場合のみ、directionの角度を取得して螺旋オフセットを回転
+    var direction_angle = direction.angle()
+    spiral_offset = spiral_offset_local.rotated(direction_angle)
 
   # === 8. 最終位置の設定 ===
-  global_position = _spiral_center + rotated_offset
+  global_position = _spiral_center + spiral_offset
 
 
 func _handle_boundary_bounce():
@@ -335,6 +380,93 @@ func _handle_boundary_bounce():
   # 反射が発生した場合はカウンターを増加
   if bounced:
     _bounce_count += 1
+
+
+func _initialize_fade():
+  """フェード機能の初期化"""
+  if not bullet_config:
+    _fade_state = FadeState.VISIBLE
+    _current_alpha = 1.0
+    return
+
+  # フェードイン設定の適用
+  if bullet_config.fade_in_duration > 0.0:
+    _fade_state = FadeState.FADE_IN
+    _current_alpha = bullet_config.fade_in_initial_alpha
+    _fade_timer = 0.0
+  else:
+    _fade_state = FadeState.VISIBLE
+    _current_alpha = 1.0
+
+  # 初期アルファを適用
+  _update_sprite_alpha()
+
+
+func _update_fade(delta: float):
+  """フェード状態の更新"""
+  if not bullet_config:
+    return
+
+  match _fade_state:
+    FadeState.FADE_IN:
+      _fade_timer += delta
+      var progress = _fade_timer / bullet_config.fade_in_duration
+
+      if progress >= 1.0:
+        # フェードイン完了
+        _current_alpha = 1.0
+        _fade_state = FadeState.VISIBLE
+      else:
+        # 線形補間: initial_alpha → 1.0
+        _current_alpha = lerp(bullet_config.fade_in_initial_alpha, 1.0, progress)
+
+      _update_sprite_alpha()
+
+    FadeState.FADE_OUT:
+      _fade_timer += delta
+      var progress = _fade_timer / bullet_config.fade_out_duration
+
+      if progress >= 1.0:
+        # フェードアウト完了 → 削除
+        _finalize_bullet_removal()
+      else:
+        # 開始時のアルファから0.0へ線形補間
+        _current_alpha = lerp(_fade_out_start_alpha, 0.0, progress)
+        _update_sprite_alpha()
+
+
+func _update_sprite_alpha():
+  """スプライトのアルファ値を現在のフェード状態に基づいて更新"""
+  if sprite:
+    sprite.modulate = Color(
+      _base_color.r, _base_color.g, _base_color.b, _base_color.a * _current_alpha  # 元のアルファと掛け合わせ
+    )
+
+
+func _immediate_removal():
+  """画面外・敵ヒット時の即座削除"""
+  _create_explosion_effect()
+  _handle_particle_cleanup()
+  queue_free()
+
+
+func _start_fade_out():
+  """寿命・射程終了時のフェードアウト開始"""
+  if bullet_config and bullet_config.fade_out_duration > 0.0:
+    _fade_state = FadeState.FADE_OUT
+    _fade_timer = 0.0
+    _fade_out_start_alpha = _current_alpha  # 開始時のアルファ値を保存
+    # フェードアウト完了まで削除を遅延
+  else:
+    # フェードアウト無効時は即座削除
+    _immediate_removal()
+
+
+func _finalize_bullet_removal():
+  """フェードアウト完了後の最終削除処理"""
+  _create_explosion_effect()
+  _handle_particle_cleanup()
+  queue_free()
 
 
 func _handle_particle_cleanup():

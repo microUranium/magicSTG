@@ -253,7 +253,9 @@ func test_show_attack_warning_with_single_config():
   await universal_core._show_attack_warning()
 
   # Then - 警告線が生成される（警告完了後に確認）
-  var scene_children = get_tree().current_scene.get_children()
+  # 警告はrootに追加されるため、rootから探す
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  var scene_children = parent.get_children()
   var warning_found = false
   for child in scene_children:
     if child is AttackWarning:
@@ -290,7 +292,9 @@ func test_show_attack_warning_with_multiple_configs():
   await universal_core._show_attack_warning()
 
   # Then - 3つの警告線が生成される（警告完了後に確認）
-  var scene_children = get_tree().current_scene.get_children()
+  # 警告はrootに追加されるため、rootから探す
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  var scene_children = parent.get_children()
   var warning_count = 0
   for child in scene_children:
     if child is AttackWarning:
@@ -318,7 +322,9 @@ func test_warning_line_relative_vs_absolute_position():
   await universal_core._show_attack_warning()
 
   # Then - 両方の警告線が生成される（警告完了後に確認）
-  var scene_children = get_tree().current_scene.get_children()
+  # 警告はrootに追加されるため、rootから探す
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  var scene_children = parent.get_children()
   var relative_warnings = 0
   var absolute_warnings = 0
 

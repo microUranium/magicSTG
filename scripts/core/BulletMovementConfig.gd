@@ -3,6 +3,8 @@ class_name BulletMovementConfig extends Resource
 
 enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋
 
+enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向に合わせる  # 設定された角速度で自転する  # 回転しない（初期角度を保持）
+
 @export var movement_type: MovementType = MovementType.STRAIGHT
 @export var initial_speed: float = 200.0
 
@@ -40,3 +42,10 @@ enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY
 @export var spiral_acceleration: float = 0.0  # 加速度（ピクセル/秒²）、0なら等速
 @export var spiral_max_speed: float = 500.0  # 最大速度（加速時の制限）
 @export var spiral_min_speed: float = 10.0  # 最小速度（減速時の制限）
+@export var spiral_initial_radius: float = 0.0  # 初期半径（ピクセル）
+
+# 回転設定
+@export_group("Rotation Settings")
+@export var rotation_mode: RotationMode = RotationMode.MOVEMENT_DIRECTION  # 回転モード
+@export_range(0.0, 360.0, 0.1, "radians_as_degrees") var initial_rotation: float = 0.0  # 初期角度（度）、FIXED/SELF_ROTATIONモードで使用
+@export var angular_velocity: float = 0.0  # 角速度（度/秒）、負の値で逆回転

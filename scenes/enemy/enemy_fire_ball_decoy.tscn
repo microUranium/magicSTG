@@ -78,6 +78,9 @@ collision_radius = 32.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_fwcd2")
 animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [node name="EnemyFireBallDecoy" type="Area2D" groups=["enemies"]]

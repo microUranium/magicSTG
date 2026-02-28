@@ -283,6 +283,9 @@ collision_radius = 16.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_p4pu0")
 animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [node name="BossBear" type="Area2D" groups=["enemies"]]

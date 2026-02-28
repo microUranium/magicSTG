@@ -121,6 +121,9 @@ color = Color(1, 1, 1, 1)
 collision_radius = 10.0
 enable_particles = false
 animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [sub_resource type="Resource" id="Resource_dx3bb"]

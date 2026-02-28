@@ -203,6 +203,9 @@ collision_radius = 16.0
 enable_particles = false
 animation_name = ""
 explosion_config = SubResource("Resource_pwxes")
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [sub_resource type="Resource" id="Resource_uiagi"]

@@ -1140,6 +1140,9 @@ collision_radius = 16.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_8rn8w")
 animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [sub_resource type="Resource" id="Resource_64bv2"]
@@ -1150,6 +1153,9 @@ color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = false
 animation_name = ""
+fade_in_initial_alpha = 0.2
+fade_in_duration = 0.5
+fade_out_duration = 0.5
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [node name="BossDoll" type="Area2D" groups=["enemies"]]

@@ -41,7 +41,12 @@ func _spawn_item_node(pos: Vector2, inst: ItemInstance) -> void:
     return
   node.global_position = pos
   node.item_instance = inst
-  get_tree().current_scene.add_child(node)
+
+  # テスト環境では current_scene が null の可能性があるため、フォールバック処理を追加
+  var parent = get_tree().current_scene
+  if parent == null:
+    parent = get_tree().root
+  parent.add_child(node)
 
 
 func _weighted_pick(weights: Dictionary) -> Variant:

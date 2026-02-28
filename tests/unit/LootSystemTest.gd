@@ -11,8 +11,11 @@ func before() -> void:
 
 func before_test() -> void:
   # テスト前に毎回実行される
-  for node in get_tree().current_scene.get_children().filter(func(c): return c is DroppedItem):
-    node.queue_free()  # 前のテストで生成された DroppedItem を削除
+  # LootSystemはcurrent_sceneまたはrootに追加するため、両方をクリーンアップ
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  if parent:
+    for node in parent.get_children().filter(func(c): return c is DroppedItem):
+      node.queue_free()  # 前のテストで生成された DroppedItem を削除
 
 
 ## ---------- 1-1. 100% ドロップ確認 ----------
@@ -30,7 +33,9 @@ func test_spawn_drop_creates_dropped_item() -> void:
   await get_tree().process_frame
 
   # DroppedItem が 1 個追加され、ItemInstance の prototype が一致すること
-  var drops := get_tree().current_scene.get_children().filter(func(c): return c is DroppedItem)
+  # LootSystemはcurrent_sceneまたはrootに追加するため、current_sceneから探す
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  var drops := parent.get_children().filter(func(c): return c is DroppedItem)
   assert_int(drops.size()).is_equal(1)
   assert_object(drops[0].item_instance.prototype).is_equal(proto)
 
@@ -45,5 +50,7 @@ func test_spawn_drop_probability_zero_spawns_nothing() -> void:
   LootSystem.spawn_drop(Vector2.ZERO, [entry])
   await get_tree().process_frame
 
-  var drops := get_tree().current_scene.get_children().filter(func(c): return c is DroppedItem)
+  # LootSystemはcurrent_sceneまたはrootに追加するため、current_sceneから探す
+  var parent = get_tree().current_scene if get_tree().current_scene else get_tree().root
+  var drops := parent.get_children().filter(func(c): return c is DroppedItem)
   assert_int(drops.size()).is_equal(0)

@@ -705,7 +705,11 @@ func _show_attack_warning() -> Vector2:
   for warning_config in attack_pattern.warning_configs:
     var warning_scene = preload("res://scenes/effects/attack_warning.tscn")
     var warning = warning_scene.instantiate()
-    get_tree().current_scene.add_child(warning)
+    # テスト環境では current_scene が null の可能性があるため、フォールバック処理を追加
+    var parent = get_tree().current_scene
+    if parent == null:
+      parent = get_tree().root
+    parent.add_child(warning)
 
     # 警告線の開始座標を計算
     var start_pos: Vector2

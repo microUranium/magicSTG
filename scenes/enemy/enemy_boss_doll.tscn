@@ -1,7 +1,7 @@
-[gd_scene load_steps=94 format=3 uid="uid://dljd2jhdrsogl"]
+[gd_scene load_steps=94 format=3 uid="uid://ocsviq60pkl0"]
 
 [ext_resource type="Texture2D" uid="uid://b5rcfnuhnabre" path="res://assets/gfx/sprites/enemy_boss_doll_sprite.png" id="1_ncbgs"]
-[ext_resource type="Script" uid="uid://dgg8ly4c6l6r8" path="res://scripts/enemy/BossDoll.gd" id="1_x5nyp"]
+[ext_resource type="Script" path="res://scripts/enemy/BossDoll.gd" id="1_x5nyp"]
 [ext_resource type="Script" uid="uid://bevw3h06e6lg6" path="res://scripts/enemy/BossDollAI.gd" id="3_ub1xv"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_2km0j"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="4_x5nyp"]

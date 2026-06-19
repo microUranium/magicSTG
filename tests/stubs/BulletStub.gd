@@ -46,6 +46,11 @@ func setup_barrier_bullet(
   initialized = true
 
 
-func start_rotation(duration: float, speed: float):
+var last_rotation_duration: float = 0.0
+var last_rotation_speed: float = 0.0
+
+
+func start_rotation(duration: float, rotation_spd: float):
   """バリア弾の回転開始メソッド"""
-  pass
+  last_rotation_duration = duration
+  last_rotation_speed = rotation_spd

@@ -1,0 +1,360 @@
+[gd_scene load_steps=38 format=3 uid="uid://wbp6oy3xn7mi"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_yea2y"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_mc14j"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_g3ldc"]
+[ext_resource type="Texture2D" uid="uid://dgd0dblx4bmey" path="res://assets/gfx/sprites/enemy_bird_d_sprite.png" id="4_yea2y"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="5_f70qo"]
+[ext_resource type="Script" uid="uid://dqt25fk551eja" path="res://scripts/enemy/StraightMoveAI.gd" id="6_4i110"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_pmcmy"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_wibll"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_r07n0"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="10_g3ldc"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="11_e2cgu"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="11_qltra"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="12_wibll"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="13_f70qo"]
+[ext_resource type="Script" uid="uid://dwfltd8qe8ou" path="res://scripts/core/UniversalBullet.gd" id="14_pmcmy"]
+[ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="15_wibll"]
+[ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="16_r07n0"]
+[ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="17_sokdm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mc14j"]
+atlas = ExtResource("4_yea2y")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3ldc"]
+atlas = ExtResource("4_yea2y")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mc14j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g3ldc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(40, 66)
+
+[sub_resource type="Resource" id="Resource_4i110"]
+script = ExtResource("10_g3ldc")
+movement_type = 1
+initial_speed = 400.0
+deceleration_rate = 100.0
+min_speed = 200.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 0
+initial_rotation = 0.0
+angular_velocity = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Resource" id="Resource_r07n0"]
+script = ExtResource("12_wibll")
+texture = ExtResource("17_sokdm")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_pmcmy"]
+script = ExtResource("11_qltra")
+pattern_type = 1
+bullet_scene = ExtResource("11_e2cgu")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_r07n0")
+bullet_movement_config = SubResource("Resource_4i110")
+bullet_count = 8
+rapid_fire_count = 3
+rapid_fire_interval = 0.5
+burst_delay = 1.5
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("11_qltra")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("13_f70qo")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_qltra"]
+script = ExtResource("10_g3ldc")
+movement_type = 1
+initial_speed = 350.0
+deceleration_rate = 100.0
+min_speed = 175.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 0
+initial_rotation = 0.0
+angular_velocity = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Curve" id="Curve_58abv"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nji8l"]
+curve = SubResource("Curve_58abv")
+
+[sub_resource type="Gradient" id="Gradient_nji8l"]
+offsets = PackedFloat32Array(0.489655, 1)
+colors = PackedColorArray(0.42656, 0.3956, 0.86, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d55w"]
+gradient = SubResource("Gradient_nji8l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gmgwi"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_2d55w")
+alpha_curve = SubResource("CurveTexture_nji8l")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nji8l"]
+radius = 8.0
+
+[sub_resource type="PackedScene" id="PackedScene_db7xm"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("UniversalBullet", "position", "collision_layer", "script", "bullet_config", "movement_config", "Area2D", "GPUParticles2D", "amount", "lifetime", "process_material", "Sprite2D", "texture", "CollisionShape2D", "shape", "AnimationPlayer"),
+"node_count": 5,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 6, 0, -1, 5, 1, 0, 2, 1, 3, 2, 4, 3, 5, 4, 0, 0, 0, 7, 7, -1, 3, 8, 5, 9, 6, 10, 7, 0, 0, 0, 11, 11, -1, 1, 12, 8, 0, 0, 0, 13, 13, -1, 1, 14, 9, 0, 0, 0, 15, 15, -1, 0, 0),
+"variants": [Vector2(0, -1), 2, ExtResource("14_pmcmy"), ExtResource("15_wibll"), ExtResource("16_r07n0"), 16, 0.3, SubResource("ParticleProcessMaterial_gmgwi"), ExtResource("17_sokdm"), SubResource("CircleShape2D_nji8l")],
+"version": 3
+}
+
+[sub_resource type="Resource" id="Resource_cf7yw"]
+script = ExtResource("11_qltra")
+pattern_type = 1
+bullet_scene = SubResource("PackedScene_db7xm")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_movement_config = SubResource("Resource_qltra")
+bullet_count = 8
+rapid_fire_count = 3
+rapid_fire_interval = 0.5
+burst_delay = 1.5
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("11_qltra")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("13_f70qo")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_22j0f"]
+script = ExtResource("10_g3ldc")
+movement_type = 1
+initial_speed = 300.0
+deceleration_rate = 100.0
+min_speed = 150.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 0
+initial_rotation = 0.0
+angular_velocity = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="PackedScene" id="PackedScene_24pq7"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("UniversalBullet", "position", "collision_layer", "script", "bullet_config", "movement_config", "Area2D", "GPUParticles2D", "amount", "lifetime", "process_material", "Sprite2D", "texture", "CollisionShape2D", "shape", "AnimationPlayer"),
+"node_count": 5,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 6, 0, -1, 5, 1, 0, 2, 1, 3, 2, 4, 3, 5, 4, 0, 0, 0, 7, 7, -1, 3, 8, 5, 9, 6, 10, 7, 0, 0, 0, 11, 11, -1, 1, 12, 8, 0, 0, 0, 13, 13, -1, 1, 14, 9, 0, 0, 0, 15, 15, -1, 0, 0),
+"variants": [Vector2(0, -1), 2, ExtResource("14_pmcmy"), ExtResource("15_wibll"), ExtResource("16_r07n0"), 16, 0.3, SubResource("ParticleProcessMaterial_gmgwi"), ExtResource("17_sokdm"), SubResource("CircleShape2D_nji8l")],
+"version": 3
+}
+
+[sub_resource type="Resource" id="Resource_x1vhf"]
+script = ExtResource("11_qltra")
+pattern_type = 1
+bullet_scene = SubResource("PackedScene_24pq7")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_movement_config = SubResource("Resource_22j0f")
+bullet_count = 8
+rapid_fire_count = 3
+rapid_fire_interval = 0.5
+burst_delay = 1.5
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("11_qltra")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("13_f70qo")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemyBirdD" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_yea2y")
+drop_table = Array[ExtResource("2_mc14j")]([ExtResource("3_g3ldc")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.953131
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("5_f70qo")
+max_hp = 100
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("6_4i110")
+base_speed = 200.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("7_pmcmy")]
+script = ExtResource("8_wibll")
+default_core_scene = ExtResource("9_r07n0")
+attack_pattern = SubResource("Resource_pmcmy")
+attack_patterns_additive = Array[ExtResource("11_qltra")]([SubResource("Resource_cf7yw"), SubResource("Resource_x1vhf")])
+auto_create_core = true

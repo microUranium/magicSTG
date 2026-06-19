@@ -1,0 +1,245 @@
+[gd_scene load_steps=28 format=3 uid="uid://bp1nad05frbjx"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_n00qm"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_rg600"]
+[ext_resource type="Resource" uid="uid://bpvxkjd10aoum" path="res://resources/itemdrop/droptableentry_debug_core.tres" id="3_s4l57"]
+[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="4_ta326"]
+[ext_resource type="Texture2D" uid="uid://dq20pas1s0dlj" path="res://assets/gfx/sprites/enemy_flower_c_sprite.png" id="5_n00qm"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="6_b6fhm"]
+[ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="7_vq3ew"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_i3awc"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_vbv7y"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_rr0ml"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="11_jk1g7"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="12_x56bi"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="14_sq788"]
+[ext_resource type="Texture2D" uid="uid://eeykk5dmkswh" path="res://assets/gfx/sprites/bullet_enemy_sprite_2.png" id="15_svxl6"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="16_8tue8"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="17_evj2u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rg600"]
+atlas = ExtResource("5_n00qm")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4l57"]
+atlas = ExtResource("5_n00qm")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ta326"]
+atlas = ExtResource("5_n00qm")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5r2u"]
+atlas = ExtResource("5_n00qm")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rg600")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4l57")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ta326")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5r2u")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4utyh"]
+size = Vector2(120, 118)
+
+[sub_resource type="Resource" id="Resource_bg5e5"]
+script = ExtResource("11_jk1g7")
+movement_type = 4
+initial_speed = 400.0
+deceleration_rate = 100.0
+min_speed = 50.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 20.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 1.0
+max_bounces = 2
+spiral_radius_growth = 50.0
+spiral_rotation_speed = 360.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 2
+initial_rotation = 0.0
+angular_velocity = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Resource" id="Resource_n00qm"]
+script = ExtResource("14_sq788")
+texture = ExtResource("15_svxl6")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_rg600"]
+script = ExtResource("16_8tue8")
+pattern_type = 0
+bullet_scene = ExtResource("12_x56bi")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_n00qm")
+bullet_movement_config = SubResource("Resource_bg5e5")
+bullet_count = 12
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 1.5
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("16_8tue8")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("17_evj2u")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_s4l57"]
+script = ExtResource("11_jk1g7")
+movement_type = 6
+initial_speed = 0.0
+deceleration_rate = 100.0
+min_speed = 50.0
+acceleration_rate = 50.0
+max_speed = 500.0
+wave_amplitude = 50.0
+wave_frequency = 2.0
+homing_duration = 3.0
+max_turn_angle_per_second = 180.0
+gravity_strength = 980.0
+gravity_direction = Vector2(0, 1)
+air_resistance = 0.0
+bounce_factor = 0.0
+max_bounces = 0
+spiral_radius_growth = 100.0
+spiral_rotation_speed = 90.0
+spiral_clockwise = true
+spiral_phase_offset = 0.0
+spiral_acceleration = 0.0
+spiral_max_speed = 500.0
+spiral_min_speed = 10.0
+spiral_initial_radius = 0.0
+rotation_mode = 0
+initial_rotation = 0.0
+angular_velocity = 0.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Resource" id="Resource_ta326"]
+script = ExtResource("16_8tue8")
+pattern_type = 1
+bullet_scene = ExtResource("12_x56bi")
+target_group = "players"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_movement_config = SubResource("Resource_s4l57")
+bullet_count = 8
+rapid_fire_count = 3
+rapid_fire_interval = 0.1
+burst_delay = 3.0
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("16_8tue8")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("17_evj2u")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemyFlowerC" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_n00qm")
+drop_table = Array[ExtResource("2_rg600")]([ExtResource("3_s4l57"), ExtResource("4_ta326")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.912479
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_4utyh")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("6_b6fhm")
+max_hp = 200
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("7_vq3ew")
+base_speed = 150.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("8_i3awc")]
+script = ExtResource("9_vbv7y")
+default_core_scene = ExtResource("10_rr0ml")
+attack_pattern = SubResource("Resource_rg600")
+attack_patterns_additive = Array[ExtResource("16_8tue8")]([SubResource("Resource_ta326")])
+auto_create_core = true

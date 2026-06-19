@@ -167,6 +167,15 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
 
   var success = true
   for i in range(pattern.bullet_count):
+    # 発射位置を計算
+    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
+
+    # TO_OWNERの場合、spawn_posごとに方向を再計算
+    if pattern.direction_type == AttackPattern.DirectionType.TO_OWNER:
+      base_dir = pattern.calculate_base_direction(
+        _owner_actor.global_position, target_pos, _rear_firing_mode, spawn_pos
+      )
+
     var bullet_dir
     if pattern.direction_type == AttackPattern.DirectionType.CIRCLE:
       # 円形配置の場合、方向を計算
@@ -177,9 +186,6 @@ func _execute_single_shot(pattern: AttackPattern) -> bool:
     else:
       # 通常の方向計算
       bullet_dir = pattern.calculate_spread_direction(i, pattern.bullet_count, base_dir)
-
-    # 発射位置を計算
-    var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, i)
 
     if not _spawn_bullet(pattern, bullet_dir, spawn_pos, i):
       success = false
@@ -412,6 +418,11 @@ func _get_base_direction(pattern: AttackPattern) -> Vector2:
       direction = Vector2(cos(angle), sin(angle))
       if _rear_firing_mode:
         direction = -direction
+    AttackPattern.DirectionType.TO_OWNER:
+      # spawn_posが不明なためbase_directionにフォールバック
+      direction = pattern.base_direction
+      if _rear_firing_mode:
+        direction = -direction
     AttackPattern.DirectionType.CIRCLE, AttackPattern.DirectionType.CUSTOM:
       # 円形やカスタムの場合はデフォルト方向
       direction = pattern.base_direction
@@ -540,7 +551,18 @@ func _create_barrier_bullet(
 func _start_barrier_bullet(bullet, pattern: AttackPattern):
   """バリア弾の開始処理"""
   if bullet.has_method("start_rotation"):
-    bullet.start_rotation(pattern.rotation_duration, pattern.rotation_speed)
+    # barrier_movement_configがある場合はそちらの値を使用
+    var duration = (
+      pattern.barrier_movement_config.orbit_duration
+      if pattern.barrier_movement_config
+      else pattern.rotation_duration
+    )
+    var rotation_speed_val = (
+      pattern.barrier_movement_config.rotation_speed
+      if pattern.barrier_movement_config
+      else pattern.rotation_speed
+    )
+    bullet.start_rotation(duration, rotation_speed_val)
 
 
 func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: int = -1):

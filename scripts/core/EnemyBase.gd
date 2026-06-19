@@ -13,6 +13,7 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 @export var isInvincible: bool = false  # 無敵状態かどうか
 
 var _damage_flash_time: float
+var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
 
 
 func _ready():
@@ -26,7 +27,7 @@ func take_damage(amount: int) -> void:
   if isInvincible:  # 無敵状態ならダメージを受けない
     return
   $HpNode.take_damage(amount)
-  StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, -10, 0)
+  _is_hit_per_frame = true
   flash_white()
 
 
@@ -60,6 +61,10 @@ func set_parameter(_name: String, _value: String) -> void:
 
 func _process(delta: float) -> void:
   _update_flashing(delta)
+
+  if _is_hit_per_frame:
+    _is_hit_per_frame = false
+    StageSignals.emit_signal("sfx_play_requested", "hit_enemy", global_position, -10, 0)
 
 
 func _update_flashing(delta):

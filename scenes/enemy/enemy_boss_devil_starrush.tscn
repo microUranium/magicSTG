@@ -1,0 +1,61 @@
+[gd_scene load_steps=12 format=3 uid="uid://bme8jijcf2b1f"]
+
+[ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_61tli"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="2_f5uqs"]
+[ext_resource type="Script" uid="uid://cmucqejrhrtkh" path="res://scripts/enemy/BossDevilStarRushAI.gd" id="3_6ohyc"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="4_sx2h1"]
+[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://scenes/bullets/destroy_particle.png" id="5_5pykk"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_ynlg0"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_4ics3"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_fokqx"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="10_qp555"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jrb5u"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="Resource" id="Resource_61tli"]
+script = ExtResource("4_sx2h1")
+texture = ExtResource("5_5pykk")
+scale = 1.0
+color = Color(1, 1, 1, 1)
+collision_radius = 1.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 0.2
+fade_in_duration = 0.2
+fade_out_duration = 0.1
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[node name="EnemyBossDevilStarRush" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_61tli")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_jrb5u")
+frame_progress = 0.855413
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("2_f5uqs")
+max_hp = 150
+
+[node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("3_6ohyc")
+visual_config_star = SubResource("Resource_61tli")
+attack_core_slot = NodePath("../AttackCoreSlot")
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("7_ynlg0")]
+script = ExtResource("8_4ics3")
+default_core_scene = ExtResource("9_fokqx")
+attack_pattern = null
+attack_patterns_additive = Array[ExtResource("10_qp555")]([])
+auto_create_core = true

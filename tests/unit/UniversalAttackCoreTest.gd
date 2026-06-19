@@ -754,6 +754,139 @@ func test_rear_firing_composite_pattern():
   mock_player.queue_free()
 
 
+# === バリア弾のbarrier_movement_config優先テスト ===
+
+
+func test_barrier_bullet_uses_barrier_movement_config_values():
+  """barrier_movement_configが設定されている場合、そちらの値でstart_rotationが呼ばれる"""
+  # コア状態をリセット
+  universal_core._cooling = false
+  universal_core._paused = false
+
+  test_pattern.pattern_type = AttackPattern.PatternType.BARRIER_BULLETS
+  test_pattern.bullet_count = 2
+  test_pattern.circle_radius = 80.0
+  test_pattern.rotation_duration = 2.0  # パターン側の値
+  test_pattern.rotation_speed = 90.0  # パターン側の値
+
+  # barrier_movement_configを設定（こちらが優先される）
+  var barrier_config = BarrierBulletMovement.new()
+  barrier_config.orbit_duration = 5.0
+  barrier_config.rotation_speed = 180.0
+  test_pattern.barrier_movement_config = barrier_config
+
+  universal_core.attack_pattern = test_pattern
+  universal_core.clear_spawned_bullets()
+
+  await universal_core._execute_barrier_bullets(test_pattern)
+
+  # barrier_movement_configの値でstart_rotationが呼ばれたことを確認
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(2)
+  for bullet in universal_core.spawned_bullets:
+    assert_that(bullet.last_rotation_duration).is_equal(5.0)
+    assert_that(bullet.last_rotation_speed).is_equal(180.0)
+
+
+func test_barrier_bullet_falls_back_to_pattern_values():
+  """barrier_movement_configがnullの場合、パターンの値でstart_rotationが呼ばれる"""
+  # コア状態をリセット
+  universal_core._cooling = false
+  universal_core._paused = false
+
+  test_pattern.pattern_type = AttackPattern.PatternType.BARRIER_BULLETS
+  test_pattern.bullet_count = 2
+  test_pattern.circle_radius = 80.0
+  test_pattern.rotation_duration = 3.0
+  test_pattern.rotation_speed = 120.0
+  test_pattern.barrier_movement_config = null  # 明示的にnull
+
+  universal_core.attack_pattern = test_pattern
+  universal_core.clear_spawned_bullets()
+
+  await universal_core._execute_barrier_bullets(test_pattern)
+
+  # パターンの値でstart_rotationが呼ばれたことを確認
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(2)
+  for bullet in universal_core.spawned_bullets:
+    assert_that(bullet.last_rotation_duration).is_equal(3.0)
+    assert_that(bullet.last_rotation_speed).is_equal(120.0)
+
+
+# === TO_OWNER方向のテスト ===
+
+
+func test_to_owner_single_shot_direction():
+  """TO_OWNER方向: 各弾丸がspawn_posからオーナーへの方向で発射される"""
+  # Given - TO_OWNERパターンを設定（複数位置から発射）
+  test_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  test_pattern.bullet_count = 3
+  test_pattern.spawn_position_mode = AttackPattern.SpawnPositionMode.RELATIVE_TO_OWNER
+  test_pattern.spawn_positions_multi = [
+    Vector2(0, 100),  # オーナーの下方
+    Vector2(100, 0),  # オーナーの右方
+    Vector2(-100, 0),  # オーナーの左方
+  ]
+  universal_core.attack_pattern = test_pattern
+  universal_core.clear_spawned_bullets()
+
+  # When
+  await universal_core._execute_single_shot(test_pattern)
+
+  # Then - 3発の弾丸が生成される
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(3)
+
+  # 各弾丸の方向がspawn_posからオーナーに向かっている
+  var bullets = universal_core.spawned_bullets
+  # bullet[0]: spawn_pos=(100,200) -> owner(100,100) = 方向(0,-1)
+  assert_that(bullets[0].direction.distance_to(Vector2(0, -1))).is_less(0.01)
+  # bullet[1]: spawn_pos=(200,100) -> owner(100,100) = 方向(-1,0)
+  assert_that(bullets[1].direction.distance_to(Vector2(-1, 0))).is_less(0.01)
+  # bullet[2]: spawn_pos=(0,100) -> owner(100,100) = 方向(1,0)
+  assert_that(bullets[2].direction.distance_to(Vector2(1, 0))).is_less(0.01)
+
+
+func test_to_owner_fallback_without_spawn_offset():
+  """TO_OWNER方向: spawn_posがオーナーと同じ場合はbase_directionにフォールバック"""
+  # Given - spawn_posがオーナー位置と同じ（OWNER_POSITIONモード）
+  test_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  test_pattern.bullet_count = 1
+  test_pattern.base_direction = Vector2.DOWN
+  test_pattern.spawn_position_mode = AttackPattern.SpawnPositionMode.OWNER_POSITION
+  universal_core.attack_pattern = test_pattern
+  universal_core.clear_spawned_bullets()
+
+  # When
+  await universal_core._execute_single_shot(test_pattern)
+
+  # Then - base_directionにフォールバック
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(1)
+  var bullet = universal_core.spawned_bullets[0]
+  assert_that(bullet.direction.distance_to(Vector2.DOWN)).is_less(0.01)
+
+
+func test_to_owner_rear_firing_mode():
+  """TO_OWNER方向: 後方射撃モードのフォールバック時に方向が反転する"""
+  # Given - spawn_posがオーナーと同じ（フォールバック発動）
+  test_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  test_pattern.bullet_count = 1
+  test_pattern.base_direction = Vector2.DOWN
+  test_pattern.spawn_position_mode = AttackPattern.SpawnPositionMode.OWNER_POSITION
+  universal_core.attack_pattern = test_pattern
+  universal_core.set_rear_firing_mode(true)
+  universal_core.clear_spawned_bullets()
+
+  # When
+  await universal_core._execute_single_shot(test_pattern)
+
+  # Then - フォールバックで後方射撃 = -DOWN = UP
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(1)
+  var bullet = universal_core.spawned_bullets[0]
+  assert_that(bullet.direction.distance_to(Vector2.UP)).is_less(0.01)
+
+  # クリーンアップ
+  universal_core.set_rear_firing_mode(false)
+
+
 func test_rear_firing_with_mixed_patterns():
   """後方射撃モード時の混合パターン（ビーム+弾丸）テスト"""
   # Given - ビームと弾丸の混合複合パターン

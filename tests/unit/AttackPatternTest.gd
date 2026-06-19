@@ -194,3 +194,92 @@ func test_barrier_bullet_configuration():
   assert_that(attack_pattern.circle_radius).is_equal(120.0)
   assert_that(attack_pattern.rotation_speed).is_equal(180.0)
   assert_that(attack_pattern.rotation_duration).is_equal(4.0)
+
+
+# === TO_OWNER方向のテスト ===
+
+
+func test_direction_calculation_to_owner_with_spawn_pos():
+  """TO_OWNER方向: spawn_posからオーナー位置への方向を計算"""
+  attack_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+
+  var owner_pos = Vector2(100, 100)
+  var target_pos = Vector2(200, 200)  # 無視される
+  var spawn_pos = Vector2(100, 200)  # オーナーの下方
+
+  var direction = attack_pattern.calculate_base_direction(owner_pos, target_pos, false, spawn_pos)
+
+  # spawn_pos(100,200)からowner_pos(100,100)への方向 = (0,-100).normalized = (0,-1)
+  var expected = (owner_pos - spawn_pos).normalized()
+  assert_that(direction.distance_to(expected)).is_less(0.01)
+
+
+func test_direction_calculation_to_owner_different_positions():
+  """TO_OWNER方向: 異なるspawn_posで異なる方向が得られる"""
+  attack_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+
+  var owner_pos = Vector2(100, 100)
+  var target_pos = Vector2(300, 300)
+
+  # spawn_posが右側
+  var spawn_pos_right = Vector2(200, 100)
+  var dir_right = attack_pattern.calculate_base_direction(
+    owner_pos, target_pos, false, spawn_pos_right
+  )
+  var expected_right = (owner_pos - spawn_pos_right).normalized()  # (-1, 0)
+  assert_that(dir_right.distance_to(expected_right)).is_less(0.01)
+
+  # spawn_posが左側
+  var spawn_pos_left = Vector2(0, 100)
+  var dir_left = attack_pattern.calculate_base_direction(
+    owner_pos, target_pos, false, spawn_pos_left
+  )
+  var expected_left = (owner_pos - spawn_pos_left).normalized()  # (1, 0)
+  assert_that(dir_left.distance_to(expected_left)).is_less(0.01)
+
+  # 左右で反対方向になることを確認
+  var dot_product = dir_right.dot(dir_left)
+  assert_that(dot_product).is_less(-0.9)
+
+
+func test_direction_calculation_to_owner_fallback_when_same_pos():
+  """TO_OWNER方向: spawn_posがオーナーと同じ場合はbase_directionにフォールバック"""
+  attack_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  attack_pattern.base_direction = Vector2.DOWN
+
+  var owner_pos = Vector2(100, 100)
+  var target_pos = Vector2(200, 200)
+  var spawn_pos = Vector2(100, 100)  # オーナーと同じ位置
+
+  var direction = attack_pattern.calculate_base_direction(owner_pos, target_pos, false, spawn_pos)
+
+  assert_that(direction.distance_to(Vector2.DOWN)).is_less(0.01)
+
+
+func test_direction_calculation_to_owner_fallback_when_zero():
+  """TO_OWNER方向: spawn_posがゼロの場合はbase_directionにフォールバック"""
+  attack_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  attack_pattern.base_direction = Vector2.RIGHT
+
+  var owner_pos = Vector2(100, 100)
+  var target_pos = Vector2(200, 200)
+  var spawn_pos = Vector2.ZERO
+
+  var direction = attack_pattern.calculate_base_direction(owner_pos, target_pos, false, spawn_pos)
+
+  assert_that(direction.distance_to(Vector2.RIGHT)).is_less(0.01)
+
+
+func test_direction_calculation_to_owner_rear_firing_fallback():
+  """TO_OWNER方向: フォールバック時に後方射撃モードで方向が反転する"""
+  attack_pattern.direction_type = AttackPattern.DirectionType.TO_OWNER
+  attack_pattern.base_direction = Vector2.DOWN
+
+  var owner_pos = Vector2(100, 100)
+  var target_pos = Vector2(200, 200)
+  var spawn_pos = Vector2.ZERO  # フォールバックを強制
+
+  var direction = attack_pattern.calculate_base_direction(owner_pos, target_pos, true, spawn_pos)
+
+  # 後方射撃なのでbase_directionの逆
+  assert_that(direction.distance_to(-Vector2.DOWN)).is_less(0.01)

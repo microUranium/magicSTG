@@ -23,6 +23,7 @@ var _is_sneaking: bool = false
 var _rear_mode: bool = false  # 後方攻撃モード
 var _damage_flash_time: float = 0.0
 var _paused: bool = false  # ポーズ状態
+var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
 
 
 func _ready() -> void:
@@ -42,6 +43,10 @@ func _process(delta):
   _handle_input(delta)
   _clamp_inside_playrect()
   _update_flashing(delta)
+
+  if _is_hit_per_frame:
+    _is_hit_per_frame = false
+    StageSignals.emit_signal("sfx_play_requested", "hit_player", global_position, 0, 0)
 
 
 func _update_flashing(delta):
@@ -111,7 +116,7 @@ func take_damage(amount: int) -> void:
 
 func _apply_damage(damage):
   $HpNode.take_damage(damage)
-  StageSignals.emit_signal("sfx_play_requested", "hit_player", global_position, 0, 0)
+  _is_hit_per_frame = true
   flash_white()
 
 

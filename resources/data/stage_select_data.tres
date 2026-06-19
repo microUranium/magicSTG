@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StageSelectData" load_steps=28 format=3 uid="uid://dtmqpbvr6bhmq"]
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=32 format=3 uid="uid://dtmqpbvr6bhmq"]
 
 [ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
 [ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bv4gwdx2ixvpn" path="res://assets/gfx/backgrounds/background_ruins.png" id="5_x38wm"]
 [ext_resource type="Texture2D" uid="uid://b5ql47ydr08qy" path="res://assets/gfx/backgrounds/background_swamp.png" id="6_ljvmy"]
 [ext_resource type="Texture2D" uid="uid://c817xaiu6lfd6" path="res://assets/gfx/backgrounds/background_house.png" id="7_x38wm"]
+[ext_resource type="Texture2D" uid="uid://bppltgka3wjl3" path="res://assets/gfx/backgrounds/background_mountain.png" id="8_vynet"]
 
 [sub_resource type="Resource" id="StageData_1_1"]
 script = ExtResource("3_stage")
@@ -242,7 +243,40 @@ is_unlocked = true
 background_texture = ExtResource("7_x38wm")
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
+[sub_resource type="Resource" id="Resource_ks7vi"]
+script = ExtResource("3_stage")
+stage_name = "6-1 旅の決着"
+chapter_id = "chapter6"
+stage_id = "stage6_1"
+is_seed_fixed = true
+fixed_seed = "s6z1"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_ls1bl"]
+script = ExtResource("3_stage")
+stage_name = "6-3 懸ける思い"
+chapter_id = "chapter6"
+stage_id = "stage6_3"
+is_seed_fixed = true
+fixed_seed = "s6z2"
+is_unlocked = true
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="Resource_umupn"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter6"
+chapter_name = "第6章 守り人の山"
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_ks7vi"), SubResource("Resource_ls1bl")])
+is_unlocked = true
+background_texture = ExtResource("8_vynet")
+metadata/_custom_type_script = "uid://dnqf62vu42hqi"
+
 [resource]
 script = ExtResource("2_1ifpm")
-chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj"), SubResource("Resource_wg655"), SubResource("Resource_t647l")])
+chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj"), SubResource("Resource_wg655"), SubResource("Resource_t647l"), SubResource("Resource_umupn")])
 metadata/_custom_type_script = "uid://dpox3am3xjmyy"

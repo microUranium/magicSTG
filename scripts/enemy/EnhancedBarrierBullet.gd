@@ -184,6 +184,12 @@ func _update_approach_phase(delta: float):
   if owner_node:
     _orbit_center = owner_node.global_position
 
+  # 接近中に回転するかどうか
+  if movement_config.rotate_during_approach:
+    # 回転角度を更新
+    _orbit_angle += movement_config.rotation_speed * delta
+    _orbit_angle = wrapf(_orbit_angle, 0.0, 360.0)
+
   # 現在の軌道位置を計算
   _calculate_orbit_position()
 
@@ -231,6 +237,9 @@ func _transition_to_projectile():
       direction = movement_config.fixed_direction.normalized()
     BarrierBulletMovement.ProjectileDirection.RANDOM:
       direction = Vector2.from_angle(randf() * TAU)
+    BarrierBulletMovement.ProjectileDirection.SPREAD:
+      # 軌道中心から外側に向かって放射状に拡散
+      direction = (global_position - _orbit_center).normalized()
 
 
 func _calculate_initial_orbit_position():

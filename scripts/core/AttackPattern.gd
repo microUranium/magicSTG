@@ -4,7 +4,7 @@ class_name AttackPattern
 
 enum PatternType { SINGLE_SHOT, RAPID_FIRE, BARRIER_BULLETS, SPIRAL, BEAM, CUSTOM }  # 単発  # 連射  # 円形配置  # バリア弾（回転→直進）  # 螺旋  # ビーム  # カスタムスクリプト用
 
-enum DirectionType { FIXED, TO_PLAYER, RANDOM, CIRCLE, CUSTOM }  # 固定方向  # プレイヤー狙い  # ランダム # 円形  # カスタム計算
+enum DirectionType { FIXED, TO_PLAYER, RANDOM, CIRCLE, CUSTOM, TO_OWNER }  # 固定方向  # プレイヤー狙い  # ランダム # 円形  # カスタム計算  # オーナー狙い
 
 enum MovementType { STRAIGHT, CURVE, ORBIT_THEN_STRAIGHT, HOMING }  # 直進  # カーブ  # 軌道→直進  # 追尾
 
@@ -84,7 +84,10 @@ enum SpawnPositionMode {
 
 # パターンの基本方向を計算
 func calculate_base_direction(
-  from_pos: Vector2, target_pos: Vector2, _rear_firing: bool = false
+  from_pos: Vector2,
+  target_pos: Vector2,
+  _rear_firing: bool = false,
+  spawn_pos: Vector2 = Vector2.ZERO
 ) -> Vector2:
   match direction_type:
     DirectionType.FIXED:
@@ -99,6 +102,15 @@ func calculate_base_direction(
       else:
         print("Beam attack calculating direction with offset: ", beam_offset)
         return (target_pos - beam_offset - from_pos).normalized()
+
+    DirectionType.TO_OWNER:
+      # 弾の生成位置からオーナー位置に向かう方向
+      if spawn_pos != Vector2.ZERO and spawn_pos != from_pos:
+        return (from_pos - spawn_pos).normalized()
+      # spawn_posがowner位置と同じ場合はbase_directionにフォールバック
+      if _rear_firing:
+        return -base_direction.normalized()
+      return base_direction.normalized()
 
       # カスタムスクリプトで計算
     DirectionType.RANDOM:

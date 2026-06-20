@@ -93,6 +93,26 @@ static func update_pattern_from_enchantments(
   cooldown_sec = max(cooldown_sec, 0.02)  # 最低クールダウンは 0.02 秒
   pattern.burst_delay = cooldown_sec
 
+  # 貫通回数の更新
+  pattern.penetration_count = int(
+    _apply_enchantment_modifiers(item_inst, pattern.penetration_count, "penetration")
+  )
+
+  # 弾数の更新
+  var base_bullet_count = pattern.bullet_count
+  pattern.bullet_count = max(
+    1, int(_apply_enchantment_modifiers(item_inst, base_bullet_count, "bullet_count"))
+  )
+
+  # 拡散弾数の更新（SHOT_ON_HITパターンの場合）
+  if pattern.on_hit_pattern:
+    var base_spread_count = item_inst.prototype.base_modifiers.get(
+      "spread_bullet_count", pattern.on_hit_pattern.bullet_count
+    )
+    pattern.on_hit_pattern.bullet_count = max(
+      1, int(_apply_enchantment_modifiers(item_inst, base_spread_count, "spread_bullet_count"))
+    )
+
 
 static func _apply_enchantment_modifiers(
   item_inst: ItemInstance, base_value: float, modifier_key: String

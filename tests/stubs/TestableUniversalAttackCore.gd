@@ -21,6 +21,9 @@ func _spawn_bullet(
   # 追跡用に配列に追加
   spawned_bullets.append(mock_bullet)
 
+  # パターンタイプに応じた追加処理
+  _on_bullet_spawned(mock_bullet)
+
   return true  # 常に成功
 
 

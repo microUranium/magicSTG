@@ -56,6 +56,13 @@ func _on_pattern_changed(old_pattern: AttackPattern, new_pattern: AttackPattern)
   if new_pattern and new_pattern.burst_delay > 0:
     cooldown_sec = new_pattern.burst_delay
 
+    # デバッグログ
+    if new_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING:
+      print(
+        "[AttackCoreBase] Pattern changed: cooldown_sec set to burst_delay = ",
+        new_pattern.burst_delay
+      )
+
   # 自動発射設定をパターンから更新
   if new_pattern:
     auto_start = new_pattern.auto_start
@@ -169,7 +176,9 @@ func _validate_enchantments() -> bool:
 
 func _get_available_enchant_keys() -> Array[String]:
   """このコアが対応するエンチャントキーを返す"""
-  return ["damage", "bullet_speed", "cooldown"]
+  return [
+    "damage", "bullet_speed", "cooldown", "penetration", "bullet_count", "spread_bullet_count"
+  ]
 
 
 func _is_compatible_enchant_key(key: String, available_keys: Array[String]) -> bool:
@@ -203,6 +212,13 @@ func _update_attack_pattern_stats() -> void:
 
 func _start_cooldown():
   _cooling = true
+
+  # デバッグログ
+  if (
+    attack_pattern and attack_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING
+  ):
+    print(Time.get_ticks_msec(), "[AttackCoreBase] Starting cooldown: ", cooldown_sec, " sec")
+
   emit_signal("core_cooldown_updated", 0.0, cooldown_sec)
   if _cool_timer:
     _cool_timer.timeout.disconnect(_on_cooldown_finished)

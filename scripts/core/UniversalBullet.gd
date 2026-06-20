@@ -160,6 +160,12 @@ func _process(delta):
       BulletMovementConfig.RotationMode.FIXED:
         # 回転しない（何もしない）
         pass
+  else:
+    # デフォルトは移動方向に合わせる
+    var _direction = (global_position - _prev_position).normalized()
+    if _direction != Vector2.ZERO:
+      var rotation_angle = _direction.angle() + PI / 2
+      rotation = rotation_angle
 
   _prev_position = global_position
 

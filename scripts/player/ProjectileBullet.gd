@@ -22,6 +22,9 @@ var _forced_lifetime_timer: float = 0.0
 func _ready():
   super._ready()
   _spawn_position = global_position  # 発射位置を記録
+  # 弾の向きを方向に合わせる
+  if direction != Vector2.ZERO:
+    rotation = direction.angle() + PI / 2  # 上向きが0度なので90度回転
   if speed > min_speed:
     var tw = get_tree().create_tween()
     tw.tween_property(self, "speed", min_speed, deceleration_time)

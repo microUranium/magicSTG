@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=13 format=3 uid="uid://bhqs6qvw78t65"]
+
+[ext_resource type="PackedScene" uid="uid://br565nd5vqltf" path="res://scenes/bullets/enhanced_barrier_bullet.tscn" id="1_bullet"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_core"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="1_pattern"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="2_visual"]
+[ext_resource type="Script" uid="uid://bfq6gyek44eor" path="res://scripts/core/BarrierBulletMovement.gd" id="3_barrier"]
+[ext_resource type="Texture2D" uid="uid://b453yui4thg1l" path="res://assets/gfx/sprites/bullet_barrier_orb.png" id="4_texture"]
+[ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="5_item"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="6_1ywg5"]
+[ext_resource type="Texture2D" uid="uid://dudcq4xfguoxq" path="res://assets/gfx/sprites/icon_magic_barrier_orb.png" id="6_icon"]
+
+[sub_resource type="Resource" id="Resource_barrier_movement"]
+script = ExtResource("3_barrier")
+orbit_radius = 80.0
+approach_duration = 0.3
+orbit_duration = 4.0
+rotation_speed = 180.0
+rotate_during_approach = true
+projectile_direction_type = 4
+fixed_direction = Vector2(0, 1)
+projectile_speed = 600.0
+
+[sub_resource type="Resource" id="Resource_visual"]
+script = ExtResource("2_visual")
+texture = ExtResource("4_texture")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 12.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_pattern"]
+script = ExtResource("1_pattern")
+pattern_type = 2
+bullet_scene = ExtResource("1_bullet")
+target_group = "enemies"
+damage = 2
+bullet_range = 0.0
+bullet_lifetime = 3.0
+auto_start = true
+penetration_count = 1
+bullet_visual_config = SubResource("Resource_visual")
+barrier_movement_config = SubResource("Resource_barrier_movement")
+bullet_count = 4
+rapid_fire_count = 1
+rapid_fire_interval = 0.0
+burst_delay = 5.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 3
+base_direction = Vector2(0, -1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 80.0
+rotation_speed = 180.0
+rotation_duration = 4.0
+movement_type = 0
+bullet_speed = 600.0
+curve_strength = 0.0
+orbit_radius = 80.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("1_pattern")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("6_1ywg5")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[resource]
+script = ExtResource("5_item")
+pattern_type = 0
+core_scene = ExtResource("1_core")
+projectile_scene = ExtResource("1_bullet")
+damage_base = 2.0
+cooldown_sec_base = 5.0
+base_modifiers = {
+"bullet_speed": 800.0
+}
+attack_pattern = SubResource("Resource_pattern")
+id = &"attackcore_barrier_orb"
+item_type = 1
+display_name = "バリアオーブ"
+description = "精霊の周囲を回転する魔力球を展開し、触れた敵にダメージを与えます。"
+icon = ExtResource("6_icon")
+metadata/_custom_type_script = "uid://31siypvcpkwh"

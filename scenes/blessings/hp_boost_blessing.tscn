@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://chpb0ostbls01"]
+
+[ext_resource type="Script" path="res://scripts/player/HpBoostBlessing.gd" id="1"]
+
+[node name="HpBoostBlessing" type="Node"]
+script = ExtResource("1")

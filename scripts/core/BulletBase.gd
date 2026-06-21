@@ -32,11 +32,18 @@ func _ready():
   _spawn_frame = Engine.get_process_frames()
   connect("area_entered", Callable(self, "_on_area_entered"))
   StageSignals.destroy_bullet.connect(_destroy_bullet)
+  StageSignals.destroy_bullets_by_target.connect(_on_destroy_by_target)
 
 
 func _destroy_bullet() -> void:
   """シグナルによる弾の破壊（即座削除）"""
   _immediate_removal()
+
+
+func _on_destroy_by_target(group: String) -> void:
+  """指定ターゲットグループを狙う弾のみ破壊（打消の加護など）"""
+  if target_group == group:
+    _immediate_removal()
 
 
 func _immediate_removal():
@@ -59,13 +66,24 @@ func _create_explosion_effect():
   pass
 
 
+func _resolve_damage(_target: Node) -> int:
+  """ヒット時の最終ダメージを算出。
+  自弾(target_group=='enemies')はプレイヤーの加護で与ダメージ補正を受ける。"""
+  if target_group != "enemies":
+    return damage
+  var player = TargetService.get_player()
+  if is_instance_valid(player) and "blessing_container" in player and player.blessing_container:
+    return player.blessing_container.process_outgoing_damage(_target, damage)
+  return damage
+
+
 func _on_area_entered(body):
   # フラグが有効な場合のみ、生成後1フレームは衝突判定をスキップ（拡散弾の即ヒット防止）
   if ignore_first_frame_collision and Engine.get_process_frames() - _spawn_frame <= 1:
     return
 
   if body.is_in_group(target_group):
-    body.take_damage(damage)  # 敵側に take_damage 実装がある前提
+    body.take_damage(_resolve_damage(body))  # 敵側に take_damage 実装がある前提
     hit_count += 1
 
     # SHOT_ON_HIT パターンの発動

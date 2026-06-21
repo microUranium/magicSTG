@@ -35,6 +35,7 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= 0:
     emit_signal("destroyed")
+    StageSignals.emit_enemy_defeated(self)  # 強奪の加護など、敵撃破を購読する側へ通知
     _spawn_destroy_particles()
     _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)

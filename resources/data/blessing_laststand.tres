@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=4 format=3 uid="uid://dl4ststres03q"]
+
+[ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cl4ststbls03q" path="res://scenes/blessings/laststand_blessing.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://jiw4e1fd2we5" path="res://assets/gfx/sprites/icon_blessing_last_stand.png" id="3"]
+
+[resource]
+script = ExtResource("1")
+blessing_scene = ExtResource("2")
+base_modifiers = {
+"laststand_max_pct": 1.5,
+"laststand_floor_ratio": 0.3
+}
+id = &"blessing_laststand"
+item_type = 0
+display_name = "背水の加護"
+description = "残り体力が少ないほど与えるダメージが増加します。"
+icon = ExtResource("3")
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl4ststbls03q"]
+
+[ext_resource type="Script" path="res://scripts/player/LastStandBlessing.gd" id="1"]
+
+[node name="LastStandBlessing" type="Node"]
+script = ExtResource("1")

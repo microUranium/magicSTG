@@ -1,6 +1,8 @@
 extends GaugeProvider
 class_name AttackCoreBase
 
+const MIN_PLAYER_COOLDOWN := 1.0 / 60.0  # プレイヤー魔法クールタイムの下限（必死の加護など）
+
 #---------------------------------------------------------------------
 # Signals
 #---------------------------------------------------------------------
@@ -223,8 +225,19 @@ func _start_cooldown():
   if _cool_timer:
     _cool_timer.timeout.disconnect(_on_cooldown_finished)
     _cool_timer = null
-  _cool_timer = get_tree().create_timer(cooldown_sec)
+  _cool_timer = get_tree().create_timer(_effective_cooldown())
   _cool_timer.timeout.connect(_on_cooldown_finished)
+
+
+func _effective_cooldown() -> float:
+  # プレイヤーの魔法のみ、加護によるクールタイム倍率を適用（最小1/60秒）。
+  var cd := cooldown_sec
+  if player_mode:
+    var p = TargetService.get_player()
+    if is_instance_valid(p) and "blessing_container" in p and p.blessing_container:
+      cd *= float(p.blessing_container.get_attack_cooldown_mult())
+    cd = maxf(cd, MIN_PLAYER_COOLDOWN)
+  return cd
 
 
 func _on_cooldown_finished():

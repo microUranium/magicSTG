@@ -218,6 +218,58 @@
     ],
     "blessings": [
       {
+        "uid": "blessing_nullify_1",
+        "id": "blessing_nullify",
+        "enchantments": [
+          {
+            "id": "blessing_uses_add",
+            "level": 2
+          },
+          {
+            "id": "nullify_steal_chance_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "blessing_proximity_1",
+        "id": "blessing_proximity",
+        "enchantments": [
+          {
+            "id": "muga",
+            "level": 2
+          },
+          {
+            "id": "proximity_range_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "blessing_laststand_1",
+        "id": "blessing_laststand",
+        "enchantments": [
+          {
+            "id": "muga",
+            "level": 2
+          },
+          {
+            "id": "laststand_cdr_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "blessing_hp_boost_1",
+        "id": "blessing_hp_boost",
+        "enchantments": [
+          {
+            "id": "hp_add",
+            "level": 3
+          }
+        ]
+      },
+      {
         "uid": "blessing_shield_1",
         "id": "blessing_shield",
         "enchantments": [

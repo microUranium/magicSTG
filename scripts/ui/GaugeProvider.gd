@@ -40,3 +40,9 @@ func init_gauge(
   gauge_max = max_value
   gauge_label = _label
   call_deferred("set_gauge", _current_value)  # 初期値を設定
+
+
+func set_gauge_style(style: String):
+  # スタイル（色・バー画像など）を変更し HUD へ通知する
+  gauge_style = style
+  emit_signal("gauge_style_changed", style)

@@ -1,6 +1,8 @@
 extends Area2D
 class_name EnemyBase
 
+const DamageNumberScene = preload("res://scripts/ui/DamageNumber.gd")
+
 signal received_damage(amount: int, isInvincible: bool)
 signal destroyed
 
@@ -11,6 +13,7 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 @export var drop_table: Array[DropTableEntry] = []
 @export var skip_boss_defeat_effect: bool = false  # ボス撃破エフェクトをスキップするかどうか
 @export var isInvincible: bool = false  # 無敵状態かどうか
+@export var show_damage_numbers: bool = true  # 被弾ダメージ数字を表示するか（デバッグビルドのみ有効）
 
 var _damage_flash_time: float
 var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
@@ -24,6 +27,9 @@ func _ready():
 
 func take_damage(amount: int) -> void:
   emit_signal("received_damage", amount, isInvincible)
+  # デバッグ用ダメージ表示（デバッグビルド時のみ）
+  if show_damage_numbers and OS.is_debug_build():
+    DamageNumberScene.spawn(global_position, amount, isInvincible)
   if isInvincible:  # 無敵状態ならダメージを受けない
     return
   $HpNode.take_damage(amount)
@@ -35,6 +41,7 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= 0:
     emit_signal("destroyed")
+    StageSignals.emit_enemy_defeated(self)  # 強奪の加護など、敵撃破を購読する側へ通知
     _spawn_destroy_particles()
     _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)

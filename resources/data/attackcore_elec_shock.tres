@@ -1,0 +1,137 @@
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=12 format=3 uid="uid://deqfhbmsqs4xp"]
+
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_core"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="1_pattern"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="2_visual"]
+[ext_resource type="Texture2D" uid="uid://dpg8tovjv1klc" path="res://assets/gfx/sprites/bullet_elec_shock.png" id="3_texture"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="4_d1sb0"]
+[ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_item"]
+[ext_resource type="Texture2D" uid="uid://qeyb1s8vwptw" path="res://assets/gfx/sprites/icon_magic_elec_shock.png" id="5_icon"]
+
+[sub_resource type="Resource" id="Resource_visual"]
+script = ExtResource("2_visual")
+texture = ExtResource("3_texture")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 8.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_spread_pattern"]
+script = ExtResource("1_pattern")
+pattern_type = 0
+bullet_scene = ExtResource("1_bullet")
+target_group = "enemies"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 1.5
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_visual")
+bullet_count = 4
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.5
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 2
+base_direction = Vector2(0, 1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("1_pattern")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("4_d1sb0")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_main_pattern"]
+script = ExtResource("1_pattern")
+pattern_type = 7
+bullet_scene = ExtResource("1_bullet")
+target_group = "enemies"
+damage = 5
+bullet_range = 0.0
+bullet_lifetime = 3.0
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_visual")
+bullet_count = 1
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.5
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_pattern = SubResource("Resource_spread_pattern")
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, -1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("1_pattern")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("4_d1sb0")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[resource]
+script = ExtResource("4_item")
+pattern_type = 0
+core_scene = ExtResource("1_core")
+damage_base = 5.0
+cooldown_sec_base = 0.3
+base_modifiers = {
+"bullet_speed": 800.0,
+"spread_bullet_count": 4,
+"spread_bullet_speed_multiplier": 1.2
+}
+attack_pattern = SubResource("Resource_main_pattern")
+id = &"attackcore_elec_shock"
+item_type = 1
+display_name = "エレキショック"
+description = "電撃を放ちます。電撃が敵にヒットすると、その敵を中心に攻撃が拡散します。"
+icon = ExtResource("5_icon")
+metadata/_custom_type_script = "uid://31siypvcpkwh"

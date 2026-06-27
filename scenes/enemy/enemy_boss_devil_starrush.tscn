@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="2_f5uqs"]
 [ext_resource type="Script" uid="uid://cmucqejrhrtkh" path="res://scripts/enemy/BossDevilStarRushAI.gd" id="3_6ohyc"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="4_sx2h1"]
-[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://scenes/bullets/destroy_particle.png" id="5_5pykk"]
+[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://assets/gfx/effects/destroy_particle.png" id="5_5pykk"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="7_ynlg0"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_4ics3"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="9_fokqx"]

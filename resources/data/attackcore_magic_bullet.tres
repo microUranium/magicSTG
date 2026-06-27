@@ -1,20 +1,84 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=5 format=3 uid="uid://btduv61qerhj"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=11 format=3 uid="uid://btduv61qerhj"]
 
-[ext_resource type="PackedScene" uid="uid://c8dge426kwwql" path="res://scenes/attackCores/player/bullet.tscn" id="1_01gxq"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_k7kja"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="1_ypo2y"]
 [ext_resource type="Texture2D" uid="uid://cfpn5w3abdsp0" path="res://assets/gfx/sprites/icon_magic_energy_shot.png" id="2_k7kja"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="2_pattern"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="3_visual"]
+[ext_resource type="Texture2D" uid="uid://dy8hs1fh4tu5e" path="res://assets/gfx/sprites/bullet_sprite.png" id="4_tex"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="5_jnoq5"]
+
+[sub_resource type="Resource" id="Resource_visual"]
+script = ExtResource("3_visual")
+texture = ExtResource("4_tex")
+scale = 1.0
+color = Color(0.16, 0.692, 1, 1)
+collision_radius = 8.0
+enable_particles = false
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_pattern"]
+script = ExtResource("2_pattern")
+pattern_type = 0
+bullet_scene = ExtResource("1_bullet")
+target_group = "enemies"
+damage = 1
+bullet_range = 0.0
+bullet_lifetime = 0.0
+auto_start = true
+penetration_count = 0
+bullet_visual_config = SubResource("Resource_visual")
+bullet_count = 1
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 0.2
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, -1)
+angle_spread = 0.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 1000.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("2_pattern")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("5_jnoq5")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]
 script = ExtResource("1_ypo2y")
 pattern_type = 0
 core_scene = ExtResource("1_k7kja")
-projectile_scene = ExtResource("1_01gxq")
 damage_base = 1.0
 cooldown_sec_base = 0.2
 base_modifiers = {
 "bullet_speed": 1000.0
 }
+attack_pattern = SubResource("Resource_pattern")
 id = &"attackcore_magic_bullet"
 item_type = 1
 display_name = "エネルギーショット"

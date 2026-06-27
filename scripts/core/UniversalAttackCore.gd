@@ -12,9 +12,11 @@ class_name UniversalAttackCore
 var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
 var _beam_duration_timer: SceneTreeTimer = null  # ビーム持続時間タイマー
+var _barrier_duration_timer: SceneTreeTimer = null  # バリア回転時間タイマー
 var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追跡
 var _rear_firing_mode: bool = false  # 後方発射モード
 var _base_dir_cached: Vector2 = Vector2.ZERO  # ベース方向のキャッシュ
+var _tracked_bullets: Array[Node] = []  # BURST_WITH_TRACKING用の弾丸追跡
 
 
 class ExecutionContext:
@@ -54,6 +56,19 @@ func _update_gauge_display() -> void:
     var elapsed = _beam_duration_timer.time_left
     var progress = (elapsed) * 100 / attack_pattern.beam_duration
     set_gauge(progress)
+  # バリア回転中の場合
+  elif (
+    _barrier_duration_timer
+    and attack_pattern
+    and attack_pattern.pattern_type == AttackPattern.PatternType.BARRIER_BULLETS
+  ):
+    var orbit_duration = (
+      attack_pattern.barrier_movement_config.orbit_duration
+      if attack_pattern.barrier_movement_config
+      else attack_pattern.rotation_duration
+    )
+    var progress = (_barrier_duration_timer.time_left) * 100 / orbit_duration
+    set_gauge(progress)
   # 通常のクールダウン中の場合
   elif _cool_timer and _cooling:
     var elapsed = _cool_timer.time_left
@@ -69,6 +84,8 @@ func _register_pattern_executors() -> void:
   _pattern_executors[AttackPattern.PatternType.SPIRAL] = _execute_spiral
   _pattern_executors[AttackPattern.PatternType.BEAM] = _execute_beam
   _pattern_executors[AttackPattern.PatternType.CUSTOM] = _execute_custom
+  _pattern_executors[AttackPattern.PatternType.BURST_WITH_TRACKING] = _execute_burst_with_tracking
+  _pattern_executors[AttackPattern.PatternType.SHOT_ON_HIT] = _execute_shot_on_hit
 
 
 func _do_fire() -> bool:
@@ -76,11 +93,9 @@ func _do_fire() -> bool:
   if not attack_pattern:
     push_warning("UniversalAttackCore: AttackPattern is not set.")
     return false
+
   if not _validate_firing_conditions():
     return false
-  # デバッグ情報更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
   # 警告表示（warning_configが存在する場合のみ）
   if !attack_pattern.warning_configs.is_empty():
@@ -119,6 +134,23 @@ func _validate_firing_conditions() -> bool:
     if not attack_pattern.bullet_scene:
       push_warning("UniversalAttackCore: Attack pattern has no bullet scene.")
       return false
+
+  # BURST_WITH_TRACKING: 追跡中の弾が残っているか確認
+  if attack_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING:
+    _clean_tracked_bullets()  # 無効な参照を削除
+
+    # デバッグログ
+    print(
+      Time.get_ticks_msec(),
+      "[UniversalAttackCore] Validate firing: tracked bullets = ",
+      _tracked_bullets.size()
+    )
+
+    if _tracked_bullets.size() > 0:
+      print(Time.get_ticks_msec(), "[UniversalAttackCore] Cannot fire: bullets still exist")
+      return false  # まだ弾が残っている
+
+    print(Time.get_ticks_msec(), "[UniversalAttackCore] Can fire: all bullets cleared")
 
   return true
 
@@ -226,6 +258,198 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   return success
 
 
+func _execute_burst_with_tracking(pattern: AttackPattern) -> bool:
+  """バースト射撃（弾追跡あり）"""
+  if not pattern.bullet_scene:
+    push_warning("BURST_WITH_TRACKING: bullet_scene is null")
+    return false
+
+  var burst_count = max(1, pattern.burst_count)
+  var burst_interval = max(0.0, pattern.burst_interval)
+
+  # バースト射撃を実行
+  for i in range(burst_count):
+    var success = await _execute_single_shot(pattern)
+    if not success:
+      return false
+
+    if i < burst_count - 1:
+      if is_inside_tree():
+        await get_tree().create_timer(burst_interval).timeout
+
+  return true
+
+
+func _clean_tracked_bullets() -> void:
+  """無効な弾丸参照を削除"""
+  _tracked_bullets = _tracked_bullets.filter(func(b): return is_instance_valid(b))
+
+
+func _on_bullet_spawned(bullet: Node) -> void:
+  """弾丸生成後の処理（パターンタイプに応じて追跡）"""
+  if (
+    attack_pattern and attack_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING
+  ):
+    _tracked_bullets.append(bullet)
+    print(
+      Time.get_ticks_msec(),
+      "[UniversalAttackCore] Bullet spawned, tracked count: ",
+      _tracked_bullets.size()
+    )
+
+
+func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
+  """ヒット時に別パターンを発動する弾を発射"""
+  if not pattern.bullet_scene:
+    push_warning("SHOT_ON_HIT: bullet_scene is null")
+    return false
+
+  if not pattern.on_hit_pattern:
+    push_warning("SHOT_ON_HIT: on_hit_pattern is null")
+    return false
+
+  # メインの弾を発射
+  var target_pos = _get_player_position()
+  var base_dir = pattern.calculate_base_direction(
+    _owner_actor.global_position, target_pos, _rear_firing_mode
+  )
+  var spawn_pos = pattern.calculate_spawn_position(_owner_actor.global_position, target_pos, 0)
+
+  # 弾を直接生成（_spawn_bullet は bool を返すため使用できない）
+  var parent = _find_bullet_parent()
+  if not parent:
+    return false
+
+  var bullet = pattern.bullet_scene.instantiate()
+
+  # movement_config クリア
+  if not pattern.bullet_movement_config and "movement_config" in bullet:
+    bullet.movement_config = null
+
+  parent.add_child(bullet)
+
+  # 基本設定
+  bullet.global_position = spawn_pos
+  bullet.direction = base_dir
+  bullet.speed = pattern.bullet_speed
+  bullet.damage = pattern.damage
+  bullet.bullet_lifetime = pattern.bullet_lifetime
+  bullet.target_group = pattern.target_group
+
+  if "penetration_count" in bullet:
+    bullet.penetration_count = pattern.penetration_count
+
+  # ヒット時パターンの設定を弾に渡す
+  if pattern.on_hit_pattern:
+    if "on_hit_pattern" in bullet:
+      bullet.on_hit_pattern = pattern.on_hit_pattern
+      bullet.on_hit_use_hit_position = pattern.on_hit_use_hit_position
+      bullet.on_hit_trigger_once = pattern.on_hit_trigger_once
+
+      # シグナル接続
+      if bullet.has_signal("hit_pattern_requested"):
+        bullet.hit_pattern_requested.connect(_on_hit_pattern_requested)
+
+  # 視覚設定の適用
+  if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
+    bullet.apply_visual_config(pattern.bullet_visual_config)
+
+  # 追跡リストに追加
+  _spawned_projectiles.append(bullet)
+  bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
+
+  # プレイヤーモード時はゲージリセット
+  if player_mode and show_gauge_ui:
+    set_gauge(0)
+
+  return true
+
+
+func _on_hit_pattern_requested(
+  hit_position: Vector2, bullet_position: Vector2, on_hit_pattern: AttackPattern
+) -> void:
+  """ヒット時パターンの実行ハンドラ"""
+  if not on_hit_pattern:
+    return
+
+  var spawn_pos = hit_position if on_hit_pattern.on_hit_use_hit_position else bullet_position
+
+  # 拡散弾の速度係数を取得
+  var speed_multiplier = 1.0
+  if item_inst and item_inst.prototype is AttackCoreItem:
+    speed_multiplier = item_inst.prototype.base_modifiers.get("spread_bullet_speed_multiplier", 1.0)
+
+  # direction_type に応じた拡散弾生成
+  if on_hit_pattern.direction_type == AttackPattern.DirectionType.CIRCLE:
+    # 円形パターン（均等配置）
+    for i in range(on_hit_pattern.bullet_count):
+      var angle = (360.0 / on_hit_pattern.bullet_count) * i + on_hit_pattern.angle_offset
+      var direction = Vector2(cos(deg_to_rad(angle)), sin(deg_to_rad(angle)))
+      _spawn_spread_bullet(on_hit_pattern, direction, spawn_pos, speed_multiplier)
+
+  elif on_hit_pattern.direction_type == AttackPattern.DirectionType.RANDOM:
+    # ランダムパターン
+    var base_dir = on_hit_pattern.base_direction.normalized()
+    for i in range(on_hit_pattern.bullet_count):
+      var direction = on_hit_pattern.calculate_random_spread_direction(base_dir)
+      _spawn_spread_bullet(on_hit_pattern, direction, spawn_pos, speed_multiplier)
+
+  else:
+    # その他のパターン（FIXED, TO_PLAYERなど）
+    var base_dir = on_hit_pattern.calculate_base_direction(spawn_pos, _get_player_position(), false)
+    for i in range(on_hit_pattern.bullet_count):
+      var direction = on_hit_pattern.calculate_spread_direction(
+        i, on_hit_pattern.bullet_count, base_dir
+      )
+      _spawn_spread_bullet(on_hit_pattern, direction, spawn_pos, speed_multiplier)
+
+
+func _spawn_spread_bullet(
+  pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2, speed_multiplier: float = 1.0
+) -> Node:
+  """拡散弾専用の生成関数"""
+  if not pattern.bullet_scene:
+    return null
+
+  var parent = _find_bullet_parent()
+  if not parent:
+    return null
+
+  var bullet = pattern.bullet_scene.instantiate()
+
+  # movement_config クリア（既存の修正と同様）
+  if not pattern.bullet_movement_config and "movement_config" in bullet:
+    bullet.movement_config = null
+
+  parent.add_child(bullet)
+
+  # 基本設定
+  bullet.global_position = spawn_pos
+  bullet.direction = direction
+  bullet.speed = pattern.bullet_speed * speed_multiplier
+  bullet.damage = pattern.damage
+  bullet.bullet_lifetime = pattern.bullet_lifetime
+  bullet.target_group = pattern.target_group
+
+  # 拡散弾は1F無敵を有効化（生成直後の元の敵への再ヒットを防止）
+  if "ignore_first_frame_collision" in bullet:
+    bullet.ignore_first_frame_collision = true
+
+  # 再拡散防止（on_hit_pattern は設定しない）
+  if "on_hit_pattern" in bullet:
+    bullet.on_hit_pattern = null
+
+  # 視覚設定の適用
+  if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
+    bullet.apply_visual_config(pattern.bullet_visual_config)
+
+  # 追跡リストに追加
+  _spawned_projectiles.append(bullet)
+  bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
+
+  return bullet
+
+
 func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
   """バリア弾（回転→直進）"""
   var bullet_group = "barrier_bullets_" + str(ResourceUID.create_id())
@@ -245,6 +469,21 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
 
     if pattern.rapid_fire_interval > 0:
       await get_tree().create_timer(pattern.rapid_fire_interval).timeout
+
+  # プレイヤーモード時のみ: 回転中のゲージ表示 + CD遅延
+  if player_mode:
+    var orbit_duration = (
+      pattern.barrier_movement_config.orbit_duration
+      if pattern.barrier_movement_config
+      else pattern.rotation_duration
+    )
+    _barrier_duration_timer = get_tree().create_timer(orbit_duration)
+
+    if show_gauge_ui:
+      set_gauge(0)
+
+    await _barrier_duration_timer.timeout
+    _barrier_duration_timer = null
 
   return success
 
@@ -461,6 +700,12 @@ func _spawn_bullet(
     return false
 
   var bullet = pattern.bullet_scene.instantiate()
+
+  # パターンがmovement_configを指定していない場合、シーンのデフォルトをクリア
+  # (デフォルトのmovement_configによる意図しない初期回転を防ぐ)
+  if not pattern.bullet_movement_config and "movement_config" in bullet:
+    bullet.movement_config = null
+
   parent.add_child(bullet)
 
   # 弾丸の基本設定
@@ -492,6 +737,9 @@ func _spawn_bullet(
   _spawned_projectiles.append(bullet)
   bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
 
+  # パターンタイプに応じた追加処理
+  _on_bullet_spawned(bullet)
+
   # 実行コンテキスト更新
   if _current_execution:
     _current_execution.bullets_spawned += 1
@@ -518,6 +766,12 @@ func _create_barrier_bullet(
     return null
 
   var bullet = pattern.bullet_scene.instantiate()
+
+  # パターンがmovement_configを指定していない場合、シーンのデフォルトをクリア
+  # (デフォルトのmovement_configによる意図しない初期回転を防ぐ)
+  if not pattern.bullet_movement_config and "movement_config" in bullet:
+    bullet.movement_config = null
+
   parent.add_child(bullet)
 
   # バリア弾の初期位置を設定
@@ -615,69 +869,14 @@ func _get_player_node() -> Node2D:
 
 
 #---------------------------------------------------------------------
-# Debug System (デバッグシステム)
-#---------------------------------------------------------------------
-func _update_debug_display():
-  """デバッグ情報の更新"""
-  if not attack_pattern:
-    return
-
-  _update_debug_label()
-  _update_debug_line()
-
-
-func _update_debug_label():
-  """デバッグラベルの更新"""
-  if not debug_label or not attack_pattern:
-    return
-
-  var pattern_name = attack_pattern.resource_path.get_file().get_basename()
-  var execution_info = ""
-  if _current_execution:
-    execution_info = "\nBullets: %d" % _current_execution.bullets_spawned
-
-  var enchant_info = ""
-  if player_mode and item_inst and item_inst.enchantments.size() > 0:
-    enchant_info = "\nEnchants: %d" % item_inst.enchantments.size()
-
-  debug_label.text = (
-    "Pattern: %s\nCount: %d\nDamage: %d%s%s"
-    % [
-      pattern_name, attack_pattern.bullet_count, attack_pattern.damage, execution_info, enchant_info
-    ]
-  )
-
-
-func _update_debug_line():
-  """デバッグライン（射撃方向）の更新"""
-  if not debug_line or not _owner_actor:
-    return
-
-  var player_pos = _get_player_position()
-  var direction = attack_pattern.calculate_base_direction(_owner_actor.global_position, player_pos)
-  var line_end = direction * 100.0  # 100ピクセルの線
-
-  debug_line.clear_points()
-  debug_line.add_point(Vector2.ZERO)
-  debug_line.add_point(line_end)
-  debug_line.default_color = Color.RED
-
-
-#---------------------------------------------------------------------
 # AttackCoreBase Overrides (基底クラスのオーバーライド)
 #---------------------------------------------------------------------
 func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPattern) -> void:
   """パターン変更時の処理"""
-  # デバッグ表示更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
 
 func _on_owner_changed(new_owner: Node2D) -> void:
   """オーナー変更時の処理"""
-  # デバッグ表示更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
 
 func get_debug_info() -> Dictionary:
@@ -714,6 +913,25 @@ func get_debug_info() -> Dictionary:
 
 func _on_projectile_destroyed(projectile: Node) -> void:
   _spawned_projectiles.erase(projectile)
+  _tracked_bullets.erase(projectile)
+
+  # デバッグログ
+  if (
+    attack_pattern and attack_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING
+  ):
+    print(
+      Time.get_ticks_msec(),
+      "[UniversalAttackCore] Bullet destroyed, tracked count: ",
+      _tracked_bullets.size()
+    )
+
+    # 全ての弾が削除された場合、min_cooldownを考慮して発射を試みる
+    if _tracked_bullets.size() == 0 and is_inside_tree():
+      print(
+        Time.get_ticks_msec(), "[UniversalAttackCore] All bullets destroyed, triggering next fire"
+      )
+      await get_tree().process_frame
+      trigger()
 
 
 func _show_attack_warning() -> Vector2:

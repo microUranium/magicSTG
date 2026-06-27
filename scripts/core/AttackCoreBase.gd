@@ -1,6 +1,8 @@
 extends GaugeProvider
 class_name AttackCoreBase
 
+const MIN_PLAYER_COOLDOWN := 1.0 / 60.0  # プレイヤー魔法クールタイムの下限（必死の加護など）
+
 #---------------------------------------------------------------------
 # Signals
 #---------------------------------------------------------------------
@@ -55,6 +57,13 @@ func _on_pattern_changed(old_pattern: AttackPattern, new_pattern: AttackPattern)
   # クールダウンタイムをパターンから更新
   if new_pattern and new_pattern.burst_delay > 0:
     cooldown_sec = new_pattern.burst_delay
+
+    # デバッグログ
+    if new_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING:
+      print(
+        "[AttackCoreBase] Pattern changed: cooldown_sec set to burst_delay = ",
+        new_pattern.burst_delay
+      )
 
   # 自動発射設定をパターンから更新
   if new_pattern:
@@ -169,7 +178,9 @@ func _validate_enchantments() -> bool:
 
 func _get_available_enchant_keys() -> Array[String]:
   """このコアが対応するエンチャントキーを返す"""
-  return ["damage", "bullet_speed", "cooldown"]
+  return [
+    "damage", "bullet_speed", "cooldown", "penetration", "bullet_count", "spread_bullet_count"
+  ]
 
 
 func _is_compatible_enchant_key(key: String, available_keys: Array[String]) -> bool:
@@ -203,12 +214,30 @@ func _update_attack_pattern_stats() -> void:
 
 func _start_cooldown():
   _cooling = true
+
+  # デバッグログ
+  if (
+    attack_pattern and attack_pattern.pattern_type == AttackPattern.PatternType.BURST_WITH_TRACKING
+  ):
+    print(Time.get_ticks_msec(), "[AttackCoreBase] Starting cooldown: ", cooldown_sec, " sec")
+
   emit_signal("core_cooldown_updated", 0.0, cooldown_sec)
   if _cool_timer:
     _cool_timer.timeout.disconnect(_on_cooldown_finished)
     _cool_timer = null
-  _cool_timer = get_tree().create_timer(cooldown_sec)
+  _cool_timer = get_tree().create_timer(_effective_cooldown())
   _cool_timer.timeout.connect(_on_cooldown_finished)
+
+
+func _effective_cooldown() -> float:
+  # プレイヤーの魔法のみ、加護によるクールタイム倍率を適用（最小1/60秒）。
+  var cd := cooldown_sec
+  if player_mode:
+    var p = TargetService.get_player()
+    if is_instance_valid(p) and "blessing_container" in p and p.blessing_container:
+      cd *= float(p.blessing_container.get_attack_cooldown_mult())
+    cd = maxf(cd, MIN_PLAYER_COOLDOWN)
+  return cd
 
 
 func _on_cooldown_finished():

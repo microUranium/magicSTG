@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_enchant"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2_tier"]
+[ext_resource type="Resource" path="res://resources/data/tiers/tier_penetration_add_1.tres" id="3_t1"]
+[ext_resource type="Resource" path="res://resources/data/tiers/tier_penetration_add_2.tres" id="4_t2"]
+[ext_resource type="Resource" path="res://resources/data/tiers/tier_penetration_add_3.tres" id="5_t3"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = &"penetration_add"
+display_name = "貫通"
+description = "弾が敵を貫通するようになります。"
+tiers = Array[ExtResource("2_tier")]([ExtResource("3_t1"), ExtResource("4_t2"), ExtResource("5_t3")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

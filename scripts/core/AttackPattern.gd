@@ -2,7 +2,9 @@
 extends Resource
 class_name AttackPattern
 
-enum PatternType { SINGLE_SHOT, RAPID_FIRE, BARRIER_BULLETS, SPIRAL, BEAM, CUSTOM }  # 単発  # 連射  # 円形配置  # バリア弾（回転→直進）  # 螺旋  # ビーム  # カスタムスクリプト用
+enum PatternType {
+  SINGLE_SHOT, RAPID_FIRE, BARRIER_BULLETS, SPIRAL, BEAM, CUSTOM, BURST_WITH_TRACKING, SHOT_ON_HIT
+}  # 単発  # 連射  # 円形配置  # バリア弾（回転→直進）  # 螺旋  # ビーム  # カスタムスクリプト用  # バースト射撃（弾追跡あり）  # ヒット時に別パターン発動
 
 enum DirectionType { FIXED, TO_PLAYER, RANDOM, CIRCLE, CUSTOM, TO_OWNER }  # 固定方向  # プレイヤー狙い  # ランダム # 円形  # カスタム計算  # オーナー狙い
 
@@ -32,6 +34,17 @@ enum SpawnPositionMode {
 @export var rapid_fire_count: int = 1
 @export var rapid_fire_interval: float = 0.1
 @export var burst_delay: float = 0.5  # 複数バースト間の間隔
+
+# === バースト射撃（弾追跡あり）設定 ===
+@export var burst_count: int = 3  # バースト弾数
+@export var burst_interval: float = 0.05  # バースト内の連射間隔
+@export var min_cooldown: float = 0.0833  # バースト間の最小クールダウン
+
+# === ヒット時発動（SHOT_ON_HIT）設定 ===
+@export_group("Shot On Hit")
+@export var on_hit_pattern: AttackPattern  # ヒット時に実行するパターン
+@export var on_hit_use_hit_position: bool = true  # ヒット位置から発射するか（false=弾の位置）
+@export var on_hit_trigger_once: bool = true  # 弾1つにつき1回のみ発動（false=貫通時に毎回発動）
 
 # === 発射位置設定 ===
 @export_group("Spawn Position")

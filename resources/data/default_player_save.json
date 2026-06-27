@@ -79,15 +79,212 @@
             "level": 3
           }
         ]
+      },
+      {
+        "uid": "attackcore_barrier_orb_1",
+        "id": "attackcore_barrier_orb",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_barrier_orb_2",
+        "id": "attackcore_barrier_orb",
+        "enchantments": [
+          {
+            "id": "bullet_count_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_barrier_orb_3",
+        "id": "attackcore_barrier_orb",
+        "enchantments": [
+          {
+            "id": "bullet_count_add",
+            "level": 3
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_barrier_orb_4",
+        "id": "attackcore_barrier_orb",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_4",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_5",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 3
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_fireball_3",
+        "id": "attackcore_fireball",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 2
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_triple_burst_1",
+        "id": "attackcore_triple_burst",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_triple_burst_2",
+        "id": "attackcore_triple_burst",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_triple_burst_3",
+        "id": "attackcore_triple_burst",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 1
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_elec_shock_1",
+        "id": "attackcore_elec_shock",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_elec_shock_2",
+        "id": "attackcore_elec_shock",
+        "enchantments": [
+          {
+            "id": "spread_bullet_count_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_elec_shock_3",
+        "id": "attackcore_elec_shock",
+        "enchantments": [
+          {
+            "id": "penetration_add",
+            "level": 1
+          },
+          {
+            "id": "spread_bullet_count_add",
+            "level": 3
+          }
+        ]
       }
     ],
     "blessings": [
+      {
+        "uid": "blessing_nullify_1",
+        "id": "blessing_nullify",
+        "enchantments": [
+          {
+            "id": "blessing_uses_add",
+            "level": 2
+          },
+          {
+            "id": "nullify_steal_chance_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "blessing_proximity_1",
+        "id": "blessing_proximity",
+        "enchantments": [
+          {
+            "id": "muga",
+            "level": 2
+          },
+          {
+            "id": "proximity_range_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "blessing_laststand_1",
+        "id": "blessing_laststand",
+        "enchantments": [
+          {
+            "id": "muga",
+            "level": 2
+          },
+          {
+            "id": "laststand_cdr_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "blessing_hp_boost_1",
+        "id": "blessing_hp_boost",
+        "enchantments": [
+          {
+            "id": "hp_add",
+            "level": 3
+          }
+        ]
+      },
       {
         "uid": "blessing_shield_1",
         "id": "blessing_shield",
         "enchantments": [
           {
             "id": "shield_hp_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "blessing_shield_2",
+        "id": "blessing_shield",
+        "enchantments": [
+          {
+            "id": "shield_recover_delay_pct",
             "level": 3
           }
         ]

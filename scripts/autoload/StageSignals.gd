@@ -7,6 +7,8 @@ signal request_background_fade
 signal request_background_change(texture: Texture2D)
 signal request_start_vibration
 signal destroy_bullet
+signal destroy_bullets_by_target(target_group: String)
+signal enemy_defeated(enemy)
 signal attack_cores_pause_requested(paused: bool)
 signal blessings_pause_requested(paused: bool)
 signal player_control_pause_requested(paused: bool)
@@ -38,6 +40,14 @@ func emit_request_start_vibration():
 
 func emit_destroy_bullet():
   emit_signal("destroy_bullet")
+
+
+func emit_destroy_bullets_by_target(target_group: String):
+  emit_signal("destroy_bullets_by_target", target_group)
+
+
+func emit_enemy_defeated(enemy):
+  emit_signal("enemy_defeated", enemy)
 
 
 func emit_bgm_play_requested(stream: AudioStream, fade_time: float, maxdb: float):

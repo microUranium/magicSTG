@@ -41,6 +41,18 @@ func process_damage(_player, damage):
   return damage  # デフォルトはダメージそのまま通す
 
 
+func get_damage_bonus_pct(_player, _enemy, _ctx: Dictionary) -> float:
+  # 自弾が敵にヒットした時の与ダメージボーナス率を返す（0.5 = +50%）。
+  # 複数加護の戻り値は BlessingContainer 側で加算合成され、基底値に一括適用される。
+  return 0.0
+
+
+func get_attack_cooldown_mult(_player) -> float:
+  # プレイヤーの魔法クールタイムへの倍率を返す（1.0 = 等倍, 0.5 = 半減）。
+  # 複数加護の戻り値は BlessingContainer 側で乗算合成される。
+  return 1.0
+
+
 func set_paused(state: bool) -> void:
   if _paused == state:
     return

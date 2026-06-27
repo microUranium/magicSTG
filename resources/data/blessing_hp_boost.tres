@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=4 format=3 uid="uid://dhpb0ostres01"]
+
+[ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://chpb0ostbls01" path="res://scenes/blessings/hp_boost_blessing.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://s3xbrwsxxcuj" path="res://assets/gfx/sprites/icon_blessing_hp_boost.png" id="3"]
+
+[resource]
+script = ExtResource("1")
+blessing_scene = ExtResource("2")
+base_modifiers = {
+"hp_add": 5,
+"hp_pct": 0.0
+}
+id = &"blessing_hp_boost"
+item_type = 0
+display_name = "体力増強の加護"
+description = "身につけると最大体力が増加します。"
+icon = ExtResource("3")
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

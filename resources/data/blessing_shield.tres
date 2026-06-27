@@ -9,7 +9,9 @@ script = ExtResource("1_qkv0m")
 blessing_scene = ExtResource("1_xq25p")
 base_modifiers = {
 "shield_hp": 10,
-"shield_recover_delay": 10
+"shield_recover_delay": 10,
+"shield_regen_delay": 5.0,
+"shield_regen_rate": 2.0
 }
 id = &"blessing_shield"
 item_type = 0

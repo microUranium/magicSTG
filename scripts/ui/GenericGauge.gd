@@ -1,5 +1,9 @@
 extends Control
 
+# バー画像（通常／無効化）。スタイルに応じて texture_progress を差し替える
+const TEX_PROGRESS := preload("res://assets/gfx/sprites/generic_gauge_progress.png")
+const TEX_DISABLED := preload("res://assets/gfx/sprites/ganeric_gauge_disabled.png")
+
 var _icon: TextureRect
 var _icon_background: TextureRect
 var _bar: TextureProgressBar
@@ -34,6 +38,7 @@ func init_from_provider(p: GaugeProvider) -> void:
   # 3) プログレスバー初期化
   _bar.min_value = 0
   _bar.max_value = p.gauge_max
+  _bar.step = 0.0  # 値のスナップを無効化し、フレーム単位で滑らかに変化させる
   _bar.value = p.gauge_current
 
   # 4) スタイル反映（色 / 方向など）
@@ -56,10 +61,18 @@ func update_style(style: String) -> void:
   match style:
     "cooldown":
       _bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
+      _bar.texture_progress = TEX_PROGRESS
       _bar.add_theme_color_override("fg_color", Color.CYAN)
     "durability":
       _bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
+      _bar.texture_progress = TEX_PROGRESS
+      _bar.add_theme_color_override("fg_color", Color.GREEN)
+    "durability_recovering":
+      # シールド破壊中：復活ゲージを無効化画像で表示
+      _bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
+      _bar.texture_progress = TEX_DISABLED
       _bar.add_theme_color_override("fg_color", Color.GREEN)
     _:
       _bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
+      _bar.texture_progress = TEX_PROGRESS
       _bar.add_theme_color_override("fg_color", Color.WHITE)

@@ -96,9 +96,6 @@ func _do_fire() -> bool:
 
   if not _validate_firing_conditions():
     return false
-  # デバッグ情報更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
   # 警告表示（warning_configが存在する場合のみ）
   if !attack_pattern.warning_configs.is_empty():
@@ -872,69 +869,14 @@ func _get_player_node() -> Node2D:
 
 
 #---------------------------------------------------------------------
-# Debug System (デバッグシステム)
-#---------------------------------------------------------------------
-func _update_debug_display():
-  """デバッグ情報の更新"""
-  if not attack_pattern:
-    return
-
-  _update_debug_label()
-  _update_debug_line()
-
-
-func _update_debug_label():
-  """デバッグラベルの更新"""
-  if not debug_label or not attack_pattern:
-    return
-
-  var pattern_name = attack_pattern.resource_path.get_file().get_basename()
-  var execution_info = ""
-  if _current_execution:
-    execution_info = "\nBullets: %d" % _current_execution.bullets_spawned
-
-  var enchant_info = ""
-  if player_mode and item_inst and item_inst.enchantments.size() > 0:
-    enchant_info = "\nEnchants: %d" % item_inst.enchantments.size()
-
-  debug_label.text = (
-    "Pattern: %s\nCount: %d\nDamage: %d%s%s"
-    % [
-      pattern_name, attack_pattern.bullet_count, attack_pattern.damage, execution_info, enchant_info
-    ]
-  )
-
-
-func _update_debug_line():
-  """デバッグライン（射撃方向）の更新"""
-  if not debug_line or not _owner_actor:
-    return
-
-  var player_pos = _get_player_position()
-  var direction = attack_pattern.calculate_base_direction(_owner_actor.global_position, player_pos)
-  var line_end = direction * 100.0  # 100ピクセルの線
-
-  debug_line.clear_points()
-  debug_line.add_point(Vector2.ZERO)
-  debug_line.add_point(line_end)
-  debug_line.default_color = Color.RED
-
-
-#---------------------------------------------------------------------
 # AttackCoreBase Overrides (基底クラスのオーバーライド)
 #---------------------------------------------------------------------
 func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPattern) -> void:
   """パターン変更時の処理"""
-  # デバッグ表示更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
 
 func _on_owner_changed(new_owner: Node2D) -> void:
   """オーナー変更時の処理"""
-  # デバッグ表示更新
-  if show_debug_info and OS.is_debug_build():
-    _update_debug_display()
 
 
 func get_debug_info() -> Dictionary:

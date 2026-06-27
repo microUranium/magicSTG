@@ -299,8 +299,14 @@ func _check_layer_clear(layer_id: String) -> void:
     _finish_layer(layer_id)
   else:
     # 敵残カウントを監視して再試行
-    if is_inside_tree():
-      await get_tree().create_timer(0.5).timeout
+    # ツリー外（ゲームオーバー→画面遷移などでシーン破棄中）の場合は
+    # awaitがスキップされて同期再帰となりスタックオーバーフローするため監視を打ち切る
+    if not is_inside_tree():
+      return
+    await get_tree().create_timer(0.5).timeout
+    # await中に破棄された場合も打ち切る
+    if not is_inside_tree():
+      return
     _check_layer_clear(layer_id)
 
 

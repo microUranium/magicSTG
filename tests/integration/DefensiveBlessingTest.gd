@@ -126,6 +126,27 @@ func test_recover_gauge_fills_over_time() -> void:
   assert_float(bl.gauge_current).is_less(float(bl.shield_max))
 
 
+# 「速復」エンチャントで復活待機時間が短縮される
+func test_recover_delay_enchant_reduces_delay() -> void:
+  var ench := load("res://resources/data/enchantment_shield_recover_delay_pct.tres") as Enchantment
+  assert_object(ench).is_not_null()
+
+  sandbox = auto_free(Node.new())
+  add_child(sandbox)
+  var p := PlayerStub.new()
+  sandbox.add_child(p)
+
+  var inst := ItemInstance.new(_make_blessing_item({"shield_recover_delay": 1.0}))
+  inst.add_enchantment(ench, 3)  # Lv3 = -50%
+  var bl := inst.prototype.blessing_scene.instantiate() as DefensiveBlessing
+  bl.item_inst = inst
+  sandbox.add_child(bl)
+  bl.on_equip(p)
+
+  # 1.0s * (1.0 - 0.5) = 0.5s
+  assert_float(bl.recover_delay).is_equal_approx(0.5, 0.001)
+
+
 func after():
   # sandbox は auto_free 管理のため、有効な場合のみ明示解放
   if is_instance_valid(sandbox):

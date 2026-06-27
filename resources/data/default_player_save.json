@@ -280,6 +280,16 @@
         ]
       },
       {
+        "uid": "blessing_shield_2",
+        "id": "blessing_shield",
+        "enchantments": [
+          {
+            "id": "shield_recover_delay_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
         "uid": "blessing_regen_1",
         "id": "blessing_regen",
         "enchantments": [

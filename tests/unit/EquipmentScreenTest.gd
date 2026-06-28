@@ -131,6 +131,23 @@ func test_right_click_does_nothing_when_no_empty_slot() -> void:
   assert_int(grid.get_items().size()).is_equal(1)
 
 
+func test_has_equipped_attack_core_false_when_all_empty() -> void:
+  _reset_equipment_slots()
+  assert_bool(equipment_screen._has_equipped_attack_core()).is_false()
+
+
+func test_has_equipped_attack_core_true_when_equipped() -> void:
+  _reset_equipment_slots()
+  for slot in get_tree().get_nodes_in_group("equipment_slots"):
+    if slot is EquipSlotPanel and slot.allowed_type == ItemBase.ItemType.ATTACK_CORE:
+      var d := ItemPanelData.new()
+      d.inst = ItemInstanceStubScript.dummy_item("core1", ItemBase.ItemType.ATTACK_CORE)
+      slot.data = d
+      slot._refresh()
+      break
+  assert_bool(equipment_screen._has_equipped_attack_core()).is_true()
+
+
 ## Helpers -------------------------------------------------------------
 func _reset_equipment_slots() -> void:
   for slot in get_tree().get_nodes_in_group("equipment_slots"):

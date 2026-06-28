@@ -5,6 +5,8 @@ class_name EquipmentScreen
 @onready var tooltip := $ItemTooltipPanel
 @onready var save_btn := $BackButton
 
+@export var generic_popup_window := preload("res://scenes/ui/generic_pop-up_window.tscn")
+
 
 func _ready():
   # Signal 接続
@@ -172,6 +174,10 @@ func _collect_inventory_items() -> Array[ItemPanelData]:
 
 # 保存
 func _on_save_pressed():
+  if not _has_equipped_attack_core():
+    _show_warning_popup("1つ以上の魔法を装備してください。")
+    return  # 魔法未装備なら終了せず警告のみ
+
   var inventory_items: Array[ItemPanelData] = _collect_inventory_items()
   InventoryService.clear()
   for item in inventory_items:
@@ -207,3 +213,21 @@ func _on_request_show_item(item: ItemInstance):
     tooltip.show_item(item)
   else:
     tooltip.hide()
+
+
+## 魔法(ATTACK_CORE)が1つでも装備されているか
+func _has_equipped_attack_core() -> bool:
+  for slot in get_tree().get_nodes_in_group("equipment_slots"):
+    if slot is EquipSlotPanel and slot.allowed_type == ItemBase.ItemType.ATTACK_CORE and slot.data:
+      return true
+  return false
+
+
+## OKのみの警告ポップアップを表示する
+func _show_warning_popup(message: String) -> void:
+  var popup: GenericPopupWindow = generic_popup_window.instantiate()
+  # EquipmentScreen のルートはサイズ0のため、画面全体サイズのビューポートへ追加する
+  get_tree().root.add_child(popup)
+  popup.set_message(message)
+  popup.set_ok_only()
+  popup.ok_pressed.connect(func(): popup.queue_free())  # OKで閉じるだけ

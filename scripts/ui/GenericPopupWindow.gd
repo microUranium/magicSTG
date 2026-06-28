@@ -18,6 +18,17 @@ func set_message(message: String):
   label.text = message
 
 
+## OKボタンのみ・ウィンドウ下中央に配置するモードへ切り替える
+func set_ok_only() -> void:
+  cancel_btn.hide()
+  # OK ボタンをウィンドウ下中央へ（画面中央=ウィンドウ中央にアンカー）
+  var w := ok_btn.offset_right - ok_btn.offset_left  # 既存の幅を維持
+  ok_btn.anchor_left = 0.5
+  ok_btn.anchor_right = 0.5
+  ok_btn.offset_left = -w / 2.0
+  ok_btn.offset_right = w / 2.0
+
+
 func _on_ok_pressed():
   emit_signal("ok_pressed")
 

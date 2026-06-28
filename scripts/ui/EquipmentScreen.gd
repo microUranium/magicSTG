@@ -10,6 +10,7 @@ func _ready():
   # Signal 接続
   EquipSignals.swap_request.connect(_on_swap_request)
   EquipSignals.return_item_to_inventory.connect(_on_return_item_to_inventory)
+  EquipSignals.swap_to_each_grid.connect(_on_equip_from_inventory)
   EquipSignals.request_show_item.connect(_on_request_show_item)
   # PlayerSaveData.data_loaded.connect(_set_inventory)
 
@@ -35,7 +36,7 @@ func _load_inventory():
   grid.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
 
 
-func _set_equipment(data: ItemPanelData):
+func _set_equipment(data: ItemPanelData) -> bool:
   var equipment_slots := get_tree().get_nodes_in_group("equipment_slots")
   for slot in equipment_slots:
     if slot is EquipSlotPanel and slot.allowed_type == data.inst.prototype.item_type:
@@ -44,7 +45,8 @@ func _set_equipment(data: ItemPanelData):
       slot.data = data
       slot._refresh()
       slot.equip_changed.emit(data.inst)
-      return  # 一つのスロットにのみ装備可能
+      return true  # 一つのスロットにのみ装備可能
+  return false  # 空きスロットが無い場合
 
 
 ## ------------------------------------------------------------------
@@ -73,6 +75,18 @@ func _on_return_item_to_inventory(pane: Node):
     pane.data = null  # スロットを空に
     pane._refresh()  # 見た目更新
     pane.equip_changed.emit(null)  # 装備変更通知
+
+
+func _on_equip_from_inventory(src: Node, _grid: Node) -> void:
+  # 持ち物欄のアイテムを右クリック → 同タイプの空きスロットへ自動装備
+  if not (src is ItemSlotPanel) or src.data == null:
+    return
+  if _set_equipment(src.data):  # 空きスロットがあれば装備
+    src.data = null  # 持ち物欄から除去
+    src._refresh()
+    grid.set_items(_collect_inventory_items())  # 詰め直し
+    grid.emit_signal("ui_needs_refresh")
+  # 空きスロットが無い場合は何もしない（アイテムは持ち物欄に残る）
 
 
 func _swap_items(src: Node, dst: Node) -> void:

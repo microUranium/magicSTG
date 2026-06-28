@@ -4,6 +4,10 @@ class_name ItemTooltipPanel
 const OFFSET := Vector2(16, 16)  # マウスの少し右下に表示
 const MARGIN_X := 500  # 画面端からの余白
 const MARGIN_Y := 250  # 画面端からの余白
+const BG_BOTTOM_PAD := 12  # VBox 下端から背景下端までの余白
+
+@onready var _bg: NinePatchRect = $NinePatchRect
+@onready var _vbox: VBoxContainer = $VBoxContainer
 
 
 func _ready() -> void:
@@ -19,10 +23,18 @@ func show_item(inst: ItemInstance):
   $VBoxContainer/RichTextLabel.text = inst.prototype.description
   $VBoxContainer/RichTextLabel2.text = _format_enchant(inst)
   visible = true
+  await get_tree().process_frame  # fit_content のレイアウト確定を待つ
+  _resize_background()
 
 
 func hide_tooltip():
   visible = false
+
+
+## テキスト量に応じて背景 NinePatchRect の高さを伸縮させる
+func _resize_background() -> void:
+  var content_height := _vbox.get_combined_minimum_size().y
+  _bg.size.y = _vbox.position.y + content_height + BG_BOTTOM_PAD
 
 
 func _format_enchant(inst: ItemInstance) -> String:

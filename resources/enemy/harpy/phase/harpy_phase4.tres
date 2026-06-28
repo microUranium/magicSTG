@@ -11,3 +11,5 @@
 script = ExtResource("4_ahckj")
 patterns = Array[ExtResource("1_05j7f")]([ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("4_6gebm"), ExtResource("5_xvnjv"), ExtResource("4_6gebm")])
 loop_type = 0
+consumes_hp = true
+end_hp_ratio = 0.0

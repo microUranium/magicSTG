@@ -5,11 +5,14 @@ class_name EquipmentScreen
 @onready var tooltip := $ItemTooltipPanel
 @onready var save_btn := $BackButton
 
+@export var generic_popup_window := preload("res://scenes/ui/generic_pop-up_window.tscn")
+
 
 func _ready():
   # Signal 接続
   EquipSignals.swap_request.connect(_on_swap_request)
   EquipSignals.return_item_to_inventory.connect(_on_return_item_to_inventory)
+  EquipSignals.swap_to_each_grid.connect(_on_equip_from_inventory)
   EquipSignals.request_show_item.connect(_on_request_show_item)
   # PlayerSaveData.data_loaded.connect(_set_inventory)
 
@@ -35,7 +38,7 @@ func _load_inventory():
   grid.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
 
 
-func _set_equipment(data: ItemPanelData):
+func _set_equipment(data: ItemPanelData) -> bool:
   var equipment_slots := get_tree().get_nodes_in_group("equipment_slots")
   for slot in equipment_slots:
     if slot is EquipSlotPanel and slot.allowed_type == data.inst.prototype.item_type:
@@ -44,7 +47,8 @@ func _set_equipment(data: ItemPanelData):
       slot.data = data
       slot._refresh()
       slot.equip_changed.emit(data.inst)
-      return  # 一つのスロットにのみ装備可能
+      return true  # 一つのスロットにのみ装備可能
+  return false  # 空きスロットが無い場合
 
 
 ## ------------------------------------------------------------------
@@ -73,6 +77,18 @@ func _on_return_item_to_inventory(pane: Node):
     pane.data = null  # スロットを空に
     pane._refresh()  # 見た目更新
     pane.equip_changed.emit(null)  # 装備変更通知
+
+
+func _on_equip_from_inventory(src: Node, _grid: Node) -> void:
+  # 持ち物欄のアイテムを右クリック → 同タイプの空きスロットへ自動装備
+  if not (src is ItemSlotPanel) or src.data == null:
+    return
+  if _set_equipment(src.data):  # 空きスロットがあれば装備
+    src.data = null  # 持ち物欄から除去
+    src._refresh()
+    grid.set_items(_collect_inventory_items())  # 詰め直し
+    grid.emit_signal("ui_needs_refresh")
+  # 空きスロットが無い場合は何もしない（アイテムは持ち物欄に残る）
 
 
 func _swap_items(src: Node, dst: Node) -> void:
@@ -158,6 +174,10 @@ func _collect_inventory_items() -> Array[ItemPanelData]:
 
 # 保存
 func _on_save_pressed():
+  if not _has_equipped_attack_core():
+    _show_warning_popup("1つ以上の魔法を装備してください。")
+    return  # 魔法未装備なら終了せず警告のみ
+
   var inventory_items: Array[ItemPanelData] = _collect_inventory_items()
   InventoryService.clear()
   for item in inventory_items:
@@ -193,3 +213,21 @@ func _on_request_show_item(item: ItemInstance):
     tooltip.show_item(item)
   else:
     tooltip.hide()
+
+
+## 魔法(ATTACK_CORE)が1つでも装備されているか
+func _has_equipped_attack_core() -> bool:
+  for slot in get_tree().get_nodes_in_group("equipment_slots"):
+    if slot is EquipSlotPanel and slot.allowed_type == ItemBase.ItemType.ATTACK_CORE and slot.data:
+      return true
+  return false
+
+
+## OKのみの警告ポップアップを表示する
+func _show_warning_popup(message: String) -> void:
+  var popup: GenericPopupWindow = generic_popup_window.instantiate()
+  # EquipmentScreen のルートはサイズ0のため、画面全体サイズのビューポートへ追加する
+  get_tree().root.add_child(popup)
+  popup.set_message(message)
+  popup.set_ok_only()
+  popup.ok_pressed.connect(func(): popup.queue_free())  # OKで閉じるだけ

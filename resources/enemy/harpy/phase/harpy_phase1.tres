@@ -10,3 +10,5 @@
 script = ExtResource("2_64j0a")
 patterns = Array[ExtResource("1_wn4nu")]([ExtResource("2_xfw23"), ExtResource("3_1fn47"), ExtResource("4_p1dkj")])
 loop_type = 0
+consumes_hp = false
+end_hp_ratio = 0.0

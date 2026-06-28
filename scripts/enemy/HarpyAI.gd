@@ -1,6 +1,8 @@
 extends EnemyPatternedAIBase
 class_name HarpyAI
 
+signal phase_changed(phase_idx: int)  # フェーズ遷移をHPバー等へ通知
+
 @export var phases: Array[PhaseResource] = []  # 各 Phase のパターンリソース
 @export var phase1_patterns: Array[AttackPattern]
 @export var phase3_patterns_1: Array[AttackPattern]
@@ -62,6 +64,8 @@ func _next_phase():
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_request_change_background_scroll_speed(1000, 0.3)
     StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+
+  phase_changed.emit(_phase_idx)
 
   _next_pattern()
 

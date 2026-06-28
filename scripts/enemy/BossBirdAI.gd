@@ -1,6 +1,8 @@
 extends EnemyPatternedAIBase
 class_name BossBirdAI
 
+signal phase_changed(phase_idx: int)  # フェーズ遷移をHPバー等へ通知
+
 @export var phases: Array[PhaseResource] = []  # 各 Phase のパターンリソース
 @export var phase1_patterns: Array[AttackPattern]
 @export var phase2_patterns: Array[AttackPattern]
@@ -48,6 +50,8 @@ func _next_phase():
 
   if _phase_idx == 1 and not skip_bgm_change:
     StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
+
+  phase_changed.emit(_phase_idx)
 
   _next_pattern()
 

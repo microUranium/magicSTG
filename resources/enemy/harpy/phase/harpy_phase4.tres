@@ -13,3 +13,4 @@ patterns = Array[ExtResource("1_05j7f")]([ExtResource("2_mimup"), ExtResource("3
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.0
+bar_merge_with_previous = false

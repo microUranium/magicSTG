@@ -74,6 +74,8 @@ func _next_phase():
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
 
+  phase_changed.emit(_phase_idx)
+
   _next_pattern()
 
 

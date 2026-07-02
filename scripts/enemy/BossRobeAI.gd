@@ -65,6 +65,8 @@ func _next_phase():
     _spawn_clones(3)
     _sprite_fade_in(0.3)
 
+  phase_changed.emit(_phase_idx)
+
   _next_pattern()
 
 

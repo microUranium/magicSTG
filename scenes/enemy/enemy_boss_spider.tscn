@@ -1,4 +1,6 @@
-[gd_scene load_steps=45 format=3 uid="uid://c31x6u3h3j02y"]
+[gd_scene load_steps=46 format=3 uid="uid://c31x6u3h3j02y"]
+
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [ext_resource type="Script" uid="uid://6lylowgff5sb" path="res://scripts/enemy/BossSpider.gd" id="1_m3mwo"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_md488"]
@@ -310,6 +312,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_m3mwo"), SubResource("Resource_1k3hq"), SubResource("Resource_fg38x"), SubResource("Resource_gfwgc"), SubResource("Resource_uspes"), SubResource("Resource_u32tt"), SubResource("Resource_6sp45"), SubResource("Resource_cvbmj"), SubResource("Resource_g13fj"), SubResource("Resource_f67gb"), SubResource("Resource_k5yli"), SubResource("Resource_u4538")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_j7ufx"]
@@ -392,6 +395,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_j7ufx"), SubResource("Resource_qousy"), SubResource("Resource_emf8d"), SubResource("Resource_xcv7w")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_xi1y1"]
@@ -417,6 +421,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_xi1y1")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_cqqu8"]
@@ -463,3 +468,6 @@ default_core_scene = ExtResource("16_qousy")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("17_emf8d")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 0

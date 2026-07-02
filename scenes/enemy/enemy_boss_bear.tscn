@@ -1,4 +1,6 @@
-[gd_scene load_steps=40 format=3 uid="uid://c0omtihvvaieb"]
+[gd_scene load_steps=41 format=3 uid="uid://c0omtihvvaieb"]
+
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [ext_resource type="Script" uid="uid://8rohnyi311pb" path="res://scripts/enemy/BossBear.gd" id="1_grr34"]
 [ext_resource type="Texture2D" uid="uid://i11btmh4g00n" path="res://assets/gfx/sprites/enemy_boss_bear_sprite.png" id="2_7infs"]
@@ -160,6 +162,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_oad3j")
 patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_ws6x4"]
@@ -242,6 +245,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_oad3j")
 patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_ws6x4"), SubResource("Resource_gjc13"), SubResource("Resource_4nlkf"), SubResource("Resource_p4pu0")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_ws6x4"]
@@ -318,3 +322,6 @@ default_core_scene = ExtResource("16_q3hgb")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("17_r3ja4")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 0

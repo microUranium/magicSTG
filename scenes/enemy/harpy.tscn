@@ -96,3 +96,4 @@ attack_patterns_additive = Array[ExtResource("15_1xhvu")]([])
 auto_create_core = true
 
 [node name="BossHpBar" parent="." instance=ExtResource("19_hpbar")]
+mode = 1

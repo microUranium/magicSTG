@@ -97,8 +97,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_el5v6")
 patterns = Array[ExtResource("6_5g4h4")]([ExtResource("7_oeuat"), ExtResource("8_ngv7u"), SubResource("Resource_ngv7u")])
 loop_type = 0
-consumes_hp = false
-end_hp_ratio = 0.0
+show_hp_bar = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_clw6s"]
@@ -181,8 +180,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_el5v6")
 patterns = Array[ExtResource("6_5g4h4")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
 loop_type = 0
-consumes_hp = true
-end_hp_ratio = 0.5
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_sw3l5"]
@@ -265,8 +263,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_el5v6")
 patterns = Array[ExtResource("6_5g4h4")]([SubResource("Resource_sw3l5"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_5g4h4"), SubResource("Resource_oeuat"), SubResource("Resource_hyn3k")])
 loop_type = 0
-consumes_hp = true
-end_hp_ratio = 0.0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5g4h4"]
@@ -308,3 +305,4 @@ position = Vector2(-0.5, -48.5)
 shape = SubResource("RectangleShape2D_5g4h4")
 
 [node name="BossHpBar" parent="." instance=ExtResource("15_hpbar")]
+mode = 0

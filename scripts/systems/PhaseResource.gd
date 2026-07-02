@@ -4,5 +4,8 @@ class_name PhaseResource
 
 @export var patterns: Array[EnemyPatternResource] = []
 @export var loop_type: int = 0  # 0=SEQ, 1=RANDOM   ← 各 Phase 個別で可
-@export var consumes_hp: bool = true  # false = 会話/導入フェーズ（HPバー非表示・無敵想定）
-@export var end_hp_ratio: float = 0.0  # このフェーズが終了する HP 割合（max_hp 基準, 0.0〜1.0）
+
+# --- HPバー表示制御 ---
+@export var show_hp_bar: bool = false  # このフェーズでHPバーを表示するか（登場/会話は false）
+@export var end_hp_ratio: float = 0.0  # PER_PHASE時の区間下端 HP 割合（max_hp 基準, 0.0〜1.0）
+@export var bar_merge_with_previous: bool = false  # PER_PHASE時、リセットせず前フェーズの区間を継続

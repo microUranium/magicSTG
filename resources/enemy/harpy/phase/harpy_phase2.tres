@@ -9,5 +9,5 @@
 script = ExtResource("5_k0o0b")
 patterns = Array[ExtResource("1_21hem")]([ExtResource("2_padsh"), ExtResource("3_21hem")])
 loop_type = 0
-consumes_hp = true
+show_hp_bar = true
 end_hp_ratio = 0.5

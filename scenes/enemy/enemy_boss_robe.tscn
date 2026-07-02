@@ -1,4 +1,6 @@
-[gd_scene load_steps=50 format=3 uid="uid://dkos6dqisuon4"]
+[gd_scene load_steps=51 format=3 uid="uid://dkos6dqisuon4"]
+
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [ext_resource type="Script" uid="uid://d4iwpjlfi8eeu" path="res://scripts/enemy/BossRobe.gd" id="1_8nbxi"]
 [ext_resource type="Script" uid="uid://cnmw0f13kculn" path="res://scripts/enemy/BossRobeAI.gd" id="1_l6hyg"]
@@ -282,6 +284,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb"), SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb"), SubResource("Resource_8nbxi"), SubResource("Resource_efo7e"), SubResource("Resource_xq4ur"), SubResource("Resource_vgl2v"), SubResource("Resource_ul17m"), SubResource("Resource_7bo1r")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_5t5pq"]
@@ -345,6 +348,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_5t5pq"), SubResource("Resource_lws1y"), SubResource("Resource_fsis4")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_nexou"]
@@ -408,6 +412,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_nexou"), SubResource("Resource_rnprv"), SubResource("Resource_uxy4m")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_58abv"]
@@ -480,3 +485,6 @@ default_core_scene = ExtResource("11_coh47")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("15_kt4f4")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 0

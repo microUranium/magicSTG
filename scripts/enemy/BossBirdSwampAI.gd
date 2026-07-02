@@ -116,6 +116,8 @@ func _next_phase():
   elif _phase_idx == 6:
     _destory_decoys()
 
+  phase_changed.emit(_phase_idx)
+
   _next_pattern()
 
 

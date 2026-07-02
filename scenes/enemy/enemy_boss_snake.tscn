@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c4c77cdqptgq8"]
+[gd_scene load_steps=23 format=3 uid="uid://c4c77cdqptgq8"]
 
 [ext_resource type="Script" uid="uid://cbm4inu0l5omw" path="res://scripts/enemy/BossSnake.gd" id="1_dhpoj"]
 [ext_resource type="Texture2D" uid="uid://cvor1sxuokmka" path="res://assets/gfx/sprites/enemy_snake_head.png" id="2_vuglt"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_wxu4v"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_pdwag"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_dmrm3"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dhpoj"]
 atlas = ExtResource("2_vuglt")
@@ -72,6 +73,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_dhpoj")
 patterns = Array[ExtResource("6_p22mw")]([SubResource("Resource_271uf"), SubResource("Resource_p22mw")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_sxpga"]
@@ -135,6 +139,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_dhpoj")
 patterns = Array[ExtResource("6_p22mw")]([SubResource("Resource_sxpga"), SubResource("Resource_3kx4q"), SubResource("Resource_dhpoj")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [node name="BossSnake" type="Area2D" groups=["enemies"]]
@@ -177,3 +184,6 @@ default_core_scene = ExtResource("16_dmrm3")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("11_p22mw")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 0

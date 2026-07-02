@@ -2,8 +2,6 @@ extends EnemyBase
 
 @onready var ai: BossBirdAI = $EnemyAI
 @onready var attack_collision: CollisionShape2D = $CollisionShape_attack
-@onready var hp_bar = $BossHpBar
-@onready var hp_node = $HpNode
 var prev_position: Vector2 = Vector2.ZERO
 
 var damage = 10
@@ -20,11 +18,6 @@ func _ready():
     animated_sprite.animation_changed.connect(_on_animation_changed)
   connect("area_entered", Callable(self, "_on_area_entered"))
 
-  # HPバーをフェーズ遷移に同期（_ready は子(EnemyAI)より後に走るため接続漏れしない）
-  if hp_bar:
-    ai.phase_changed.connect(_on_phase_changed)
-    _on_phase_changed(ai._phase_idx)  # 初期フェーズ（会話）でバーを隠す
-
 
 func take_damage(amount: int) -> void:
   if ai._phase_idx == 0:
@@ -34,27 +27,11 @@ func take_damage(amount: int) -> void:
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  if ai._phase_idx == 0:
-    return  # 会話フェーズはパターン完走で遷移するため何もしない
-
-  var phase: PhaseResource = ai.phases[ai._phase_idx] if ai._phase_idx < ai.phases.size() else null
-  var has_next_phase := ai._phase_idx < ai.phases.size() - 1
-
-  # 現フェーズの終了HP割合を下回ったら次フェーズへ（閾値は PhaseResource.end_hp_ratio が真実の源）
-  if (
-    phase
-    and phase.consumes_hp
-    and has_next_phase
-    and current_hp > 0
-    and current_hp <= max_hp * phase.end_hp_ratio
-  ):
+  # HPバーは BossHpBar(SINGLE) が自己配線で表示。ここではフェーズ遷移のみ扱う。
+  if current_hp <= max_hp * 0.5 and ai._phase_idx == 1:
+    # Phase 1でHPが50%以下になったら次のフェーズへ
     ai._next_phase()
-    return
-
-  if hp_bar:
-    hp_bar.update_hp(current_hp)
-
-  if current_hp <= 0:
+  elif current_hp <= 0:
     if !skip_boss_defeat_effect:
       StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
       StageSignals.emit_request_change_background_scroll_speed(0, 2.5)  # スクロール速度を0に
@@ -66,33 +43,6 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
       StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
     _spawn_destroy_particles()
     queue_free()
-
-
-func _on_phase_changed(phase_idx: int) -> void:
-  if not hp_bar:
-    return
-  if phase_idx < 0 or phase_idx >= ai.phases.size():
-    hp_bar.hide_bar()
-    return
-
-  var phase: PhaseResource = ai.phases[phase_idx]
-  if not phase.consumes_hp:
-    hp_bar.hide_bar()  # 会話/導入フェーズはバー非表示
-    return
-
-  # このフェーズのHP区間 [low, high] を算出
-  #   high = 直前の戦闘フェーズの end_hp_ratio（無ければ満タン 1.0）
-  #   low  = このフェーズの end_hp_ratio
-  var max_hp: int = hp_node.max_hp
-  var high_ratio := 1.0
-  for i in range(phase_idx - 1, -1, -1):
-    if ai.phases[i].consumes_hp:
-      high_ratio = ai.phases[i].end_hp_ratio
-      break
-  var high_hp := int(round(max_hp * high_ratio))
-  var low_hp := int(round(max_hp * phase.end_hp_ratio))
-
-  hp_bar.begin_phase(low_hp, high_hp, hp_node.current_hp)
 
 
 func _on_animation_changed():

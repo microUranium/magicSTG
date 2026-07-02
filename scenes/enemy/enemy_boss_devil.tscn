@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://cotogichr6p5p"]
+[gd_scene load_steps=73 format=3 uid="uid://cotogichr6p5p"]
 
 [ext_resource type="Script" uid="uid://cwovwkigldf15" path="res://scripts/enemy/BossDevil.gd" id="1_nwjbn"]
 [ext_resource type="Texture2D" uid="uid://4374i1wqpbb6" path="res://assets/gfx/sprites/enemy_boss_devil_sprite.png" id="3_4p060"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_aqlg7"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_qbpc6"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_qcdl3"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w6ydq"]
 atlas = ExtResource("3_k0vqh")
@@ -169,6 +170,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_4mq2f")
 patterns = Array[ExtResource("7_rgrjo")]([ExtResource("8_k0vqh"), SubResource("Resource_aqlg7"), ExtResource("9_hu820"), SubResource("Resource_qbpc6")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_22d71"]
@@ -327,6 +331,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_4mq2f")
 patterns = Array[ExtResource("7_rgrjo")]([SubResource("Resource_22d71"), SubResource("Resource_8bw3s"), SubResource("Resource_cyxi4"), SubResource("Resource_02jws"), SubResource("Resource_u1kt2"), SubResource("Resource_g0t1s"), SubResource("Resource_mg21w"), SubResource("Resource_7g0ab")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.5
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_xxhy4"]
@@ -371,6 +378,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_4mq2f")
 patterns = Array[ExtResource("7_rgrjo")]([SubResource("Resource_xxhy4"), SubResource("Resource_k0vqh")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_1vcy5"]
@@ -529,6 +539,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_4mq2f")
 patterns = Array[ExtResource("7_rgrjo")]([SubResource("Resource_1vcy5"), SubResource("Resource_4mq2f"), SubResource("Resource_dixpv"), SubResource("Resource_d6sui"), SubResource("Resource_b6y8i"), SubResource("Resource_n3pj2"), SubResource("Resource_oxtw0"), SubResource("Resource_6jvtm")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_ie02l"]
@@ -630,6 +643,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_4mq2f")
 patterns = Array[ExtResource("7_rgrjo")]([SubResource("Resource_ie02l"), SubResource("Resource_j4xyq"), SubResource("Resource_nbjgi"), SubResource("Resource_o1ohg"), SubResource("Resource_thrhi")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_qjr2w"]
@@ -751,3 +767,5 @@ default_core_scene = ExtResource("13_qbpc6")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("14_qcdl3")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]

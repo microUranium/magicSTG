@@ -1,4 +1,6 @@
-[gd_scene load_steps=94 format=3 uid="uid://ocsviq60pkl0"]
+[gd_scene load_steps=95 format=3 uid="uid://ocsviq60pkl0"]
+
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [ext_resource type="Texture2D" uid="uid://b5rcfnuhnabre" path="res://assets/gfx/sprites/enemy_boss_doll_sprite.png" id="1_ncbgs"]
 [ext_resource type="Script" path="res://scripts/enemy/BossDoll.gd" id="1_x5nyp"]
@@ -474,6 +476,8 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_x5nyp"), SubResource("Resource_01hkn"), SubResource("Resource_t7ghq"), SubResource("Resource_2km0j"), SubResource("Resource_85er7"), SubResource("Resource_fclmm"), SubResource("Resource_qjr2w"), SubResource("Resource_i2doi"), SubResource("Resource_5p7v6"), SubResource("Resource_rchal"), SubResource("Resource_8rn8w"), SubResource("Resource_5v5eo"), SubResource("Resource_5axc1"), SubResource("Resource_4kq7k")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.8
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_x5eck"]
@@ -752,6 +756,8 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_qskyv"), SubResource("Resource_p00on"), SubResource("Resource_63ra1"), SubResource("Resource_rgpmg"), SubResource("Resource_aouh0"), SubResource("Resource_aef4w"), SubResource("Resource_nshvq"), SubResource("Resource_ak786"), SubResource("Resource_u6mvx"), SubResource("Resource_hmfel"), SubResource("Resource_arfk7"), SubResource("Resource_q7nhh")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.4
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_tldiw"]
@@ -1011,6 +1017,8 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_3liu4"), SubResource("Resource_nguj4"), SubResource("Resource_ksggt"), SubResource("Resource_uwqpx"), SubResource("Resource_dsp4k"), SubResource("Resource_qmmyp"), SubResource("Resource_2l704"), SubResource("Resource_a01dr"), SubResource("Resource_a23dc"), SubResource("Resource_g6hm8"), SubResource("Resource_ve4oi"), SubResource("Resource_vestm")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_toot0"]
@@ -1055,6 +1063,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_toot0"), SubResource("Resource_iq3aw")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_7efgs"]
@@ -1189,3 +1200,6 @@ default_core_scene = ExtResource("13_5p7v6")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("14_rchal")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 1

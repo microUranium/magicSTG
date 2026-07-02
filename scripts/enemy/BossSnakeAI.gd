@@ -47,6 +47,8 @@ func _next_phase():
   loop_type = phase.loop_type
   _idx = 0
 
+  phase_changed.emit(_phase_idx)
+
   _next_pattern()
 
 

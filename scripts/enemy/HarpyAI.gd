@@ -1,8 +1,6 @@
 extends EnemyPatternedAIBase
 class_name HarpyAI
 
-signal phase_changed(phase_idx: int)  # フェーズ遷移をHPバー等へ通知
-
 @export var phases: Array[PhaseResource] = []  # 各 Phase のパターンリソース
 @export var phase1_patterns: Array[AttackPattern]
 @export var phase3_patterns_1: Array[AttackPattern]

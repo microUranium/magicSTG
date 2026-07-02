@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://c42prqqtwqrn3"]
+[gd_scene load_steps=84 format=3 uid="uid://c42prqqtwqrn3"]
 
 [ext_resource type="Script" uid="uid://17lrhicpmac" path="res://scripts/enemy/BossBirdSwamp.gd" id="1_npltc"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_h320o"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_ikdrg"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_t4lc6"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_wfc02"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u2lym"]
 atlas = ExtResource("3_mxm57")
@@ -115,6 +116,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_npltc"), SubResource("Resource_mxm57")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_h320o"]
@@ -159,6 +163,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_h320o"), SubResource("Resource_vx0vy")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_kyrqf"]
@@ -184,6 +191,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_kyrqf")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_puiq3"]
@@ -266,6 +276,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_puiq3"), SubResource("Resource_4jiho"), SubResource("Resource_41yy6"), SubResource("Resource_3x74v")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.8
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_ikdrg"]
@@ -310,6 +323,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_ikdrg"), SubResource("Resource_t4lc6")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_qj17g"]
@@ -392,6 +408,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_qj17g"), SubResource("Resource_v48a3"), SubResource("Resource_0gje2"), SubResource("Resource_4jkxt")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.25
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_d5smi"]
@@ -436,6 +455,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_d5smi"), SubResource("Resource_xvtv4")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_hwb0e"]
@@ -575,6 +597,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_hwb0e"), SubResource("Resource_ecjop"), SubResource("Resource_0dls3"), SubResource("Resource_6aksc"), SubResource("Resource_kr5mt"), SubResource("Resource_qgd7o"), SubResource("Resource_ltv2j")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_h6fp2"]
@@ -771,6 +796,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_h6fp2"), SubResource("Resource_8yksu"), SubResource("Resource_4s2y4"), SubResource("Resource_doy64"), SubResource("Resource_quqoa"), SubResource("Resource_bney6"), SubResource("Resource_qfxot"), SubResource("Resource_1yfcf"), SubResource("Resource_cqn7e"), SubResource("Resource_7o3bs")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_xgak4"]
@@ -1043,6 +1071,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_3i0hm")
 patterns = Array[ExtResource("7_puiq3")]([SubResource("Resource_xgak4"), SubResource("Resource_0swnl"), SubResource("Resource_0nb0j"), SubResource("Resource_cfcmq"), SubResource("Resource_745sc"), SubResource("Resource_qj5hg"), SubResource("Resource_kqce5"), SubResource("Resource_qtlus"), SubResource("Resource_bdxug"), SubResource("Resource_tr3dg"), SubResource("Resource_q3vuo"), SubResource("Resource_d47se"), SubResource("Resource_hqvo5"), SubResource("Resource_bl7gn")])
 loop_type = 0
+show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_xfvr1"]
@@ -1093,6 +1124,8 @@ default_core_scene = ExtResource("13_t4lc6")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("14_wfc02")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
 
 [node name="CollisionShape_attack" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -48.5)

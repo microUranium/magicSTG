@@ -56,6 +56,8 @@ func _next_phase():
     StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
     _bgm_played = true
 
+  phase_changed.emit(_phase_idx)
+
   _next_pattern()
 
 

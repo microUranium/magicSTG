@@ -2,6 +2,9 @@
 extends EnemyAIBase
 class_name EnemyPatternedAIBase
 
+@warning_ignore("unused_signal")
+signal phase_changed(phase_idx: int)  # フェーズ遷移をHPバー等へ通知（各ボスAIの _next_phase で emit）
+
 @export var patterns: Array[EnemyPatternResource] = []  # パターンのリスト
 @export var loop_type: int = 0  # 0 = SEQ, 1 = RANDOM
 @export var skip_dialogue: bool = false  # ダイアログをスキップするかどうか

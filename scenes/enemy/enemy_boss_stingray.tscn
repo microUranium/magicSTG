@@ -1,4 +1,6 @@
-[gd_scene load_steps=40 format=3 uid="uid://dr6vsncc5ib1w"]
+[gd_scene load_steps=41 format=3 uid="uid://dr6vsncc5ib1w"]
+
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [ext_resource type="Script" uid="uid://ci0qfur25d4yq" path="res://scripts/enemy/BossStingray.gd" id="1_cx5sj"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_yhp0k"]
@@ -162,6 +164,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_lxd5g")
 patterns = Array[ExtResource("7_o36s2")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_5xo3n"]
@@ -225,6 +228,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_lxd5g")
 patterns = Array[ExtResource("7_o36s2")]([SubResource("Resource_5xo3n"), SubResource("Resource_78n74"), SubResource("Resource_lxd5g")])
 loop_type = 0
+show_hp_bar = true
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_6l0x7"]
@@ -304,3 +308,6 @@ default_core_scene = ExtResource("13_hqa8d")
 attack_pattern = null
 attack_patterns_additive = Array[ExtResource("17_78n74")]([])
 auto_create_core = true
+
+[node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
+mode = 0

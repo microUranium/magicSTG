@@ -17,6 +17,7 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 
 var _damage_flash_time: float
 var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
+var _is_dead: bool = false  # 撃破処理の二重実行防止フラグ
 
 
 func _ready():
@@ -37,9 +38,21 @@ func take_damage(amount: int) -> void:
   flash_white()
 
 
+## 撃破処理の多重実行を防ぐガード。撃破処理へ初めて到達したときのみ true を返す。
+## 同一フレームで複数の弾が被弾すると on_hp_changed が複数回 current_hp<=0 で呼ばれ、
+## SFX・ドロップ・弾消去などが二重に走るため、各撃破ブランチの先頭で呼び出すこと。
+func mark_dead_once() -> bool:
+  if _is_dead:
+    return false
+  _is_dead = true
+  return true
+
+
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= 0:
+    if not mark_dead_once():  # 同一フレームでの多重被弾による撃破処理の重複を防ぐ
+      return
     emit_signal("destroyed")
     StageSignals.emit_enemy_defeated(self)  # 強奪の加護など、敵撃破を購読する側へ通知
     _spawn_destroy_particles()

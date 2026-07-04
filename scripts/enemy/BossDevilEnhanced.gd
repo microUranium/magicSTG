@@ -45,6 +45,8 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
     StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
   elif ai._phase_idx == 8:
+    if not mark_dead_once():  # 同一フレームでの多重被弾による撃破処理の重複を防ぐ
+      return
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     StageSignals.emit_request_start_vibration()  # Start vibration
     StageSignals.emit_destroy_bullet()  # Destroy bullet

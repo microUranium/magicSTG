@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dh2dnnxq7llvf"]
+[gd_scene load_steps=13 format=3 uid="uid://dh2dnnxq7llvf"]
 
 [ext_resource type="Texture2D" uid="uid://d3i2xeghpwsbr" path="res://assets/gfx/sprites/enemy_robe_sprite.png" id="2_ria55"]
 [ext_resource type="Script" uid="uid://ctfas7ya54p0v" path="res://scripts/enemy/BossRobeCloneAI.gd" id="3_4q3wh"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="6_4q3wh"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="11_jotyq"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_wkqid"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_m7n2g"]
@@ -67,4 +68,5 @@ attack_core_slot = NodePath("../AttackCoreSlot")
 script = ExtResource("12_wkqid")
 default_core_scene = ExtResource("13_m7n2g")
 attack_pattern = null
+attack_patterns_additive = Array[ExtResource("6_4q3wh")]([])
 auto_create_core = true

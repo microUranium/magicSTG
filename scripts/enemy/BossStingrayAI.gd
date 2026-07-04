@@ -49,7 +49,7 @@ func _next_phase():
   _setup_phase_attacks()
 
   if _phase_idx == 1 and not skip_bgm_change:
-    StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
+    StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -5)  # BGM再生リクエスト
 
   phase_changed.emit(_phase_idx)
 

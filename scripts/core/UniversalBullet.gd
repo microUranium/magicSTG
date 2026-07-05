@@ -485,7 +485,7 @@ func _handle_particle_cleanup():
 
       # パーティクルのライフタイム後にクリーンアップ
       var cleanup_delay = particles.lifetime + 0.1
-      get_tree().create_timer(cleanup_delay).timeout.connect(
+      get_tree().create_timer(cleanup_delay, false).timeout.connect(
         func():
           if is_instance_valid(particles):
             particles.queue_free()

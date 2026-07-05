@@ -80,7 +80,7 @@ func _schedule_next_layer_spawn(layer_state: LayerState, delay: float) -> void:
   if layer_state.event_timer:
     layer_state.event_timer = null
 
-  layer_state.event_timer = get_tree().create_timer(delay)
+  layer_state.event_timer = get_tree().create_timer(delay, false)
   layer_state.event_timer.timeout.connect(_on_layer_timer_spawn.bind(layer_state))
 
 
@@ -303,7 +303,7 @@ func _check_layer_clear(layer_id: String) -> void:
     # awaitがスキップされて同期再帰となりスタックオーバーフローするため監視を打ち切る
     if not is_inside_tree():
       return
-    await get_tree().create_timer(0.5).timeout
+    await get_tree().create_timer(0.5, false).timeout
     # await中に破棄された場合も打ち切る
     if not is_inside_tree():
       return

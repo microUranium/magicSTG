@@ -107,7 +107,7 @@ func _execute_directional_movement(enemy: Node2D, ai: Node, finished_cb: Callabl
 func _execute_stay_in_place(enemy: Node2D, finished_cb: Callable):
   print_debug("EnemyPatternResource: staying in place for ", move_time, " seconds")
   if core_to_enable.is_empty():
-    enemy.get_tree().create_timer(move_time).timeout.connect(finished_cb)
+    enemy.get_tree().create_timer(move_time, false).timeout.connect(finished_cb)
     return null
   else:
     _enable_core_then_wait(enemy, finished_cb)
@@ -231,7 +231,7 @@ func _enable_core_then_wait(enemy: Node2D, finished_cb: Callable):
   var slot = enemy.slot.get_node_or_null(core_to_enable)
   if slot:
     slot.set_phased(true)  # 任意：Core 側で発射ON/OFF切替関数
-  enemy.get_tree().create_timer(core_duration).timeout.connect(
+  enemy.get_tree().create_timer(core_duration, false).timeout.connect(
     func():
       if slot:
         slot.set_phased(false)

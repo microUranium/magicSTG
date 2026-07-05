@@ -67,7 +67,7 @@ func handle_stage_cleared() -> void:
   play_stage_clear_bgm()
 
   # ステージクリア後の音響終了処理
-  await get_tree().create_timer(5.0).timeout
+  await get_tree().create_timer(5.0, false).timeout
   stop_bgm()
 
 

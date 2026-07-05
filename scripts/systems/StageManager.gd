@@ -133,7 +133,7 @@ func _on_stage_cleared() -> void:
   if ui_controller:
     ui_controller.handle_stage_cleared()
 
-  await get_tree().create_timer(7.0).timeout
+  await get_tree().create_timer(7.0, false).timeout
   GameFlow.start_result_inventory()
 
 
@@ -157,7 +157,7 @@ func _on_game_over() -> void:
     audio_controller.stop_bgm()
 
   # 2秒待機
-  await get_tree().create_timer(2.0).timeout
+  await get_tree().create_timer(2.0, false).timeout
 
   # 音響処理（SFX再生）
   if audio_controller:
@@ -168,7 +168,7 @@ func _on_game_over() -> void:
   if ui_controller:
     ui_controller.handle_game_over()
 
-  await get_tree().create_timer(5.0).timeout
+  await get_tree().create_timer(5.0, false).timeout
   GameFlow.start_result_inventory()
 
 

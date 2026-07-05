@@ -225,7 +225,7 @@ func _start_cooldown():
   if _cool_timer:
     _cool_timer.timeout.disconnect(_on_cooldown_finished)
     _cool_timer = null
-  _cool_timer = get_tree().create_timer(_effective_cooldown())
+  _cool_timer = get_tree().create_timer(_effective_cooldown(), false)
   _cool_timer.timeout.connect(_on_cooldown_finished)
 
 
@@ -244,7 +244,7 @@ func _on_cooldown_finished():
   # ポーズ中またはポーズフラグが立っている場合はスキップ
   if get_tree().paused or _paused:
     # ポーズ解除後に再試行
-    _cool_timer = get_tree().create_timer(0.1)
+    _cool_timer = get_tree().create_timer(0.1, false)
     _cool_timer.timeout.connect(_on_cooldown_finished)
     return
 

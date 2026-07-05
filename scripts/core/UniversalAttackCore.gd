@@ -170,7 +170,7 @@ func _execute_composite_pattern() -> bool:
     var delay = attack_pattern.layer_delays[i] if i < attack_pattern.layer_delays.size() else 0.0
 
     if delay > 0:
-      await get_tree().create_timer(delay).timeout
+      await get_tree().create_timer(delay, false).timeout
 
     if not await _execute_single_pattern(layer_pattern):
       success = false
@@ -254,7 +254,7 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
 
     if burst < pattern.rapid_fire_count - 1:
       if is_inside_tree():
-        await get_tree().create_timer(pattern.rapid_fire_interval).timeout
+        await get_tree().create_timer(pattern.rapid_fire_interval, false).timeout
 
   return success
 
@@ -276,7 +276,7 @@ func _execute_burst_with_tracking(pattern: AttackPattern) -> bool:
 
     if i < burst_count - 1:
       if is_inside_tree():
-        await get_tree().create_timer(burst_interval).timeout
+        await get_tree().create_timer(burst_interval, false).timeout
 
   return true
 
@@ -475,7 +475,7 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
       success = false
 
     if pattern.rapid_fire_interval > 0:
-      await get_tree().create_timer(pattern.rapid_fire_interval).timeout
+      await get_tree().create_timer(pattern.rapid_fire_interval, false).timeout
 
   # プレイヤーモード時のみ: 回転中のゲージ表示 + CD遅延
   if player_mode:
@@ -484,7 +484,7 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
       if pattern.barrier_movement_config
       else pattern.rotation_duration
     )
-    _barrier_duration_timer = get_tree().create_timer(orbit_duration)
+    _barrier_duration_timer = get_tree().create_timer(orbit_duration, false)
 
     if show_gauge_ui:
       set_gauge(0)
@@ -515,7 +515,7 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
       success = false
 
     # 螺旋の時間差
-    await get_tree().create_timer(0.05).timeout
+    await get_tree().create_timer(0.05, false).timeout
 
   return success
 
@@ -585,7 +585,7 @@ func _execute_beam(pattern: AttackPattern) -> bool:
     created_beams.append(beam_instance)
 
   # ビーム持続時間タイマーを設定（ゲージ表示用）
-  _beam_duration_timer = get_tree().create_timer(modified_duration)
+  _beam_duration_timer = get_tree().create_timer(modified_duration, false)
 
   # プレイヤーモード時はゲージをリセット
   if player_mode and show_gauge_ui:
@@ -966,7 +966,12 @@ func _on_projectile_destroyed(projectile: Node) -> void:
         Time.get_ticks_msec(), "[UniversalAttackCore] All bullets destroyed, triggering next fire"
       )
       await get_tree().process_frame
-      trigger()
+      # process_frame はツリーポーズ中も発火するため、ポーズ中に trigger() すると
+      # can_fire() で弾かれて再発射の機会を永久に失う。ポーズ解除まで待機する。
+      while is_inside_tree() and (get_tree().paused or _paused):
+        await get_tree().process_frame
+      if is_inside_tree():
+        trigger()
 
 
 func _show_attack_warning() -> Vector2:
@@ -1008,7 +1013,7 @@ func _show_attack_warning() -> Vector2:
 
   # 最長の警告時間だけ待機
   if max_duration > 0.0:
-    await get_tree().create_timer(max_duration).timeout
+    await get_tree().create_timer(max_duration, false).timeout
 
   return base_dir
 

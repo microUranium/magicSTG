@@ -143,7 +143,7 @@ func on_player_damaged(damage):
     if shield_sprite:
       shield_sprite.play("hit")
     StageSignals.sfx_play_requested.emit("hit_shield", player_ref.global_position, 0, 1.0)
-    get_tree().create_timer(0.1).connect("timeout", Callable(self, "_return_to_idle"))
+    get_tree().create_timer(0.1, false).connect("timeout", Callable(self, "_return_to_idle"))
   else:
     shield_current = 0
     is_broken = true
@@ -171,7 +171,7 @@ func recover_shield():
   set_gauge(shield_current)  # 汎用ゲージの値を更新
   if shield_sprite:
     shield_sprite.play("recover")
-  get_tree().create_timer(0.1).connect("timeout", Callable(self, "_return_to_idle"))
+  get_tree().create_timer(0.1, false).connect("timeout", Callable(self, "_return_to_idle"))
   emit_signal("shield_recovered")
 
 

@@ -12,7 +12,7 @@ func _ready():
   super._ready()
   _initialize_attack_patterns()
   # 3秒後に自動的にクリーンアップ
-  await get_tree().create_timer(3).timeout
+  await get_tree().create_timer(3, false).timeout
   cleanup()
 
 

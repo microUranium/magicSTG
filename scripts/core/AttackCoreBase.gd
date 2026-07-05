@@ -25,6 +25,8 @@ signal core_cooldown_updated(elapsed, max)  # HUD ゲージ用
 #---------------------------------------------------------------------
 var _cooling: bool = false
 var _paused: bool = false
+var _firing: bool = false  # _do_fire() 実行中（連射コルーチンが進行中）
+var _cool_remaining: float = 0.0  # ポーズ時に退避したクールタイム残り時間
 var _cool_timer: SceneTreeTimer
 var _owner_actor: Node2D = null  # 親ノード (Fairy / Enemy) を保持
 var _proto: AttackCoreItem
@@ -84,7 +86,9 @@ func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPat
 func trigger() -> void:
   if not can_fire():
     return
+  _firing = true
   var success = await _do_fire()
+  _firing = false
 
   if success:
     emit_signal("core_fired")
@@ -96,7 +100,9 @@ func force_fire() -> void:
   if _paused:
     return
 
+  _firing = true
   var success = await _do_fire()
+  _firing = false
 
   if success:
     emit_signal("core_fired")
@@ -214,6 +220,7 @@ func _update_attack_pattern_stats() -> void:
 
 func _start_cooldown():
   _cooling = true
+  _cool_remaining = 0.0  # 退避済みの残り時間は新しいクールダウンで無効化
 
   # デバッグログ
   if (
@@ -260,11 +267,22 @@ func set_paused(state: bool) -> void:
   _paused = state
 
   if _paused:
+    # 残り時間を退避してタイマーを停止（再開時にフルリセットすると攻撃周期がズレるため）
     if _cool_timer:
+      _cool_remaining = _cool_timer.time_left
       _cool_timer.timeout.disconnect(_on_cooldown_finished)
       _cool_timer = null
-  elif auto_start:
-    _start_cooldown()
+  else:
+    if _cooling and _cool_remaining > 0.0:
+      # クールダウン途中でポーズされた場合は残り時間から再開（周期を保持）
+      _cool_timer = get_tree().create_timer(_cool_remaining, false)
+      _cool_timer.timeout.connect(_on_cooldown_finished)
+      _cool_remaining = 0.0
+    elif auto_start and not _cooling and not _firing:
+      # 完全に休止していた場合のみ新規にクールダウンを開始する。
+      # _firing 中（連射コルーチンが中断中）に開始すると、連射再開後の
+      # _start_cooldown() と二重周期になり連射が次の攻撃周期に被るため除外。
+      _start_cooldown()
 
 
 func _find_bullet_parent() -> Node:

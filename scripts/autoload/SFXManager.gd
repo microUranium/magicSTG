@@ -89,7 +89,9 @@ func _play(stream: AudioStream, coalesce_key: String, pos: Vector2, vol: float, 
 
   player.stream = stream
   player.volume_db = vol
-  player.pitch_scale = pitch
+  # pitch <= 0 は Godot のセッターに拒否され、プールプレイヤーに前回の
+  # pitch_scale が残留してしまうため、既定値 1.0 に正規化する
+  player.pitch_scale = pitch if pitch > 0.0 else 1.0
   if not use_ui:
     player.global_position = pos
   player.play()

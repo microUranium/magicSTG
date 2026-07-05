@@ -62,12 +62,12 @@ func _next_phase():
   elif _phase_idx == 3:
     _start_attack_decoys()
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
   elif _phase_idx == 4:
     _destory_decoys()
   elif _phase_idx == 5:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 

@@ -66,13 +66,13 @@ func _next_phase():
 
   if _phase_idx == 3:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
   elif _phase_idx == 5:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
   elif _phase_idx == 6:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 
@@ -86,7 +86,7 @@ func _next_pattern():
   elif _phase_idx == 0 and _idx % patterns.size() == 0:
     StageSignals.emit_bgm_play_requested(_bgm, 0, -10)  # BGM再生リクエスト
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_signal("sfx_play_requested", "girl_laugh", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "girl_laugh", Vector2.INF, -5, 0)
   elif _phase_idx == 3 and (_idx % patterns.size() == 1 or _idx % patterns.size() == 7):
     _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns1)

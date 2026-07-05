@@ -123,3 +123,19 @@ func test_stream_request_null_is_ignored() -> void:
   await await_idle_frame()
 
   assert_int(_count_playing(_sfx._pool_2d)).is_equal(0)
+
+
+func test_pitch_zero_is_normalized_to_default() -> void:
+  # pitch<=0 はセッターに拒否され前回値が残留するため、1.0 に正規化される
+  # （例: pitch=2 の音の後に pitch=0 の音が同じプレイヤーを再利用するケース）
+  _sfx._on_request("a", Vector2(10, 10), 0.0, 2.0)
+  await await_millis(50)
+  _sfx._pool_2d[0].stop()
+  _sfx._pool_2d[1].stop()
+
+  _sfx._on_request("b", Vector2(10, 10), 0.0, 0.0)
+  await await_idle_frame()
+
+  for p in _sfx._pool_2d:
+    if p.playing:
+      assert_float(p.pitch_scale).is_equal(1.0)

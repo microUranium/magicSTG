@@ -61,7 +61,7 @@ func _next_phase():
   elif _phase_idx == 3:
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_request_change_background_scroll_speed(1000, 0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 

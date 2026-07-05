@@ -11,7 +11,6 @@ class_name EnhancedBarrierBullet
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var particles: GPUParticles2D = $GPUParticles2D
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 # === 内部状態 ===
 var owner_node: Node2D
@@ -125,10 +124,9 @@ func _apply_visual_settings():
     if animation_player.has_animation(config.animation_name):
       animation_player.play(config.animation_name)
 
-  # 音声設定
-  if config.spawn_sound and audio_player:
-    audio_player.stream = config.spawn_sound
-    audio_player.play()
+  # 発射音は SFXManager に委譲（コアレッシングにより同フレームの一斉生成でも1音）
+  if config.spawn_sound:
+    StageSignals.sfx_play_stream_requested.emit(config.spawn_sound, global_position, 0.0, 1.0)
 
 
 func apply_barrier_movement_config(_movement_config: BarrierBulletMovement = null):

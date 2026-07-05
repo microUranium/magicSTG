@@ -8,7 +8,6 @@ class_name UniversalAttackCore
 @onready var debug_display: Node2D = $DebugDisplay
 @onready var debug_label: Label = $DebugDisplay/Label
 @onready var debug_line: Line2D = $DebugDisplay/Line2D
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
@@ -695,23 +694,26 @@ func _execute_custom(pattern: AttackPattern) -> bool:
 func _play_spawn_sound(pattern: AttackPattern) -> void:
   """発射音を攻撃単位で再生する。
 
-  同一フレーム内で生成された弾はまとめて1回だけ再生し、一斉発射時の
-  音の重複（＝音量増大）を防ぐ。旧 UniversalBullet の弾ごと再生から移行。
+  同一フレーム内で生成された弾はまとめて1回だけリクエストし（1次間引き）、
+  実際の再生は SFXManager に委譲する。SFXManager 側でもコア横断の
+  コアレッシングとボイス管理が行われる（2次間引き）。
   """
   if not pattern or not pattern.bullet_visual_config:
     return
   var stream: AudioStream = pattern.bullet_visual_config.spawn_sound
-  if not stream or not audio_player:
+  if not stream:
     return
 
-  # 同一フレームでの重複再生を抑止
+  # 同一フレームでの重複リクエストを抑止（シグナル発火のスパム防止）
   var frame := Engine.get_physics_frames()
   if frame == _last_spawn_sound_frame:
     return
   _last_spawn_sound_frame = frame
 
-  audio_player.stream = stream
-  audio_player.play()
+  # 発射位置はオーナー基準（発射条件の検証で _owner_actor は保証されている）
+  if not _owner_actor:
+    return
+  StageSignals.sfx_play_stream_requested.emit(stream, _owner_actor.global_position, 0.0, 1.0)
 
 
 func _spawn_bullet(

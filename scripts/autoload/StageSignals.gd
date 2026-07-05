@@ -20,6 +20,7 @@ signal bgm_stop_requested(fade_time: float)
 
 ## ───── SFX 系シグナル ─────
 signal sfx_play_requested(name: String, pos: Vector2, vol_db: float, pitch: float)  # カタログ名  # INF なら UI / 非 2D
+signal sfx_play_stream_requested(stream: AudioStream, pos: Vector2, vol_db: float, pitch: float)  # カタログ外の AudioStream を直接再生（弾発射音など）
 
 
 func emit_request_dialogue(dd, cb):

@@ -111,7 +111,7 @@ func _next_phase():
     StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
   elif _phase_idx == 5:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
     _spawn_decoys()
   elif _phase_idx == 6:
     _destory_decoys()

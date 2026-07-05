@@ -61,7 +61,7 @@ func _next_phase():
   elif _phase_idx == 3:
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_request_change_background_scroll_speed(1000, 0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 
@@ -154,6 +154,7 @@ func create_harpy_phase1_pattern() -> Array[AttackPattern]:
     )
     visual_config.scale = 1.5
     visual_config.texture = preload("res://assets/gfx/sprites/bullet_harpy_sprite.png")
+    visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
     pattern.bullet_visual_config = visual_config
 
     var movement_config = BulletMovementConfig.new()

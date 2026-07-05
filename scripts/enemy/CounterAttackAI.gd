@@ -13,5 +13,5 @@ func _ready():
 
 func _on_received_damage(amount: int, isInvincible: bool):
   if is_instance_valid(attack_core_slot):
-    StageSignals.emit_signal("sfx_play_requested", counter_sfx, Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", counter_sfx, enemy_node.global_position, 0, 0)
     attack_core_slot.trigger_all_cores()

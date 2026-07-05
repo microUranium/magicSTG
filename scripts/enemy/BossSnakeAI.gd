@@ -37,7 +37,7 @@ func _next_phase():
   if _phase_idx >= phases.size():
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_request_change_background_scroll_speed(1000, 0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
     enemy_node.connect("area_entered", Callable(enemy_node, "_on_area_entered"))
     current_state = MovementState.CHASE
     return

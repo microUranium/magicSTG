@@ -1,7 +1,5 @@
 [gd_scene load_steps=46 format=3 uid="uid://c31x6u3h3j02y"]
 
-[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
-
 [ext_resource type="Script" uid="uid://6lylowgff5sb" path="res://scripts/enemy/BossSpider.gd" id="1_m3mwo"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_md488"]
 [ext_resource type="Texture2D" uid="uid://dofrog80liiic" path="res://assets/gfx/sprites/enemy_spider_sprite.png" id="3_oovd5"]
@@ -13,11 +11,12 @@
 [ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="9_6sp45"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="11_g13fj"]
 [ext_resource type="Texture2D" uid="uid://bdstvopelllkl" path="res://assets/gfx/sprites/bullet_spider_sprite.png" id="11_xu823"]
-[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="13_k5yli"]
+[ext_resource type="AudioStream" uid="uid://b0vrccpy24lhq" path="res://assets/audio/bgm/stage34_midBoss_bgm.mp3" id="12_oovd5"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_u4538"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_j7ufx"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_qousy"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_emf8d"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_md488"]
 atlas = ExtResource("3_oovd5")
@@ -78,6 +77,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([ExtResource("8_u32tt"), ExtResource("9_6sp45"), SubResource("Resource_oovd5")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_m3mwo"]
@@ -313,6 +315,8 @@ script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_m3mwo"), SubResource("Resource_1k3hq"), SubResource("Resource_fg38x"), SubResource("Resource_gfwgc"), SubResource("Resource_uspes"), SubResource("Resource_u32tt"), SubResource("Resource_6sp45"), SubResource("Resource_cvbmj"), SubResource("Resource_g13fj"), SubResource("Resource_f67gb"), SubResource("Resource_k5yli"), SubResource("Resource_u4538")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_j7ufx"]
@@ -396,6 +400,8 @@ script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_j7ufx"), SubResource("Resource_qousy"), SubResource("Resource_emf8d"), SubResource("Resource_xcv7w")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_xi1y1"]
@@ -422,6 +428,8 @@ script = ExtResource("6_gfwgc")
 patterns = Array[ExtResource("7_uspes")]([SubResource("Resource_xi1y1")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_cqqu8"]
@@ -459,7 +467,7 @@ max_hp = 1200
 script = ExtResource("5_m3mwo")
 phases = Array[ExtResource("6_gfwgc")]([SubResource("Resource_md488"), SubResource("Resource_xu823"), SubResource("Resource_fh05a"), SubResource("Resource_3tkki")])
 visual_config = SubResource("Resource_cqqu8")
-_bgm = ExtResource("13_k5yli")
+_bgm = ExtResource("12_oovd5")
 attack_core_slot = NodePath("../AttackCoreSlot")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("14_u4538")]

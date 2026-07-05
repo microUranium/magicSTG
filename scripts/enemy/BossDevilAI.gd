@@ -56,7 +56,7 @@ func _next_phase():
     StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
   elif _phase_idx == 3:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 
@@ -94,8 +94,9 @@ func _next_pattern():
     _set_attack_patterns(phase2_patterns_2)
   elif _phase_idx == 4 and _idx % patterns.size() == 3:
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", Vector2.ZERO, 0, 2)
-    StageSignals.emit_signal("sfx_play_requested", "break_shield", Vector2.ZERO, 0, 2)
+    # destroy_boss はボス位置で定位、break_shield は演出音として非2D再生
+    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", enemy_node.global_position, 0, 2)
+    StageSignals.emit_signal("sfx_play_requested", "break_shield", Vector2.INF, 0, 2)
   elif _phase_idx == 4 and _idx % patterns.size() == 0:
     enemy_node.queue_free()  # 最終フェーズの最後のパターンが終わったら敵を消す
 

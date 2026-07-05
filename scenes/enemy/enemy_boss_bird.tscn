@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_el5v6"]
 [ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="7_oeuat"]
 [ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="8_ngv7u"]
-[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="11_oeuat"]
+[ext_resource type="AudioStream" uid="uid://dvv6ukxxiu24b" path="res://assets/audio/bgm/stage12_midBoss_bgm.mp3" id="10_ngv7u"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="12_n5io8"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="13_2wdkw"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="14_ktlex"]
@@ -296,7 +296,7 @@ max_hp = 400
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("4_1lmri")
 phases = Array[ExtResource("6_el5v6")]([SubResource("Resource_v5i53"), SubResource("Resource_el5v6"), SubResource("Resource_amn40")])
-_bgm = ExtResource("11_oeuat")
+_bgm = ExtResource("10_ngv7u")
 attack_core_slot = NodePath("../AttackCoreSlot")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("12_n5io8")]

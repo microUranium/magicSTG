@@ -47,7 +47,7 @@ func _next_phase():
   _setup_phase_attacks()
 
   if _phase_idx == 1 and not skip_bgm_change:
-    StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
+    StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -5)  # BGM再生リクエスト
 
   phase_changed.emit(_phase_idx)
 
@@ -118,6 +118,12 @@ func create_phase1_pattern() -> Array[AttackPattern]:
     pattern.burst_delay = 5
     pattern.bullet_count = 12
     pattern.direction_type = AttackPattern.DirectionType.CIRCLE
+
+    var visual_config = (
+      preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+    )
+    visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
+    pattern.bullet_visual_config = visual_config
 
     var movement_config = BulletMovementConfig.new()
     movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE

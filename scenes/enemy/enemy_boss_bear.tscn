@@ -1,21 +1,20 @@
-[gd_scene load_steps=41 format=3 uid="uid://c0omtihvvaieb"]
-
-[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
+[gd_scene load_steps=41 format=3 uid="uid://d1qrjjwil2eru"]
 
 [ext_resource type="Script" uid="uid://8rohnyi311pb" path="res://scripts/enemy/BossBear.gd" id="1_grr34"]
 [ext_resource type="Texture2D" uid="uid://i11btmh4g00n" path="res://assets/gfx/sprites/enemy_boss_bear_sprite.png" id="2_7infs"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_8gjqd"]
-[ext_resource type="Script" uid="uid://bal3pdrbrhyn8" path="res://scripts/enemy/BossBearAI.gd" id="4_g7xud"]
+[ext_resource type="Script" path="res://scripts/enemy/BossBearAI.gd" id="4_g7xud"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_oad3j"]
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="7_bqy6d"]
 [ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="8_7msdg"]
 [ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="9_st8mf"]
+[ext_resource type="AudioStream" uid="uid://rcv53flfohy6" path="res://assets/audio/bgm/stage56_midBoss_bgm.mp3" id="10_ws6x4"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="11_wps4d"]
-[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="13_fsri7"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="14_8cehh"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_ad74b"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_q3hgb"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_r3ja4"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ws6x4"]
 atlas = ExtResource("2_7infs")
@@ -80,6 +79,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("6_oad3j")
 patterns = Array[ExtResource("7_bqy6d")]([ExtResource("8_7msdg"), ExtResource("9_st8mf"), SubResource("Resource_oovd5")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_clw6s"]
@@ -163,6 +165,8 @@ script = ExtResource("6_oad3j")
 patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_ws6x4"]
@@ -246,6 +250,8 @@ script = ExtResource("6_oad3j")
 patterns = Array[ExtResource("7_bqy6d")]([SubResource("Resource_ws6x4"), SubResource("Resource_gjc13"), SubResource("Resource_4nlkf"), SubResource("Resource_p4pu0")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_ws6x4"]
@@ -313,7 +319,7 @@ max_hp = 800
 script = ExtResource("4_g7xud")
 phases = Array[ExtResource("6_oad3j")]([SubResource("Resource_8gjqd"), SubResource("Resource_g7xud"), SubResource("Resource_iymdn")])
 visual_config = SubResource("Resource_bymuh")
-_bgm = ExtResource("13_fsri7")
+_bgm = ExtResource("10_ws6x4")
 attack_core_slot = NodePath("../AttackCoreSlot")
 
 [node name="AttackCoreSlot" parent="." instance=ExtResource("14_8cehh")]

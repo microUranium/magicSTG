@@ -80,13 +80,13 @@ func _next_phase():
     StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
   elif _phase_idx == 3:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
   elif _phase_idx == 5:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
   elif _phase_idx == 7:
     StageSignals.emit_request_hud_flash(0.3)
-    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.ZERO, 0, 0)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 

@@ -1,7 +1,5 @@
 [gd_scene load_steps=51 format=3 uid="uid://dkos6dqisuon4"]
 
-[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
-
 [ext_resource type="Script" uid="uid://d4iwpjlfi8eeu" path="res://scripts/enemy/BossRobe.gd" id="1_8nbxi"]
 [ext_resource type="Script" uid="uid://cnmw0f13kculn" path="res://scripts/enemy/BossRobeAI.gd" id="1_l6hyg"]
 [ext_resource type="Texture2D" uid="uid://d3i2xeghpwsbr" path="res://assets/gfx/sprites/enemy_robe_sprite.png" id="5_kt4f4"]
@@ -11,12 +9,13 @@
 [ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="7_efo7e"]
 [ext_resource type="Resource" uid="uid://b1nsw2cfyu16a" path="res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres" id="8_xq4ur"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="9_efo7e"]
-[ext_resource type="AudioStream" uid="uid://djcdijoknc0cn" path="res://assets/audio/bgm/testBoss_bgm.mp3" id="9_xq4ur"]
+[ext_resource type="AudioStream" uid="uid://b0vrccpy24lhq" path="res://assets/audio/bgm/stage34_midBoss_bgm.mp3" id="9_vgl2v"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="9_yh4gy"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="10_n3b7i"]
 [ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="10_xq4ur"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="11_coh47"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_kt4f4"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgl2v"]
 atlas = ExtResource("5_kt4f4")
@@ -88,6 +87,9 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([ExtResource("7_efo7e"), ExtResource("8_xq4ur"), SubResource("Resource_3wbll")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_clw6s"]
@@ -285,6 +287,8 @@ script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb"), SubResource("Resource_clw6s"), SubResource("Resource_f0ufh"), SubResource("Resource_mnf1d"), SubResource("Resource_aaifb"), SubResource("Resource_8nbxi"), SubResource("Resource_efo7e"), SubResource("Resource_xq4ur"), SubResource("Resource_vgl2v"), SubResource("Resource_ul17m"), SubResource("Resource_7bo1r")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_5t5pq"]
@@ -349,6 +353,8 @@ script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_5t5pq"), SubResource("Resource_lws1y"), SubResource("Resource_fsis4")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_nexou"]
@@ -413,6 +419,8 @@ script = ExtResource("5_l6hyg")
 patterns = Array[ExtResource("6_8nbxi")]([SubResource("Resource_nexou"), SubResource("Resource_rnprv"), SubResource("Resource_uxy4m")])
 loop_type = 0
 show_hp_bar = true
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_58abv"]
@@ -451,6 +459,9 @@ collision_radius = 16.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_nm61o")
 animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [node name="EnemyBossRobe" type="Area2D" groups=["enemies"]]
@@ -474,7 +485,7 @@ max_hp = 800
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("animated_sprite", "attack_core_slot")]
 script = ExtResource("1_l6hyg")
 phases = Array[ExtResource("5_l6hyg")]([SubResource("Resource_kt4f4"), SubResource("Resource_l6hyg"), SubResource("Resource_js1y1"), SubResource("Resource_eb5v8")])
-_bgm = ExtResource("9_xq4ur")
+_bgm = ExtResource("9_vgl2v")
 animated_sprite = NodePath("../AnimatedSprite2D")
 visual_config_dark = SubResource("Resource_ciclb")
 attack_core_slot = NodePath("../AttackCoreSlot")

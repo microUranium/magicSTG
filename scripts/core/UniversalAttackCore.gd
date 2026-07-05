@@ -17,6 +17,7 @@ var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追
 var _rear_firing_mode: bool = false  # 後方発射モード
 var _base_dir_cached: Vector2 = Vector2.ZERO  # ベース方向のキャッシュ
 var _tracked_bullets: Array[Node] = []  # BURST_WITH_TRACKING用の弾丸追跡
+var _last_spawn_sound_frame: int = -1  # 発射音の同一フレーム重複再生を防ぐ
 
 
 class ExecutionContext:
@@ -362,6 +363,9 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
   if player_mode and show_gauge_ui:
     set_gauge(0)
 
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
+
   return true
 
 
@@ -446,6 +450,9 @@ func _spawn_spread_bullet(
   # 追跡リストに追加
   _spawned_projectiles.append(bullet)
   bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
+
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
 
   return bullet
 
@@ -684,6 +691,31 @@ func _execute_custom(pattern: AttackPattern) -> bool:
 # === ヘルパーメソッド ===
 
 
+func _play_spawn_sound(pattern: AttackPattern) -> void:
+  """発射音を攻撃単位で再生する。
+
+  同一フレーム内で生成された弾はまとめて1回だけリクエストし（1次間引き）、
+  実際の再生は SFXManager に委譲する。SFXManager 側でもコア横断の
+  コアレッシングとボイス管理が行われる（2次間引き）。
+  """
+  if not pattern or not pattern.bullet_visual_config:
+    return
+  var stream: AudioStream = pattern.bullet_visual_config.spawn_sound
+  if not stream:
+    return
+
+  # 同一フレームでの重複リクエストを抑止（シグナル発火のスパム防止）
+  var frame := Engine.get_physics_frames()
+  if frame == _last_spawn_sound_frame:
+    return
+  _last_spawn_sound_frame = frame
+
+  # 発射位置はオーナー基準（発射条件の検証で _owner_actor は保証されている）
+  if not _owner_actor:
+    return
+  StageSignals.sfx_play_stream_requested.emit(stream, _owner_actor.global_position, 0.0, 1.0)
+
+
 func _spawn_bullet(
   pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2, bullet_index: int = -1
 ) -> bool:
@@ -747,6 +779,9 @@ func _spawn_bullet(
   # プレイヤーモード時は発射時にゲージをリセット
   if player_mode and show_gauge_ui:
     set_gauge(0)
+
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
 
   return true
 

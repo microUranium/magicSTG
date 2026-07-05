@@ -35,6 +35,8 @@ func _create_shields(amount: int) -> Array[Node2D]:
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= 0:
+    if not mark_dead_once():  # 同一フレームでの多重被弾による撃破処理の重複を防ぐ
+      return
     _spawn_destroy_particles()
     _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)

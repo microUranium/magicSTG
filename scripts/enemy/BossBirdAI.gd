@@ -119,6 +119,12 @@ func create_phase1_pattern() -> Array[AttackPattern]:
     pattern.bullet_count = 12
     pattern.direction_type = AttackPattern.DirectionType.CIRCLE
 
+    var visual_config = (
+      preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
+    )
+    visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
+    pattern.bullet_visual_config = visual_config
+
     var movement_config = BulletMovementConfig.new()
     movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
     movement_config.initial_speed = 300.0 - (i * 30.0)

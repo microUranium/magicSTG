@@ -154,6 +154,7 @@ func create_harpy_phase1_pattern() -> Array[AttackPattern]:
     )
     visual_config.scale = 1.5
     visual_config.texture = preload("res://assets/gfx/sprites/bullet_harpy_sprite.png")
+    visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
     pattern.bullet_visual_config = visual_config
 
     var movement_config = BulletMovementConfig.new()

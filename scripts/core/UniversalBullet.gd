@@ -11,7 +11,6 @@ class_name UniversalBullet
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var particles: GPUParticles2D = $GPUParticles2D
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 # === 内部状態 ===
 var _movement_timer: float = 0.0
@@ -86,10 +85,8 @@ func _apply_visual_settings():
     if animation_player.has_animation(config.animation_name):
       animation_player.play(config.animation_name)
 
-  # 音声設定
-  if config.spawn_sound and audio_player:
-    audio_player.stream = config.spawn_sound
-    audio_player.play()
+  # 発射音は UniversalAttackCore 側で攻撃単位（同一フレームの一斉発射ごと）に再生する。
+  # 弾ごとに再生すると大量発射時に音が重複して音量が増大するため、ここでは再生しない。
 
   # フェード初期化
   _initialize_fade()

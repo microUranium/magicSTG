@@ -8,6 +8,7 @@ class_name UniversalAttackCore
 @onready var debug_display: Node2D = $DebugDisplay
 @onready var debug_label: Label = $DebugDisplay/Label
 @onready var debug_line: Line2D = $DebugDisplay/Line2D
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
@@ -17,6 +18,7 @@ var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追
 var _rear_firing_mode: bool = false  # 後方発射モード
 var _base_dir_cached: Vector2 = Vector2.ZERO  # ベース方向のキャッシュ
 var _tracked_bullets: Array[Node] = []  # BURST_WITH_TRACKING用の弾丸追跡
+var _last_spawn_sound_frame: int = -1  # 発射音の同一フレーム重複再生を防ぐ
 
 
 class ExecutionContext:
@@ -362,6 +364,9 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
   if player_mode and show_gauge_ui:
     set_gauge(0)
 
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
+
   return true
 
 
@@ -446,6 +451,9 @@ func _spawn_spread_bullet(
   # 追跡リストに追加
   _spawned_projectiles.append(bullet)
   bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
+
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
 
   return bullet
 
@@ -684,6 +692,28 @@ func _execute_custom(pattern: AttackPattern) -> bool:
 # === ヘルパーメソッド ===
 
 
+func _play_spawn_sound(pattern: AttackPattern) -> void:
+  """発射音を攻撃単位で再生する。
+
+  同一フレーム内で生成された弾はまとめて1回だけ再生し、一斉発射時の
+  音の重複（＝音量増大）を防ぐ。旧 UniversalBullet の弾ごと再生から移行。
+  """
+  if not pattern or not pattern.bullet_visual_config:
+    return
+  var stream: AudioStream = pattern.bullet_visual_config.spawn_sound
+  if not stream or not audio_player:
+    return
+
+  # 同一フレームでの重複再生を抑止
+  var frame := Engine.get_physics_frames()
+  if frame == _last_spawn_sound_frame:
+    return
+  _last_spawn_sound_frame = frame
+
+  audio_player.stream = stream
+  audio_player.play()
+
+
 func _spawn_bullet(
   pattern: AttackPattern, direction: Vector2, spawn_pos: Vector2, bullet_index: int = -1
 ) -> bool:
@@ -747,6 +777,9 @@ func _spawn_bullet(
   # プレイヤーモード時は発射時にゲージをリセット
   if player_mode and show_gauge_ui:
     set_gauge(0)
+
+  # 発射音を攻撃単位で再生（同一フレームの一斉発射はまとめて1回）
+  _play_spawn_sound(pattern)
 
   return true
 

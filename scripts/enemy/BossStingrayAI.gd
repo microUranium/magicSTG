@@ -173,7 +173,9 @@ func create_phase2_pattern() -> Array[AttackPattern]:
 
   pattern.bullet_movement_config = movement_config
   if visual_config:
-    pattern.bullet_visual_config = visual_config
+    var _visual_config = visual_config.duplicate()  # 複製して独立させる
+    _visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_2.wav")  # 弾丸の発射音を設定
+    pattern.bullet_visual_config = _visual_config
 
   patterns.append(pattern)
 

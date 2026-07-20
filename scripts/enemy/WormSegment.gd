@@ -93,9 +93,8 @@ func _update_follow_movement(delta):
     print_debug("WormSegment: TrailFollowSystemが見つかりません - ", name)
     return
 
-  # 目標位置と回転を取得
+  # 目標位置を取得
   var target_position = trail_system.get_position_at_delay(follow_delay_frames)
-  var target_rotation = trail_system.get_rotation_at_delay(follow_delay_frames)
 
   # 位置の滑らかな移動
   var position_diff = target_position - global_position
@@ -107,13 +106,12 @@ func _update_follow_movement(delta):
     var move_direction = position_diff.normalized()
     global_position += move_direction * move_speed * delta
 
-  # 回転を移動方向にリアルタイムで合わせる
-  if distance_to_target > 1.0:  # 移動している場合のみ回転
-    var movement_direction = position_diff.normalized()
-    var desired_rotation = movement_direction.angle() + PI * 1.5  # スプライトの向きに合わせて調整
-
-    # 即座に目標回転に設定（滑らかな変化なし）
-    global_rotation = desired_rotation
+  # 回転を前の節への方向にリアルタイムで合わせる
+  # 注意: 遅延トレイル位置を基準にすると、高速移動時に距離制約が節を
+  # トレイル位置より前方へ引き込み、向きが180°反転する（後方の節ほど顕著）
+  var to_previous = previous_segment.global_position - global_position
+  if to_previous.length() > 1.0:
+    global_rotation = to_previous.angle() + PI * 1.5  # スプライトの向きに合わせて調整
 
 
 func _apply_distance_constraints(delta):

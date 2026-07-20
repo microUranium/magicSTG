@@ -1,0 +1,220 @@
+{
+  "s2d11": {
+    "intro": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "はぁ。なんであたしがこんなことを…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "シスターが言うにはこの先にコウモリ遺跡があるみたいだけど…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "さっさと依頼を片付けて帰ろう。"
+      }
+    ],
+    "progression": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（たしかこの辺りって鉱石エイが出る地域だったよね。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（あれに出くわすと厄介だからさっさと通り抜けちゃお。）"
+      }
+    ],
+    "battle_conversation": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "なっ…。言ったそばから…！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "出てくるの早すぎでしょ！そんなことある！？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（あたしってホントに運が悪い…。）"
+      }
+    ],
+    "resolution": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（やっと倒せた…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（一人で相手する敵じゃないってあんなの。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…………"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "なんであたし一人でこんなことしてるんだろ。"
+      }
+    ]
+  },
+  "s2d12": {
+    "intro": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ずいぶん遠くまで来たなあ。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "疲れたからちょっと休憩……。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（潮のせいで髪も肌もベタベタ。はぁ、町に戻ってお風呂に入りたい…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…………なんの音？"
+      }
+    ],
+    "battle_conversation": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あいつは、サンドパイソン……！？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（まずい…！あれは普通に強いやつ…！）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（囲まれたらやばい…振り切らないと…！）"
+      }
+    ],
+    "resolution": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "はぁ……はぁ……。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "た、倒したの…？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "良かった…。マジで終わったかと思った…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ん？あそこになにか…。もしかしてあれが遺跡？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "うぅ、なんかこうしてみるとめっちゃ不気味なんだけど…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "はぁ。でも行くしかないか。ギルドクビにされたくないし…。"
+      }
+    ]
+  }
+}

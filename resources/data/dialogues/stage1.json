@@ -1,0 +1,424 @@
+{
+  "s1d11": {
+    "intro": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（うえ～？\nなんか魔物が寄ってきてない…？）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（こっちはギルドで説教食らって疲れてるんだけど…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あーもう！\n邪魔しないでよねー！"
+      }
+    ],
+    "progression": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（まだ寄ってくるな～。面倒くさい…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（普段こんなに魔物は出てこないはずなんだけど…。）"
+      }
+    ],
+    "battle_conversation": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "！？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あいつ、火山にいるやつじゃ…？\nなんでこんなところに？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（めっちゃ睨んでる…。やるしか無いか…。）"
+      }
+    ],
+    "resolution": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（な、なんとか倒せた…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（やっぱりおかしい。やたら魔物が多いし、ここに生息してないやつも出てくるし…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…………"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（今日はもう帰ろう。疲れたし、もうヘトヘト…。）"
+      }
+    ]
+  },
+  "s1d12": {
+    "intro": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "なんかギルドマスターから呼び出し食らったんだけど…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ふわぁ…。\n眠すぎる。まだ朝の8時じゃん…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ギルドの奴らってこんな早い時間から活動してるの？社畜かよ…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あーもう魔物も寄ってくるし、ダルすぎるー！！"
+      }
+    ],
+    "progression": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "やばいやばい…。\n魔物が多すぎてこのままだと遅刻する…！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（ん？あそこにいるのは…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（あいつの仕業だな？ここ最近魔物が多かったのは…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（でもあいつに構ってたら絶対遅刻するし、一旦無視無視！）"
+      }
+    ],
+    "battle_conversation": [
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あら、誰かと思えばシィルじゃない。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "げっ見つかった…！"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "へぇ。昔に比べて一段と魔力を蓄えてるようね。貰い甲斐がありそう♪"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "悪いけどさ、あんまり相手にしてる暇ないんだよねー。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "急いでギルドに向かわないと行けないからさー。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "そんなのあたしには関係ないわよ。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あんたのその人並み外れた魔力量は最高のご馳走なの♪"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "また昔みたいにたっぷり可愛がって、その魔力をぜーんぶ吸い尽くしてあげる♪"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（あたしが全力で逃げたとしても、こいつは追いついてくるだろうし…。）"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "………………。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（ごめん、今日も遅刻します…！！）"
+      }
+    ],
+    "battle_progression": [
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "な、なかなかやるじゃない…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "いい加減諦めてくれないかなー？"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ぐぬぬ…。生意気な…！"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "こうなったら徹底的にあんたを叩きのめして、生意気な口をきけなくしてあげる！"
+      }
+    ],
+    "resolution": [
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "そんな…。あたしがこんな子どもに…！！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "な、なにをする気…！？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "今日あたし機嫌が悪いんだよね。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "お前の引き連れた魔物のせいで遅刻だし。昔の恨みもあるし。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "二度と付き纏われないように、ここでトドメを刺すべきかなって。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "やっやめて…！お願いだから…！！"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "わかった！もうあんた…シィルさんに絡まないから！すぐに消えますからー！！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…そう。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "じゃあさっさとこの森からでてってよね。\nもう二度と近寄らないで。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あ、ありがとうございますう！！"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あ、でももう飛べる体力が…。\nそのほうきに乗せてもらえないかしら…？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "……チッ。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あ、じょ、冗談ですぅ…。歩いて帰ります…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "（はあ、もう完全に遅刻だけど、ギルドに行くか…。）"
+      }
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 extends Node
 
+const DIALOGUE_DIR := "res://resources/data/dialogues/"
+
 var stage_configs: Dictionary = {}
 var wave_templates: Dictionary = {}
 var enemies: Dictionary = {}
@@ -27,6 +29,11 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   dialogues = data.get("dialogues", {})
   wave_pools = data.get("wave_pools", {})
 
+  # 会話データはステージ別の外部ファイルに分割されている。
+  # テスト等で辞書を直接注入された場合は外部ファイルを読まない。
+  if _data.is_empty():
+    _load_dialogue_files()
+
   _data_loaded = true
   print_debug(
     (
@@ -43,6 +50,24 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   )
 
   return true
+
+
+func _load_dialogue_files() -> void:
+  var file_names := DirAccess.get_files_at(DIALOGUE_DIR)
+  if file_names.is_empty():
+    push_warning("GameDataRegistry: No dialogue files found in %s" % DIALOGUE_DIR)
+    return
+
+  for file_name in file_names:
+    if not file_name.ends_with(".json"):
+      continue
+    var pools := parse_json_data(DIALOGUE_DIR + file_name)
+    for pool_name in pools:
+      if dialogues.has(pool_name):
+        push_warning(
+          "GameDataRegistry: Duplicate dialogue pool '%s' in %s" % [pool_name, file_name]
+        )
+      dialogues[pool_name] = pools[pool_name]
 
 
 func is_data_loaded() -> bool:

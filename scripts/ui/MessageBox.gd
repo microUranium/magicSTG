@@ -162,7 +162,7 @@ func _schedule_next_char() -> void:
   if _char_idx >= _full_text.length():
     _is_typing = false
     return
-  _timer = get_tree().create_timer(char_interval)
+  _timer = get_tree().create_timer(char_interval, false)
   _timer.timeout.connect(_on_char_timer)
 
 

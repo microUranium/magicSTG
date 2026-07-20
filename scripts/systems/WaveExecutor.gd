@@ -70,7 +70,7 @@ func execute_wave_template(template_data: Dictionary) -> bool:
     var delay: float = layer.get("delay", 0.0)
 
     if delay > 0.0:
-      var timer := get_tree().create_timer(delay)
+      var timer := get_tree().create_timer(delay, false)
       _active_layer_timers.append(timer)
       timer.timeout.connect(_execute_layer.bind(i))
     else:
@@ -83,7 +83,7 @@ func _execute_layer(layer_index: int) -> void:
   # ポーズ中はレイヤー開始をスキップ
   if get_tree().paused:
     # ポーズ解除後に再試行（短い遅延で再スケジュール）
-    var retry_timer := get_tree().create_timer(0.1)
+    var retry_timer := get_tree().create_timer(0.1, false)
     retry_timer.timeout.connect(_execute_layer.bind(layer_index))
     return
 

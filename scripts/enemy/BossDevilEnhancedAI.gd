@@ -636,7 +636,7 @@ func _attack_starrush(delay = 0.5, count = 10, _phase = 3):
       attack_angle = 180
       attack_positions_y = 896
     _spawn_starrush(attack_angle, Vector2(attack_positions_x[randomIndex], attack_positions_y))
-    await get_tree().create_timer(delay).timeout
+    await get_tree().create_timer(delay, false).timeout
 
 
 func _attack_starrush_2(delay = 0.5, count = 10, _phase = 5):
@@ -657,7 +657,7 @@ func _attack_starrush_2(delay = 0.5, count = 10, _phase = 5):
     )  # プレイヤーに向かう角度を計算
 
     _spawn_starrush(attack_angle, randomPos)
-    await get_tree().create_timer(delay).timeout
+    await get_tree().create_timer(delay, false).timeout
 
 
 func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
@@ -675,8 +675,8 @@ func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
 
     await get_tree().process_frame
     attack_core_slot.trigger_all_cores()
-    await get_tree().create_timer(delay).timeout
-  await get_tree().create_timer(1).timeout
+    await get_tree().create_timer(delay, false).timeout
+  await get_tree().create_timer(1, false).timeout
   _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
 
 
@@ -684,7 +684,7 @@ func _attack_final_rush():
   var delays = [0.5, 0.45, 0.38, 0.3]
   var counts = [5, 6, 7, 8]
   var delay_count = 0
-  await get_tree().create_timer(1).timeout
+  await get_tree().create_timer(1, false).timeout
 
   var c = 0
   var d = 0.5
@@ -709,5 +709,5 @@ func _attack_final_rush():
 
     attack_core_slot_final.trigger_all_cores()  # 全てのコアをトリガーして攻撃開始
 
-    await get_tree().create_timer(d).timeout  # 遅延時間を段階的に短く
+    await get_tree().create_timer(d, false).timeout  # 遅延時間を段階的に短く
     delay_count += d

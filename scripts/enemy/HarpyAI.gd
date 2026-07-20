@@ -228,8 +228,6 @@ func create_harpy_phase3_barrier3() -> AttackPattern:
   var pattern = AttackPatternFactory.create_barrier_bullets(
     AttackPatternFactory.BARRIER_BULLET_SCENE, 16, 140.0, 0.25, 5
   )
-  pattern.rotation_speed = 0  # 回転しない
-  pattern.target_group = "players"
   pattern.target_group = "players"
   pattern.burst_delay = 0.5
   pattern.rapid_fire_interval = 0.0625
@@ -243,5 +241,9 @@ func create_harpy_phase3_barrier3() -> AttackPattern:
   var movement_config = BarrierBulletMovement.new()
   movement_config.projectile_speed = 1000.0
   movement_config.projectile_direction_type = BarrierBulletMovement.ProjectileDirection.TO_TARGET
+  movement_config.orbit_duration = 0.25
+  movement_config.orbit_radius = 140.0
+  movement_config.rotation_speed = 0
+  movement_config.approach_duration = 0.75
   pattern.barrier_movement_config = movement_config
   return pattern

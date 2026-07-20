@@ -27,7 +27,7 @@ func _ready() -> void:
   tw.play()
 
   # 0.5秒後にプレイヤーに向かって移動
-  await get_tree().create_timer(0.5).timeout
+  await get_tree().create_timer(0.5, false).timeout
   player = get_tree().current_scene.get_node_or_null("Player")
   speed = 300  # プレイヤーに向かう速度を設定
   # 徐々に加速

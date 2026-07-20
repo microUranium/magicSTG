@@ -74,7 +74,7 @@ func _update_rotation_movement():
 
 func _update_stay_movement():
   # 3秒間停止
-  await get_tree().create_timer(3.0).timeout
+  await get_tree().create_timer(3.0, false).timeout
   _check_state_transitions()
 
 

@@ -19,13 +19,13 @@ func _ready() -> void:
   StageSignals.request_background_fade.connect(
     func():
       modulate_fade(Color(0, 0, 0, 1), 0.3)
-      await get_tree().create_timer(0.3).timeout
+      await get_tree().create_timer(0.3, false).timeout
       modulate_fade(Color(1, 1, 1, 1), 0.3)
   )
   StageSignals.request_background_change.connect(
     func(texture: Texture2D):
       modulate_fade(Color(0, 0, 0, 1), 0.3)
-      await get_tree().create_timer(0.3).timeout
+      await get_tree().create_timer(0.3, false).timeout
       set_background_texture(texture)
       modulate_fade(Color(1, 1, 1, 1), 0.3)
   )

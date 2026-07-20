@@ -240,22 +240,22 @@ func _attack_firerush():
   var attack_angle = 90.0
   for pos in attack_positions:
     _spawn_firerush(attack_angle, pos)
-    await get_tree().create_timer(0.05).timeout
+    await get_tree().create_timer(0.05, false).timeout
 
-  await get_tree().create_timer(1.0).timeout
+  await get_tree().create_timer(1.0, false).timeout
   attack_positions = [Vector2(64, 1), Vector2(320, 1), Vector2(576, 1), Vector2(832, 1)]
   attack_angle = 0
   for pos in attack_positions:
     _spawn_firerush(attack_angle, pos)
-    await get_tree().create_timer(0.05).timeout
+    await get_tree().create_timer(0.05, false).timeout
 
-  await get_tree().create_timer(1.0).timeout
+  await get_tree().create_timer(1.0, false).timeout
   attack_positions = [Vector2(32, 1)]
   for i in range(18):
     _spawn_firerush(attack_angle, Vector2(attack_positions[0].x + i * 32, attack_positions[0].y))
-    await get_tree().create_timer(0.05).timeout
-  await get_tree().create_timer(0.7).timeout
+    await get_tree().create_timer(0.05, false).timeout
+  await get_tree().create_timer(0.7, false).timeout
   attack_positions = [Vector2(864, 1)]
   for i in range(18):
     _spawn_firerush(attack_angle, Vector2(attack_positions[0].x - i * 32, attack_positions[0].y))
-    await get_tree().create_timer(0.05).timeout
+    await get_tree().create_timer(0.05, false).timeout

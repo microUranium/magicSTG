@@ -202,7 +202,7 @@ func _on_wave_completed() -> void:
   print_debug(
     "StageController: Wave completed - waiting %.1f seconds before next event" % inter_wave_delay
   )
-  await get_tree().create_timer(inter_wave_delay).timeout
+  await get_tree().create_timer(inter_wave_delay, false).timeout
   _advance_to_next_event()
 
 

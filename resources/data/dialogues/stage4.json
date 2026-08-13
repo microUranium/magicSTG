@@ -73,7 +73,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（歌声…？こんなところに誰かいるの…？）"
+        "text": "歌声…？こんなところに誰かいるの…？"
       },
       {
         "speaker_name": "",
@@ -89,7 +89,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（この辺の人なのかな…）"
+        "text": "この辺の人なのかな…"
       },
       {
         "speaker_name": "",
@@ -101,11 +101,11 @@
       },
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（なんか安心できる歌声だなあ…。）"
+        "text": "なんか安心できる歌声だなあ…。"
       },
       {
         "speaker_name": "フェリス",
@@ -113,194 +113,330 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（声のする方向に行ってみよう…ここから出る方法を教えてくれるかも。）"
+        "text": "声のする方向に行ってみよう…ここから出る方法を教えてくれるかも。"
       }
     ],
     "progression2": [
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（うぅ、変な寒気がしてきた…。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（日が暮れる前になんとかしないと…。）"
-      },
-      {
-        "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（こんな気味の悪いところで野宿なんて死んでもムリ！）"
+        "text": "…？あそこに座ってるのは…。"
       },
       {
-        "speaker_name": "",
+        "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
         "speaker_side": "right",
-        "box_direction": "neutral",
-        "text": "♪～～"
+        "box_direction": "right",
+        "text": "♪～～♪～～"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "やっぱり、あの子が歌ってたんだ！"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あら？こんなところに人が来るなんて、珍しいわ。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ごきげんよう。私はアリシア。あなたは…冒険者さんかしら？"
       },
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（声が近くなってきた…）"
+        "text": "え、まあそんなところかな。"
       },
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（すぐ近くにいるかも…！）"
+        "text": "もしかしてこの辺に住んでる人？"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ええ。ここから少し進んだところに私のお家があるの。"
       },
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "！？"
+        "text": "良かった…！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あたし、火山に向かってるんだけど、どっちに進めば良いか分かるかな？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "道に迷っちゃって…。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "うふふ。ここは霧が濃いものね。迷うのも仕方がないわ。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ここは火山の麓よ。山頂を目指しているのならこの沼地を抜けるまで案内できるわ。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "本当！？助かった…！"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "……！お姉さん、後ろ！"
       }
     ],
     "battle_conversation": [
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "うわっ！"
+        "text": "うわ！"
       },
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
         "text": "この沼地って、こんなキモい魔物しか出てこないの？"
       },
       {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "悪いけど、今はこんなとこで時間食ってる場合じゃないから、"
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あれはこの場所を住処にしている大蜘蛛よ。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "珍しいわ。いつもは人前に姿を現さないものなのに…。"
       },
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "さっさとそこを通してよね！"
+        "text": "最近この島に魔族が入り込んで、その影響で魔物たちが凶暴化してるんだよ。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "アリシアは下がってて。あたしが追い払うから。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ええ、怪我をしないようにね。お姉さん！"
       }
     ],
     "resolution": [
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "なんとか倒せたけど…。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "身体中にクモの糸がへばりついてて最悪…。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "お気に入りの服なのに～…。"
+        "text": "……多分もう大丈夫だよ。"
       },
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "♪～～♪～～"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "！？\nあそこにいるのは…。"
+        "text": "ありがとう、お姉さん！"
       },
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "♪～～♪～～"
+        "text": "お姉さん、お名前を教えてくれるかしら？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ん？あたしはフェリス・シィルベスト。\nシィルって呼んで。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "シィルお姉さん、あなたとっても強いのね！"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "そのネコちゃんたちもあなたの仲間？とっても素敵だわ！"
+      },
+      {
+        "speaker_name": "精霊",
+        "face_left": "res://assets/gfx/sprites/faily_full_body.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "……！(シャーッ！)"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/faily_full_body.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あら、嫌われちゃったかしら？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あれ？普段は人によく懐く方なんだけどな…。なんかごめんね。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "私は動物にはあまり好かれないみたいなの。だから平気よ。"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "そうだ！もう暗くなるし、私のお家に案内してあげる！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "え？いいの？"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "夜は危険な魔物もいっぱい出てきて危険なのよ？"
+      },
+      {
+        "speaker_name": "少女",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "それにさっきのお礼もさせて欲しいわ。どうかしら？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "それじゃあちょっとついていこうかな。"
       },
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（やっぱり、あの子が歌ってるんだ！）"
+        "text": "（よくできた子だなあ。あたしが子どもの頃とは大違い。）"
       },
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（よかった、こんなところにも人がいるんだ…！）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（ちょっと話をしてみよう…！）"
+        "text": "（でも丁度良かった。最近しっかり寝られてなかったし、お邪魔させてもらおう。）"
       }
     ]
   },
   "s4d12": {
     "intro": [
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（なんか成り行きでこの子の家を探すことになったけど…。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_3.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（本当にこんなところに家があるの…？）"
-      },
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
@@ -343,14 +479,6 @@
       },
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（まあ珍しいか。飛べる人は浮遊魔法で自力で飛んでるし。）"
-      },
-      {
-        "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "left",
@@ -371,7 +499,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（さっさとこの子の家を見つけて、あわよくば泊めてもらおう…。）"
+        "text": "（この子以外に人はいなさそうだし、本当にこんな場所に家があるのかな。）"
       }
     ],
     "progression": [
@@ -429,7 +557,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ええ、お歌はよく歌うの。お姉さんはお歌は好き？"
+        "text": "ええ、お歌はよく歌うの。シィルお姉さんはお歌は好き？"
       },
       {
         "speaker_name": "フェリス",
@@ -469,7 +597,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ええ、私とお姉さんはお友達。二人で歌えばきっと素敵だわ！"
+        "text": "ええ、私とシィルお姉さんはお友達。二人で歌えばきっと素敵だわ！"
       },
       {
         "speaker_name": "フェリス",
@@ -477,7 +605,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（友達認定するの早くない？あたしが子どもの頃とは大違いだ…。）"
+        "text": "（友達認定するの早くない？今の子ってこんな積極的なのかな。）"
       },
       {
         "speaker_name": "フェリス",
@@ -485,7 +613,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（でも、悪い気はしないかも。\nそれに…。）"
+        "text": "（でも、悪い気はしないかも。それに…。）"
       },
       {
         "speaker_name": "フェリス",
@@ -821,7 +949,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（まったく…自分の手下の躾くらいちゃんとしてよね…！）"
+        "text": "まったく…自分の手下の躾くらいちゃんとしてよね…！"
       },
       {
         "speaker_name": "少女",
@@ -829,7 +957,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "魔法使いのお姉さん、頑張って…！"
+        "text": "シィルお姉さん、頑張って…！"
       },
       {
         "speaker_name": "フェリス",
@@ -948,28 +1076,12 @@
         "text": "はぁ……はぁ……。"
       },
       {
-        "speaker_name": "少女",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "わぁ！お姉さん、とっても強いのね！"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "ま、まあね。伊達にここまで来れてないよ…。"
-      },
-      {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（本当に手強かった…。あれがこの間戦った魔物なの…？）"
+        "text": "（本当に手強かった…。あれがついこの間戦ったのと同じヤツなの…？）"
       },
       {
         "speaker_name": "ハーピー",

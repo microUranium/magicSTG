@@ -3,27 +3,27 @@
     "intro": [
       {
         "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "あのハーピーが言うにはこの海岸の先に遺跡があって、そこにあいつの言ってた人がいるらしいけど…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "「この島のことならなんでも知ってる情報屋」ねぇ…。"
+      },
+      {
+        "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ。なんであたしがこんなことを…。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "シスターが言うにはこの先にコウモリ遺跡があるみたいだけど…。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "さっさと依頼を片付けて帰ろう。"
+        "text": "そんなやつがいるならあたしたちの仕事も苦労しないっつーの。"
       }
     ],
     "progression": [
@@ -33,7 +33,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（たしかこの辺りって鉱石エイが出る地域だったよね。）"
+        "text": "それにしても、ここの海っていつ見ても赤いなあ。"
       },
       {
         "speaker_name": "フェリス",
@@ -41,7 +41,15 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（あれに出くわすと厄介だからさっさと通り抜けちゃお。）"
+        "text": "この近辺に生息してる特殊な微生物の影響で赤く見える、とかなんとか。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "毎年ここは海水浴のスポットになってるけど、そう考えるとちょっと気持ち悪いかも…。"
       }
     ],
     "battle_conversation": [
@@ -51,7 +59,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "なっ…。言ったそばから…！"
+        "text": "あれは…鉱石エイ？"
       },
       {
         "speaker_name": "フェリス",
@@ -59,7 +67,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "出てくるの早すぎでしょ！そんなことある！？"
+        "text": "普段海底にいるやつがなんで浜に…？"
       },
       {
         "speaker_name": "フェリス",
@@ -67,7 +75,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（あたしってホントに運が悪い…。）"
+        "text": "なんかこっち見てきてない…？ヤバいかも！"
       }
     ],
     "resolution": [
@@ -77,7 +85,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（やっと倒せた…。）"
+        "text": "鉱石エイ、こいつは本来大人しい魔物って聞いたなんだけどな…。"
       },
       {
         "speaker_name": "フェリス",
@@ -85,7 +93,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（一人で相手する敵じゃないってあんなの。）"
+        "text": "そういえば魔物たちが凶暴化してるってハーピーも言ってたし。"
       },
       {
         "speaker_name": "フェリス",
@@ -93,15 +101,15 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "…………"
+        "text": "あの魔族を止めないことにはずっとこんな調子なのかな…。"
       },
       {
         "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "なんであたし一人でこんなことしてるんだろ。"
+        "text": "人手が足りないからってそんな大役をあたし一人に任せるなよ…。"
       }
     ]
   },
@@ -121,7 +129,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "疲れたからちょっと休憩……。"
+        "text": "疲れたからちょっと休憩…。"
       },
       {
         "speaker_name": "フェリス",
@@ -129,7 +137,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（潮のせいで髪も肌もベタベタ。はぁ、町に戻ってお風呂に入りたい…。）"
+        "text": "潮のせいで髪も肌もベタベタ。はぁ、町に戻ってお風呂に入りたい…。"
       },
       {
         "speaker_name": "フェリス",
@@ -147,7 +155,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あいつは、サンドパイソン……！？"
+        "text": "あいつは、サンドパイソン…！？"
       },
       {
         "speaker_name": "フェリス",
@@ -155,7 +163,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（まずい…！あれは普通に強いやつ…！）"
+        "text": "あいつはちょっとマズいかも…！"
       },
       {
         "speaker_name": "フェリス",
@@ -163,7 +171,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（囲まれたらやばい…振り切らないと…！）"
+        "text": "囲まれたらやばい…振り切らないと…！"
       }
     ],
     "resolution": [
@@ -213,7 +221,49 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ。でも行くしかないか。ギルドクビにされたくないし…。"
+        "text": "はぁ。でもここまで来たのなら行くしかないか。"
+      }
+    ],
+    "resolution2": [
+      {
+        "speaker_name": "？？？",
+        "face_left": null,
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "neutral",
+        "text": "…………。"
+      },
+      {
+        "speaker_name": "？？？",
+        "face_left": null,
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "neutral",
+        "text": "サンドパイソンを一人で倒しちゃうなんて。"
+      },
+      {
+        "speaker_name": "？？？",
+        "face_left": null,
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "neutral",
+        "text": "ふふっ。あの子の強さは知っていたけれど、まさかこれほどとはね。"
+      },
+      {
+        "speaker_name": "？？？",
+        "face_left": null,
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "neutral",
+        "text": "興味が湧いてきたよ。"
+      },
+      {
+        "speaker_name": "？？？",
+        "face_left": null,
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "neutral",
+        "text": "ボクのところまで辿り着けるか、ここから見させてもらうね。"
       }
     ]
   }

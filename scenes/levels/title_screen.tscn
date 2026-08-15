@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbm3capbd2b4g"]
+[gd_scene load_steps=4 format=3 uid="uid://bbm3capbd2b4g"]
 
 [ext_resource type="Script" uid="uid://pq5woxgf8ki8" path="res://scripts/systems/TitleScreen.gd" id="1_upj3s"]
+[ext_resource type="Texture2D" uid="uid://xm0ft6f46e4t" path="res://assets/gfx/sprites/title_background.png" id="2_gxyay"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_w8mqq"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -11,32 +13,101 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_upj3s")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(640, 480)
+scale = Vector2(4, 4)
+texture = ExtResource("2_gxyay")
+
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -316.0
-offset_right = 316.0
-offset_bottom = 349.0
+offset_left = 5.0
+offset_top = 115.0
+offset_right = 637.0
+offset_bottom = 464.0
 grow_horizontal = 2
-theme_override_font_sizes/normal_font_size = 120
-text = "魔術師STG プロトタイプ"
+theme_override_font_sizes/normal_font_size = 96
+text = "魔術師STG(仮)"
 
-[node name="SwitchToStageSelectButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 763.0
-offset_top = 678.0
-offset_right = 1134.0
-offset_bottom = 785.0
-theme_override_font_sizes/font_size = 72
-text = "ステージ選択"
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 932.0
+offset_top = 554.0
+offset_right = 932.0
+offset_bottom = 649.0
+theme_override_constants/separation = 120
+alignment = 1
 
-[node name="SwitchToEquipmentButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 181.0
-offset_top = 676.0
-offset_right = 477.0
-offset_bottom = 783.0
-theme_override_font_sizes/font_size = 72
-text = "装備画面"
+[node name="StageSelect" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/StageSelect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.418252, 0.485805, 0.831039, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_w8mqq")
+theme_override_font_sizes/font_size = 80
+text = "ステージ"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="VBoxContainer/StageSelect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.0
+offset_top = -36.0
+offset_right = -95.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4.96, 2.12)
+
+[node name="Equipment" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Equipment"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.968132, 0.25534, 0.461148, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_w8mqq")
+theme_override_font_sizes/font_size = 80
+text = "装備"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="VBoxContainer/Equipment"]
+anchors_preset = 0
+offset_left = -82.0
+offset_top = -37.0
+offset_right = -18.0
+offset_bottom = 1.0
+scale = Vector2(2.56382, 2.12473)

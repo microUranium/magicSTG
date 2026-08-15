@@ -66,6 +66,12 @@ func _on_stop_request(fade: float) -> void:
   _tween.tween_callback(target.stop)
 
 
+func is_playing_stream(stream: AudioStream) -> bool:
+  """指定ストリームが現在アクティブに再生中か（フェード中も含む）。
+  呼び出し側が「既に鳴っているなら再リクエストしない」判断をするための問い合わせ用。"""
+  return _active.playing and _active.stream == stream
+
+
 func _kill_tween() -> void:
   if _tween and _tween.is_valid():
     _tween.kill()

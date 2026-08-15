@@ -9,6 +9,8 @@ class_name EquipmentScreen
 
 
 func _ready():
+  GameFlow.play_menu_bgm()
+
   # Signal 接続
   EquipSignals.swap_request.connect(_on_swap_request)
   EquipSignals.return_item_to_inventory.connect(_on_return_item_to_inventory)

@@ -21,6 +21,9 @@ var _homing_timer: float = 0.0  # 追尾経過時間
 var _bounce_count: int = 0  # 反射回数
 var _boomerang_returning: bool = false  # ブーメランが帰還フェーズに入ったか
 var _gravity_dir: Vector2 = Vector2.DOWN  # この弾に適用する重力方向（弾ごとに確定）
+var _afterimage_accum: float = 0.0  # 残像の生成間隔の累積
+
+const AFTERIMAGE_SCENE = preload("res://scenes/effects/after_image.tscn")
 
 # 螺旋移動用の内部状態
 var _spiral_current_radius: float = 0.0  # 現在の螺旋半径
@@ -189,6 +192,58 @@ func _process(delta):
       rotation = rotation_angle
 
   _prev_position = global_position
+
+  # 残像は回転が確定した後に生成する（スプライトの向きをそのまま複製するため）
+  _update_afterimage(delta)
+
+
+func _update_afterimage(delta: float) -> void:
+  """一定間隔で弾のスプライトを複製した残像を生成する"""
+  if not bullet_config or not bullet_config.enable_afterimage:
+    return
+  if bullet_config.afterimage_interval <= 0.0:
+    return
+
+  _afterimage_accum += delta
+  if _afterimage_accum < bullet_config.afterimage_interval:
+    return
+
+  # 残像は装飾なので1フレームに1枚までとし、積み残しは捨てる。
+  # 間隔がフレーム時間より短い場合は自然に毎フレーム1枚になる。
+  _afterimage_accum = 0.0
+  _spawn_afterimage()
+
+
+func _spawn_afterimage() -> void:
+  if not sprite or not sprite.texture:
+    return
+
+  # 弾より寿命が長いため、弾の子ではなくシーンに直接ぶら下げる。
+  # テスト環境では current_scene が null になりうるので root にフォールバックする。
+  var tree := get_tree()
+  if not tree:
+    return
+  var parent: Node = tree.current_scene if tree.current_scene else tree.root
+  if not parent:
+    return
+
+  var image := AFTERIMAGE_SCENE.instantiate() as AfterImage
+  if not image:
+    return
+
+  # lifetime は AfterImage._ready() が tween を張るときに読むため add_child より前に、
+  # modulate も tween の開始値になるため前に設定する。
+  image.lifetime = bullet_config.afterimage_lifetime
+  image.modulate = bullet_config.afterimage_color
+  image.texture = sprite.texture
+  image.z_index = z_index
+
+  parent.add_child(image)
+
+  # global_* は親の変形を考慮して local へ逆算されるため add_child の後に設定する
+  image.global_position = sprite.global_position
+  image.global_rotation = sprite.global_rotation
+  image.scale = sprite.scale
 
 
 func _update_advanced_movement(delta: float):

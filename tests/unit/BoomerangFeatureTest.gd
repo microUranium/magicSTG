@@ -324,6 +324,124 @@ func test_resource_file_loads() -> void:
   assert_float(move_cfg.boomerang_return_max_speed).is_equal_approx(RETURN_MAX_SPEED, 0.001)
 
 
+# =====================================================================
+# 残像
+# =====================================================================
+
+
+func _afterimage_count() -> int:
+  """シーンに存在する残像ノード数を数える"""
+  var tree := get_tree()
+  var root: Node = tree.current_scene if tree.current_scene else tree.root
+  var n := 0
+  for child in root.get_children():
+    if child is AfterImage:
+      n += 1
+  return n
+
+
+func _make_afterimage_bullet(interval: float = 0.04) -> Node2D:
+  var bullet: Node2D = auto_free(load(BULLET_SCENE).instantiate())
+  var visual := BulletVisualConfig.new()
+  visual.texture = PlaceholderTexture2D.new()
+  visual.scale = 2.0
+  visual.enable_afterimage = true
+  visual.afterimage_interval = interval
+  visual.afterimage_lifetime = 0.25
+  visual.afterimage_color = Color(1, 1, 1, 0.45)
+  _scene.add_child(bullet)
+  bullet.set_process(false)
+  bullet.global_position = Vector2(400, 400)
+  bullet.direction = Vector2(0, -1)
+  bullet.apply_visual_config(visual)
+  bullet.apply_movement_config(_make_boomerang_config())
+  return bullet
+
+
+func test_afterimage_disabled_by_default() -> void:
+  """既定では残像を出さない（既存の弾は無変更で従来どおり）"""
+  assert_bool(BulletVisualConfig.new().enable_afterimage).is_false()
+
+  var before := _afterimage_count()
+  for _i in 60:
+    _bullet._update_afterimage(1.0 / 60.0)
+
+  assert_int(_afterimage_count()).is_equal(before)
+
+
+func test_afterimage_spawns_at_interval() -> void:
+  """interval ごとに1枚生成される（0.04秒間隔・0.4秒で約10枚）"""
+  var bullet := _make_afterimage_bullet(0.04)
+  var before := _afterimage_count()
+
+  for _i in 24:  # 0.4秒
+    bullet._update_afterimage(1.0 / 60.0)
+
+  # 累積は1フレーム分ぶれるので幅を持たせる
+  assert_int(_afterimage_count() - before).is_between(8, 10)
+
+
+func test_afterimage_capped_to_one_per_frame() -> void:
+  """巨大な delta でも1フレームに1枚まで（積み残しは捨てる）"""
+  var bullet := _make_afterimage_bullet(0.04)
+  var before := _afterimage_count()
+
+  bullet._update_afterimage(10.0)  # 本来なら250枚
+
+  assert_int(_afterimage_count() - before).is_equal(1)
+
+
+func test_afterimage_copies_sprite_transform() -> void:
+  """残像が弾のスプライトの位置・回転・スケール・テクスチャを複製する"""
+  var bullet := _make_afterimage_bullet(0.01)
+  bullet.global_position = Vector2(300, 250)
+  bullet.rotation = deg_to_rad(37.0)
+  var before := _afterimage_count()
+
+  bullet._update_afterimage(0.02)
+  assert_int(_afterimage_count() - before).is_equal(1)
+
+  var tree := get_tree()
+  var root: Node = tree.current_scene if tree.current_scene else tree.root
+  var newest: AfterImage = null
+  for child in root.get_children():
+    if child is AfterImage:
+      newest = child
+  assert_object(newest).is_not_null()
+  assert_vector(newest.global_position).is_equal_approx(
+    bullet.sprite.global_position, Vector2(0.5, 0.5)
+  )
+  assert_float(newest.global_rotation).is_equal_approx(bullet.sprite.global_rotation, 0.001)
+  assert_vector(newest.scale).is_equal_approx(bullet.sprite.scale, Vector2(0.001, 0.001))
+  assert_object(newest.texture).is_same(bullet.sprite.texture)
+  assert_float(newest.modulate.a).is_equal_approx(0.45, 0.001)
+  newest.free()
+
+
+func test_afterimage_survives_bullet_removal() -> void:
+  """残像は弾の子ではないので、弾が消えても残る"""
+  var bullet := _make_afterimage_bullet(0.01)
+  bullet._update_afterimage(0.02)
+  var count := _afterimage_count()
+  assert_int(count).is_greater(0)
+
+  bullet.queue_free()
+  await await_idle_frame()
+
+  assert_int(_afterimage_count()).is_equal(count)
+
+
+func test_boomerang_resource_enables_afterimage() -> void:
+  var core = load("res://resources/data/attackcore_boomerang.tres")
+  var visual: BulletVisualConfig = core.attack_pattern.bullet_visual_config
+
+  assert_bool(visual.enable_afterimage).is_true()
+  assert_float(visual.afterimage_interval).is_greater(0.0)
+  assert_float(visual.afterimage_lifetime).is_greater(0.0)
+  # 弾本体より薄くないと残像に見えない
+  assert_float(visual.afterimage_color.a).is_less(1.0)
+
+
 func test_return_speed_cannot_skip_catch_radius() -> void:
   """1フレームの移動量が回収判定をすり抜けない余裕があること
 

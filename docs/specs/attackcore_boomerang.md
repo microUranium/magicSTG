@@ -53,8 +53,31 @@
 
 - **1発射サイクルの流れ**：発射→直進→0.75秒かけて徐々に減速し、速度が0になったらプレイヤーに追尾を始める→速度はプレイヤーの移動速度を上回る程度まで徐々に上がり、プレイヤーに追いつくと消滅する
 - **弾の見た目・回転**：SELF_ROTATION（`angular_velocity = 720.0`）
+- **残像**：有効（下記 2.2）
 - **画面外・持続**：`persist_offscreen = true` ／ `forced_lifetime = 8.0`
   - 往路の到達距離が450pxあり、プレイヤーが上寄りにいると画面上端を越えうる。`persist_offscreen = false` だと画面外に出た瞬間 `_immediate_removal()` で消えて戻ってこない（`ProjectileBullet._process()`）。`forced_lifetime` はプレイヤー消滅時などの迷子弾の安全弁。
+
+### 2.2 残像
+
+回転しながら往復する弾なので、軌跡が読めるように残像を出す。既存の `AfterImage`（`scenes/effects/after_image.tscn`／弾のスプライトを複製してアルファを tween で落として自壊する Sprite2D）を流用する。
+
+`BulletVisualConfig` に設定を追加したので、他のコアからも `.tres` だけで有効化できる。
+
+| パラメータ | 値 | 意味 |
+|---|---|---|
+| `enable_afterimage` | true | **既定 false** なので既存の弾は無変更 |
+| `afterimage_interval` | 0.04 | 生成間隔（秒）。時間ベースでフレームレートに依存しない |
+| `afterimage_lifetime` | 0.25 | 1枚が消えるまでの時間 |
+| `afterimage_color` | `Color(1, 1, 1, 0.45)` | 弾本体より薄くする |
+
+実装上の注意点:
+
+- **残像は弾の子にしない**。弾より寿命が長いため `get_tree().current_scene`（テスト環境では `root` にフォールバック）へ直接ぶら下げる
+- `lifetime` と `modulate` は `add_child` の**前**に設定する（`AfterImage._ready()` が `lifetime` を読んで tween を張り、`modulate` はその開始値になる）
+- `global_position` / `global_rotation` は `add_child` の**後**に設定する（親の変形を考慮して local へ逆算されるため、前に設定すると親に変形があるとズレる）
+- 生成は `_process` の末尾（回転確定後）に行う。スプライトの向きをそのまま複製するため
+- 1フレームに1枚までとし積み残しは捨てる。装飾なので間隔の1フレーム分のぶれは許容する
+- 空中の弾数 × (lifetime ÷ interval) が同時存在数。3スロット・速射なしなら約30枚、速射Lv3（CT 0.25）で約110枚
 
 ### 2.1 新設する `BulletMovementConfig` パラメータ
 
@@ -162,11 +185,19 @@
 - [x] 復路の1フレーム移動量が `2 × catch_radius` 未満（回収すり抜け防止）
 - [x] プレイヤー移動速度 < `boomerang_return_max_speed`
 - [x] STRAIGHT / GRAVITY が影響を受けていないこと（回帰）
+- [x] 残像が既定では出ないこと（`enable_afterimage` 既定 false）
+- [x] 残像が `afterimage_interval` ごとに1枚生成されること
+- [x] 巨大な delta でも1フレームに1枚までであること
+- [x] 残像が弾のスプライトの位置・回転・スケール・テクスチャ・色を複製すること
+- [x] **弾が消えても残像が残ること**（弾の子になっていないこと）
+- [x] `.tres` で残像が有効かつ弾本体より薄いこと
 
 実機で確認が必要:
 
 - [ ] 回収時に爆発エフェクトが出ないこと（見た目）
 - [ ] プレイヤーが移動中でも回収されること
+- [ ] 残像の見た目（濃さ・間隔・弾との描画順）。残像は `current_scene` に、弾は `_find_bullet_parent()` の返り値にぶら下がるため、前後関係は実機で確認する
+- [ ] 折り返し地点で速度0になる間、残像が同じ位置に重なって濃く見えないか
 - [ ] 画面上端を越えた弾が戻ってくること（`persist_offscreen = true` の検証）
 - [ ] プレイヤー消滅（被弾死亡）時に弾が残留しないこと
 - [ ] 折り返し地点に敵を置いたときのヒット回数（10章の既知の制約）

@@ -11,10 +11,10 @@ class_name BoomerangFeatureTest
 
 const BULLET_SCENE := "res://scenes/bullets/universal_bullet.tscn"
 
-const OUTBOUND_TIME := 1.5
-const INITIAL_SPEED := 500.0
-const RETURN_ACCEL := 900.0
-const RETURN_MAX_SPEED := 700.0
+const OUTBOUND_TIME := 0.75
+const INITIAL_SPEED := 1000.0
+const RETURN_ACCEL := 1800.0
+const RETURN_MAX_SPEED := 1000.0
 const CATCH_RADIUS := 24.0
 
 var _scene: Node2D
@@ -90,7 +90,8 @@ func test_boomerang_movement_type_value() -> void:
 
 
 func test_boomerang_params_exist_with_defaults() -> void:
-  """固有パラメータが存在し、既定値が仕様どおり"""
+  """固有パラメータが存在し、スクリプト側の既定値が保たれている
+  （.tres の値はコア個別のチューニング値なので test_resource_file_loads で検証する）"""
   var cfg := BulletMovementConfig.new()
   assert_float(cfg.boomerang_outbound_time).is_equal_approx(1.5, 0.001)
   assert_float(cfg.boomerang_return_accel).is_equal_approx(900.0, 0.001)
@@ -131,10 +132,10 @@ func test_outbound_reaches_zero_and_switches_to_return() -> void:
 
 
 func test_outbound_distance_matches_spec() -> void:
-  """往路の到達距離が initial_speed * outbound_time / 2 ≒ 375px 前後になる
+  """往路の到達距離が initial_speed * outbound_time / 2 になる
 
   ProjectileBullet._process() は「現在の speed で移動 → 速度更新」の順なので
-  離散化により解析解 375px より僅かに大きくなる（dt=1/60 で約379px）。
+  離散化により解析解より initial_speed * dt / 2 だけ大きくなる。
   """
   var dt := 1.0 / 60.0
   var distance := 0.0
@@ -143,7 +144,10 @@ func test_outbound_distance_matches_spec() -> void:
     distance += _bullet.speed * dt
     _bullet._update_advanced_movement(dt)
 
-  assert_float(distance).is_between(370.0, 385.0)
+  var analytic := INITIAL_SPEED * OUTBOUND_TIME / 2.0
+  var expected := analytic + INITIAL_SPEED * dt / 2.0
+  assert_float(analytic).is_equal_approx(375.0, 0.001)  # 飛距離は仕様どおり375px
+  assert_float(distance).is_equal_approx(expected, 2.0)
 
 
 # =====================================================================
@@ -301,7 +305,7 @@ func test_resource_file_loads() -> void:
   assert_str(str(core.id)).is_equal("attackcore_boomerang")
   assert_float(core.damage_base).is_equal_approx(3.0, 0.001)
   assert_float(core.cooldown_sec_base).is_equal_approx(1.0, 0.001)
-  assert_float(core.base_modifiers.get("bullet_speed", 0.0)).is_equal_approx(500.0, 0.001)
+  assert_float(core.base_modifiers.get("bullet_speed", 0.0)).is_equal_approx(INITIAL_SPEED, 0.001)
 
   var pattern: AttackPattern = core.attack_pattern
   assert_object(pattern).is_not_null()
@@ -314,9 +318,22 @@ func test_resource_file_loads() -> void:
   assert_int(move_cfg.movement_type).is_equal(BulletMovementConfig.MovementType.BOOMERANG)
   # movement_config が指定されている場合 initial_speed が speed を上書きするため
   # base_modifiers.bullet_speed と一致していなければならない
-  assert_float(move_cfg.initial_speed).is_equal_approx(500.0, 0.001)
-  assert_float(move_cfg.boomerang_outbound_time).is_equal_approx(1.5, 0.001)
-  assert_float(move_cfg.boomerang_return_max_speed).is_equal_approx(700.0, 0.001)
+  assert_float(move_cfg.initial_speed).is_equal_approx(INITIAL_SPEED, 0.001)
+  assert_float(move_cfg.boomerang_outbound_time).is_equal_approx(OUTBOUND_TIME, 0.001)
+  assert_float(move_cfg.boomerang_return_accel).is_equal_approx(RETURN_ACCEL, 0.001)
+  assert_float(move_cfg.boomerang_return_max_speed).is_equal_approx(RETURN_MAX_SPEED, 0.001)
+
+
+func test_return_speed_cannot_skip_catch_radius() -> void:
+  """1フレームの移動量が回収判定をすり抜けない余裕があること
+
+  正面から近づく場合、距離 d から d - step へ移動して両方が半径外になるには
+  step > 2 * catch_radius が必要。したがって step < 2 * catch_radius なら
+  必ずどこかのフレームで半径内に入る。復路速度を上げる際の上限条件。
+  """
+  var step_per_frame := RETURN_MAX_SPEED / 60.0
+
+  assert_float(step_per_frame).is_less(CATCH_RADIUS * 2.0)
 
 
 func test_return_max_speed_exceeds_player_speed() -> void:

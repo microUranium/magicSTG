@@ -51,7 +51,7 @@
 | `penetration_count` | 3| 0 なし / n 回 / -1 無限 |
 | `target_group` | `enemies` | プレイヤー弾は固定。HOMING の索敵グループも兼ねる |
 
-- **1発射サイクルの流れ**：発射→直進→1.5秒かけて徐々に減速し、速度が0になったらプレイヤーに追尾を始める→速度はプレイヤーの移動速度を上回る程度まで徐々に上がり、プレイヤーに追いつくと消滅する
+- **1発射サイクルの流れ**：発射→直進→0.75秒かけて徐々に減速し、速度が0になったらプレイヤーに追尾を始める→速度はプレイヤーの移動速度を上回る程度まで徐々に上がり、プレイヤーに追いつくと消滅する
 - **弾の見た目・回転**：SELF_ROTATION（`angular_velocity = 720.0`）
 - **画面外・持続**：`persist_offscreen = true` ／ `forced_lifetime = 8.0`
   - 往路の到達距離が約375pxあり画面上端を越えうる。`persist_offscreen = false` だと画面外に出た瞬間 `_immediate_removal()` で消えて戻ってこない（`ProjectileBullet._process()`）。`forced_lifetime` はプレイヤー消滅時などの迷子弾の安全弁。
@@ -60,17 +60,18 @@
 
 | パラメータ | 値 | 意味 |
 |---|---|---|
-| `initial_speed` | 500.0 | 発射速度。`base_modifiers.bullet_speed` と一致させる（9章の落とし穴） |
-| `boomerang_outbound_time` | 1.5 | 減速して停止するまでの秒数。往路距離 = 500×1.5÷2 ≒ **375px** |
-| `boomerang_return_accel` | 900.0 | 帰還時の加速度（px/秒²） |
-| `boomerang_return_max_speed` | 700.0 | 帰還時の最大速度。帰還所要 約0.93秒 |
-| `boomerang_catch_radius` | 24.0 | この距離までプレイヤーに近づいたら回収（`queue_free()`） |
+| `initial_speed` | 1000.0 | 発射速度。`base_modifiers.bullet_speed` と一致させる（9章の落とし穴） |
+| `boomerang_outbound_time` | 0.75 | 減速して停止するまでの秒数。往路距離 = 1000×0.75÷2 ≒ **375px** |
+| `boomerang_return_accel` | 1800.0 | 帰還時の加速度（px/秒²） |
+| `boomerang_return_max_speed` | 1000.0 | 帰還時の最大速度。帰還所要 約0.65秒 |
+| `boomerang_catch_radius` | 24.0 | この距離までプレイヤーに近づいたら回収（`queue_free()`）。**復路の1フレーム移動量が `2 × catch_radius` を超えると回収をすり抜ける**（1000px/s で 16.7px < 48px なので余裕あり） |
 
 - 往路：`speed = initial_speed * max(0, 1 - t / boomerang_outbound_time)`
 - 復路：毎フレーム `direction` をプレイヤー方向へ更新し、`speed` を上限まで加速
 - 回収時は `_immediate_removal()` を使わない（爆発エフェクトが出て「回収」に見えないため）
 - プレイヤー不在（`TargetService.get_player()` が null）時は向きを維持して直進し、`forced_lifetime` で消滅
-- 総飛翔時間 約2.4秒（CT 1.0秒に対し常時2〜3発が空中に滞留する）
+- 総飛翔時間 **約1.4秒**（往路0.75秒＋復路0.65秒）。CT 1.0秒に対し空中の滞留は1〜2発
+  - テンポ調整の履歴：初期案は `initial_speed 500 / outbound_time 1.5 / return_accel 900 / return_max_speed 700` で総飛翔 2.42秒だった。往路距離は `initial_speed × outbound_time ÷ 2` なので、初速を2倍・往路時間を半分にすると飛距離375pxを保ったまま往路だけ半減できる。ただし復路0.92秒はこれでは縮まず合計1.67秒で止まるため、`return_accel` と `return_max_speed` も引き上げて 1.40秒（-42%）とした
 
 ## 3. 数値設計
 
@@ -78,7 +79,7 @@
 |---|---|---|
 | `damage_base` | 3| → `pattern.damage` |
 | `cooldown_sec_base` | 1| → `pattern.burst_delay`（＝実クールダウン） |
-| `base_modifiers.bullet_speed` | 500(発射時)| → `pattern.bullet_speed` |
+| `base_modifiers.bullet_speed` | 1000(発射時)| → `pattern.bullet_speed` |
 | その他 `base_modifiers` |不要（ブーメラン固有値は `bullet_movement_config` 側に持たせる）| 例：`spread_bullet_count`（SHOT_ON_HIT用） |
 
 - **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ **3.0**（1ヒット時）／ 既存比較：エネルギーショット 5.0、ファイアボール 5.0、エレキショック 16.7
@@ -91,7 +92,7 @@
 
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
-| 速射 | `cooldown_pct` |◯ | 主力。ただし飛翔2.4秒に対しCTが縮むため空中の滞留弾が増える |
+| 速射 | `cooldown_pct` |◯ | 主力。ただし飛翔1.4秒に対しCTが縮むため空中の滞留弾が増える |
 | 増輪 | `bullet_count_add` | ◯ | 主力。`angle_spread 30°` で扇状に開き、面の制圧力が上がる |
 | 貫通 | `penetration_add` |◯ | 最重要。往復するためヒット数に乗数的に効く（10章のバランス注視項目） |
 | 残留 | `bullet_lifetime_pct` | ✕(プレイヤーに衝突するまで消えない) | 対象外（意図的） |
@@ -129,12 +130,12 @@
 
 - [◯] `assets/gfx/sprites/bullet_boomerang.png`
 - [◯] `assets/gfx/sprites/icon_magic_boomerang.png`
-- [ ] `resources/data/attackcore_boomerang.tres`
-- [ ] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
+- [x] `resources/data/attackcore_boomerang.tres`
+- [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
   - 無エンチャント／増輪Lv2／速射Lv2＋貫通Lv1 の3個体
 - [ ] （ドロップさせる場合）`resources/itemdrop/` のドロップテーブル／`enchantmentrule_*.tres` の `pool`
-- [ ] `tests/unit/` にテスト追加
-- [ ] スクリプト変更がある場合はテスト更新
+- [x] `tests/unit/BoomerangFeatureTest.gd`（19件）
+- [x] スクリプト変更に対するテスト更新
 
 ## 8. テスト観点
 
@@ -148,9 +149,22 @@
 
 ### 8.1 ブーメラン固有
 
-- [ ] 往路で速度が0まで落ち、復路へ切り替わること（`boomerang_outbound_time` 境界）
-- [ ] プレイヤーを追尾し、回収半径内で消滅すること／回収時に爆発エフェクトが出ないこと
-- [ ] プレイヤーが移動中でも回収されること（プレイヤー移動速度 < `boomerang_return_max_speed` が前提）
+ユニットテスト済み（`tests/unit/BoomerangFeatureTest.gd`）:
+
+- [x] 往路で速度が0まで落ち、復路へ切り替わること（`boomerang_outbound_time` 境界）
+- [x] 往路の到達距離が `initial_speed × outbound_time ÷ 2`
+- [x] 復路でプレイヤー方向へ向き直り、`boomerang_return_max_speed` で上限クランプされること
+- [x] 回収半径の内／外で削除される・されないこと
+- [x] 往路では回収判定されないこと（発射直後に自機と重なっていても消えない）
+- [x] プレイヤー不在時に向きを維持すること
+- [x] 復路の1フレーム移動量が `2 × catch_radius` 未満（回収すり抜け防止）
+- [x] プレイヤー移動速度 < `boomerang_return_max_speed`
+- [x] STRAIGHT / GRAVITY が影響を受けていないこと（回帰）
+
+実機で確認が必要:
+
+- [ ] 回収時に爆発エフェクトが出ないこと（見た目）
+- [ ] プレイヤーが移動中でも回収されること
 - [ ] 画面上端を越えた弾が戻ってくること（`persist_offscreen = true` の検証）
 - [ ] プレイヤー消滅（被弾死亡）時に弾が残留しないこと
 - [ ] 折り返し地点に敵を置いたときのヒット回数（10章の既知の制約）
@@ -167,6 +181,6 @@
 
 ## 10. 未決事項
 
-- **プレイヤー移動速度の実測値**：`boomerang_return_max_speed = 700.0` がこれを十分上回るか要確認。下回ると弾が回収されず滞留する。
+- ~~**プレイヤー移動速度の実測値**~~：解決。`Player.speed = 200.0`（`scripts/player/Player.gd:10`、sneak時はさらに低下）に対し `boomerang_return_max_speed = 1000.0` は十分上回る。`tests/unit/BoomerangFeatureTest.gd` の `test_return_max_speed_exceeds_player_speed` で固定した。
 - **貫通×速射の上振れ**：貫通Lv3（+4 → 計7回貫通＝最大8ヒット）× 速射Lv3 で理論96 DPS。実測後、必要なら `damage_base`（3→2）または基礎 `penetration_count`（3→2）で調整する。
 - **折り返し地点に敵がいると2度ヒットしない**：`BulletBase._on_area_entered()` は `area_entered`（進入時のみ）で発火するため、敵の当たり判定内で速度0になって折り返すと退出→再進入が起きずヒットは1回だけ。売りの「2度ヒット」が成立しないケースとして許容するか、`boomerang_outbound_time` を短くして折り返し点を手前に置くかを決める。

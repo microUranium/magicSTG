@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=13 format=3]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=18 format=3]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="2_movecfg"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="7_warn"]
 [ext_resource type="Texture2D" uid="uid://bdwl1xukq0b4b" path="res://assets/gfx/sprites/icon_magic_magical_ball.png" id="8_icon"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="9_item"]
+[ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="10_explosion"]
 
 [sub_resource type="Resource" id="Resource_movement"]
 script = ExtResource("2_movecfg")
@@ -45,6 +46,37 @@ initial_rotation = 0.0
 angular_velocity = 0.0
 metadata/_custom_type_script = "uid://urppv4s7es6g"
 
+[sub_resource type="Curve" id="Curve_explosion"]
+_data = [Vector2(0, 0.818115), 0.0, 0.0, 0, 0, Vector2(0.589286, 0.483063), -1.34021, -1.34021, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_explosion"]
+curve = SubResource("Curve_explosion")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_explosion"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+spread = 180.0
+initial_velocity_min = 204.41
+initial_velocity_max = 308.18
+scale_min = 2.0
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_explosion")
+
+[sub_resource type="Resource" id="Resource_explosion"]
+script = ExtResource("10_explosion")
+explosion_particle_material = SubResource("ParticleProcessMaterial_explosion")
+explosion_scale = 1.0
+explosion_duration = 0.5
+explosion_damage = 0
+explosion_radius = 0.0
+damage_falloff = false
+explosion_type = 0
+knockback_force = 0.0
+screen_shake_intensity = 0.0
+metadata/_custom_type_script = "uid://cmf38edjntyfq"
+
 [sub_resource type="Resource" id="Resource_visual"]
 script = ExtResource("3_viscfg")
 texture = ExtResource("4_tex")
@@ -53,9 +85,10 @@ color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = false
 animation_name = ""
+explosion_config = SubResource("Resource_explosion")
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
-fade_out_duration = 0.2
+fade_out_duration = 0.0
 metadata/_custom_type_script = "uid://bgake8ntgc47w"
 
 [sub_resource type="Resource" id="Resource_pattern"]
@@ -65,7 +98,7 @@ bullet_scene = ExtResource("1_bullet")
 target_group = "enemies"
 damage = 3
 bullet_range = 0.0
-bullet_lifetime = 5.0
+bullet_lifetime = 3.5
 auto_start = true
 penetration_count = 2
 bullet_visual_config = SubResource("Resource_visual")

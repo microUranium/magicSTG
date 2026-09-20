@@ -49,11 +49,11 @@
 | `angle_spread` / `angle_offset` | 45 / 0 | 扇状の広がり（度）。`bullet_count>1` のとき効く |
 | `spawn_position_mode` | 0 | 0 OWNER / 1 FIXED_ABSOLUTE / 2 RELATIVE_TO_OWNER / 3 RELATIVE_TO_TARGET / 4 CUSTOM |
 | `bullet_movement_config.movement_type` | 5 | 0 STRAIGHT / 1 DECELERATE / 2 ACCELERATE / 3 SINE_WAVE / 4 HOMING / 5 GRAVITY / 6 SPIRAL |
-| `bullet_lifetime` | 5 | 0 は無限。エンチャント「残留」は **0 だと効かない** |
+| `bullet_lifetime` | 3.5 | 0 は無限。エンチャント「残留」は **0 だと効かない** |
 | `penetration_count` | 2 | 0 なし / n 回 / -1 無限 |
 | `target_group` | `enemies` | プレイヤー弾は固定。HOMING の索敵グループも兼ねる |
 
-- **1発射サイクルの流れ**：発射→弾が画面端でバウンド→敵に当たる／寿命切れで消滅
+- **1発射サイクルの流れ**：発射→弾が画面端でバウンド→敵に当たる／寿命切れ（3.5秒）で**破裂エフェクトを出して**消滅
   ただし、上向きに発射した場合は重力方向が上になり、下向きに発射した場合は重力方向が下になる。
   - 意図：重力を常に下向きにすると弾が画面下に溜まり、上側の敵に当てにくくなる。本作は後方発射（`FairyContainer.set_rear_firing_mode()`）で攻撃方向を上下に切り替えられるため、重力方向も追従させて弾が片側に寄る問題を解消する。
   - 帰結：重力が発射方向と同じなので弾は**放物線を描かず、撃った方向へ加速し続ける**。「奥の壁まで加速 → バウンド → 減速して停止 → 再び壁へ加速」という往復運動になる。`bounce_factor = 1.0` だと毎回発射地点の高さまで戻って画面を縦断してしまうため、**反発係数は1未満**にして弾を奥の壁際に収束させる。
@@ -64,7 +64,14 @@
       - バウンド判定は `global_position.y <= play_rect.position.y + bounce_margin` という**半空間判定**なので、どれだけオーバーシュートしても取りこぼさない。
       - さらに GRAVITY は `speed = 0` で `_velocity` 一本に移動を集約したため、`super._process()` の `position += direction * speed * delta` は何も動かさない。画面外判定が見るのは前フレームのバウンドでクランプ済みの位置であり、`max_bounces = 0`（無制限）なら弾は画面外の位置で観測されない。
     - それでも `true` を採用する理由：`max_bounces > 0` に変更すると `_handle_boundary_bounce()` が早期 return してクランプされなくなり、その瞬間に `false` だと即消滅する。加えて `forced_lifetime` を有効化できる（迷子弾の上限）。
-  - `forced_lifetime` は `persist_offscreen = true` のとき最優先で `queue_free()` する上限値。**`bullet_lifetime` より短いと寿命を切り詰めてしまう**ため、残留Lv3（+200% → 15秒）を通す前提で 16.0 とする（10章の未決事項も参照）。
+
+### 2.2 消失エフェクト
+
+バブルショットと同じ `ExplosionConfig`（パーティクル拡散・`explosion_duration = 0.5`）を `bullet_visual_config.explosion_config` に設定し、弾が「弾けて」消えるようにする。`explosion_damage = 0` / `explosion_radius = 0` なので**見た目のみでバランスには影響しない**。
+
+- 発火経路は2つ。敵ヒットで貫通を使い切ったとき（`_immediate_removal()`）と、寿命切れのとき（`_start_fade_out()` → `_finalize_bullet_removal()`）。どちらも `_create_explosion_effect()` を通る
+- **`fade_out_duration` は 0.0 にする**。0 より大きいと弾がフェードで消えきってから破裂エフェクトが出るため、「弾けた」ではなく「消えたあとに何か出た」ように見える
+  - `forced_lifetime` は `persist_offscreen = true` のとき最優先で `queue_free()` する上限値。**`bullet_lifetime` より短いと寿命を切り詰めてしまう**ため、残留Lv3（+200% → 10.5秒）を通す前提で 16.0 とする（10章の未決事項も参照）。
 
 ### 2.1 `bullet_movement_config` 設定値
 
@@ -135,7 +142,7 @@
 | 速射 | `cooldown_pct` |◯| 主力。ただし寿命5秒に対しCTが縮むため滞留弾が急増する（8.1の負荷確認対象） |
 | 増輪 | `bullet_count_add` | ◯ | 主力。`angle_spread 45°` の扇内にランダム配置され、面の制圧力が上がる |
 | 貫通 | `penetration_add` |◯| 強い。バウンドで同一敵に再進入するため、ヒット数に乗りやすい |
-| 残留 | `bullet_lifetime_pct` | ◯ | 強い。Lv3で寿命15秒＝奥の壁際に長時間居座る。`forced_lifetime = 16.0` が実質の上限 |
+| 残留 | `bullet_lifetime_pct` | ◯ | 強い。Lv3で寿命10.5秒。`forced_lifetime = 16.0` が実質の上限 |
 | 炸裂 | `spread_bullet_count_add` | ✕ | 対象外（`on_hit_pattern` なし） |
 
 - **新規エンチャントキーが必要か**：不要
@@ -216,7 +223,8 @@
 - [x] **共有 movement_config を書き換えないこと**（上撃ちと下撃ちの弾が互いの重力方向を壊さない）
 - [x] `gravity_follows_direction` 既定 false で従来どおり `gravity_direction` を使うこと（回帰）
 - [x] `single_shot_circle_gravity.tres` がフラグ無効かつ Step1 の移行値（400）を保っていること
-- [x] `forced_lifetime` が残留Lv3適用後の寿命（15秒）を切り詰めないこと
+- [x] 消失時の破裂エフェクトが設定されていること（`explosion_config` あり / `fade_out_duration = 0` / ダメージ0）
+- [x] `forced_lifetime` が残留Lv3適用後の寿命（10.5秒）を切り詰めないこと
 
 実機で確認が必要:
 
@@ -241,6 +249,6 @@
 ## 10. 未決事項
 
 - **実効DPSの実測**：`direction_type = RANDOM` ＋ バウンド再ヒットで期待値が机上計算できない。理論DPS 2.0 は既存最低なので、実測後に `damage_base`（3→4）または `cooldown_sec_base`（1.5→1.2）で引き上げる余地を残す。
-- **滞留弾数の許容ライン**：速射Lv3（CT 0.375秒）＋増輪Lv3（7発）＋残留Lv3（寿命15秒）で理論上280発が同時に存在しうる。`forced_lifetime` を 16.0 より短く設定して残留の上限を意図的に切る案も含めて、実測後に判断する。
+- **滞留弾数の許容ライン**：速射Lv3（CT 0.375秒）＋増輪Lv3（7発）＋残留Lv3（寿命10.5秒）で理論上196発が同時に存在しうる。`forced_lifetime` を 16.0 より短く設定して残留の上限を意図的に切る案も含めて、実測後に判断する。
 - **`rotation_mode = FIXED` でよいか**：ボールが無回転で跳ねる見た目になる。転がり感を出すなら `SELF_ROTATION`＋`angular_velocity` に変更する。
 - ~~**仕様ファイル名**~~：解決。コアID `attackcore_magical_ball` に合わせて本ファイルを `attackcore_magical_ball.md` へリネームした。

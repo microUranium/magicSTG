@@ -300,7 +300,7 @@ func test_resource_file_loads() -> void:
   assert_int(pattern.direction_type).is_equal(AttackPattern.DirectionType.RANDOM)
   assert_float(pattern.angle_spread).is_equal_approx(45.0, 0.001)
   assert_int(pattern.penetration_count).is_equal(2)
-  assert_float(pattern.bullet_lifetime).is_equal_approx(5.0, 0.001)
+  assert_float(pattern.bullet_lifetime).is_equal_approx(3.5, 0.001)
   assert_bool(pattern.persist_offscreen).is_true()
 
   var cfg: BulletMovementConfig = pattern.bullet_movement_config
@@ -323,5 +323,23 @@ func test_forced_lifetime_covers_max_retention() -> void:
   var pattern: AttackPattern = core.attack_pattern
   var lifetime_lv3: float = pattern.bullet_lifetime * (1.0 + 2.0)  # 残留Lv3 = +200%
 
-  assert_float(lifetime_lv3).is_equal_approx(15.0, 0.001)
+  assert_float(lifetime_lv3).is_equal_approx(10.5, 0.001)
   assert_float(pattern.forced_lifetime).is_greater(lifetime_lv3)
+
+
+func test_pops_on_disappear() -> void:
+  """消失時に破裂エフェクトが出ること（バブルショットと同じ構成）。
+
+  爆発は _immediate_removal() / _finalize_bullet_removal() の両方から
+  _create_explosion_effect() 経由で発火する。fade_out_duration が 0 より
+  大きいとフェードで消えきってから破裂が出て「弾けた」ように見えないため、
+  0.0 にして即座に破裂させる。
+  """
+  var core = load("res://resources/data/attackcore_magical_ball.tres")
+  var visual: BulletVisualConfig = core.attack_pattern.bullet_visual_config
+
+  assert_object(visual.explosion_config).is_not_null()
+  assert_float(visual.fade_out_duration).is_equal_approx(0.0, 0.001)
+  # 見た目のみ。ダメージ・ノックバックは持たせない
+  assert_int(visual.explosion_config.explosion_damage).is_equal(0)
+  assert_float(visual.explosion_config.explosion_radius).is_equal_approx(0.0, 0.001)

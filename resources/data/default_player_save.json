@@ -214,6 +214,35 @@
             "level": 3
           }
         ]
+      },
+      {
+        "uid": "attackcore_boomerang_1",
+        "id": "attackcore_boomerang",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_boomerang_2",
+        "id": "attackcore_boomerang",
+        "enchantments": [
+          {
+            "id": "bullet_count_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_boomerang_3",
+        "id": "attackcore_boomerang",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          },
+          {
+            "id": "penetration_add",
+            "level": 1
+          }
+        ]
       }
     ],
     "blessings": [

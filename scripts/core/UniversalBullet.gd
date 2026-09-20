@@ -19,6 +19,7 @@ var _prev_position: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _homing_timer: float = 0.0  # 追尾経過時間
 var _bounce_count: int = 0  # 反射回数
+var _boomerang_returning: bool = false  # ブーメランが帰還フェーズに入ったか
 
 # 螺旋移動用の内部状態
 var _spiral_current_radius: float = 0.0  # 現在の螺旋半径
@@ -196,6 +197,8 @@ func _update_advanced_movement(delta: float):
       _update_gravity(delta)
     BulletMovementConfig.MovementType.SPIRAL:
       _update_spiral(delta)
+    BulletMovementConfig.MovementType.BOOMERANG:
+      _update_boomerang(delta)
 
 
 func _update_deceleration(delta: float):
@@ -289,6 +292,52 @@ func _update_gravity(delta: float):
   # `_moving_distance += speed * delta` が伸びない。bullet_range を機能させるため
   # 実移動量をここで積む（射程判定は次フレームに1回遅れる）。
   _moving_distance += step.length()
+
+
+func _update_boomerang(delta: float):
+  """ブーメラン移動処理
+
+  往路：initial_speed から boomerang_outbound_time 秒かけて線形に減速し 0 で停止する。
+        往路の到達距離 = initial_speed * boomerang_outbound_time / 2
+  復路：毎フレーム進行方向をプレイヤーへ向け直し、boomerang_return_max_speed まで加速する。
+        boomerang_catch_radius まで近づいたら回収（爆発を出さずに削除）。
+
+  プレイヤー不在時は向きを維持して直進し、forced_lifetime で消滅する。
+  """
+  if not _boomerang_returning:
+    var outbound_time: float = movement_config.boomerang_outbound_time
+    if outbound_time <= 0.0 or _movement_timer >= outbound_time:
+      # 停止 → 帰還フェーズへ
+      speed = 0.0
+      _boomerang_returning = true
+    else:
+      speed = movement_config.initial_speed * (1.0 - _movement_timer / outbound_time)
+    return
+
+  # === 復路 ===
+  # 回収判定は帰還フェーズのみで行う。往路の開始時点では弾がプレイヤーの至近距離に
+  # あるため、フェーズを問わず判定すると発射直後に回収されてしまう。
+  var player := TargetService.get_player()
+  if is_instance_valid(player):
+    if (
+      global_position.distance_to(player.global_position) <= movement_config.boomerang_catch_radius
+    ):
+      _boomerang_catch()
+      return
+    direction = (player.global_position - global_position).normalized()
+
+  speed = min(
+    movement_config.boomerang_return_max_speed,
+    speed + movement_config.boomerang_return_accel * delta
+  )
+
+
+func _boomerang_catch():
+  """プレイヤーによる回収。
+  「消滅」ではなく「戻ってきた」ことを見せるため、_immediate_removal() を使わず
+  爆発エフェクトを出さない。軌跡パーティクルは分離して残す。"""
+  _handle_particle_cleanup()
+  queue_free()
 
 
 func _update_spiral(delta: float):

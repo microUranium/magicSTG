@@ -1,7 +1,7 @@
 # 弾丸の移動設定
 class_name BulletMovementConfig extends Resource
 
-enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋
+enum MovementType {STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL, BOOMERANG}  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋  # ブーメラン（減速→停止→プレイヤーへ帰還）
 
 enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向に合わせる  # 設定された角速度で自転する  # 回転しない（初期角度を保持）
 
@@ -28,6 +28,14 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 @export var gravity_strength: float = 980.0  # ピクセル/秒²
 @export var gravity_direction: Vector2 = Vector2.DOWN
 @export var air_resistance: float = 0.0  # 0-1, 空気抵抗
+
+# ブーメラン設定
+@export_group("Boomerang Settings")
+@export var boomerang_outbound_time: float = 1.5  # 減速して停止するまでの秒数。往路距離 = initial_speed * time / 2
+@export var boomerang_return_accel: float = 900.0  # 帰還時の加速度（ピクセル/秒²）
+@export var boomerang_return_max_speed: float = 700.0  # 帰還時の最大速度。プレイヤー移動速度を上回る値にする
+@export var boomerang_catch_radius: float = 24.0  # この距離までプレイヤーに近づいたら回収する
+@export_group("")
 
 # 反射設定（全ての移動タイプで使用可能）
 @export var bounce_factor: float = 0.0  # 0-1, 境界との衝突時の反発係数

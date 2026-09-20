@@ -20,6 +20,7 @@ var _velocity: Vector2 = Vector2.ZERO
 var _homing_timer: float = 0.0  # 追尾経過時間
 var _bounce_count: int = 0  # 反射回数
 var _boomerang_returning: bool = false  # ブーメランが帰還フェーズに入ったか
+var _gravity_dir: Vector2 = Vector2.DOWN  # この弾に適用する重力方向（弾ごとに確定）
 
 # 螺旋移動用の内部状態
 var _spiral_current_radius: float = 0.0  # 現在の螺旋半径
@@ -112,6 +113,19 @@ func apply_movement_config(config: BulletMovementConfig = null):
   # 縦横とも正しく跳ね返る（等速成分が壁向きに残って張り付く問題も解消する）。
   if movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY:
     speed = 0.0
+
+  # 重力方向を弾ごとに確定させる。
+  # movement_config はパターン内のサブリソースで全弾・全個体に共有されるため、
+  # 弾ごとの事情で書き換えると同装備の他個体にも波及する。ここで値をコピーして持つ。
+  if movement_config.gravity_follows_direction:
+    var vertical_sign := signf(direction.y)
+    if vertical_sign != 0.0:
+      _gravity_dir = Vector2(0.0, vertical_sign)
+    else:
+      # 真横発射などY成分が0のときは設定値にフォールバックする
+      _gravity_dir = movement_config.gravity_direction
+  else:
+    _gravity_dir = movement_config.gravity_direction
 
   # 初期角度の設定（FIXED/SELF_ROTATIONモードの場合）
   if (
@@ -277,8 +291,8 @@ func _find_homing_target() -> Node2D:
 
 func _update_gravity(delta: float):
   """重力処理"""
-  # 重力による加速度を速度に加算
-  _velocity += movement_config.gravity_direction * movement_config.gravity_strength * delta
+  # 重力による加速度を速度に加算（方向は弾ごとに確定した _gravity_dir を使う）
+  _velocity += _gravity_dir * movement_config.gravity_strength * delta
 
   # 空気抵抗を適用
   if movement_config.air_resistance > 0:

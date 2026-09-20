@@ -27,6 +27,10 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 # 重力設定
 @export var gravity_strength: float = 980.0  # ピクセル/秒²
 @export var gravity_direction: Vector2 = Vector2.DOWN
+## true なら弾の初期進行方向のY符号から重力方向を決める（上に撃てば重力も上向き）。
+## 後方発射で攻撃方向が反転しても弾が片側に溜まらないようにするための設定。
+## 既定 false で従来どおり gravity_direction をそのまま使う。
+@export var gravity_follows_direction: bool = false
 @export var air_resistance: float = 0.0  # 0-1, 空気抵抗
 
 # ブーメラン設定

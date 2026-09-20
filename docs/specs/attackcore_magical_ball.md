@@ -59,7 +59,11 @@
   - 帰結：重力が発射方向と同じなので弾は**放物線を描かず、撃った方向へ加速し続ける**。「奥の壁まで加速 → バウンド → 減速して停止 → 再び壁へ加速」という往復運動になる。`bounce_factor = 1.0` だと毎回発射地点の高さまで戻って画面を縦断してしまうため、**反発係数は1未満**にして弾を奥の壁際に収束させる。
 - **弾の見た目・回転**：FIXED
 - **画面外・持続**：`persist_offscreen = true` ／ `max_offscreen_distance = 2000.0` ／ `forced_lifetime = 16.0`
-  - `persist_offscreen = false` は**不可**。`UniversalBullet._process()` は「移動＋画面外判定（`super._process`）→ バウンド処理」の順で走るため、画面外に出た弾はバウンド処理に到達する前に `_immediate_removal()` で消える。バウンドの判定帯は境界内側4px（`bounce_margin`）しかなく、60fpsでは移動量が 240px/s を超えた時点で帯を飛び越えうる。本コアは重力で加速するため、`false` のままでは奥の壁でほぼ確実に消滅する。
+  - **安全弁として `true` にする**（当初の想定より必要性は低い）。
+    - 当初は「`super._process` の画面外判定がバウンド処理より前に走るので画面外に出た弾は消える」「判定帯は内側4pxしかなく高速だと飛び越える」と整理していたが、いずれも正確ではなかった。
+      - バウンド判定は `global_position.y <= play_rect.position.y + bounce_margin` という**半空間判定**なので、どれだけオーバーシュートしても取りこぼさない。
+      - さらに GRAVITY は `speed = 0` で `_velocity` 一本に移動を集約したため、`super._process()` の `position += direction * speed * delta` は何も動かさない。画面外判定が見るのは前フレームのバウンドでクランプ済みの位置であり、`max_bounces = 0`（無制限）なら弾は画面外の位置で観測されない。
+    - それでも `true` を採用する理由：`max_bounces > 0` に変更すると `_handle_boundary_bounce()` が早期 return してクランプされなくなり、その瞬間に `false` だと即消滅する。加えて `forced_lifetime` を有効化できる（迷子弾の上限）。
   - `forced_lifetime` は `persist_offscreen = true` のとき最優先で `queue_free()` する上限値。**`bullet_lifetime` より短いと寿命を切り詰めてしまう**ため、残留Lv3（+200% → 15秒）を通す前提で 16.0 とする（10章の未決事項も参照）。
 
 ### 2.1 `bullet_movement_config` 設定値
@@ -83,6 +87,21 @@
 - 反発0.5で跳ね返り、上端から **約251px** 下で折り返して再び上端へ（1.83秒周期）
 - 以降 63px → 15px と折り返し幅が縮み、寿命5秒のうち **約3.5秒（70%）を上端から251px以内の帯に滞留**する
 - 横方向は96px/sで流れ、左右の壁（896px幅）でも反射する
+
+**実装での実測**（`tests/unit/MagicalBallFeatureTest.gd` で固定）
+
+上の想定は弾が画面最下部（y=960）から昇る前提で計算していた。実際のプレイヤー初期位置は y=748 なので登り距離が短くなる。
+
+| | 想定（y=960 起点） | 実測（y=748 起点・真上発射） |
+|---|---|---|
+| 上端到達 | 1.45秒 | **1.22秒** |
+| 到達時の縦速度 | 1098px/s | **982px/s** |
+| 反発後の折り返し幅 | 251px | **201px** |
+| 寿命5秒中の上端帯滞在 | 約3.5秒(70%) | 約4.0秒(81%) |
+
+離散シミュレーション（60fps）で想定条件（y=960）を再現すると 1.43秒 / 1101px/s / 248px となり、想定値と一致する。差は起点の違いのみ。
+
+弾は最終的に上端に張り付いて毎フレーム微小な反射を繰り返す（速度が反発で0へ収束する）。`max_bounces = 0` なので問題にはならず、「奥の壁際に滞留する」という設計意図どおりの挙動。
 
 ## 3. 数値設計
 
@@ -134,14 +153,17 @@
 
 > 既存で GRAVITY を使っている3箇所（`BossDollAI` / `enemy_flower_b.tscn` / `single_shot_circle_gravity.tres`）は**すべて `bounce_factor = 0.0`** のため、GRAVITY×バウンドは本作で前例のない未検証パスである。
 
-**必要な場合の変更点**（ファイル：内容）
-- `scripts/core/BulletMovementConfig.gd`：`@export var gravity_follows_direction: bool = false` を追加
+**変更点**（ファイル：内容）
+
+不足点1・2および既存3箇所の移行は **Step1（コミット `1ef0f7c`）で完了済み**。本コアの実装で追加したのは不足点3の解消のみ。
+
+- `scripts/core/BulletMovementConfig.gd`：`@export var gravity_follows_direction: bool = false` を追加（既定 false で既存挙動を維持）
 - `scripts/core/UniversalBullet.gd`：
-  - `apply_movement_config()` の GRAVITY 分岐で `_velocity = direction * speed` の後に `speed = 0.0`（不足点1・2の解消。移動を `_velocity` に一本化することでバウンドが縦横とも正しく反転する）
-  - 弾ごとの `_gravity_dir: Vector2` を追加。`gravity_follows_direction` が true なら `Vector2(0, signf(direction.y))`、false なら `movement_config.gravity_direction` を採用（不足点3の解消。共有リソースは書き換えない）
+  - 弾ごとの `_gravity_dir: Vector2` を追加。`apply_movement_config()` で `gravity_follows_direction` が true なら `Vector2(0, signf(direction.y))`、false なら `movement_config.gravity_direction` を採用（共有リソースは書き換えない）
+  - Y成分が0（真横発射）のときは `signf` が 0 になるため `gravity_direction` にフォールバックする
   - `_update_gravity()` が `movement_config.gravity_direction` ではなく `_gravity_dir` を参照
-- 既存GRAVITY 3箇所の `initial_speed` を2倍にする移行（`BossDollAI` 450→900、`enemy_flower_b.tscn` 200→400、`single_shot_circle_gravity.tres` 200→400）
-  - 3箇所とも `bounce_factor = 0` かつ `air_resistance = 0` のため `direction` も `_velocity` も一度も反転せず、旧軌道 `2·v·t + ½gt²` と新軌道が**完全に一致する**。見た目の変化は生じない
+- ~~`apply_movement_config()` の GRAVITY 分岐で `speed = 0.0`~~ → Step1 で実施済み
+- ~~既存GRAVITY 3箇所の `initial_speed` 2倍化~~ → Step1 で実施済み（`BossDollAI` 450→900、`enemy_flower_b.tscn` 200→400、`single_shot_circle_gravity.tres` 200→400）。60fps/144fps で240フレーム分を数値検証し最大差 1.9e-11 px を確認
 - `scripts/core/AttackPattern.gd`：**変更不要**
 - `scripts/core/UniversalAttackCore.gd`：**変更不要**
 - `scripts/core/PlayerAttackPatternFactory.gd`：**変更不要**
@@ -152,13 +174,13 @@
 
 - [◯] `assets/gfx/sprites/bullet_magical_ball.png`
 - [◯] `assets/gfx/sprites/icon_magic_magical_ball.png`
-- [ ] `resources/data/attackcore_magical_ball.tres`
-- [ ] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
+- [x] `resources/data/attackcore_magical_ball.tres`
+- [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
   - 無エンチャント／残留Lv2／速射Lv2＋貫通Lv1 の3個体
 - [ ] （ドロップさせる場合）`resources/itemdrop/` のドロップテーブル／`enchantmentrule_*.tres` の `pool`
-- [ ] `tests/unit/` にテスト追加
-- [ ] スクリプト変更がある場合はテスト更新
-- [ ] 既存GRAVITY 3箇所の `initial_speed` 2倍化
+- [x] `tests/unit/MagicalBallFeatureTest.gd`（15件）
+- [x] スクリプト変更に対するテスト更新
+- [x] 既存GRAVITY 3箇所の `initial_speed` 2倍化（Step1 で完了）
 
 ## 8. テスト観点
 
@@ -172,14 +194,30 @@
 
 ### 8.1 マジカルボール固有
 
-- [ ] 上端・下端・左右の**4辺すべて**でバウンドし、消滅しないこと（`persist_offscreen = true` の検証）
-- [ ] 上向き発射で弾が上端側、後方発射で下端側に滞留すること（`gravity_follows_direction` の検証）
-- [ ] 弾が壁に張り付かないこと（不足点2の修正確認）
-- [ ] 2.1節の想定軌道（上端到達1.45秒、折り返し幅251px）と実測が大きく乖離しないこと
+ユニットテスト済み（`tests/unit/MagicalBallFeatureTest.gd`）:
+
+- [x] 上端・下端・左右の**4辺すべて**で反射すること
+- [x] 上向き発射で重力が上向き、後方発射（下向き）で下向きになること
+- [x] 斜め発射でも重力は真上／真下（Y符号のみを見る）
+- [x] Y成分が0のとき `gravity_direction` にフォールバックすること
+- [x] 弾が壁に張り付かないこと（反射位置にクランプ→壁から離れていく）
+- [x] 反発係数どおりに速度が減衰すること
+- [x] 2.1節の想定軌道と実装が一致すること（上端到達1.22秒 / 到達時982px/s）
+- [x] **共有 movement_config を書き換えないこと**（上撃ちと下撃ちの弾が互いの重力方向を壊さない）
+- [x] `gravity_follows_direction` 既定 false で従来どおり `gravity_direction` を使うこと（回帰）
+- [x] `single_shot_circle_gravity.tres` がフラグ無効かつ Step1 の移行値（400）を保っていること
+- [x] `forced_lifetime` が残留Lv3適用後の寿命（15秒）を切り詰めないこと
+
+実機で確認が必要:
+
+- [ ] 弾が画面外で消滅しないこと（`persist_offscreen` の実挙動）
 - [ ] 貫通2の消費のされ方（同一敵へのバウンド再ヒットを含めて何回で消えるか）
 - [ ] 速射Lv3＋増輪Lv3＋残留Lv3 の同時適用時の滞留弾数と描画・当たり判定の負荷
 - [ ] プレイヤー弾が敵弾と見分けられること（滞留数が多いため）
 - [ ] 既存GRAVITY 3箇所（`BossDollAI` / `enemy_flower_b` / `single_shot_circle_gravity`）の弾道が変わっていないこと
+- [ ] 実効DPSの実測（10章）
+
+**テスト環境の注意**：ヘッドレスのビューポートは 64x64 で、`PlayArea.get_play_rect()` が幅の負な矩形 `Rect2(0, 0, -320, 64)` を返すためバウンド判定が成立しない。`MagicalBallFeatureTest` は `before_test` で `PlayArea._play_rect` を実機相当の `Rect2(0, 0, 896, 960)` に差し替え、`after_test` で復元している。
 
 ## 9. 既知の落とし穴（記入不要・確認用）
 
@@ -195,4 +233,4 @@
 - **実効DPSの実測**：`direction_type = RANDOM` ＋ バウンド再ヒットで期待値が机上計算できない。理論DPS 2.0 は既存最低なので、実測後に `damage_base`（3→4）または `cooldown_sec_base`（1.5→1.2）で引き上げる余地を残す。
 - **滞留弾数の許容ライン**：速射Lv3（CT 0.375秒）＋増輪Lv3（7発）＋残留Lv3（寿命15秒）で理論上280発が同時に存在しうる。`forced_lifetime` を 16.0 より短く設定して残留の上限を意図的に切る案も含めて、実測後に判断する。
 - **`rotation_mode = FIXED` でよいか**：ボールが無回転で跳ねる見た目になる。転がり感を出すなら `SELF_ROTATION`＋`angular_velocity` に変更する。
-- **仕様ファイル名**：コアIDは `attackcore_magical_ball`（アセット名と一致）だが、本ファイルは `attackcore_magicalball.md`。実装着手時に `attackcore_magical_ball.md` へリネームするか決める。
+- ~~**仕様ファイル名**~~：解決。コアID `attackcore_magical_ball` に合わせて本ファイルを `attackcore_magical_ball.md` へリネームした。

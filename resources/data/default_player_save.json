@@ -243,6 +243,35 @@
             "level": 1
           }
         ]
+      },
+      {
+        "uid": "attackcore_magical_ball_1",
+        "id": "attackcore_magical_ball",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_magical_ball_2",
+        "id": "attackcore_magical_ball",
+        "enchantments": [
+          {
+            "id": "bullet_lifetime_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magical_ball_3",
+        "id": "attackcore_magical_ball",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          },
+          {
+            "id": "penetration_add",
+            "level": 1
+          }
+        ]
       }
     ],
     "blessings": [

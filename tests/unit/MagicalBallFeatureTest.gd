@@ -13,7 +13,7 @@ const BULLET_SCENE := "res://scenes/bullets/universal_bullet.tscn"
 
 const INITIAL_SPEED := 250.0
 const GRAVITY_STRENGTH := 600.0
-const BOUNCE_FACTOR := 0.5
+const BOUNCE_FACTOR := 0.8
 const DT := 1.0 / 60.0
 
 # 実機のプレイ領域（viewport 1280x960 - hud_width 384）

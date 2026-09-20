@@ -106,7 +106,7 @@ bullet_movement_config = SubResource("Resource_movement")
 bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
-burst_delay = 1.5
+burst_delay = 0.75
 burst_count = 3
 burst_interval = 0.05
 min_cooldown = 0.0833
@@ -117,7 +117,7 @@ spawn_position_offset = Vector2(0, 0)
 spawn_positions_multi = Array[Vector2]([])
 direction_type = 2
 base_direction = Vector2(0, -1)
-angle_spread = 45.0
+angle_spread = 120.0
 angle_offset = 0.0
 circle_radius = 100.0
 rotation_speed = 90.0
@@ -144,7 +144,7 @@ script = ExtResource("9_item")
 pattern_type = 0
 core_scene = ExtResource("6_core")
 damage_base = 3.0
-cooldown_sec_base = 1.5
+cooldown_sec_base = 0.75
 base_modifiers = {
 "bullet_speed": 250.0
 }

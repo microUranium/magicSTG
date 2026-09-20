@@ -294,11 +294,11 @@ func test_resource_file_loads() -> void:
   assert_object(core).is_not_null()
   assert_str(str(core.id)).is_equal("attackcore_magical_ball")
   assert_float(core.damage_base).is_equal_approx(3.0, 0.001)
-  assert_float(core.cooldown_sec_base).is_equal_approx(1.5, 0.001)
+  assert_float(core.cooldown_sec_base).is_equal_approx(0.75, 0.001)
 
   var pattern: AttackPattern = core.attack_pattern
   assert_int(pattern.direction_type).is_equal(AttackPattern.DirectionType.RANDOM)
-  assert_float(pattern.angle_spread).is_equal_approx(45.0, 0.001)
+  assert_float(pattern.angle_spread).is_equal_approx(120.0, 0.001)
   assert_int(pattern.penetration_count).is_equal(2)
   assert_float(pattern.bullet_lifetime).is_equal_approx(3.5, 0.001)
   assert_bool(pattern.persist_offscreen).is_true()
@@ -311,6 +311,30 @@ func test_resource_file_loads() -> void:
   # movement_config が speed を上書きするため base_modifiers と一致させる
   assert_float(cfg.initial_speed).is_equal_approx(INITIAL_SPEED, 0.001)
   assert_float(core.base_modifiers.get("bullet_speed", 0.0)).is_equal_approx(INITIAL_SPEED, 0.001)
+
+
+func test_spread_keeps_gravity_direction_consistent() -> void:
+  """拡散角が広すぎると gravity_follows_direction が破綻しないこと。
+
+  重力方向は signf(direction.y) で決める。angle_spread が 180 度に達すると
+  扇の端で direction.y が 0 になり、signf が 0 を返して
+  gravity_direction（下向き）へフォールバックしてしまう。
+  上向きに撃ったのに重力が下向きになる弾が混ざるため、
+  angle_spread は 180 度未満に保つ必要がある。
+  """
+  var core = load("res://resources/data/attackcore_magical_ball.tres")
+  var pattern: AttackPattern = core.attack_pattern
+
+  assert_float(pattern.angle_spread).is_less(180.0)
+
+  # 扇の両端で重力方向が上向きに保たれることを実際に確認する
+  var half := deg_to_rad(pattern.angle_spread) * 0.5
+  var up := Vector2(0, -1)
+  var tol := Vector2(0.001, 0.001)
+  for sign_ in [-1.0, 1.0]:
+    var bullet := _make_bullet(up.rotated(half * sign_), _make_config(true))
+    var msg := "扇の端 %.1f 度で重力方向が反転した" % rad_to_deg(half * sign_)
+    assert_vector(bullet._gravity_dir).override_failure_message(msg).is_equal_approx(up, tol)
 
 
 func test_forced_lifetime_covers_max_retention() -> void:

@@ -46,7 +46,7 @@
 | `pattern_type` | 0 | 0 SINGLE_SHOT / 1 RAPID_FIRE / 2 BARRIER_BULLETS / 3 SPIRAL / 4 BEAM / 5 CUSTOM / 6 BURST_WITH_TRACKING / 7 SHOT_ON_HIT |
 | `direction_type` | 2 | 0 FIXED / 1 TO_PLAYER / 2 RANDOM / 3 CIRCLE / 4 CUSTOM / 5 TO_OWNER |
 | `base_direction` | `Vector2(0, -1)` | プレイヤーは基本 `Vector2(0, -1)` |
-| `angle_spread` / `angle_offset` | 45 / 0 | 扇状の広がり（度）。`bullet_count>1` のとき効く |
+| `angle_spread` / `angle_offset` | 120 / 0 | 扇状の広がり（度）。`direction_type = RANDOM` では `bullet_count = 1` でも扇内でランダム化される（`calculate_random_spread_direction`）。**180度未満に保つこと**（下記 2.3） |
 | `spawn_position_mode` | 0 | 0 OWNER / 1 FIXED_ABSOLUTE / 2 RELATIVE_TO_OWNER / 3 RELATIVE_TO_TARGET / 4 CUSTOM |
 | `bullet_movement_config.movement_type` | 5 | 0 STRAIGHT / 1 DECELERATE / 2 ACCELERATE / 3 SINE_WAVE / 4 HOMING / 5 GRAVITY / 6 SPIRAL |
 | `bullet_lifetime` | 3.5 | 0 は無限。エンチャント「残留」は **0 だと効かない** |
@@ -64,6 +64,12 @@
       - バウンド判定は `global_position.y <= play_rect.position.y + bounce_margin` という**半空間判定**なので、どれだけオーバーシュートしても取りこぼさない。
       - さらに GRAVITY は `speed = 0` で `_velocity` 一本に移動を集約したため、`super._process()` の `position += direction * speed * delta` は何も動かさない。画面外判定が見るのは前フレームのバウンドでクランプ済みの位置であり、`max_bounces = 0`（無制限）なら弾は画面外の位置で観測されない。
     - それでも `true` を採用する理由：`max_bounces > 0` に変更すると `_handle_boundary_bounce()` が早期 return してクランプされなくなり、その瞬間に `false` だと即消滅する。加えて `forced_lifetime` を有効化できる（迷子弾の上限）。
+
+### 2.3 `angle_spread` の上限
+
+重力方向は `signf(direction.y)` で決める（2.1節）。`angle_spread` が **180度に達すると扇の端で `direction.y` が 0 になり**、`signf` が 0 を返して `gravity_direction`（下向き）へフォールバックする。上向きに撃ったのに重力が下向きの弾が混ざるため、**180度未満に保つ必要がある**。
+
+採用値 120度（±60度）では `direction.y ∈ [-1.0, -0.5]` で符号が安定する。実用上の上限は 170度程度。`tests/unit/MagicalBallFeatureTest.gd` の `test_spread_keeps_gravity_direction_consistent` で固定した。
 
 ### 2.2 消失エフェクト
 
@@ -125,13 +131,47 @@
 | パラメータ | 値 | 反映先 |
 |---|---|---|
 | `damage_base` | 3 | → `pattern.damage` |
-| `cooldown_sec_base` | 1.5 | → `pattern.burst_delay`（＝実クールダウン） |
+| `cooldown_sec_base` | 0.75 | → `pattern.burst_delay`（＝実クールダウン） |
 | `base_modifiers.bullet_speed` | 250 | → `pattern.bullet_speed`（`initial_speed` と同値） |
 | その他 `base_modifiers` | 不要（重力・反発の値は `bullet_movement_config` 側に持たせる） | 例：`spread_bullet_count`（SHOT_ON_HIT用） |
 
-- **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ **2.0**（1ヒット時／既存最低）／ 既存比較：エネルギーショット 5.0、ファイアボール 5.0、エレキショック 16.7
-- **命中期待込みの実効DPS**：**上限 6.0**（貫通2＝1発あたり最大3ヒット）。ただし `direction_type = RANDOM` で命中が確率的なうえ、バウンドによる同一敵への再ヒットも絡むため、**机上で期待値を出せない。実測して `damage_base` を後調整する前提**（10章）
-- **速射Lv3（-75%）適用時**：CT **0.375** → DPS **8.0**（1ヒット基準）／最大24.0（3ヒット基準） ※ 下限は `max(cooldown, 0.02)`
+- **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ **4.0**（1ヒット時）／ 既存比較：エネルギーショット 5.0、ファイアボール 5.0、エレキショック 16.7、ビーム 30.0（対象1体あたり・常時オン）
+- **上限DPS**：貫通2＝1発あたり最大3ヒットで 12.0。ただし後述のとおり**単体相手には到達しない**
+
+### 3.1 軌道シミュレーションによる実効DPS
+
+`direction_type = RANDOM` とバウンド再ヒットのため机上で期待値が出せないので、実装と同じ離散シミュレーション（60fps・各条件3000〜4000試行）で計測した。敵は静止・プレイヤーは x=448 / y=748 とする。
+
+**単体相手（狙って撃った場合）**
+
+| 敵 | 位置 | 期待ヒット | 実効DPS | 3スロット |
+|---|---|---|---|---|
+| 雑魚 44×70 | y=300 | 0.32 | 1.28 | 3.8 |
+| ボス 60×144 | y=300 | 0.39 | 1.56 | 4.7 |
+| ボス 60×144 | y=450 | 0.44 | 1.76 | 5.3 |
+
+**期待ヒット数が1を大きく下回るため、貫通2（最大3ヒット）は単体相手にはほぼ機能しない。** 上限DPS 12.0 は実質到達不能な数字であり、バランス判断には実効値を使うこと。
+
+**複数体相手（面制圧・雑魚5体が横一列 y=300）**
+
+| | 1発あたり総ヒット | 面制圧DPS | 3スロット |
+|---|---|---|---|
+| 拡散45度 / CT1.5（旧） | 1.70 | 3.39 | 10.2 |
+| **拡散120度 / CT0.75（現行）** | **1.66** | **6.64** | **19.9** |
+
+**拡散を45度から120度へ広げても、ウェーブ全体への総ヒット数はほぼ変わらない（98%）。** 広げたぶん当たる場所が分散するだけで、総スループットは落ちない。一方で横ズレへの耐性が大きく変わる。
+
+| 横ズレ（ボス60×144 / y=300） | 45度 | 120度 |
+|---|---|---|
+| 0px | 1.05 | 0.41 |
+| 100px | 0.72 | 0.46 |
+| 200px | 0.27 | 0.47 |
+| 300px | 0.12 | 0.42 |
+| 400px | 0.00 | 0.29 |
+
+45度は「正面にしか当たらない」、120度は「どこにいても薄く当たる」という性質になる。単体火力を捨てて面の安定性を取る設計。
+
+- **速射Lv3（-75%）適用時**：CT **0.1875** → 面制圧DPS **26.6**（3スロット79.7） ※ 下限は `max(cooldown, 0.02)`
 
 ## 4. エンチャント適合
 
@@ -139,8 +179,8 @@
 
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
-| 速射 | `cooldown_pct` |◯| 主力。ただし寿命5秒に対しCTが縮むため滞留弾が急増する（8.1の負荷確認対象） |
-| 増輪 | `bullet_count_add` | ◯ | 主力。`angle_spread 45°` の扇内にランダム配置され、面の制圧力が上がる |
+| 速射 | `cooldown_pct` |◯| 主力。ただし寿命3.5秒に対しCTが縮むため滞留弾が急増する（8.1の負荷確認対象） |
+| 増輪 | `bullet_count_add` | ◯ | 主力。`angle_spread 120°` の扇内にランダム配置され、面の制圧力が上がる |
 | 貫通 | `penetration_add` |◯| 強い。バウンドで同一敵に再進入するため、ヒット数に乗りやすい |
 | 残留 | `bullet_lifetime_pct` | ◯ | 強い。Lv3で寿命10.5秒。`forced_lifetime = 16.0` が実質の上限 |
 | 炸裂 | `spread_bullet_count_add` | ✕ | 対象外（`on_hit_pattern` なし） |
@@ -248,7 +288,7 @@
 
 ## 10. 未決事項
 
-- **実効DPSの実測**：`direction_type = RANDOM` ＋ バウンド再ヒットで期待値が机上計算できない。理論DPS 2.0 は既存最低なので、実測後に `damage_base`（3→4）または `cooldown_sec_base`（1.5→1.2）で引き上げる余地を残す。
-- **滞留弾数の許容ライン**：速射Lv3（CT 0.375秒）＋増輪Lv3（7発）＋残留Lv3（寿命10.5秒）で理論上196発が同時に存在しうる。`forced_lifetime` を 16.0 より短く設定して残留の上限を意図的に切る案も含めて、実測後に判断する。
+- ~~**実効DPSの実測**~~：3.1節で計測済み。単体実効DPS 1.3〜1.8 は既存主力（エネルギーショット5.0 / ファイアボール5.0）の 1/3 程度。面制圧DPS は 6.6（3スロット19.9）で、拡散120度＋CT0.75 により旧構成の約2倍になった。単体火力をさらに上げるなら `damage_base` 3→4 で実効 1.7〜2.3 になる。
+- **滞留弾数の許容ライン**：速射Lv3（CT 0.1875秒）＋増輪Lv3（7発）＋残留Lv3（寿命10.5秒）＋3スロットで理論上**1176発**が同時に存在しうる（CT 1.5 のときは294発だった）。`forced_lifetime` を 16.0 より短く設定して残留の上限を意図的に切る案も含めて、実測後に判断する。
 - **`rotation_mode = FIXED` でよいか**：ボールが無回転で跳ねる見た目になる。転がり感を出すなら `SELF_ROTATION`＋`angular_velocity` に変更する。
 - ~~**仕様ファイル名**~~：解決。コアID `attackcore_magical_ball` に合わせて本ファイルを `attackcore_magical_ball.md` へリネームした。

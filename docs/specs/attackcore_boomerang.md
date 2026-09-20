@@ -54,24 +54,26 @@
 - **1発射サイクルの流れ**：発射→直進→0.75秒かけて徐々に減速し、速度が0になったらプレイヤーに追尾を始める→速度はプレイヤーの移動速度を上回る程度まで徐々に上がり、プレイヤーに追いつくと消滅する
 - **弾の見た目・回転**：SELF_ROTATION（`angular_velocity = 720.0`）
 - **画面外・持続**：`persist_offscreen = true` ／ `forced_lifetime = 8.0`
-  - 往路の到達距離が約375pxあり画面上端を越えうる。`persist_offscreen = false` だと画面外に出た瞬間 `_immediate_removal()` で消えて戻ってこない（`ProjectileBullet._process()`）。`forced_lifetime` はプレイヤー消滅時などの迷子弾の安全弁。
+  - 往路の到達距離が450pxあり、プレイヤーが上寄りにいると画面上端を越えうる。`persist_offscreen = false` だと画面外に出た瞬間 `_immediate_removal()` で消えて戻ってこない（`ProjectileBullet._process()`）。`forced_lifetime` はプレイヤー消滅時などの迷子弾の安全弁。
 
 ### 2.1 新設する `BulletMovementConfig` パラメータ
 
 | パラメータ | 値 | 意味 |
 |---|---|---|
-| `initial_speed` | 1000.0 | 発射速度。`base_modifiers.bullet_speed` と一致させる（9章の落とし穴） |
-| `boomerang_outbound_time` | 0.75 | 減速して停止するまでの秒数。往路距離 = 1000×0.75÷2 ≒ **375px** |
+| `initial_speed` | 1200.0 | 発射速度。`base_modifiers.bullet_speed` と一致させる（9章の落とし穴） |
+| `boomerang_outbound_time` | 0.75 | 減速して停止するまでの秒数。往路距離 = 1200×0.75÷2 = **450px** |
 | `boomerang_return_accel` | 1800.0 | 帰還時の加速度（px/秒²） |
-| `boomerang_return_max_speed` | 1000.0 | 帰還時の最大速度。帰還所要 約0.65秒 |
+| `boomerang_return_max_speed` | 1000.0 | 帰還時の最大速度。帰還所要 約0.73秒 |
 | `boomerang_catch_radius` | 24.0 | この距離までプレイヤーに近づいたら回収（`queue_free()`）。**復路の1フレーム移動量が `2 × catch_radius` を超えると回収をすり抜ける**（1000px/s で 16.7px < 48px なので余裕あり） |
 
 - 往路：`speed = initial_speed * max(0, 1 - t / boomerang_outbound_time)`
 - 復路：毎フレーム `direction` をプレイヤー方向へ更新し、`speed` を上限まで加速
 - 回収時は `_immediate_removal()` を使わない（爆発エフェクトが出て「回収」に見えないため）
 - プレイヤー不在（`TargetService.get_player()` が null）時は向きを維持して直進し、`forced_lifetime` で消滅
-- 総飛翔時間 **約1.4秒**（往路0.75秒＋復路0.65秒）。CT 1.0秒に対し空中の滞留は1〜2発
+- 総飛翔時間 **約1.48秒**（往路0.75秒＋復路0.73秒）。CT 1.0秒に対し空中の滞留は1〜2発
   - テンポ調整の履歴：初期案は `initial_speed 500 / outbound_time 1.5 / return_accel 900 / return_max_speed 700` で総飛翔 2.42秒だった。往路距離は `initial_speed × outbound_time ÷ 2` なので、初速を2倍・往路時間を半分にすると飛距離375pxを保ったまま往路だけ半減できる。ただし復路0.92秒はこれでは縮まず合計1.67秒で止まるため、`return_accel` と `return_max_speed` も引き上げて 1.40秒（-42%）とした
+  - 飛距離調整：その後 `initial_speed` のみ 1000→1200 とし飛距離を 375→**450px**（×1.2）に伸ばした。`outbound_time` を延ばす方法（1000 / 0.9）でも同じ450pxになるが、往路が 0.75→0.90秒に伸びて合計1.63秒になる。初速側で伸ばせば往路時間が変わらず合計は1.48秒（+75ms）で済む
+  - 折り返し点は y = 748 - 450 = **298**。敵のスポーン帯（y 0〜480）に十分入る（375pxのときは y=373 で際どかった）
 
 ## 3. 数値設計
 
@@ -79,7 +81,7 @@
 |---|---|---|
 | `damage_base` | 3| → `pattern.damage` |
 | `cooldown_sec_base` | 1| → `pattern.burst_delay`（＝実クールダウン） |
-| `base_modifiers.bullet_speed` | 1000(発射時)| → `pattern.bullet_speed` |
+| `base_modifiers.bullet_speed` | 1200(発射時)| → `pattern.bullet_speed` |
 | その他 `base_modifiers` |不要（ブーメラン固有値は `bullet_movement_config` 側に持たせる）| 例：`spread_bullet_count`（SHOT_ON_HIT用） |
 
 - **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ **3.0**（1ヒット時）／ 既存比較：エネルギーショット 5.0、ファイアボール 5.0、エレキショック 16.7

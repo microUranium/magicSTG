@@ -13,7 +13,7 @@
 [sub_resource type="Resource" id="Resource_movement"]
 script = ExtResource("2_movecfg")
 movement_type = 7
-initial_speed = 1000.0
+initial_speed = 1200.0
 deceleration_rate = 100.0
 min_speed = 50.0
 acceleration_rate = 50.0
@@ -89,7 +89,7 @@ circle_radius = 100.0
 rotation_speed = 90.0
 rotation_duration = 3.0
 movement_type = 0
-bullet_speed = 1000.0
+bullet_speed = 1200.0
 curve_strength = 0.0
 orbit_radius = 50.0
 beam_duration = 1.0
@@ -112,7 +112,7 @@ core_scene = ExtResource("6_core")
 damage_base = 3.0
 cooldown_sec_base = 1.0
 base_modifiers = {
-"bullet_speed": 1000.0
+"bullet_speed": 1200.0
 }
 attack_pattern = SubResource("Resource_pattern")
 id = &"attackcore_boomerang"

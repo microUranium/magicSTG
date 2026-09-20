@@ -12,7 +12,7 @@ class_name BoomerangFeatureTest
 const BULLET_SCENE := "res://scenes/bullets/universal_bullet.tscn"
 
 const OUTBOUND_TIME := 0.75
-const INITIAL_SPEED := 1000.0
+const INITIAL_SPEED := 1200.0
 const RETURN_ACCEL := 1800.0
 const RETURN_MAX_SPEED := 1000.0
 const CATCH_RADIUS := 24.0
@@ -146,7 +146,7 @@ func test_outbound_distance_matches_spec() -> void:
 
   var analytic := INITIAL_SPEED * OUTBOUND_TIME / 2.0
   var expected := analytic + INITIAL_SPEED * dt / 2.0
-  assert_float(analytic).is_equal_approx(375.0, 0.001)  # 飛距離は仕様どおり375px
+  assert_float(analytic).is_equal_approx(450.0, 0.001)  # 飛距離は仕様どおり450px
   assert_float(distance).is_equal_approx(expected, 2.0)
 
 

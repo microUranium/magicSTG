@@ -60,7 +60,7 @@ size = Vector2(120, 118)
 [sub_resource type="Resource" id="Resource_pnsch"]
 script = ExtResource("11_7ofes")
 movement_type = 5
-initial_speed = 200.0
+initial_speed = 400.0
 deceleration_rate = 100.0
 min_speed = 50.0
 acceleration_rate = 50.0

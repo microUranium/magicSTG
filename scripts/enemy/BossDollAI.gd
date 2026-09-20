@@ -359,7 +359,9 @@ func create_phase5_pattern3() -> Array[AttackPattern]:
   pattern.angle_offset = 180
 
   var movement_config = BulletMovementConfig.new()
-  movement_config.initial_speed = 450
+  # GRAVITY は speed = 0 / _velocity 一本で移動する（UniversalBullet.apply_movement_config）。
+  # 旧実装では二重加算で実効初速が 2 倍になっていたため、旧軌道を維持するために 450 → 900 とする。
+  movement_config.initial_speed = 900
   movement_config.movement_type = BulletMovementConfig.MovementType.GRAVITY
   movement_config.rotation_mode = BulletMovementConfig.RotationMode.SELF_ROTATION
   movement_config.angular_velocity = 360

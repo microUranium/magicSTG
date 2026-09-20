@@ -103,6 +103,15 @@ func apply_movement_config(config: BulletMovementConfig = null):
   _original_speed = speed
   _velocity = direction * speed
 
+  # GRAVITY は移動を _velocity 一本に集約する。
+  # ProjectileBullet._process() の `position += direction * speed * delta` と
+  # _update_gravity() の `position += _velocity * delta` が二重に加算され、
+  # 実効初速が initial_speed の2倍になってしまうため speed を 0 にする。
+  # これにより _handle_boundary_bounce() が _velocity を反転させるだけで
+  # 縦横とも正しく跳ね返る（等速成分が壁向きに残って張り付く問題も解消する）。
+  if movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY:
+    speed = 0.0
+
   # 初期角度の設定（FIXED/SELF_ROTATIONモードの場合）
   if (
     movement_config.rotation_mode == BulletMovementConfig.RotationMode.FIXED
@@ -273,7 +282,13 @@ func _update_gravity(delta: float):
     _velocity *= (1.0 - movement_config.air_resistance * delta)
 
   # 速度ベースで位置を更新
-  position += _velocity * delta
+  var step := _velocity * delta
+  position += step
+
+  # GRAVITY は speed = 0 で運用するため ProjectileBullet._process() の
+  # `_moving_distance += speed * delta` が伸びない。bullet_range を機能させるため
+  # 実移動量をここで積む（射程判定は次フレームに1回遅れる）。
+  _moving_distance += step.length()
 
 
 func _update_spiral(delta: float):

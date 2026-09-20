@@ -94,6 +94,7 @@ bullet_range = 0.0
 bullet_lifetime = 0.0
 auto_start = true
 penetration_count = 0
+contact_damage_tick_sec = 0.0
 bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1

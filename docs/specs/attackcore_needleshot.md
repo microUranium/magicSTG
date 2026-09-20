@@ -12,8 +12,8 @@
 | コアID | `attackcore_needleshot` | `resources/data/attackcore_<name>.tres` のファイル名＋`id` と一致させる |
 | 表示名 | ニードルショット | `display_name` |
 | 説明文 | 敵に持続的にダメージを与える針状の弾を発射します。 | `description`。インベントリ表示用 |
-| アイコン | `assets/gfx/sprites/icon_magic_needleshot.png` | 作成済み |
-| 弾スプライト | `assets/gfx/sprites/bullet_needleshot.png` | 作成済み |
+| アイコン | `assets/gfx/sprites/icon_magic_needle_shot.png` | 作成済み（当初 `icon_magic_needleshot.png` と記載していたが実ファイル名は `icon_magic_needle_shot.png`） |
+| 弾スプライト | `assets/gfx/sprites/bullet_needle.png` | 作成済み（当初 `bullet_needleshot.png` と記載していたが実ファイル名は `bullet_needle.png`） |
 | 発射SE | なし | `BulletVisualConfig.spawn_sound` |
 
 ## 1. コンセプト
@@ -202,21 +202,21 @@
 
 ## 7. 成果物チェックリスト
 
-- [x] `assets/gfx/sprites/bullet_needleshot.png`
-- [x] `assets/gfx/sprites/icon_magic_needleshot.png`
-- [ ] `scripts/core/AttackPattern.gd` に `contact_damage_tick_sec`
-- [ ] `scripts/core/BulletMovementConfig.gd` に `contact_speed`
-- [ ] `scripts/core/BulletBase.gd` の接触tick機構
-- [ ] `scripts/player/ProjectileBullet.gd` の `_update_contact_damage()` 呼び出し
-- [ ] `scripts/core/UniversalBullet.gd` の `contact_speed` 上書き
-- [ ] `scripts/core/UniversalAttackCore.gd` の `contact_damage_tick_sec` 受け渡し
-- [ ] `resources/data/attackcore_needleshot.tres`（**未作成**）
-- [ ] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
+- [x] `assets/gfx/sprites/bullet_needle.png`
+- [x] `assets/gfx/sprites/icon_magic_needle_shot.png`
+- [x] `scripts/core/AttackPattern.gd` に `contact_damage_tick_sec`
+- [x] `scripts/core/BulletMovementConfig.gd` に `contact_speed`
+- [x] `scripts/core/BulletBase.gd` の接触tick機構
+- [x] `scripts/player/ProjectileBullet.gd` の `_update_contact_damage()` 呼び出し
+- [x] `scripts/core/UniversalBullet.gd` の `contact_speed` 上書き
+- [x] `scripts/core/UniversalAttackCore.gd` の `enable_contact_damage()` 呼び出し
+- [x] `resources/data/attackcore_needleshot.tres`
+- [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
   - 無エンチャント／速射Lv2／速射Lv3 の3個体（増輪・貫通は付けない）
-- [ ] `resources/itemdrop/droptableentry_needleshot.tres`
-- [ ] `resources/itemdrop/enchantmentrule_needleshot.tres`（`pool` は `cooldown_pct` のみ）
-- [ ] `tests/unit/` にテスト追加
-- [ ] スクリプト変更に対するテスト更新
+- [ ] `resources/itemdrop/droptableentry_needleshot.tres` ／ `enchantmentrule_needleshot.tres`
+  - **今回は作成しない**。ドロップテーブルは現状 `attackcore_magic_bullet` の1件（`droptableentry_debug_core.tres`）のみで他コアには未設定であり、`enchantmentrule_debug_bullet.tres` の `pool` も `cooldown_pct` だけなので増輪・貫通はそもそもドロップしない。加えて貫通は tick モードで構造的に無効化されている（6章）。作成しても敵シーンの `drop_table` への配線が別途必要で現時点では無効になるため、ドロップ実装をまとめて行うときに対応する
+- [x] `tests/unit/NeedleShotFeatureTest.gd`（22件）
+- [x] スクリプト変更に対するテスト更新
 
 ## 8. テスト観点
 
@@ -230,19 +230,35 @@
 
 ### 8.1 ニードルショット固有
 
-- [ ] 接触中に `contact_damage_tick_sec` 間隔でダメージが入る（進入時1回だけになっていない）
-- [ ] **フレームレート非依存**：異なる `delta` で 1秒あたりの tick 数が 30 に保たれる
-- [ ] 接触中に速度が 200px/s に落ち、抜けると再加速する
-- [ ] **敵が縦に重なった／連続した場合も 200px/s のまま貫通し続ける**
-- [ ] 縦一列に並べた敵全員にダメージが入る（無限貫通）
-- [ ] 1発のダメージが 3章の表と一致する（doll で 46、雑魚44×70 で 24）
-- [ ] **貫通エンチャントを手動で付けても挙動が変わらない**（tick モードで `penetration_count` が参照されないことの確認）
-- [ ] 敵が tick 中に撃破された場合に `_contact_targets` から除去され、無効インスタンスへの `take_damage()` が起きない
-- [ ] 弾が画面外で消滅する（`persist_offscreen = false` の確認。永久残留しないこと）
+ユニットテスト済み（`tests/unit/NeedleShotFeatureTest.gd`・22件）:
+
+- [x] 進入した瞬間にはダメージが入らない（進入時1回ダメージになっていない）
+- [x] 接触中に `contact_damage_tick_sec` 間隔でダメージが入る（1秒で30回＝60ダメージ）
+- [x] **フレームレート非依存**：dt を 1/30・1/60・1/144・1/240 に変えても1秒あたりのダメージが変わらない
+- [x] 1フレームの tick 数に上限がある（ハング明けの一括発火を防ぐ）
+- [x] 接触終了でダメージが止まる
+- [x] 複数の敵に同時接触している間は全員にダメージが入る
+- [x] 同じ敵が二重登録されない
+- [x] 撃破された敵が除去され、無効インスタンスへの `take_damage()` が起きない
+- [x] 接触中に速度が `contact_speed` に固定され、抜けると再加速する
+- [x] **敵が重なっていても接触対象が残っている間は低速のまま貫く**
+- [x] `contact_speed = 0` なら速度を上書きしない
+- [x] **貫通エンチャントを付けても挙動が変わらない**（`penetration_count` を -1/0/1/3 に変えても消滅しない）
+- [x] 1発あたりのダメージが3章の表と一致する（doll 46 / 雑魚44×70 24 / 雑魚42×66 22）
+- [x] `.tres` がロードでき、値が仕様どおり（`persist_offscreen = false` を含む）
+- [x] 通常弾（tick 0）が従来どおり進入時に1回ダメージを与え、貫通判定も働く（回帰）
+- [x] 通常弾には `area_exited` を接続しない（大量発射時のコスト対策）
+
+実機で確認が必要:
+
+- [ ] インベントリに表示され装備できる
+- [ ] 実際のコリジョンで接触・離脱が検知される（ユニットテストはシグナルを直接駆動している）
+- [ ] 弾が画面外で消滅する（永久残留しないこと）
+- [ ] 敵に触れたときに減速が見た目として読めるか（移動500 → 接触200 の 2.5倍の減速）
 - [ ] 接近／背水の与ダメージ補正が tick ごとに乗る
-- [ ] 既存弾（`contact_damage_tick_sec = 0` / `contact_speed = 0`）の挙動が一切変わっていないこと
-  - 特に `enemy_fugu_a` / `enemy_piranha`（`continuous_damage = true` を持つ）の弾が持続ダメージ化していないこと
-- [ ] 速射Lv3（CT 0.375）で滞留弾が増えたときの当たり判定・tick 処理の負荷
+- [ ] 縦一列に並べた敵全員にダメージが入る（無限貫通）
+- [ ] 速射Lv3（CT 0.375）での滞留弾と tick 処理の負荷
+- [ ] **既存の弾（敵弾含む）の挙動が変わっていないこと**。`BulletBase._on_area_entered()` を組み替えているため、通常弾のダメージ経路の回帰確認が最重要
 
 ## 9. 既知の落とし穴（記入不要・確認用）
 

@@ -762,6 +762,10 @@ func _spawn_bullet(
     bullet.max_offscreen_distance = pattern.max_offscreen_distance
     bullet.forced_lifetime = pattern.forced_lifetime
 
+  # 接触継続ダメージの有効化（0 なら従来どおり進入時に1回だけダメージ）
+  if pattern.contact_damage_tick_sec > 0.0 and bullet.has_method("enable_contact_damage"):
+    bullet.enable_contact_damage(pattern.contact_damage_tick_sec)
+
   # 視覚・動作設定の適用
   _apply_bullet_configs(bullet, pattern, bullet_index)
 

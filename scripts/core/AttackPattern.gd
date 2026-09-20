@@ -23,6 +23,10 @@ enum SpawnPositionMode {
 @export var bullet_lifetime: float = 0.0  # 弾丸の有効時間 0なら無限
 @export var auto_start: bool = true  # AttackCoreの自動発射設定
 @export var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
+## 敵に接触している間ダメージを与える間隔（秒）。
+## 0 = 無効で、従来どおり進入時（area_entered）に1回だけダメージを与える。
+## 0より大きいときは進入時ダメージと貫通判定を行わず、この間隔でダメージを与え続ける。
+@export var contact_damage_tick_sec: float = 0.0
 
 # === 弾丸外観、動作設定 ===
 @export var bullet_visual_config: BulletVisualConfig  # 弾丸の外観設定

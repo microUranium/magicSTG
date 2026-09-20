@@ -214,6 +214,13 @@ func _update_advanced_movement(delta: float):
     BulletMovementConfig.MovementType.BOOMERANG:
       _update_boomerang(delta)
 
+  # 敵に接触している間は速度を contact_speed に固定する（0 = 無効）。
+  # 移動速度と接触中の滞在時間を切り離すための設定。
+  # ※ _process() は「super._process()（移動）→ _update_advanced_movement()（速度更新）」
+  #    の順なので、接触検知から減速反映までは1フレーム遅れる。
+  if movement_config.contact_speed > 0.0 and not _contact_targets.is_empty():
+    speed = movement_config.contact_speed
+
 
 func _update_deceleration(delta: float):
   """減速処理"""

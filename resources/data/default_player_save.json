@@ -272,6 +272,31 @@
             "level": 1
           }
         ]
+      },
+      {
+        "uid": "attackcore_needleshot_1",
+        "id": "attackcore_needleshot",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_needleshot_2",
+        "id": "attackcore_needleshot",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_needleshot_3",
+        "id": "attackcore_needleshot",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 3
+          }
+        ]
       }
     ],
     "blessings": [

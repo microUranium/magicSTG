@@ -16,6 +16,12 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 @export var acceleration_rate: float = 50.0
 @export var max_speed: float = 500.0
 
+## 敵に接触している間だけ強制する速度。0 = 無効。
+## 移動速度（見た目の速さ）と接触中の滞在時間を切り離すために使う。
+## 接触ダメージが時間あたりで入るタイプの弾では、これが1発あたりの
+## ダメージ量を決める主要パラメータになる。
+@export var contact_speed: float = 0.0
+
 # サイン波設定
 @export var wave_amplitude: float = 50.0
 @export var wave_frequency: float = 2.0

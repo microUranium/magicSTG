@@ -23,6 +23,18 @@ var _boomerang_returning: bool = false  # ブーメランが帰還フェーズ�
 var _gravity_dir: Vector2 = Vector2.DOWN  # この弾に適用する重力方向（弾ごとに確定）
 var _afterimage_accum: float = 0.0  # 残像の生成間隔の累積
 
+# === 追尾（エンチャント「追尾」）===
+# movement_type とは独立したオーバーレイとして進行方向だけを補正する。
+# 曲率（旋回半径）で定義するため、弾速が違っても「一定距離で補正できる横ズレ量」が揃う。
+var _homing_radius: float = 0.0  # 旋回半径（px）。0 なら追尾無効
+var _homing_distance: float = 0.0  # 追尾が有効な飛行距離（px）
+var _homing_lock_angle_deg: float = 60.0  # ロック対象の許容角度（度）
+var _homing_max_turn_rate_rad: float = PI  # 角速度上限（ラジアン/秒）
+var _homing_relock: bool = true  # ターゲット消失時に再ロックするか
+var _homing_target: Node2D = null  # ロック中のターゲット
+var _homing_travel: float = 0.0  # 追尾開始からの実移動距離
+var _homing_prev_position: Vector2 = Vector2.ZERO
+
 const AFTERIMAGE_SCENE = preload("res://scenes/effects/after_image.tscn")
 
 # 螺旋移動用の内部状態
@@ -167,6 +179,9 @@ func _process(delta):
     ):
       _handle_boundary_bounce()
 
+  # 追尾は movement_type と直交するオーバーレイ。移動処理の後に方向だけを補正する。
+  _update_homing_overlay(delta)
+
   # 回転モードに応じて弾を回転
   if movement_config:
     match movement_config.rotation_mode:
@@ -195,6 +210,157 @@ func _process(delta):
 
   # 残像は回転が確定した後に生成する（スプライトの向きをそのまま複製するため）
   _update_afterimage(delta)
+
+
+func setup_homing(
+  correction_px: float,
+  distance: float,
+  lock_angle_deg: float = 60.0,
+  max_turn_rate_deg: float = 180.0,
+  relock_on_target_lost: bool = true
+) -> void:
+  """追尾を有効化し、発射時点のターゲットをロックする。
+
+  correction_px: distance を飛ぶ間に補正できる横ズレ量（px）
+  旋回半径 r = distance^2 / (2 * correction_px) で、以後は曲率一定で旋回する。
+  角速度は ω = 現在速度 / r となるため、弾速が変わっても曲がり方（軌跡の形）は変わらない。
+
+  呼び出し側は global_position / direction / speed / movement_config を設定した後に呼ぶこと。
+  """
+  _homing_radius = 0.0
+  _homing_target = null
+
+  if correction_px <= 0.0 or distance <= 0.0:
+    return
+
+  # SPIRAL / BOOMERANG は direction ではなく独自の座標計算で動くため追尾を適用できない。
+  # 無理に方向を書き換えると本来の軌道が壊れるので、ここでは何もしない。
+  if movement_config:
+    match movement_config.movement_type:
+      BulletMovementConfig.MovementType.SPIRAL, BulletMovementConfig.MovementType.BOOMERANG:
+        return
+
+  _homing_distance = distance
+  _homing_lock_angle_deg = lock_angle_deg
+  _homing_max_turn_rate_rad = deg_to_rad(max(0.0, max_turn_rate_deg))
+  _homing_relock = relock_on_target_lost
+  _homing_radius = distance * distance / (2.0 * correction_px)
+  _homing_travel = 0.0
+  _homing_prev_position = global_position
+  _homing_target = _find_homing_lock_target()
+
+
+func _homing_is_velocity_driven() -> bool:
+  """GRAVITY は direction ではなく _velocity で位置を更新するため扱いを分ける"""
+  return (
+    movement_config != null
+    and movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY
+  )
+
+
+func _homing_forward() -> Vector2:
+  if _homing_is_velocity_driven():
+    return _velocity.normalized()
+  return direction.normalized()
+
+
+func _homing_current_speed() -> float:
+  if _homing_is_velocity_driven():
+    return _velocity.length()
+  return speed
+
+
+func _homing_apply_turn(turn_rad: float) -> void:
+  if _homing_is_velocity_driven():
+    _velocity = _velocity.rotated(turn_rad)
+  else:
+    direction = direction.rotated(turn_rad)
+
+
+func _update_homing_overlay(delta: float) -> void:
+  """追尾オーバーレイ：進行方向をロック中のターゲットへ曲率一定で曲げる"""
+  if _homing_radius <= 0.0:
+    return
+  if not is_inside_tree() or is_queued_for_deletion():
+    return
+
+  # 追尾区間の終了判定は実移動距離で行う（速度変化・重力の影響を正しく拾うため）
+  _homing_travel += global_position.distance_to(_homing_prev_position)
+  _homing_prev_position = global_position
+  if _homing_travel >= _homing_distance:
+    _homing_radius = 0.0
+    return
+
+  if not is_instance_valid(_homing_target) or not _homing_target.is_inside_tree():
+    _homing_target = null
+    if not _homing_relock:
+      # 仕様上の既定は「発射時にロック、以後は変更なし」。
+      # 再ロックしない設定ではターゲット消失後そのまま直進する。
+      _homing_radius = 0.0
+      return
+    # 撃破済みの敵を追い続けて弾が無駄になるのを防ぐため、
+    # 同じ条件（画面内・進行方向前方）で捉え直す。捉えられなければ直進のまま継続する。
+    _homing_target = _find_homing_lock_target()
+    if not _homing_target:
+      return
+
+  var forward := _homing_forward()
+  if forward == Vector2.ZERO:
+    return
+  var to_target: Vector2 = _homing_target.global_position - global_position
+  if to_target == Vector2.ZERO:
+    return
+
+  var angle_diff := wrapf(to_target.angle() - forward.angle(), -PI, PI)
+  # 曲率一定 → 角速度は現在速度に比例する。上限でクランプして低速弾の過剰旋回を防ぐ。
+  var turn_rate: float = min(_homing_current_speed() / _homing_radius, _homing_max_turn_rate_rad)
+  var max_turn := turn_rate * delta
+  _homing_apply_turn(clampf(angle_diff, -max_turn, max_turn))
+
+
+func _find_homing_lock_target() -> Node2D:
+  """ロック対象を検索する。
+
+  条件: target_group に所属 / 画面内 / 撃破処理中でない / 進行方向から一定角度以内。
+  その中で最も近いものを選ぶ。
+  """
+  var tree := get_tree()
+  if not tree:
+    return null
+
+  var forward := _homing_forward()
+  var cos_limit := cos(deg_to_rad(clampf(_homing_lock_angle_deg, 0.0, 180.0)))
+  var play_rect := PlayArea.get_play_rect()
+  var closest: Node2D = null
+  var closest_distance := INF
+
+  for node in tree.get_nodes_in_group(target_group):
+    if not (node is Node2D):
+      continue
+    var target := node as Node2D
+    if not is_instance_valid(target) or not target.is_inside_tree():
+      continue
+    if target.is_queued_for_deletion():
+      continue
+    # 撃破処理中の敵はまだグループに残っているのでロック対象から外す
+    if "_is_dead" in target and target._is_dead:
+      continue
+    # 画面外で待機中のスポーン直後の敵を掴まないようにする
+    if play_rect.has_area() and not play_rect.has_point(target.global_position):
+      continue
+
+    var to_target: Vector2 = target.global_position - global_position
+    var distance := to_target.length()
+    if distance <= 0.0:
+      continue
+    # 真横・後方の敵はどれだけ曲げても当たらないので候補から外す
+    if forward != Vector2.ZERO and forward.dot(to_target / distance) < cos_limit:
+      continue
+    if distance < closest_distance:
+      closest_distance = distance
+      closest = target
+
+  return closest
 
 
 func _update_afterimage(delta: float) -> void:

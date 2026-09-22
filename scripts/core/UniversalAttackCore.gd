@@ -355,6 +355,9 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
   if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
     bullet.apply_visual_config(pattern.bullet_visual_config)
 
+  # 追尾（エンチャント）の適用
+  _apply_bullet_homing(bullet, pattern)
+
   # 追跡リストに追加
   _spawned_projectiles.append(bullet)
   bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
@@ -897,6 +900,29 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: i
   # バリア弾の動作設定
   if pattern.barrier_movement_config and bullet.has_method("apply_barrier_movement_config"):
     bullet.apply_barrier_movement_config(pattern.barrier_movement_config)
+
+  # 追尾（エンチャント）の適用。
+  # movement_config 適用後の speed を基準に旋回半径を計算するため、必ず最後に行う。
+  _apply_bullet_homing(bullet, pattern)
+
+
+func _apply_bullet_homing(bullet: Node, pattern: AttackPattern) -> void:
+  """追尾エンチャントの設定を弾に渡す（発射時点でターゲットがロックされる）"""
+  if pattern.homing_correction_px <= 0.0:
+    return
+  # バリア弾はオーナー周回が本体の挙動なので追尾の対象外
+  if pattern.pattern_type == AttackPattern.PatternType.BARRIER_BULLETS:
+    return
+  if not bullet.has_method("setup_homing"):
+    return
+
+  bullet.setup_homing(
+    pattern.homing_correction_px,
+    pattern.homing_distance,
+    pattern.homing_lock_angle_deg,
+    pattern.homing_max_turn_rate_deg,
+    pattern.homing_relock_on_target_lost
+  )
 
 
 func _get_player_position() -> Vector2:

@@ -156,6 +156,11 @@ warning_configs = Array[ExtResource("17_evj2u")]([])
 persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [sub_resource type="Resource" id="Resource_s4l57"]
@@ -240,6 +245,11 @@ warning_configs = Array[ExtResource("17_evj2u")]([])
 persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyFlowerC" type="Area2D" groups=["enemies"]]

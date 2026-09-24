@@ -11,10 +11,13 @@ var player_node: Node2D
 
 func _ready():
   super._ready()
-  player_node = get_tree().current_scene.get_node("Player")
+  player_node = TargetService.get_player()
 
 
 func _process(delta):
+  if player_node == null or not is_instance_valid(player_node):
+    player_node = TargetService.get_player()  # 生成順で取り逃した場合に拾い直す
+
   if enemy_node and player_node:
     # プレイヤーとの距離維持（迷彩中は囮座標を基準にする）
     var target_position := TargetService.get_aim_position_for(player_node)

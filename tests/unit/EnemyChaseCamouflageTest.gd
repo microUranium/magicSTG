@@ -11,37 +11,31 @@ const ENEMY_POS := Vector2(400, 100)
 const PLAYER_POS := Vector2(400, 700)  # 敵の真下
 const DECOY_POS := Vector2(100, 700)  # 敵の左下
 
-var _saved_current_scene: Node
-var _stage: Node2D
+var _scene: Node2D
 var _player: Node2D
 var _enemy: Node2D
 
 
 func before_test() -> void:
-  # これらのAIは _ready で current_scene の "Player" を探すため、疑似ステージを用意する。
-  # current_scene にはツリールート直下のノードしか指定できない。
-  _stage = auto_free(Node2D.new())
-  get_tree().root.add_child(_stage)
-  _saved_current_scene = get_tree().current_scene
-  get_tree().current_scene = _stage
+  _scene = auto_free(Node2D.new())
+  add_child(_scene)
 
+  # これらのAIは TargetService から自機を取得する（シーン内の "Player" 名には依存しない）
   _player = auto_free(Node2D.new())
-  _player.name = "Player"
   _player.add_to_group("players")
-  _stage.add_child(_player)
+  _scene.add_child(_player)
   _player.global_position = PLAYER_POS
   TargetService.register_player(_player)
 
   _enemy = auto_free(Node2D.new())
   _enemy.add_to_group("enemies")
-  _stage.add_child(_enemy)
+  _scene.add_child(_enemy)
   _enemy.global_position = ENEMY_POS
 
 
 func after_test() -> void:
   TargetService.set_player_targetable(true)
   TargetService.unregister_player()
-  get_tree().current_scene = _saved_current_scene
 
 
 ## 敵ノードの子として AI を生成し、フレームは手動で進める

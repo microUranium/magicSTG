@@ -138,6 +138,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 敵の自機狙い弾・ビーム | `TargetService.get_aim_position()` | `UniversalAttackCore._get_player_position()`（`player_mode` の時は自機位置のまま） |
 | 敵弾の追尾 | `UniversalBullet._is_targetable()` | `_find_homing_target()` / `_find_homing_lock_target()`（対象外になると旋回せず直進） |
 | 敵の追跡・突進・ワープ | `TargetService.get_aim_position_for(node)` | `RushAttackAI`,`WarpBehindAI`,`WormBossAI`,`BossRobeAI`,`BossRobeCloneAI`,`EnemyPatternResource` |
+| バリア弾の直進（`TO_TARGET`） | `TargetService.get_aim_position_for(target_node)` | `EnhancedBarrierBullet._transition_to_projectile()`（軌道→直進へ移る瞬間に解決する。ハーピー第二形態・デビル系が使用） |
 
 ### 1.8 不屈の加護（FortitudeBlessing）詳細
 

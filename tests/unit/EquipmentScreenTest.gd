@@ -131,6 +131,70 @@ func test_right_click_does_nothing_when_no_empty_slot() -> void:
   assert_int(grid.get_items().size()).is_equal(1)
 
 
+func test_drop_equipped_onto_different_type_inventory_item_keeps_both() -> void:
+  # 異種装備（加護）を、魔法が入った持ち物枠へドロップしても持ち物側が消えないこと
+  _reset_equipment_slots()
+  _set_single_inventory_item("core1")
+  var blessing_slot := _find_equip_slot(ItemBase.ItemType.BLESSING)
+  var blessing := ItemPanelData.new()
+  blessing.inst = ItemInstanceStubScript.dummy_item("bless1", ItemBase.ItemType.BLESSING)
+  blessing_slot.data = blessing
+  blessing_slot._refresh()
+  await get_tree().process_frame
+
+  inv_slot = grid.get_child(0) as ItemSlotPanel
+  EquipSignals.emit_signal("swap_request", blessing_slot, inv_slot)
+  await get_tree().process_frame
+
+  # 加護は外れ、魔法は持ち物欄に残ったまま両方存在する
+  assert_bool(blessing_slot.data == null).is_true()
+  assert_int(grid.get_items().size()).is_equal(2)
+  var uids: Array[String] = []
+  for d in grid.get_items():
+    uids.append(d.inst.uid)
+  assert_array(uids).contains(["bless1", "core1"])
+
+
+func test_drop_equipped_onto_same_type_inventory_item_swaps() -> void:
+  # 同種装備はこれまで通り交換されること
+  _reset_equipment_slots()
+  _set_single_inventory_item("core1")
+  var core_slot := _find_equip_slot(ItemBase.ItemType.ATTACK_CORE)
+  var equipped := ItemPanelData.new()
+  equipped.inst = ItemInstanceStubScript.dummy_item("core2", ItemBase.ItemType.ATTACK_CORE)
+  core_slot.data = equipped
+  core_slot._refresh()
+  await get_tree().process_frame
+
+  inv_slot = grid.get_child(0) as ItemSlotPanel
+  EquipSignals.emit_signal("swap_request", core_slot, inv_slot)
+  await get_tree().process_frame
+
+  assert_str(core_slot.data.inst.uid).is_equal("core1")
+  assert_int(grid.get_items().size()).is_equal(1)
+  assert_str(grid.get_items()[0].inst.uid).is_equal("core2")
+
+
+func test_drop_equipped_onto_empty_inventory_slot_unequips() -> void:
+  _reset_equipment_slots()
+  _set_single_inventory_item("core1")
+  var blessing_slot := _find_equip_slot(ItemBase.ItemType.BLESSING)
+  var blessing := ItemPanelData.new()
+  blessing.inst = ItemInstanceStubScript.dummy_item("bless1", ItemBase.ItemType.BLESSING)
+  blessing_slot.data = blessing
+  blessing_slot._refresh()
+  await get_tree().process_frame
+
+  var empty_slot := grid.get_child(1) as ItemSlotPanel
+  assert_bool(empty_slot.data == null).is_true()
+
+  EquipSignals.emit_signal("swap_request", blessing_slot, empty_slot)
+  await get_tree().process_frame
+
+  assert_bool(blessing_slot.data == null).is_true()
+  assert_int(grid.get_items().size()).is_equal(2)
+
+
 func test_has_equipped_attack_core_false_when_all_empty() -> void:
   _reset_equipment_slots()
   assert_bool(equipment_screen._has_equipped_attack_core()).is_false()
@@ -154,6 +218,13 @@ func _reset_equipment_slots() -> void:
     if slot is EquipSlotPanel:
       slot.data = null
       slot._refresh()
+
+
+func _find_equip_slot(item_type: int) -> EquipSlotPanel:
+  for slot in get_tree().get_nodes_in_group("equipment_slots"):
+    if slot is EquipSlotPanel and slot.allowed_type == item_type:
+      return slot
+  return null
 
 
 func _set_single_inventory_item(uid: String) -> void:

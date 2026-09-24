@@ -60,8 +60,12 @@ func _set_equipment(data: ItemPanelData) -> bool:
 #   EquipSignals.emit_signal("swap_request", src, dst)
 # を emit する。ここでルール判定→実際のデータ入替を行う。
 func _on_swap_request(src: Node, dst: Node):
-  _swap_items(src, dst)
-  grid.set_items(_collect_inventory_items())  # 再配置
+  var displaced: Dictionary = _swap_items(src, dst)
+  var items: Array[ItemPanelData] = _collect_inventory_items()  # 再配置
+  if not displaced.is_empty():
+    var idx: int = clampi(int(displaced["index"]), 0, items.size())
+    items.insert(idx, displaced["data"])
+  grid.set_items(items)
   grid.emit_signal("ui_needs_refresh")
 
 
@@ -93,44 +97,53 @@ func _on_equip_from_inventory(src: Node, _grid: Node) -> void:
   # 空きスロットが無い場合は何もしない（アイテムは持ち物欄に残る）
 
 
-func _swap_items(src: Node, dst: Node) -> void:
+## src のアイテムを dst へ移動／入替する。
+## 戻り値: 持ち物一覧へ挿入し直す必要があるアイテム
+##   {"data": ItemPanelData, "index": int} … 挿入が必要
+##   {}                                    … 挿入不要（スロットへ直接書き込み済み）
+func _swap_items(src: Node, dst: Node) -> Dictionary:
   # 同一ノード → 何もしない
   if src == dst:
-    return
+    return {}
 
   # 取得元データ
   var src_data: ItemPanelData = src.data
   var dst_data: ItemPanelData = dst.data
 
-  # 取得元データの情報とSlopPanelの型をデバッグ出力
-  print_debug("Swapping items: src=%s, dst=%s" % [src_data, dst_data])
-  print_debug(
-    (
-      "Source type: %s, Destination type: %s"
-      % [
-        "Equip" if src is EquipSlotPanel else "Inventory",
-        "Equip" if dst is EquipSlotPanel else "Inventory"
-      ]
-    )
-  )
+  if src_data == null:
+    return {}
 
   # 受入可否
   if !_can_accept(dst, src_data):
-    return  # ルール外 → キャンセル
+    return {}  # ルール外 → キャンセル
   if src is EquipSlotPanel and dst is EquipSlotPanel and src.allowed_type != dst.allowed_type:
-    return  # 異なる装備種間は不可
+    return {}  # 異なる装備種間は不可
+
+  # dst のアイテムを src へ戻せるか（= 単純入替が成立するか）
+  var can_swap_back: bool = _can_accept(src, dst_data)
+
+  # 単純入替でない場合は持ち物欄の総数が 1 増えるため、空き容量が必要
   if (
     src is EquipSlotPanel
     and dst is ItemSlotPanel
+    and not can_swap_back
     and _collect_inventory_items().size() >= InventoryService.get_max_size()
   ):
-    return
+    return {}
 
-  # swap or move
-  if _can_accept(src, dst_data):
+  var displaced: Dictionary = {}
+
+  if can_swap_back:
     # 単純入替
     src.data = dst_data
     dst.data = src_data
+  elif dst is ItemSlotPanel and dst_data != null:
+    # 異種のため入替不可。dst のアイテムを上書きせず、src のアイテムを持ち物欄へ挿入する
+    src.data = null
+    displaced = {
+      "data": src_data,
+      "index": grid.current_page() * ItemGrid.SLOTS_PER_PAGE + dst.slot_index,
+    }
   else:
     # dst へ移動のみ、src を空に
     src.data = null
@@ -148,9 +161,10 @@ func _swap_items(src: Node, dst: Node) -> void:
   if dst is EquipSlotPanel:
     dst.equip_changed.emit(dst.data.inst if dst.data != null else null)
 
-  # 判定関数
+  return displaced
 
 
+# 判定関数
 func _can_accept(panel: Node, data: ItemPanelData) -> bool:
   if panel is ItemSlotPanel:
     return true  # インベントリ枠は何でも保持可

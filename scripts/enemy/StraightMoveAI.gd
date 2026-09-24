@@ -18,7 +18,9 @@ func _ready():
 
 func _process(delta):
   if enemy_node and player_node:
-    var direction = (player_node.global_position - enemy_node.global_position).normalized()
+    # 迷彩中は囮座標へ向かう
+    var target_position := TargetService.get_aim_position_for(player_node)
+    var direction = (target_position - enemy_node.global_position).normalized()
 
     # 次に移動する位置を計算
     var next_position = enemy_node.position + direction * speed * delta

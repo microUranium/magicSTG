@@ -81,7 +81,7 @@ func _start_warp_out() -> void:
   if player:
     var player_facing = _get_player_facing(player)
     target_position = WarpUtility.calculate_behind_position(
-      player.global_position,
+      TargetService.get_aim_position_for(player),  # 迷彩中は囮座標の背後へ
       player_facing,
       Vector2(behind_distance_min, behind_distance_max),
       angle_variation

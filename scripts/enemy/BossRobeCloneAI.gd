@@ -87,13 +87,12 @@ func _process(delta: float) -> void:
 
 func _culculate_position():
   if is_instance_valid(owner_original) and is_instance_valid(target_node):
-    var direction_to_target = (
-      (target_node.global_position - owner_original.global_position).normalized()
-    )
+    var target_position := TargetService.get_aim_position_for(target_node)  # 迷彩中は囮座標
+    var direction_to_target = (target_position - owner_original.global_position).normalized()
     var angle_to_target = direction_to_target.angle()
-    var offset_distance = target_node.global_position.distance_to(owner_original.global_position)
+    var offset_distance = target_position.distance_to(owner_original.global_position)
     var offset = Vector2(0, offset_distance).rotated(deg_to_rad(angle_offset) + angle_to_target)
-    enemy_node.global_position = target_node.global_position + offset
+    enemy_node.global_position = target_position + offset
 
 
 func cleanup():

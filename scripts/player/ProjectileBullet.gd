@@ -48,6 +48,9 @@ func _start_fade_out():
 
 
 func _process(delta):
+  # === 接触継続ダメージ（contact_damage_tick_sec が 0 なら何もしない） ===
+  _update_contact_damage(delta)
+
   # === 移動処理 ===
   position += direction * speed * delta
 

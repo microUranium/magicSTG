@@ -1,7 +1,7 @@
 # 弾丸の移動設定
 class_name BulletMovementConfig extends Resource
 
-enum MovementType { STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL }  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋
+enum MovementType {STRAIGHT, DECELERATE, ACCELERATE, SINE_WAVE, HOMING, GRAVITY, SPIRAL, BOOMERANG}  # 直進  # 減速  # 加速  # サイン波軌道  # 追尾  # 重力  # 螺旋  # ブーメラン（減速→停止→プレイヤーへ帰還）
 
 enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向に合わせる  # 設定された角速度で自転する  # 回転しない（初期角度を保持）
 
@@ -16,6 +16,12 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 @export var acceleration_rate: float = 50.0
 @export var max_speed: float = 500.0
 
+## 敵に接触している間だけ強制する速度。0 = 無効。
+## 移動速度（見た目の速さ）と接触中の滞在時間を切り離すために使う。
+## 接触ダメージが時間あたりで入るタイプの弾では、これが1発あたりの
+## ダメージ量を決める主要パラメータになる。
+@export var contact_speed: float = 0.0
+
 # サイン波設定
 @export var wave_amplitude: float = 50.0
 @export var wave_frequency: float = 2.0
@@ -27,7 +33,19 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 # 重力設定
 @export var gravity_strength: float = 980.0  # ピクセル/秒²
 @export var gravity_direction: Vector2 = Vector2.DOWN
+## true なら弾の初期進行方向のY符号から重力方向を決める（上に撃てば重力も上向き）。
+## 後方発射で攻撃方向が反転しても弾が片側に溜まらないようにするための設定。
+## 既定 false で従来どおり gravity_direction をそのまま使う。
+@export var gravity_follows_direction: bool = false
 @export var air_resistance: float = 0.0  # 0-1, 空気抵抗
+
+# ブーメラン設定
+@export_group("Boomerang Settings")
+@export var boomerang_outbound_time: float = 1.5  # 減速して停止するまでの秒数。往路距離 = initial_speed * time / 2
+@export var boomerang_return_accel: float = 900.0  # 帰還時の加速度（ピクセル/秒²）
+@export var boomerang_return_max_speed: float = 700.0  # 帰還時の最大速度。プレイヤー移動速度を上回る値にする
+@export var boomerang_catch_radius: float = 24.0  # この距離までプレイヤーに近づいたら回収する
+@export_group("")
 
 # 反射設定（全ての移動タイプで使用可能）
 @export var bounce_factor: float = 0.0  # 0-1, 境界との衝突時の反発係数

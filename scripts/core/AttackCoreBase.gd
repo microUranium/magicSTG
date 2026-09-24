@@ -185,7 +185,13 @@ func _validate_enchantments() -> bool:
 func _get_available_enchant_keys() -> Array[String]:
   """このコアが対応するエンチャントキーを返す"""
   return [
-    "damage", "bullet_speed", "cooldown", "penetration", "bullet_count", "spread_bullet_count"
+    "damage",
+    "bullet_speed",
+    "cooldown",
+    "penetration",
+    "bullet_count",
+    "spread_bullet_count",
+    "homing_correction_px"
   ]
 
 

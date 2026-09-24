@@ -23,6 +23,10 @@ enum SpawnPositionMode {
 @export var bullet_lifetime: float = 0.0  # 弾丸の有効時間 0なら無限
 @export var auto_start: bool = true  # AttackCoreの自動発射設定
 @export var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
+## 敵に接触している間ダメージを与える間隔（秒）。
+## 0 = 無効で、従来どおり進入時（area_entered）に1回だけダメージを与える。
+## 0より大きいときは進入時ダメージと貫通判定を行わず、この間隔でダメージを与え続ける。
+@export var contact_damage_tick_sec: float = 0.0
 
 # === 弾丸外観、動作設定 ===
 @export var bullet_visual_config: BulletVisualConfig  # 弾丸の外観設定
@@ -93,6 +97,24 @@ enum SpawnPositionMode {
 @export var persist_offscreen: bool = false  # 画面外でも消えない
 @export var max_offscreen_distance: float = 2000.0  # 画面から最大2000pxまで（安全リミット）
 @export var forced_lifetime: float = 30.0  # 強制削除までの時間（デフォルト30秒）
+
+# === 追尾設定（エンチャント「追尾」用） ===
+# 角速度を直接指定せず「旋回半径（曲率）」で定義する。
+# 角速度 ω = 弾速 / 旋回半径 なので、同じ設定なら弾速が違っても
+# 「一定距離を飛ぶ間に補正できる横ズレ量」が揃う。
+# 旋回半径 r = homing_distance^2 / (2 * homing_correction_px)
+@export_group("Homing")
+## 追尾区間（homing_distance）を飛ぶ間に補正できる横ズレ量（px）。0 = 追尾なし。
+@export var homing_correction_px: float = 0.0
+## 追尾が有効な飛行距離（px）。秒ではなく距離で切ることで弾速差の影響を受けない。
+@export var homing_distance: float = 800.0
+## ロック対象を進行方向から何度以内に絞るか（度）。真横・後方の敵を掴まないようにする。
+@export var homing_lock_angle_deg: float = 60.0
+## 角速度の上限（度/秒）。低速弾で旋回が過剰にならないようにする安全弁。
+@export var homing_max_turn_rate_deg: float = 180.0
+## ロック中の敵が消えたときに再ロックするか。false なら以後は直進する。
+@export var homing_relock_on_target_lost: bool = true
+@export_group("")
 
 
 # パターンの基本方向を計算

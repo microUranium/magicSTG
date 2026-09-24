@@ -19,6 +19,23 @@ var _prev_position: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _homing_timer: float = 0.0  # 追尾経過時間
 var _bounce_count: int = 0  # 反射回数
+var _boomerang_returning: bool = false  # ブーメランが帰還フェーズに入ったか
+var _gravity_dir: Vector2 = Vector2.DOWN  # この弾に適用する重力方向（弾ごとに確定）
+var _afterimage_accum: float = 0.0  # 残像の生成間隔の累積
+
+# === 追尾（エンチャント「追尾」）===
+# movement_type とは独立したオーバーレイとして進行方向だけを補正する。
+# 曲率（旋回半径）で定義するため、弾速が違っても「一定距離で補正できる横ズレ量」が揃う。
+var _homing_radius: float = 0.0  # 旋回半径（px）。0 なら追尾無効
+var _homing_distance: float = 0.0  # 追尾が有効な飛行距離（px）
+var _homing_lock_angle_deg: float = 60.0  # ロック対象の許容角度（度）
+var _homing_max_turn_rate_rad: float = PI  # 角速度上限（ラジアン/秒）
+var _homing_relock: bool = true  # ターゲット消失時に再ロックするか
+var _homing_target: Node2D = null  # ロック中のターゲット
+var _homing_travel: float = 0.0  # 追尾開始からの実移動距離
+var _homing_prev_position: Vector2 = Vector2.ZERO
+
+const AFTERIMAGE_SCENE = preload("res://scenes/effects/after_image.tscn")
 
 # 螺旋移動用の内部状態
 var _spiral_current_radius: float = 0.0  # 現在の螺旋半径
@@ -103,6 +120,28 @@ func apply_movement_config(config: BulletMovementConfig = null):
   _original_speed = speed
   _velocity = direction * speed
 
+  # GRAVITY は移動を _velocity 一本に集約する。
+  # ProjectileBullet._process() の `position += direction * speed * delta` と
+  # _update_gravity() の `position += _velocity * delta` が二重に加算され、
+  # 実効初速が initial_speed の2倍になってしまうため speed を 0 にする。
+  # これにより _handle_boundary_bounce() が _velocity を反転させるだけで
+  # 縦横とも正しく跳ね返る（等速成分が壁向きに残って張り付く問題も解消する）。
+  if movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY:
+    speed = 0.0
+
+  # 重力方向を弾ごとに確定させる。
+  # movement_config はパターン内のサブリソースで全弾・全個体に共有されるため、
+  # 弾ごとの事情で書き換えると同装備の他個体にも波及する。ここで値をコピーして持つ。
+  if movement_config.gravity_follows_direction:
+    var vertical_sign := signf(direction.y)
+    if vertical_sign != 0.0:
+      _gravity_dir = Vector2(0.0, vertical_sign)
+    else:
+      # 真横発射などY成分が0のときは設定値にフォールバックする
+      _gravity_dir = movement_config.gravity_direction
+  else:
+    _gravity_dir = movement_config.gravity_direction
+
   # 初期角度の設定（FIXED/SELF_ROTATIONモードの場合）
   if (
     movement_config.rotation_mode == BulletMovementConfig.RotationMode.FIXED
@@ -140,6 +179,9 @@ func _process(delta):
     ):
       _handle_boundary_bounce()
 
+  # 追尾は movement_type と直交するオーバーレイ。移動処理の後に方向だけを補正する。
+  _update_homing_overlay(delta)
+
   # 回転モードに応じて弾を回転
   if movement_config:
     match movement_config.rotation_mode:
@@ -166,6 +208,217 @@ func _process(delta):
 
   _prev_position = global_position
 
+  # 残像は回転が確定した後に生成する（スプライトの向きをそのまま複製するため）
+  _update_afterimage(delta)
+
+
+func setup_homing(
+  correction_px: float,
+  distance: float,
+  lock_angle_deg: float = 60.0,
+  max_turn_rate_deg: float = 180.0,
+  relock_on_target_lost: bool = true
+) -> void:
+  """追尾を有効化し、発射時点のターゲットをロックする。
+
+  correction_px: distance を飛ぶ間に補正できる横ズレ量（px）
+  旋回半径 r = distance^2 / (2 * correction_px) で、以後は曲率一定で旋回する。
+  角速度は ω = 現在速度 / r となるため、弾速が変わっても曲がり方（軌跡の形）は変わらない。
+
+  呼び出し側は global_position / direction / speed / movement_config を設定した後に呼ぶこと。
+  """
+  _homing_radius = 0.0
+  _homing_target = null
+
+  if correction_px <= 0.0 or distance <= 0.0:
+    return
+
+  # SPIRAL / BOOMERANG は direction ではなく独自の座標計算で動くため追尾を適用できない。
+  # 無理に方向を書き換えると本来の軌道が壊れるので、ここでは何もしない。
+  if movement_config:
+    match movement_config.movement_type:
+      BulletMovementConfig.MovementType.SPIRAL, BulletMovementConfig.MovementType.BOOMERANG:
+        return
+
+  _homing_distance = distance
+  _homing_lock_angle_deg = lock_angle_deg
+  _homing_max_turn_rate_rad = deg_to_rad(max(0.0, max_turn_rate_deg))
+  _homing_relock = relock_on_target_lost
+  _homing_radius = distance * distance / (2.0 * correction_px)
+  _homing_travel = 0.0
+  _homing_prev_position = global_position
+  _homing_target = _find_homing_lock_target()
+
+
+func _homing_is_velocity_driven() -> bool:
+  """GRAVITY は direction ではなく _velocity で位置を更新するため扱いを分ける"""
+  return (
+    movement_config != null
+    and movement_config.movement_type == BulletMovementConfig.MovementType.GRAVITY
+  )
+
+
+func _homing_forward() -> Vector2:
+  if _homing_is_velocity_driven():
+    return _velocity.normalized()
+  return direction.normalized()
+
+
+func _homing_current_speed() -> float:
+  if _homing_is_velocity_driven():
+    return _velocity.length()
+  return speed
+
+
+func _homing_apply_turn(turn_rad: float) -> void:
+  if _homing_is_velocity_driven():
+    _velocity = _velocity.rotated(turn_rad)
+  else:
+    direction = direction.rotated(turn_rad)
+
+
+func _update_homing_overlay(delta: float) -> void:
+  """追尾オーバーレイ：進行方向をロック中のターゲットへ曲率一定で曲げる"""
+  if _homing_radius <= 0.0:
+    return
+  if not is_inside_tree() or is_queued_for_deletion():
+    return
+
+  # 追尾区間の終了判定は実移動距離で行う（速度変化・重力の影響を正しく拾うため）
+  _homing_travel += global_position.distance_to(_homing_prev_position)
+  _homing_prev_position = global_position
+  if _homing_travel >= _homing_distance:
+    _homing_radius = 0.0
+    return
+
+  if not is_instance_valid(_homing_target) or not _homing_target.is_inside_tree():
+    _homing_target = null
+    if not _homing_relock:
+      # 仕様上の既定は「発射時にロック、以後は変更なし」。
+      # 再ロックしない設定ではターゲット消失後そのまま直進する。
+      _homing_radius = 0.0
+      return
+    # 撃破済みの敵を追い続けて弾が無駄になるのを防ぐため、
+    # 同じ条件（画面内・進行方向前方）で捉え直す。捉えられなければ直進のまま継続する。
+    _homing_target = _find_homing_lock_target()
+    if not _homing_target:
+      return
+
+  var forward := _homing_forward()
+  if forward == Vector2.ZERO:
+    return
+  var to_target: Vector2 = _homing_target.global_position - global_position
+  if to_target == Vector2.ZERO:
+    return
+
+  var angle_diff := wrapf(to_target.angle() - forward.angle(), -PI, PI)
+  # 曲率一定 → 角速度は現在速度に比例する。上限でクランプして低速弾の過剰旋回を防ぐ。
+  var turn_rate: float = min(_homing_current_speed() / _homing_radius, _homing_max_turn_rate_rad)
+  var max_turn := turn_rate * delta
+  _homing_apply_turn(clampf(angle_diff, -max_turn, max_turn))
+
+
+func _is_targetable(target: Node2D) -> bool:
+  """照準対象にできるか。迷彩中のプレイヤーだけが false になる。
+  当たり判定（_on_area_entered）はこの判定を通さないため、隠れていても被弾はする。"""
+  return TargetService.is_player_targetable() or target != TargetService.get_player()
+
+
+func _find_homing_lock_target() -> Node2D:
+  """ロック対象を検索する。
+
+  条件: target_group に所属 / 画面内 / 撃破処理中でない / 進行方向から一定角度以内。
+  その中で最も近いものを選ぶ。
+  """
+  var tree := get_tree()
+  if not tree:
+    return null
+
+  var forward := _homing_forward()
+  var cos_limit := cos(deg_to_rad(clampf(_homing_lock_angle_deg, 0.0, 180.0)))
+  var play_rect := PlayArea.get_play_rect()
+  var closest: Node2D = null
+  var closest_distance := INF
+
+  for node in tree.get_nodes_in_group(target_group):
+    if not (node is Node2D):
+      continue
+    var target := node as Node2D
+    if not is_instance_valid(target) or not target.is_inside_tree():
+      continue
+    if target.is_queued_for_deletion():
+      continue
+    if not _is_targetable(target):  # 迷彩中のプレイヤーはロックできない
+      continue
+    # 撃破処理中の敵はまだグループに残っているのでロック対象から外す
+    if "_is_dead" in target and target._is_dead:
+      continue
+    # 画面外で待機中のスポーン直後の敵を掴まないようにする
+    if play_rect.has_area() and not play_rect.has_point(target.global_position):
+      continue
+
+    var to_target: Vector2 = target.global_position - global_position
+    var distance := to_target.length()
+    if distance <= 0.0:
+      continue
+    # 真横・後方の敵はどれだけ曲げても当たらないので候補から外す
+    if forward != Vector2.ZERO and forward.dot(to_target / distance) < cos_limit:
+      continue
+    if distance < closest_distance:
+      closest_distance = distance
+      closest = target
+
+  return closest
+
+
+func _update_afterimage(delta: float) -> void:
+  """一定間隔で弾のスプライトを複製した残像を生成する"""
+  if not bullet_config or not bullet_config.enable_afterimage:
+    return
+  if bullet_config.afterimage_interval <= 0.0:
+    return
+
+  _afterimage_accum += delta
+  if _afterimage_accum < bullet_config.afterimage_interval:
+    return
+
+  # 残像は装飾なので1フレームに1枚までとし、積み残しは捨てる。
+  # 間隔がフレーム時間より短い場合は自然に毎フレーム1枚になる。
+  _afterimage_accum = 0.0
+  _spawn_afterimage()
+
+
+func _spawn_afterimage() -> void:
+  if not sprite or not sprite.texture:
+    return
+
+  # 弾より寿命が長いため、弾の子ではなくシーンに直接ぶら下げる。
+  # テスト環境では current_scene が null になりうるので root にフォールバックする。
+  var tree := get_tree()
+  if not tree:
+    return
+  var parent: Node = tree.current_scene if tree.current_scene else tree.root
+  if not parent:
+    return
+
+  var image := AFTERIMAGE_SCENE.instantiate() as AfterImage
+  if not image:
+    return
+
+  # lifetime は AfterImage._ready() が tween を張るときに読むため add_child より前に、
+  # modulate も tween の開始値になるため前に設定する。
+  image.lifetime = bullet_config.afterimage_lifetime
+  image.modulate = bullet_config.afterimage_color
+  image.texture = sprite.texture
+  image.z_index = z_index
+
+  parent.add_child(image)
+
+  # global_* は親の変形を考慮して local へ逆算されるため add_child の後に設定する
+  image.global_position = sprite.global_position
+  image.global_rotation = sprite.global_rotation
+  image.scale = sprite.scale
+
 
 func _update_advanced_movement(delta: float):
   """高度な移動処理"""
@@ -187,6 +440,15 @@ func _update_advanced_movement(delta: float):
       _update_gravity(delta)
     BulletMovementConfig.MovementType.SPIRAL:
       _update_spiral(delta)
+    BulletMovementConfig.MovementType.BOOMERANG:
+      _update_boomerang(delta)
+
+  # 敵に接触している間は速度を contact_speed に固定する（0 = 無効）。
+  # 移動速度と接触中の滞在時間を切り離すための設定。
+  # ※ _process() は「super._process()（移動）→ _update_advanced_movement()（速度更新）」
+  #    の順なので、接触検知から減速反映までは1フレーム遅れる。
+  if movement_config.contact_speed > 0.0 and not _contact_targets.is_empty():
+    speed = movement_config.contact_speed
 
 
 func _update_deceleration(delta: float):
@@ -256,6 +518,8 @@ func _find_homing_target() -> Node2D:
 
   for target in targets:
     if target is Node2D:
+      if not _is_targetable(target):  # 迷彩中のプレイヤーは追尾対象外
+        continue
       var distance = global_position.distance_to(target.global_position)
       if distance < closest_distance:
         closest_distance = distance
@@ -265,15 +529,67 @@ func _find_homing_target() -> Node2D:
 
 func _update_gravity(delta: float):
   """重力処理"""
-  # 重力による加速度を速度に加算
-  _velocity += movement_config.gravity_direction * movement_config.gravity_strength * delta
+  # 重力による加速度を速度に加算（方向は弾ごとに確定した _gravity_dir を使う）
+  _velocity += _gravity_dir * movement_config.gravity_strength * delta
 
   # 空気抵抗を適用
   if movement_config.air_resistance > 0:
     _velocity *= (1.0 - movement_config.air_resistance * delta)
 
   # 速度ベースで位置を更新
-  position += _velocity * delta
+  var step := _velocity * delta
+  position += step
+
+  # GRAVITY は speed = 0 で運用するため ProjectileBullet._process() の
+  # `_moving_distance += speed * delta` が伸びない。bullet_range を機能させるため
+  # 実移動量をここで積む（射程判定は次フレームに1回遅れる）。
+  _moving_distance += step.length()
+
+
+func _update_boomerang(delta: float):
+  """ブーメラン移動処理
+
+  往路：initial_speed から boomerang_outbound_time 秒かけて線形に減速し 0 で停止する。
+        往路の到達距離 = initial_speed * boomerang_outbound_time / 2
+  復路：毎フレーム進行方向をプレイヤーへ向け直し、boomerang_return_max_speed まで加速する。
+        boomerang_catch_radius まで近づいたら回収（爆発を出さずに削除）。
+
+  プレイヤー不在時は向きを維持して直進し、forced_lifetime で消滅する。
+  """
+  if not _boomerang_returning:
+    var outbound_time: float = movement_config.boomerang_outbound_time
+    if outbound_time <= 0.0 or _movement_timer >= outbound_time:
+      # 停止 → 帰還フェーズへ
+      speed = 0.0
+      _boomerang_returning = true
+    else:
+      speed = movement_config.initial_speed * (1.0 - _movement_timer / outbound_time)
+    return
+
+  # === 復路 ===
+  # 回収判定は帰還フェーズのみで行う。往路の開始時点では弾がプレイヤーの至近距離に
+  # あるため、フェーズを問わず判定すると発射直後に回収されてしまう。
+  var player := TargetService.get_player()
+  if is_instance_valid(player):
+    if (
+      global_position.distance_to(player.global_position) <= movement_config.boomerang_catch_radius
+    ):
+      _boomerang_catch()
+      return
+    direction = (player.global_position - global_position).normalized()
+
+  speed = min(
+    movement_config.boomerang_return_max_speed,
+    speed + movement_config.boomerang_return_accel * delta
+  )
+
+
+func _boomerang_catch():
+  """プレイヤーによる回収。
+  「消滅」ではなく「戻ってきた」ことを見せるため、_immediate_removal() を使わず
+  爆発エフェクトを出さない。軌跡パーティクルは分離して残す。"""
+  _handle_particle_cleanup()
+  queue_free()
 
 
 func _update_spiral(delta: float):

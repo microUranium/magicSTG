@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccamo1flbls10"]
+
+[ext_resource type="Script" uid="uid://bcamo1flgd010" path="res://scripts/player/CamouflageBlessing.gd" id="1"]
+
+[node name="CamouflageBlessing" type="Node"]
+script = ExtResource("1")

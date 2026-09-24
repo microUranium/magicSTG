@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwdv5hqderd6"]
+
+[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://assets/gfx/effects/destroy_particle.png" id="1_star"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_revive"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_revive"]
+_data = [Vector2(0, 0.2), 0.0, 2.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="ReviveParticlePlayer" type="CPUParticles2D"]
+material = SubResource("CanvasItemMaterial_revive")
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+emission_shape = 2
+emission_sphere_radius = 140.0
+direction = Vector2(0, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 0.0
+initial_velocity_max = 0.0
+radial_accel_min = -900.0
+radial_accel_max = -700.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_revive")
+color = Color(1, 1, 1, 0.5)
+texture = ExtResource("1_star")

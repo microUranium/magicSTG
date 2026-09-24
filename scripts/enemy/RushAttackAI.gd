@@ -63,11 +63,13 @@ func _calculate_rush_direction():
     DirectionMode.TO_PLAYER:
       var player = _get_player()
       if player:
-        rush_direction = (player.global_position - enemy_node.global_position).normalized()
+        # 迷彩中は囮座標へ突進する
+        var aim_pos := TargetService.get_aim_position_for(player)
+        rush_direction = (aim_pos - enemy_node.global_position).normalized()
         print_debug(
           (
             "RushAttackAI: Calculated rush direction player.global position: %s, enemy_node.global_position: %s, rush_direction: %s"
-            % [player.global_position, enemy_node.global_position, rush_direction]
+            % [aim_pos, enemy_node.global_position, rush_direction]
           )
         )
       else:

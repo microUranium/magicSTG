@@ -425,6 +425,21 @@
             "level": 3
           }
         ]
+      },
+      {
+        "uid": "blessing_camouflage_1",
+        "id": "blessing_camouflage",
+        "enchantments": [
+          {
+            "id": "blessing_uses_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "blessing_fortitude_1",
+        "id": "blessing_fortitude",
+        "enchantments": []
       }
     ]
   },

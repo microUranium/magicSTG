@@ -41,6 +41,12 @@ func process_damage(_player, damage):
   return damage  # デフォルトはダメージそのまま通す
 
 
+func process_fatal_damage(_player, _damage) -> bool:
+  # 他の加護をすべて通した後、そのダメージで HP が 0 になる場合にだけ呼ばれる。
+  # true を返すとダメージが無効化される（不屈の加護による復活など）。
+  return false
+
+
 func get_damage_bonus_pct(_player, _enemy, _ctx: Dictionary) -> float:
   # 自弾が敵にヒットした時の与ダメージボーナス率を返す（0.5 = +50%）。
   # 複数加護の戻り値は BlessingContainer 側で加算合成され、基底値に一括適用される。

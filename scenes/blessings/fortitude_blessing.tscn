@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfort1flbls11"]
+
+[ext_resource type="Script" uid="uid://bfort1flgd011" path="res://scripts/player/FortitudeBlessing.gd" id="1"]
+
+[node name="FortitudeBlessing" type="Node"]
+script = ExtResource("1")

@@ -318,6 +318,12 @@ func _update_homing_overlay(delta: float) -> void:
   _homing_apply_turn(clampf(angle_diff, -max_turn, max_turn))
 
 
+func _is_targetable(target: Node2D) -> bool:
+  """照準対象にできるか。迷彩中のプレイヤーだけが false になる。
+  当たり判定（_on_area_entered）はこの判定を通さないため、隠れていても被弾はする。"""
+  return TargetService.is_player_targetable() or target != TargetService.get_player()
+
+
 func _find_homing_lock_target() -> Node2D:
   """ロック対象を検索する。
 
@@ -341,6 +347,8 @@ func _find_homing_lock_target() -> Node2D:
     if not is_instance_valid(target) or not target.is_inside_tree():
       continue
     if target.is_queued_for_deletion():
+      continue
+    if not _is_targetable(target):  # 迷彩中のプレイヤーはロックできない
       continue
     # 撃破処理中の敵はまだグループに残っているのでロック対象から外す
     if "_is_dead" in target and target._is_dead:
@@ -510,6 +518,8 @@ func _find_homing_target() -> Node2D:
 
   for target in targets:
     if target is Node2D:
+      if not _is_targetable(target):  # 迷彩中のプレイヤーは追尾対象外
+        continue
       var distance = global_position.distance_to(target.global_position)
       if distance < closest_distance:
         closest_distance = distance

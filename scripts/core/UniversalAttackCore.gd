@@ -926,7 +926,11 @@ func _apply_bullet_homing(bullet: Node, pattern: AttackPattern) -> void:
 
 
 func _get_player_position() -> Vector2:
-  return TargetService.get_player_position()
+  # 敵の攻撃は照準座標（迷彩中は囮座標）を狙う。
+  # プレイヤー自身の魔法は自機位置を基準にする処理（バリア弾の中心など）があるため据え置く。
+  if player_mode:
+    return TargetService.get_player_position()
+  return TargetService.get_aim_position()
 
 
 func _get_player_node() -> Node2D:

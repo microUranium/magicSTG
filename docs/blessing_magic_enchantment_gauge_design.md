@@ -51,6 +51,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 統計再計算 | `_recalc_stats()`（override） | base_modifiers＋エンチャントから自パラメータを決定 |
 | ポーズ管理 | `set_paused(bool)` / `register_timer(timer)` | 登録 Timer を一括 paused。`_on_paused_changed()` で拡張 |
 | 被ダメージ介入 | `process_damage(player, dmg) -> int` | デフォルトは素通し |
+| 致命ダメージ介入 | `process_fatal_damage(player, dmg) -> bool` | 全加護通過後、残ダメージで HP が 0 になる時のみ呼ばれる。true で無効化（不屈） |
 | 与ダメージ介入 | `get_damage_bonus_pct(player, enemy, ctx) -> float` | 自弾→敵ヒット時のボーナス率 |
 | 魔法CT介入 | `get_attack_cooldown_mult(player) -> float` | 1.0=等倍 |
 
@@ -58,7 +59,7 @@ GenericGauge / GaugeManager ← HUD描画側
 
 | 介入 | メソッド | 合成方式 |
 |---|---|---|
-| 被ダメージ | `process_damage()` | 各加護を**直列**に通す（前段の結果を次段へ） |
+| 被ダメージ | `process_damage()` | 各加護を**直列**に通す（前段の結果を次段へ）。通過後に残ダメージが致命傷なら `process_fatal_damage()` を順に回す |
 | 与ダメージ | `process_outgoing_damage(enemy, base, ctx)` | 各加護の `get_damage_bonus_pct` を**加算**し、基底値へ一括適用：`base * (1 + Σbonus)` |
 | 魔法CT | `get_attack_cooldown_mult()` | 各加護の倍率を**乗算** |
 | アクティブ発動 | `_unhandled_input()` | `blessing_slot_1/2/3` 入力で対応スロットの `ActiveBlessingBase.activate()` |
@@ -80,12 +81,14 @@ GenericGauge / GaugeManager ← HUD描画側
 | 加護 | スクリプト | 効果 | 主要パラメータ |
 |---|---|---|---|
 | 障壁 | `DefensiveBlessing` | シールドが被ダメージを完全吸収。破壊後は時間で復活 | 下記 1.6 参照 |
+| 不屈 | `FortitudeBlessing` | 致命ダメージを受けた瞬間に自動で復活し、一定時間無敵。回数制 | 下記 1.8 参照 |
 
 **C. アクティブ型（`ActiveBlessingBase`。キー発動・使用回数制・短CT）**
 
 | 加護 | スクリプト | 効果 | 参照キー |
 |---|---|---|---|
 | 打消 | `NullifyBlessing` | 発動で場の敵弾を全消去（HUDフラッシュ）。「強奪」で撃破時に確率回数回復 | `max_uses`,`blessing_cooldown_sec` / enchant: `blessing_uses_add`,`nullify_steal_chance_pct` |
+| 迷彩 | `CamouflageBlessing` | 一定時間、敵の照準対象から外れる（当たり判定は残る） | `max_uses`,`blessing_cooldown_sec`,`camouflage_duration_sec` / enchant: `blessing_uses_add`,`camouflage_duration_pct` |
 
 `ActiveBlessingBase` パラメータ設計：
 
@@ -112,6 +115,45 @@ GenericGauge / GaugeManager ← HUD描画側
 - **復活ゲージ**：破壊中は `_update_recover_gauge(delta)` が delta 積算で 0→max を**毎フレーム滑らかに**充填（時間連動）。
 - **ゲージ画像切替**：破壊時 `set_gauge_style("durability_recovering")`（無効化画像）、復活時 `set_gauge_style("durability")`（通常画像）。
 - ポーズ中（`_paused`）は回復・ゲージ更新・復活Timerを停止。
+
+### 1.7 迷彩の加護（CamouflageBlessing）詳細
+
+| パラメータ | 既定 | 由来 | 意味 |
+|---|---|---|---|
+| `max_uses` | 2 | `max_uses + Σblessing_uses_add` | 1ステージの発動回数 |
+| `duration_sec` | 10.0 | `camouflage_duration_sec × (1+Σcamouflage_duration_pct)` | 効果時間 |
+| `cooldown_sec` | 1.0 | `blessing_cooldown_sec` | 連打防止の短いCT |
+
+挙動：
+- **照準から外れる**：発動時の自機位置を囮座標として `TargetService.set_player_targetable(false, pos)` に預ける。効果中、敵の自機狙い・追尾・追跡移動はすべて囮座標を狙う。
+- **当たり判定は残る**：被弾判定は `"players"` グループで行われ、この状態でも被弾する。グループからは外さない（外すと無敵になってしまう）。
+- **再発動しない**：効果中は `can_activate()` が false。延長も重ね掛けもせず、回数も消費しない。
+- **見た目**：`Player.set_camouflage_visual(true, 0.4)` で自機スプライトのみ半透明。終了1秒前から `WarnTimer` でアルファを揺らして予告する。当たり判定表示・精霊は兄弟ノードなので影響なし。
+- ポーズ中は `DurationTimer`/`WarnTimer` ともに停止（`register_timer` 済み）。
+
+**照準系の参照先（迷彩対応済みの呼び出し箇所）**
+
+| 種別 | 参照 API | 対象コード |
+|---|---|---|
+| 敵の自機狙い弾・ビーム | `TargetService.get_aim_position()` | `UniversalAttackCore._get_player_position()`（`player_mode` の時は自機位置のまま） |
+| 敵弾の追尾 | `UniversalBullet._is_targetable()` | `_find_homing_target()` / `_find_homing_lock_target()`（対象外になると旋回せず直進） |
+| 敵の追跡・突進・ワープ | `TargetService.get_aim_position_for(node)` | `RushAttackAI`,`WarpBehindAI`,`WormBossAI`,`BossRobeAI`,`BossRobeCloneAI`,`EnemyPatternResource` |
+
+### 1.8 不屈の加護（FortitudeBlessing）詳細
+
+| パラメータ | 既定 | 由来 | 意味 |
+|---|---|---|---|
+| `max_uses` | 1 | `max_uses + Σblessing_uses_add` | 1ステージの発動回数 |
+| `revive_hp_ratio` | 0.5 | `fortitude_revive_hp_ratio` | 復活後のHP（最大HPに対する割合） |
+| `invincible_sec` | 2.0 | `fortitude_invincible_sec × (1+Σfortitude_invincible_pct)` | 復活直後の無敵時間 |
+
+挙動：
+- **発動条件**：`BlessingContainer.process_damage()` が全加護を通した後、残ダメージ ≧ 現在HP の時だけ `process_fatal_damage()` が呼ばれる。障壁などが肩代わりできるダメージでは回数を消費しない。
+- **復活**：HPを `max_hp × revive_hp_ratio`（最低1）に設定し、そのダメージは無効（0を返す）。
+- **無敵**：`Player.set_invincible(sec)` を呼ぶ。無敵中の `take_damage()` は加護の処理に入る前に無視されるため、障壁も削れない。
+- **見た目**：無敵中は自機スプライトのみ点滅（`BLINK_INTERVAL=0.08秒`、暗側アルファ0.2）。迷彩の半透明とは `Player._update_sprite_alpha()` で乗算合成される。
+- **発動演出**（`_play_revive_effects()`）：HUDフラッシュ、`request_start_vibration`（撃破時と同じ画面揺れ）、効果音 `fortitude`、星の収束パーティクル `scenes/player/revive_particle_player.tscn`（外周から出て `radial_accel` 負で中心へ収束。撃破時の飛散と逆の動き。寿命後に自動で解放）。
+- **ゲージ**：残回数を `durability` スタイルで表示し、使い切ったら `durability_recovering`（無効化画像）へ切替。
 
 ---
 

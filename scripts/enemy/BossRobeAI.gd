@@ -251,8 +251,10 @@ func _start_warp() -> void:
   var player = TargetService.get_player()
 
   if player:
+    # 迷彩中は囮座標の背後へワープする
+    var aim_pos := TargetService.get_aim_position_for(player)
     _target_position = WarpUtility.calculate_behind_position(
-      player.global_position, Vector2.UP, Vector2(400, 400), 360, false
+      aim_pos, Vector2.UP, Vector2(400, 400), 360, false
     )
   else:
     # プレイヤーが見つからない場合は元の位置を維持

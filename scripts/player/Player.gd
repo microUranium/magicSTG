@@ -25,6 +25,14 @@ var _damage_flash_time: float = 0.0
 var _paused: bool = false  # ポーズ状態
 var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
 
+# === 無敵・迷彩（加護による見た目と被弾制御） ===
+const BLINK_INTERVAL := 0.08  # 無敵中の点滅周期(秒)
+const BLINK_ALPHA := 0.2  # 点滅の暗い側のアルファ
+var _invincible_time: float = 0.0  # 残り無敵時間(秒)
+var _blink_timer: float = 0.0
+var _blink_on: bool = false  # 点滅の暗い側かどうか
+var _camouflage_alpha: float = 1.0  # 迷彩中のアルファ(1.0=通常)
+
 
 func _ready() -> void:
   # Set the initial animation
@@ -43,6 +51,7 @@ func _process(delta):
   _handle_input(delta)
   _clamp_inside_playrect()
   _update_flashing(delta)
+  _update_invincible(delta)
 
   if _is_hit_per_frame:
     _is_hit_per_frame = false
@@ -60,6 +69,59 @@ func _update_flashing(delta):
   if _damage_flash_time <= 0.0:
     animated_sprite.modulate = Color(1.0, 1.0, 1.0, animated_sprite.modulate.a)
     _damage_flash_time = 0.0
+
+
+#---------------------------------------------------------------------
+# 無敵・迷彩（加護から利用する API）
+#---------------------------------------------------------------------
+func set_invincible(duration_sec: float) -> void:
+  """指定秒数だけ無敵にする。無敵中は take_damage を完全に無視する。
+  すでに無敵なら長いほうを採用する（短い無敵で上書きしない）。"""
+  _invincible_time = maxf(_invincible_time, duration_sec)
+  _blink_timer = 0.0
+  _blink_on = false
+  _update_sprite_alpha()
+
+
+func is_invincible() -> bool:
+  return _invincible_time > 0.0
+
+
+func set_camouflage_visual(active: bool, alpha: float = 0.4) -> void:
+  """迷彩中の見た目（自機スプライトのみ半透明）。当たり判定・精霊には影響しない。"""
+  _camouflage_alpha = clampf(alpha, 0.0, 1.0) if active else 1.0
+  _update_sprite_alpha()
+
+
+func _update_invincible(delta: float) -> void:
+  if _paused:  # ポーズ中は無敵時間を消費しない
+    return
+  if _invincible_time <= 0.0:
+    return
+
+  _invincible_time -= delta
+  if _invincible_time <= 0.0:
+    _invincible_time = 0.0
+    _blink_on = false
+    _update_sprite_alpha()
+    return
+
+  # 点滅：一定周期でアルファを切り替える
+  _blink_timer += delta
+  if _blink_timer >= BLINK_INTERVAL:
+    _blink_timer = fmod(_blink_timer, BLINK_INTERVAL)
+    _blink_on = not _blink_on
+    _update_sprite_alpha()
+
+
+func _update_sprite_alpha() -> void:
+  """迷彩の半透明と無敵の点滅を合成して自機スプライトへ反映する。"""
+  if not animated_sprite:
+    return
+  var alpha := _camouflage_alpha
+  if _blink_on:
+    alpha *= BLINK_ALPHA
+  animated_sprite.modulate.a = alpha
 
 
 func flash_white(duration := 0.1):
@@ -103,6 +165,8 @@ func _clamp_inside_playrect():
 
 func take_damage(amount: int) -> void:
   if _paused:  # ポーズ中はダメージを受けない
+    return
+  if is_invincible():  # 無敵中は加護の処理も含めて一切介入させない
     return
 
   var final_damage = amount

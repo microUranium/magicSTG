@@ -7,7 +7,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ…。あのクソ上司、顔合わす度にいちいち怒ってきてダルすぎ…。"
+        "text": "はぁ…。あのクソギルマス、顔合わす度にいちいち怒ってきてダルすぎ…。"
       },
       {
         "speaker_name": "フェリス",
@@ -23,7 +23,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ～あ。学生の時にもっとマシなギルドを選んでおくべきだった…。"
+        "text": "はぁ～あ。もっとマシなギルドを選んでおくべきだった…。"
       }
     ],
     "progression": [
@@ -65,7 +65,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "自分が分からないことをそれっぽく誤魔化してるだけじゃん。あのクソ上司。"
+        "text": "自分が分からないことを誤魔化してるだけじゃん。あのクソギルマス。"
       }
     ],
     "battle_conversation": [

@@ -105,7 +105,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "なんか安心できる歌声だなあ…。"
+        "text": "なんか安心できる歌声だな…。"
       },
       {
         "speaker_name": "フェリス",
@@ -795,7 +795,7 @@
         "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "霧でよく見えなかったけど、今のってあんたの…。"
+        "text": "霧でよく見えなかったけど、今のってお前の…。"
       },
       {
         "speaker_name": "ハーピー",
@@ -1150,74 +1150,36 @@
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "ねえ、そこのハーピーさんも一緒にどうかしら？"
-      },
-      {
-        "speaker_name": "少女",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "この沼地の夜はとっても危険だわ。私と一緒に来ましょう？"
-      },
-      {
-        "speaker_name": "ハーピー",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_face_1.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "え、いや、でも…。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_face_1.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "こっち見ないでよ。あたしに断る権利はないでしょ。"
-      },
-      {
-        "speaker_name": "ハーピー",
-        "face_left": "res://assets/gfx/sprites/harpy_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_face_1.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "……！"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_face_4.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "でもあたしやこの子に何かするつもりなら、その時は許さないから。"
-      },
-      {
-        "speaker_name": "ハーピー",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_face_4.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "こ、この期に及んであんたを襲おうだなんて思わないわよ…。"
-      },
-      {
-        "speaker_name": "少女",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ふふっ決まりね！それじゃあ急ぎましょ！"
+        "text": "ふふふっ楽しい夜にしましょうね！"
+      }
+    ],
+    "resolution2": [
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "(あいつら、家って言ってたけど…。)"
       },
       {
-        "speaker_name": "少女",
+        "speaker_name": "ハーピー",
         "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "楽しい夜にしましょうね！"
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "(でもあそこにあるのってどう見ても)"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "廃墟じゃないのよ。"
       }
     ]
   }

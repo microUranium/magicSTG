@@ -65,7 +65,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（なにやってるんだろ？あの魔物…。）"
+        "text": "（あれは…魔族…！？）"
       },
       {
         "speaker_name": "？？？",
@@ -131,7 +131,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "待て、なんなのだ貴様のその魔力…？"
+        "text": "待て、貴様のその魔力、一体なんなのだ…？"
       },
       {
         "speaker_name": "？？？",
@@ -139,7 +139,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "…なるほど、あの鳥頭も我輩を止めるために魔族に頼るとは、"
+        "text": "…なるほど、あのギルドもワガハイを止めるために魔族に頼るとは、"
       },
       {
         "speaker_name": "？？？",
@@ -155,7 +155,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ？あたしが魔族なわけ無いでしょ。"
+        "text": "はぁ？どこをどう見たらあたしが魔族に見えるわけ？"
       },
       {
         "speaker_name": "フェリス",
@@ -163,7 +163,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "ちょっと人より魔力が多いくらいで、魔族呼ばわりは心外なんだけど？"
+        "text": "ちょっと人より魔力が多いくらいで、魔族呼ばわりは心外なんだけど。"
       },
       {
         "speaker_name": "魔族",
@@ -171,7 +171,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ふん、他の有象無象は誤魔化せても、我輩の目は誤魔化せないのだ！"
+        "text": "ふん、他の有象無象は誤魔化せても、ワガハイの目は誤魔化せないのだ！"
       },
       {
         "speaker_name": "魔族",
@@ -187,7 +187,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はいどうぞって渡せるわけないでしょ？"
+        "text": "はいどうぞって渡せるわけないでしょ？みんなしてあたしの魔力を狙いやがって。"
       },
       {
         "speaker_name": "魔族",
@@ -195,7 +195,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ふん、我輩に楯突くとは怖いもの知らずなのだ。"
+        "text": "ふん、ワガハイに楯突くとは怖いもの知らずなのだ。"
       },
       {
         "speaker_name": "魔族",
@@ -221,7 +221,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "たった1人で来るなんて我輩も舐められたものなのだ。"
+        "text": "たった1人で来るなんてワガハイも舐められたものなのだ。"
       },
       {
         "speaker_name": "フェリス",
@@ -229,7 +229,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "文句ならうちのギルドマスターに言ってよね。"
+        "text": "文句ならうちのクソギルマスに言ってよね。"
       },
       {
         "speaker_name": "フェリス",
@@ -245,7 +245,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "あの鳥頭、またもこうして我輩の邪魔をするつもりなのだ…？"
+        "text": "あの鳥頭、またもこうしてワガハイの邪魔をするつもりなのだ…？"
       },
       {
         "speaker_name": "フェリス",
@@ -261,7 +261,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ええい！こうなったら我輩の魔法で焼き払ってくれるのだ！！"
+        "text": "ええい！こうなったらワガハイの魔法で焼き払ってくれるのだ！！"
       }
     ],
     "resolution": [
@@ -295,15 +295,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あのジジイには追い払えとしか言われてないし、"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "今すぐどっか行って、二度とこの場所に近づかないでくれたほうがあたしも楽なんだけど。"
+        "text": "さて、こいつを確保すれば依頼は終わりっと…。"
       },
       {
         "speaker_name": "魔族",
@@ -311,7 +303,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "わ、我輩をそうやって見下すななのだぁ！！"
+        "text": "わ、ワガハイをそうやって見下すななのだぁ！！"
       },
       {
         "speaker_name": "魔族",
@@ -319,7 +311,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "…しかし、我輩も幾度となく敗北を経験して学んだことがあるのだ。"
+        "text": "…しかし、ワガハイも幾度となく敗北を経験して学んだことがあるのだ。"
       },
       {
         "speaker_name": "フェリス",
@@ -351,7 +343,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "そうなのだ！我輩は戦っていると見せかけて、貴様の力を利用させてもらったのだ！"
+        "text": "そうなのだ！ワガハイは戦っていると見せかけて、貴様の力を利用させてもらったのだ！"
       },
       {
         "speaker_name": "魔族",
@@ -409,7 +401,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ふっふっふー！貴様は戦力では勝っていたみたいだが、戦略は我輩の方が上だったのだ！"
+        "text": "ふっふっふー！貴様は戦力では勝っていたみたいだが、戦略はワガハイの方が上だったのだ！"
       },
       {
         "speaker_name": "魔族",
@@ -417,7 +409,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "そして我輩は山頂へ向かい、貴様をも凌ぐ強大な戦力をも手に入れてやるのだ！！"
+        "text": "そしてワガハイは山頂へ向かい、貴様をも凌ぐ強大な戦力をも手に入れてやるのだ！！"
       }
     ],
     "resolution3": [
@@ -481,7 +473,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "貴様は一足遅かったのだ！我輩はこの山に秘められた力を手に入れたのだ！"
+        "text": "貴様は一足遅かったのだ！ワガハイはこの山に秘められた力を手に入れたのだ！"
       },
       {
         "speaker_name": "フェリス",
@@ -489,7 +481,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "大人しく帰れって言っても、もう遅いよね。"
+        "text": "大人しく捕まれって言っても、もう遅いよね。"
       },
       {
         "speaker_name": "魔族",
@@ -497,7 +489,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ふんっ初めから尻尾巻いて逃げる気などさらさら無いのだ。"
+        "text": "ふんっ貴様らギルドの言いなりになるつもりなどさらさら無いのだ。"
       },
       {
         "speaker_name": "魔族",
@@ -513,7 +505,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "さっきは土を付けられたが、ここからが我輩の本気なのだ！！"
+        "text": "さっきは土を付けられたが、ここからがワガハイの本気なのだ！！"
       },
       {
         "speaker_name": "フェリス",
@@ -522,110 +514,6 @@
         "speaker_side": "left",
         "box_direction": "left",
         "text": "はぁ……。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（これだから討伐依頼なんてやりたくないんだ。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（みんなギルドのためとか、町の平和を守るとか勇者気取っちゃってさ。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（そんなことのために自分が死ぬかもしれないのに、汗水流して必死こいて戦って）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（服は汚れるし、汗で体と髪はベタつくし、せっかく手入れした箒も傷だらけ。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（らしくないなあ。あたし。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "……。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "言っておくけど、あたしがこんな目にあったのは全部お前のせいだから。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "さっきからのだのだのだのだ喋り方もムカつくし、声もいちいち耳に障るし。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "ギルドに貢献するだの平和を守るだの、あたしはそんな大義なんて持ち合わせてないの。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "あたしは個人的にお前にムカついたから、汗だくになってまでお前を追いかけてただけ。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "お前の顔面を地面に擦り付けて、その頭を箒で滅多打ちにしてストレス解消してやるんだから…！"
-      },
-      {
-        "speaker_name": "魔族",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "えぇ…。なに言ってるのだ…？急に怖いのだこの女…。"
-      },
-      {
-        "speaker_name": "魔族",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "お、面白いやつなのだ！できるものならやってみるのだー！！！"
       }
     ],
     "battle_progression": [
@@ -643,7 +531,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "うるっさい！お前がちょこまかと動いてるんでしょ！"
+        "text": "うるっさい！ちょこまかと動きやがって…！"
       },
       {
         "speaker_name": "魔族",
@@ -696,22 +584,6 @@
         "text": "だ、黙るのだ！戦い通しで少し疲れただけなのだ！"
       },
       {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（やっとあいつのペースに追いついてきた…。）"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "（このまま耐え続ければあっちから自滅してくれるはず…。）"
-      },
-      {
         "speaker_name": "魔族",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
@@ -751,7 +623,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "一人の人間に対して…我輩が押されるわけがないのだ…！！！"
+        "text": "一人の人間に対して…ワガハイが押されるわけがないのだ…！！！"
       },
       {
         "speaker_name": "魔族",
@@ -759,7 +631,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "まだ、力が…この魔力が我輩の身体に溢れて…。"
+        "text": "まだ、力が…この魔力がワガハイの身体に溢れて…。"
       },
       {
         "speaker_name": "魔族",
@@ -852,6 +724,22 @@
         "text": "まだ喋れたんだ。"
       },
       {
+        "speaker_name": "魔族",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ワガハイの目は誤魔化せない。その魔力は確かにワガハイが手にしたのと同じ…"
+      },
+      {
+        "speaker_name": "魔族",
+        "face_left": "res://assets/gfx/sprites/felis_face_1.png",
+        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "悪魔そのもの…！"
+      },
+      {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
@@ -865,15 +753,7 @@
         "face_right": "res://assets/gfx/sprites/faily_full_body_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "今も増え続ける魔力をこの子たちに預けることでなんとか抗い続けてる。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/faily_full_body_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "この子たちも昔は1体だけで良かったんだけど、この10年で3体にまで増えちゃった。"
+        "text": "今も際限なく増え続ける魔力をこの子たちに預けることでなんとか抗い続けてる。"
       },
       {
         "speaker_name": "魔族",
@@ -929,7 +809,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "貴様、さっきから我輩の顔を踏んでるのだ。痛いのだ。"
+        "text": "貴様、さっきからワガハイのことを踏んでるのだ。痛いのだ。"
       },
       {
         "speaker_name": "フェリス",
@@ -937,7 +817,15 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "わざと踏んづけてるの。"
+        "text": "わざと踏んづけてるの。動かないように。"
+      },
+      {
+        "speaker_name": "魔族",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "もっとマシなやり方がいだだだだだだだ！！"
       },
       {
         "speaker_name": "フェリス",
@@ -945,7 +833,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "それにあたし言わなかったっけ？"
+        "text": "ごめん、聞こえなかったわ。とにかくちょっと縛るから我慢しててよ。"
       },
       {
         "speaker_name": "魔族",
@@ -953,55 +841,7 @@
         "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "…？"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "まだ箒で滅多打ちにしてない。"
-      },
-      {
-        "speaker_name": "魔族",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "ひっ…！？"
-      },
-      {
-        "speaker_name": "魔族",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "ご、ごめんなさいなのだ…！もう逆らわないのだ…！"
-      },
-      {
-        "speaker_name": "魔族",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/felis_devil_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "つ、柄の部分は洒落にならないのだ！せめてフサフサの部分で…"
-      },
-      {
-        "speaker_name": "",
-        "face_left": null,
-        "face_right": null,
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "（ドガッ）"
-      },
-      {
-        "speaker_name": "",
-        "face_left": null,
-        "face_right": null,
-        "speaker_side": "right",
-        "box_direction": "right",
-        "text": "ひぅ…！！？"
+        "text": "ぐぬぬ…貴様はワガハイよりよっぽど魔族なのだあ…！！"
       }
     ]
   }

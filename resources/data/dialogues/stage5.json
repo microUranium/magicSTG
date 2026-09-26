@@ -47,7 +47,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "オマケにハーピーもなんかいないし。"
+        "text": "それに、ここは一体…。"
       },
       {
         "speaker_name": "フェリス",
@@ -55,7 +55,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あいつはともかく、アリシアを探してこの場所から出ないと。"
+        "text": "とにかく、アリシアを探してこの場所から出ないと。"
       }
     ],
     "progression": [
@@ -321,14 +321,6 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "あの人、私のお歌を聴き続けたらどうなるのか知っていたのね。"
-      },
-      {
-        "speaker_name": "少女",
-        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
-        "speaker_side": "right",
-        "box_direction": "right",
         "text": "せっかく二人で楽しくお歌を歌っていたのに、あの人ったら急に私に襲いかかって来たのよ？"
       },
       {
@@ -445,7 +437,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "内装はボロボロなのに、外につながる部分だけしっかりしてるんだから…。"
+        "text": "どう見ても内装はボロボロなのに、どうなってんだよ…。"
       },
       {
         "speaker_name": "フェリス",
@@ -657,7 +649,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_1.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "私は本当にシィルお姉さんとお友達になりたかっただけなの。"
+        "text": "私は本当にシィルお姉さんとお友達になりたかっただけなのよ？"
       },
       {
         "speaker_name": "人形",
@@ -705,7 +697,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あまり調子に乗ってると、実力行使することになるよ。"
+        "text": "あたしは今気が立ってるの。あまり調子に乗ってると、実力行使することになるよ。"
       },
       {
         "speaker_name": "フェリス",
@@ -750,6 +742,14 @@
         "text": "私を倒そうとしてくる人は初めて見たわ！"
       },
       {
+        "speaker_name": "人形",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/doll_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "お姉さんがその気なら少し遊んであげるわ。"
+      },
+      {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
@@ -771,14 +771,6 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "お姉さんがその気なら少し遊んであげるわ。"
-      },
-      {
-        "speaker_name": "人形",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/doll_face_0.png",
-        "speaker_side": "right",
-        "box_direction": "right",
         "text": "あなたを動けなくした後に私のお歌をたーっぷり聴かせて……"
       },
       {
@@ -787,7 +779,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_3.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "死んでもここを出られないようにしてあげる！"
+        "text": "死んでもずーっとここに閉じ込めてあげる！"
       }
     ],
     "battle_progression": [
@@ -1091,7 +1083,15 @@
         "face_right": "res://assets/gfx/sprites/doll_face_4.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あんたのことはその喉を裂いてやりたい気分だけど、今は相手してる暇はないの。"
+        "text": "あんたの歌声で確信したの。あたしの仲間があんなふうになったのはあんたのせいだって。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/harpy_face_0.png",
+        "face_right": "res://assets/gfx/sprites/doll_face_4.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "正直その喉を裂いてやりたいくらいだけど、今は相手してる暇はないの。"
       },
       {
         "speaker_name": "ハーピー",
@@ -1107,10 +1107,18 @@
         "face_right": "res://assets/gfx/sprites/felis_face_3.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "ほら早く！"
+        "text": "これで貸し借りはなしだから！"
       },
       {
         "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/harpy_face_0.png",
+        "face_right": "res://assets/gfx/sprites/felis_face_3.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "ほら早く！"
+      },
+      {
+        "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/harpy_face_0.png",
         "face_right": "res://assets/gfx/sprites/felis_face_3.png",
         "speaker_side": "right",

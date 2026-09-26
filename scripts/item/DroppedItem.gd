@@ -28,7 +28,7 @@ func _ready() -> void:
 
   # 0.5秒後にプレイヤーに向かって移動
   await get_tree().create_timer(0.5, false).timeout
-  player = get_tree().current_scene.get_node_or_null("Player")
+  player = TargetService.get_player()
   speed = 300  # プレイヤーに向かう速度を設定
   # 徐々に加速
   var acceleration: float = 1000.0  # 加速量
@@ -39,7 +39,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-  if player:
+  if is_instance_valid(player):
     var direction: Vector2 = (player.global_position - global_position).normalized()
     position += direction * speed * delta  # プレイヤーに向かって移動
 

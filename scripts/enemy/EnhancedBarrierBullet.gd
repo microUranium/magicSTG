@@ -222,8 +222,10 @@ func _transition_to_projectile():
   # 直進方向を決定
   match movement_config.projectile_direction_type:
     BarrierBulletMovement.ProjectileDirection.TO_TARGET:
-      if target_node:
-        direction = (target_node.global_position - global_position).normalized()
+      if is_instance_valid(target_node):
+        # 迷彩中のプレイヤーが対象なら囮座標へ向かう（発射の瞬間に解決する）
+        var aim_pos := TargetService.get_aim_position_for(target_node)
+        direction = (aim_pos - global_position).normalized()
       else:
         direction = Vector2.DOWN  # フォールバック
     # 現在の軌道方向を維持

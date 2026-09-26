@@ -653,7 +653,7 @@ func _attack_starrush_2(delay = 0.5, count = 10, _phase = 5):
     )
 
     attack_angle = (
-      TargetService.get_player_position().direction_to(randomPos).angle() * 180 / PI + 90
+      TargetService.get_aim_position().direction_to(randomPos).angle() * 180 / PI + 90
     )  # プレイヤーに向かう角度を計算
 
     _spawn_starrush(attack_angle, randomPos)

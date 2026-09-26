@@ -48,6 +48,7 @@ bullet_range = 300.0
 bullet_lifetime = 0.0
 auto_start = true
 penetration_count = 0
+contact_damage_tick_sec = 0.0
 bullet_count = 5
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
@@ -82,6 +83,11 @@ warning_configs = Array[ExtResource("12_jiha3")]([])
 persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemySeaBird" type="Area2D" groups=["enemies"]]

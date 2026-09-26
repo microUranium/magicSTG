@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=17 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=18 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -16,6 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://35kps0ih7ou6" path="res://assets/audio/sfx/ui_cancel.wav" id="14_qh1xs"]
 [ext_resource type="AudioStream" uid="uid://co2t4xwn1wjpu" path="res://assets/audio/sfx/ui_hover.wav" id="15_a31j7"]
 [ext_resource type="AudioStream" uid="uid://c8xj675y67v8u" path="res://assets/audio/sfx/girl_laugh.wav" id="16_a31j7"]
+[ext_resource type="AudioStream" uid="uid://bwpa3ghxfa01d" path="res://assets/audio/sfx/fortitude.wav" id="17_ftd01"]
 
 [resource]
 script = ExtResource("1_tnkwu")
@@ -24,6 +25,7 @@ table = Dictionary[String, AudioStream]({
 "destroy_boss": ExtResource("2_tskcg"),
 "destroy_enemy": ExtResource("3_grn6y"),
 "destroy_player": ExtResource("4_grn6y"),
+"fortitude": ExtResource("17_ftd01"),
 "gameover": ExtResource("7_gl6cx"),
 "get_item": ExtResource("9_kghj2"),
 "girl_laugh": ExtResource("16_a31j7"),

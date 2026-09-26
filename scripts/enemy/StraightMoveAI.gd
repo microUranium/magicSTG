@@ -11,14 +11,19 @@ var viewport_half_y: float
 
 func _ready():
   super._ready()
-  player_node = get_tree().current_scene.get_node("Player")
+  player_node = TargetService.get_player()
   viewport_half_y = get_viewport().get_visible_rect().size.y / 2
   speed = base_speed
 
 
 func _process(delta):
+  if player_node == null or not is_instance_valid(player_node):
+    player_node = TargetService.get_player()  # 生成順で取り逃した場合に拾い直す
+
   if enemy_node and player_node:
-    var direction = (player_node.global_position - enemy_node.global_position).normalized()
+    # 迷彩中は囮座標へ向かう
+    var target_position := TargetService.get_aim_position_for(player_node)
+    var direction = (target_position - enemy_node.global_position).normalized()
 
     # 次に移動する位置を計算
     var next_position = enemy_node.position + direction * speed * delta

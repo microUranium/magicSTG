@@ -355,6 +355,9 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
   if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):
     bullet.apply_visual_config(pattern.bullet_visual_config)
 
+  # 追尾（エンチャント）の適用
+  _apply_bullet_homing(bullet, pattern)
+
   # 追跡リストに追加
   _spawned_projectiles.append(bullet)
   bullet.tree_exiting.connect(_on_projectile_destroyed.bind(bullet))
@@ -762,6 +765,10 @@ func _spawn_bullet(
     bullet.max_offscreen_distance = pattern.max_offscreen_distance
     bullet.forced_lifetime = pattern.forced_lifetime
 
+  # 接触継続ダメージの有効化（0 なら従来どおり進入時に1回だけダメージ）
+  if pattern.contact_damage_tick_sec > 0.0 and bullet.has_method("enable_contact_damage"):
+    bullet.enable_contact_damage(pattern.contact_damage_tick_sec)
+
   # 視覚・動作設定の適用
   _apply_bullet_configs(bullet, pattern, bullet_index)
 
@@ -894,9 +901,36 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: i
   if pattern.barrier_movement_config and bullet.has_method("apply_barrier_movement_config"):
     bullet.apply_barrier_movement_config(pattern.barrier_movement_config)
 
+  # 追尾（エンチャント）の適用。
+  # movement_config 適用後の speed を基準に旋回半径を計算するため、必ず最後に行う。
+  _apply_bullet_homing(bullet, pattern)
+
+
+func _apply_bullet_homing(bullet: Node, pattern: AttackPattern) -> void:
+  """追尾エンチャントの設定を弾に渡す（発射時点でターゲットがロックされる）"""
+  if pattern.homing_correction_px <= 0.0:
+    return
+  # バリア弾はオーナー周回が本体の挙動なので追尾の対象外
+  if pattern.pattern_type == AttackPattern.PatternType.BARRIER_BULLETS:
+    return
+  if not bullet.has_method("setup_homing"):
+    return
+
+  bullet.setup_homing(
+    pattern.homing_correction_px,
+    pattern.homing_distance,
+    pattern.homing_lock_angle_deg,
+    pattern.homing_max_turn_rate_deg,
+    pattern.homing_relock_on_target_lost
+  )
+
 
 func _get_player_position() -> Vector2:
-  return TargetService.get_player_position()
+  # 敵の攻撃は照準座標（迷彩中は囮座標）を狙う。
+  # プレイヤー自身の魔法は自機位置を基準にする処理（バリア弾の中心など）があるため据え置く。
+  if player_mode:
+    return TargetService.get_player_position()
+  return TargetService.get_aim_position()
 
 
 func _get_player_node() -> Node2D:

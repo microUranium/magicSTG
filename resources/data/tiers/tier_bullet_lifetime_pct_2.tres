@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_j4ife")
-level = 1
+level = 2
 modifiers = {
-"bullet_lifetime_pct": 0.5
+"bullet_lifetime_pct": 1.0
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"

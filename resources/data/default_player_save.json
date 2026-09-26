@@ -214,6 +214,133 @@
             "level": 3
           }
         ]
+      },
+      {
+        "uid": "attackcore_boomerang_1",
+        "id": "attackcore_boomerang",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_boomerang_2",
+        "id": "attackcore_boomerang",
+        "enchantments": [
+          {
+            "id": "bullet_count_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_boomerang_3",
+        "id": "attackcore_boomerang",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          },
+          {
+            "id": "penetration_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magical_ball_1",
+        "id": "attackcore_magical_ball",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_magical_ball_2",
+        "id": "attackcore_magical_ball",
+        "enchantments": [
+          {
+            "id": "bullet_lifetime_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magical_ball_3",
+        "id": "attackcore_magical_ball",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          },
+          {
+            "id": "penetration_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_needleshot_1",
+        "id": "attackcore_needleshot",
+        "enchantments": []
+      },
+      {
+        "uid": "attackcore_needleshot_2",
+        "id": "attackcore_needleshot",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_needleshot_3",
+        "id": "attackcore_needleshot",
+        "enchantments": [
+          {
+            "id": "cooldown_pct",
+            "level": 3
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_6",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "homing_correction_px_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_7",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "homing_correction_px_add",
+            "level": 3
+          },
+          {
+            "id": "cooldown_pct",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_bubble_shot_3",
+        "id": "attackcore_bubble_shot",
+        "enchantments": [
+          {
+            "id": "homing_correction_px_add",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "uid": "attackcore_elec_shock_4",
+        "id": "attackcore_elec_shock",
+        "enchantments": [
+          {
+            "id": "homing_correction_px_add",
+            "level": 2
+          }
+        ]
       }
     ],
     "blessings": [
@@ -298,6 +425,21 @@
             "level": 3
           }
         ]
+      },
+      {
+        "uid": "blessing_camouflage_1",
+        "id": "blessing_camouflage",
+        "enchantments": [
+          {
+            "id": "blessing_uses_add",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "uid": "blessing_fortitude_1",
+        "id": "blessing_fortitude",
+        "enchantments": []
       }
     ]
   },

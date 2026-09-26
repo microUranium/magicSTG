@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://chvmemksp6vj2"]
+[gd_scene load_steps=10 format=3 uid="uid://chvmemksp6vj2"]
 
 [ext_resource type="Script" uid="uid://dqx8hvgkier0u" path="res://scripts/ui/EquipmentScreen.gd" id="1_5a4q5"]
 [ext_resource type="PackedScene" uid="uid://d4m80irnu0v7g" path="res://scenes/ui/controller/inventory_panel.tscn" id="2_3jaj2"]
@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://c75dex56tpcf7" path="res://scenes/ui/equipment_box.tscn" id="3_s35cl"]
 [ext_resource type="PackedScene" uid="uid://b6n7saun334n8" path="res://scenes/ui/equip_slot_panel.tscn" id="4_s35cl"]
 [ext_resource type="PackedScene" uid="uid://dlv5tsm5uecbo" path="res://scenes/ui/tooltip_panel.tscn" id="5_mrksw"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="6_tabfn"]
 [ext_resource type="PackedScene" uid="uid://bug7l77qgl7ep" path="res://scenes/ui/back_button.tscn" id="7_wqlw7"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_lefttab"]
 
 [node name="EquipmentScreen" type="Control"]
 layout_mode = 3
@@ -21,41 +24,65 @@ scale = Vector2(2, 2)
 texture = ExtResource("2_rshkf")
 stretch_mode = 1
 
-[node name="InventoryPanel" parent="." instance=ExtResource("2_3jaj2")]
-offset_left = 789.0
-offset_top = 74.0
-offset_right = 801.0
-offset_bottom = 74.0
+[node name="LeftPaneTabs" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 8.0
+offset_right = 470.0
+offset_bottom = 64.0
+theme_override_constants/separation = 16
 
-[node name="EquipmentBox" parent="." instance=ExtResource("3_s35cl")]
+[node name="TabEquip" type="Button" parent="LeftPaneTabs"]
+custom_minimum_size = Vector2(200, 56)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_tabfn")
+theme_override_font_sizes/font_size = 32
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_lefttab")
+text = "装備"
+
+[node name="TabTrash" type="Button" parent="LeftPaneTabs"]
+custom_minimum_size = Vector2(200, 56)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_tabfn")
+theme_override_font_sizes/font_size = 32
+toggle_mode = true
+button_group = SubResource("ButtonGroup_lefttab")
+text = "削除"
+
+[node name="EquipPane" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="EquipmentBox" parent="EquipPane" instance=ExtResource("3_s35cl")]
 layout_mode = 1
 offset_left = 54.0
 offset_top = 71.0
 offset_right = 54.0
 offset_bottom = 71.0
 
-[node name="EquipSlotPanel" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 200.0
 offset_right = 611.0
 offset_bottom = 264.0
 
-[node name="EquipSlotPanel2" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel2" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 280.0
 offset_right = 611.0
 offset_bottom = 344.0
 
-[node name="EquipSlotPanel3" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel3" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 360.0
 offset_right = 611.0
 offset_bottom = 424.0
 
-[node name="EquipSlotPanel4" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel4" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 600.0
@@ -63,7 +90,7 @@ offset_right = 611.0
 offset_bottom = 664.0
 allowed_type = 1
 
-[node name="EquipSlotPanel5" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel5" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 680.0
@@ -71,13 +98,26 @@ offset_right = 611.0
 offset_bottom = 744.0
 allowed_type = 1
 
-[node name="EquipSlotPanel6" parent="." instance=ExtResource("4_s35cl")]
+[node name="EquipSlotPanel6" parent="EquipPane" instance=ExtResource("4_s35cl")]
 layout_mode = 0
 offset_left = 547.0
 offset_top = 760.0
 offset_right = 611.0
 offset_bottom = 824.0
 allowed_type = 1
+
+[node name="TrashPanel" parent="." instance=ExtResource("2_3jaj2")]
+visible = false
+offset_left = 205.0
+offset_top = 74.0
+offset_right = 217.0
+offset_bottom = 74.0
+
+[node name="InventoryPanel" parent="." instance=ExtResource("2_3jaj2")]
+offset_left = 789.0
+offset_top = 74.0
+offset_right = 801.0
+offset_bottom = 74.0
 
 [node name="BackButton" parent="." instance=ExtResource("7_wqlw7")]
 layout_mode = 0

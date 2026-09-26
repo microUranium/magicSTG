@@ -63,11 +63,29 @@ func unequip_all() -> void:
 
 
 # 被ダメージに対する介入 -----------------------------------------
+## 各加護を直列に通した後、残ったダメージが致命傷（HPが0になる）なら
+## 致命ダメージ用フックを回す。防壁などの肩代わりを先に消化させるため、
+## 必ず全加護の process_damage を通し終えてから判定する。
 func process_damage(player: Node2D, raw_damage: int) -> int:
   var final := raw_damage
   for b in blessings:
     final = b.process_damage(player, final)
+
+  if final > 0 and _is_fatal(player, final):
+    for b in blessings:
+      if b.process_fatal_damage(player, final):
+        return 0  # 復活したのでダメージは無効
+
   return final
+
+
+func _is_fatal(player: Node2D, damage: int) -> bool:
+  if not is_instance_valid(player):
+    return false
+  var hp = player.get("hp_node")
+  if hp == null:
+    return false
+  return damage >= hp.current_hp
 
 
 # 与ダメージ（自弾→敵）に対する介入 -------------------------------

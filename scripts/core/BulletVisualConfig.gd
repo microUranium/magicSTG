@@ -11,6 +11,17 @@ class_name BulletVisualConfig extends Resource
 @export var enable_particles: bool = false
 @export var particle_material: ParticleProcessMaterial
 
+@export_group("Afterimage")
+## 残像（弾のスプライトを複製してフェードさせる）を出すか。
+## 既定 false なので既存の弾は無変更で従来どおり動く。
+@export var enable_afterimage: bool = false
+## 残像を生成する間隔（秒）。時間ベースなのでフレームレートに依存しない
+@export var afterimage_interval: float = 0.05
+## 残像1枚が消えるまでの時間（秒）
+@export var afterimage_lifetime: float = 0.25
+## 残像の色（アルファで濃さを決める）
+@export var afterimage_color: Color = Color(1, 1, 1, 0.45)
+
 @export_group("Animation & Audio")
 @export var animation_name: String = ""
 @export var spawn_sound: AudioStream

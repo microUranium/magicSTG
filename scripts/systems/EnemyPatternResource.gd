@@ -203,9 +203,10 @@ func _get_direction_vector(enemy: Node2D, ai: Node = null) -> Vector2:
 
 
 func _get_player_position(enemy: Node2D) -> Vector2:
+  # 迷彩中は囮座標を返す（敵の追尾移動・自機狙いの基準）
   var players = enemy.get_tree().get_nodes_in_group("players")
   if players.size() > 0:
-    return players[0].global_position
+    return TargetService.get_aim_position_for(players[0])
   return Vector2.ZERO
 
 

@@ -16,6 +16,8 @@ var button_cooldown_timer: Timer = null
 
 
 func _ready() -> void:
+  GameFlow.play_menu_bgm()
+
   # Setup cooldown timer
   button_cooldown_timer = Timer.new()
   button_cooldown_timer.wait_time = 0.5

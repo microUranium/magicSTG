@@ -53,6 +53,11 @@ func _process(delta: float):
   _update_movement(delta)
 
 
+func _get_target_position() -> Vector2:
+  # 迷彩中は囮座標を追う
+  return TargetService.get_aim_position_for(target_player)
+
+
 func _find_player():
   var players = get_tree().get_nodes_in_group("players")
   if players.size() > 0:
@@ -75,7 +80,7 @@ func _update_movement(delta: float):
 
 
 func _update_chase_movement(delta: float):
-  var target_position = target_player.global_position
+  var target_position = _get_target_position()
   var current_position = enemy_node.global_position
   var distance_to_player = current_position.distance_to(target_position)
 
@@ -107,7 +112,7 @@ func _update_chase_movement(delta: float):
 
 
 func _update_circle_movement(delta: float):
-  var target_position = target_player.global_position
+  var target_position = _get_target_position()
   var current_position = enemy_node.global_position
   var to_player = target_position - current_position
   var distance_to_player = to_player.length()
@@ -194,7 +199,7 @@ func _check_pattern_movement(delta: float):
 
 
 func _check_state_transitions():
-  var target_position = target_player.global_position
+  var target_position = _get_target_position()
   var current_position = enemy_node.global_position
   var distance_to_player = current_position.distance_to(target_position)
 

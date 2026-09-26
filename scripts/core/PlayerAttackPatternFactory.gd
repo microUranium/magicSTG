@@ -24,6 +24,11 @@ static func create_pattern_from_item_instance(item_inst: ItemInstance) -> Attack
   else:
     # 既存のパターンを使用
     pattern = attack_core_item.attack_pattern.duplicate() as AttackPattern
+    # duplicate() は浅いコピーのため、サブリソースは .tres 上の実体を共有したままになる。
+    # エンチャントで書き換える on_hit_pattern だけは複製し、同じ .tres を使う
+    # 他のコア・敵弾へ値が波及しないようにする。
+    if pattern.on_hit_pattern:
+      pattern.on_hit_pattern = pattern.on_hit_pattern.duplicate() as AttackPattern
 
   # 基本設定をAttackCoreItemから取得
   if attack_core_item.damage_base > 0:
@@ -103,6 +108,21 @@ static func update_pattern_from_enchantments(
   pattern.bullet_count = max(
     1, int(_apply_enchantment_modifiers(item_inst, base_bullet_count, "bullet_count"))
   )
+
+  # 追尾（エンチャント）の更新
+  # pattern 側の現在値を基準にすると呼び出しのたびに加算が重なるため、
+  # 常に prototype の基本値（未付与なら 0）を基準にして冪等にする。
+  var base_homing: float = item_inst.prototype.base_modifiers.get("homing_correction_px", 0.0)
+  pattern.homing_correction_px = max(
+    0.0, _apply_enchantment_modifiers(item_inst, base_homing, "homing_correction_px")
+  )
+  # SHOT_ON_HIT の二次弾にも同じ追尾設定を引き継ぐ
+  if pattern.on_hit_pattern:
+    pattern.on_hit_pattern.homing_correction_px = pattern.homing_correction_px
+    pattern.on_hit_pattern.homing_distance = pattern.homing_distance
+    pattern.on_hit_pattern.homing_lock_angle_deg = pattern.homing_lock_angle_deg
+    pattern.on_hit_pattern.homing_max_turn_rate_deg = pattern.homing_max_turn_rate_deg
+    pattern.on_hit_pattern.homing_relock_on_target_lost = pattern.homing_relock_on_target_lost
 
   # 拡散弾数の更新（SHOT_ON_HITパターンの場合）
   if pattern.on_hit_pattern:

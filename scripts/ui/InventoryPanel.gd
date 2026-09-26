@@ -19,7 +19,8 @@ func _ready():
   btn_next.connect("pressed", _on_next_pressed)
 
 
-func _update_nav():
+# grid.ui_needs_refresh(引数なし) と EquipSignals.page_changed(page: int) の両方から呼ばれる
+func _update_nav(_page: int = 0):
   btn_prev.visible = grid.max_page() > 1
   btn_next.visible = grid.max_page() > 1
   btn_prev.disabled = grid.current_page() == 0

@@ -35,6 +35,7 @@ func _ready() -> void:
   StageSignals.attack_cores_pause_requested.connect(_pause_attack_cores)
   StageSignals.blessings_pause_requested.connect(_pause_blessings)
   StageSignals.player_control_pause_requested.connect(_pause_player_control)
+  StageSignals.cutscene_pause_requested.connect(_handle_cutscene_pause_request)
 
 
 func set_dependencies(wave_executor: WaveExecutor, dialogue_runner: DialogueRunner) -> void:
@@ -255,6 +256,13 @@ func get_total_events() -> int:
 
 func is_stage_running() -> bool:
   return _is_running
+
+
+func _handle_cutscene_pause_request(paused: bool) -> void:
+  """会話以外の演出中も会話中と同じようにプレイヤー操作を止める"""
+  _pause_attack_cores(paused)
+  _pause_blessings(paused)
+  _pause_player_control(paused)
 
 
 func _pause_attack_cores(paused: bool) -> void:

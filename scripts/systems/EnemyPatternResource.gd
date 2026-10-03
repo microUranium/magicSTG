@@ -30,6 +30,9 @@ enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS
 @export_group("Dialogue")
 @export var dialogue_path: String = ""  # stage_data.json の会話パス（新方式）
 
+@export_group("Player Control")
+@export var block_player_control: bool = false  # 演出中にプレイヤー操作（移動・攻撃）を会話中と同様に止めるか
+
 var _original_animation: String = ""
 
 

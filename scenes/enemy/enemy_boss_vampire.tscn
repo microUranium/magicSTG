@@ -332,6 +332,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+block_player_control = true
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_1btcl"]

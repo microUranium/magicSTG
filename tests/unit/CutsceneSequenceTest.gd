@@ -216,6 +216,72 @@ func test_player_stays_outside_play_rect_while_exiting() -> void:
   player.queue_free()
 
 
+func test_sneak_state_is_cleared_when_paused() -> void:
+  var player := preload("res://scenes/player/player.tscn").instantiate()
+  add_child(player)
+  await await_idle_frame()
+
+  var states: Array = []
+  var collector := func(is_sneaking): states.append(is_sneaking)
+  player.sneak_state_changed.connect(collector)
+
+  player._is_sneaking = true  # Shift を押しっぱなしの状態
+  player.set_paused(true)
+
+  assert_bool(player._is_sneaking).is_false()
+  assert_array(states).is_equal([false])
+
+  player.sneak_state_changed.disconnect(collector)
+  player.queue_free()
+
+
+func test_blessing_visuals_are_hidden_while_paused_and_restored_after() -> void:
+  var player := preload("res://scenes/player/player.tscn").instantiate()
+  add_child(player)
+  await await_idle_frame()
+  var sprite: AnimatedSprite2D = player.get_node("AnimatedSprite2D")
+
+  player.set_camouflage_visual(true, 0.4)
+  player.set_invincible(3.0)
+  assert_float(sprite.modulate.a).is_equal_approx(0.4, 0.001)
+
+  # 会話・演出中は通常の見た目に戻す（加護の状態は保持する）
+  player.set_paused(true)
+  assert_float(sprite.modulate.a).is_equal_approx(1.0, 0.001)
+  assert_bool(player.is_invincible()).is_true()
+
+  # 加護が続いている間に操作が戻れば、半透明も復帰する
+  player.set_paused(false)
+  assert_float(sprite.modulate.a).is_equal_approx(0.4, 0.001)
+
+  # 加護が切れていれば通常の見た目のまま
+  player.set_camouflage_visual(false)
+  player.set_paused(true)
+  player.set_paused(false)
+  assert_float(sprite.modulate.a).is_equal_approx(1.0, 0.001)
+
+  player.queue_free()
+
+
+func test_blessing_visuals_are_hidden_during_auto_move() -> void:
+  var player := preload("res://scenes/player/player.tscn").instantiate()
+  add_child(player)
+  await await_idle_frame()
+  var sprite: AnimatedSprite2D = player.get_node("AnimatedSprite2D")
+
+  player.set_camouflage_visual(true, 0.4)
+
+  var tween: Tween = player.move_to(Vector2(448, 600), 0.1)
+  assert_bool(player.is_status_visual_suppressed()).is_true()
+  assert_float(sprite.modulate.a).is_equal_approx(1.0, 0.001)
+
+  await tween.finished
+  assert_bool(player.is_status_visual_suppressed()).is_false()
+  assert_float(sprite.modulate.a).is_equal_approx(0.4, 0.001)
+
+  player.queue_free()
+
+
 func test_player_clamp_can_be_restored() -> void:
   var player := preload("res://scenes/player/player.tscn").instantiate()
   add_child(player)

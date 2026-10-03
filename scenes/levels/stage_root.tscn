@@ -24,7 +24,7 @@
 [ext_resource type="Script" uid="uid://vek3ecy03q8c" path="res://scripts/systems/WaveExecutor.gd" id="20_yuom2"]
 [ext_resource type="Script" uid="uid://bmblpot7dnnlb" path="res://scripts/systems/StageController.gd" id="21_end45"]
 [ext_resource type="Script" path="res://scripts/ui/ScreenFade.gd" id="22_fade"]
-[ext_resource type="Script" path="res://scripts/systems/CutscenePlayer.gd" id="23_cutscene"]
+[ext_resource type="Script" uid="uid://bk5mfuyo6o5we" path="res://scripts/systems/CutscenePlayer.gd" id="23_cutscene"]
 
 [node name="Main" type="Node2D"]
 

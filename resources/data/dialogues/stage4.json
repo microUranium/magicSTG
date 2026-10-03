@@ -1078,7 +1078,7 @@
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
         "text": "（本当に手強かった…。あれがついこの間戦ったのと同じヤツなの…？）"
@@ -1163,7 +1163,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "(あいつら、家って言ってたけど…。)"
+        "text": "(あいつら、あの建物を家って言ってたけど…。)"
       },
       {
         "speaker_name": "ハーピー",
@@ -1171,7 +1171,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "(あそこにあるのってどう見ても)"
+        "text": "(あれってどう見ても)"
       },
       {
         "speaker_name": "ハーピー",

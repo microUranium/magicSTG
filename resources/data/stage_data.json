@@ -1428,7 +1428,9 @@
         { "type": "move_player", "position": [448, -160], "time": 2.0 },
         { "type": "spawn_actor", "id": "harpy", "scene": "res://scenes/cutscene/cutscene_harpy_swamp.tscn", "position": [448, -160] },
         { "type": "move_actor", "id": "harpy", "position": [448, 144], "time": 2.0, "scroll_background": true },
-        { "type": "dialogue", "path": "s4d12.resolution2" }
+        { "type": "dialogue", "path": "s4d12.resolution2" },
+        { "type": "exit_actor", "id": "harpy", "position": [448, -160], "time": 0.75 },
+        { "type": "wait", "time": 0.5 }
       ]
     },
     "s5c1": {

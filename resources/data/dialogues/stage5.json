@@ -385,7 +385,7 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "待っていてちょうだい。後で改めて二人をみんなに紹介してあげるから！"
+        "text": "待っていてちょうだい。後で改めてみんなに紹介してあげるから！"
       },
       {
         "speaker_name": "少女",
@@ -487,7 +487,7 @@
         "face_right": "res://assets/gfx/sprites/faily_full_body.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "危ない……うとうとしてて箒から落ちるところだった…。"
+        "text": "危ない……箒から落ちるところだった…。"
       },
       {
         "speaker_name": "精霊",
@@ -601,7 +601,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "うふふっ。可愛らしいぬいぐるみでしょう？"
+        "text": "うふふっ。素敵なぬいぐるみでしょう？"
       },
       {
         "speaker_name": "人形",
@@ -739,7 +739,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "私を倒そうとしてくる人は初めて見たわ！"
+        "text": "私をそんな風に脅してくる人は初めて見たわ！"
       },
       {
         "speaker_name": "人形",
@@ -747,7 +747,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "お姉さんがその気なら少し遊んであげるわ。"
+        "text": "お姉さんがその気なら少し遊んであげる。"
       },
       {
         "speaker_name": "フェリス",
@@ -772,6 +772,14 @@
         "speaker_side": "right",
         "box_direction": "right",
         "text": "あなたを動けなくした後に私のお歌をたーっぷり聴かせて……"
+      },
+      {
+        "speaker_name": "人形",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/doll_face_3.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "死ぬまで…いや、"
       },
       {
         "speaker_name": "人形",
@@ -847,7 +855,7 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（それにあの歌…。聞いてるとなんか調子狂う…。）"
+        "text": "（それにあの歌…。聞いてるとなんか調子狂う…！）"
       },
       {
         "speaker_name": "人形",
@@ -1126,7 +1134,7 @@
         "text": "ま、待ってよ！"
       }
     ],
-    "battle_progression5": [
+    "resolution1": [
       {
         "speaker_name": "人形",
         "face_left": null,
@@ -1150,6 +1158,104 @@
         "speaker_side": "right",
         "box_direction": "right",
         "text": "でも、うふふっ。シィルお姉さん。あの子とはまた仲良くできるかしら。"
+      }
+    ],
+    "resolution2": [
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "霧が晴れた…。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あいつも諦めてくれたみたいね。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "その、助かったよ。サンキュ。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "あたしは昨日の借りを返しただけだから。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "で、魔族ってのはこの先にいるの？"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "え？まあ、遺跡の吸血鬼が言うにはね。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ふーん。魔族退治はあんたたち冒険者に任せるわ。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "せいぜい死なないようにしなさいよね。今でもあんたのことは狙ってるんだから。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "逆に、お前を生かしておく理由はあたしにはないけど。"
+      },
+      {
+        "speaker_name": "ハーピー",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/harpy_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "やばっ。じゃ、じゃああたしは行くから！"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "…。"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "この先に魔族が…。用心していこう…。"
       }
     ]
   }

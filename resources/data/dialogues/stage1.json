@@ -109,7 +109,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "結局手がかりなんて何もないし、どうしろっていうの…？"
+        "text": "結局手がかりなんて何もないし、どうしろっていうんだよ…。"
       },
       {
         "speaker_name": "フェリス",
@@ -367,7 +367,7 @@
         "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "ついでに一つ聞いていいかな。"
+        "text": "ついでに一つ聞いていい？"
       },
       {
         "speaker_name": "ハーピー",
@@ -407,7 +407,7 @@
         "face_right": "res://assets/gfx/sprites/harpy_face_1.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "（昨日戦ったあの鳥も元の居場所を追われてここまで来てたのかな。）"
+        "text": "（さっき戦ったあの鳥も元の居場所を追われてここまで来てたのかな。）"
       },
       {
         "speaker_name": "フェリス",

@@ -1149,7 +1149,7 @@
       },
       {
         "speaker_name": "少女",
-        "face_left": "res://assets/gfx/sprites/harpy_face_1.png",
+        "face_left": "res://assets/gfx/sprites/felis_face_2.png",
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
         "speaker_side": "right",
         "box_direction": "right",

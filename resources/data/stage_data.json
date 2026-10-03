@@ -1420,6 +1420,17 @@
   },
 
   "cutscenes": {
+    "s4c1": {
+      "description": "4-3 ボス撃破後：自機の退場〜ハーピーとの会話",
+      "steps": [
+        { "type": "move_player", "position": [448, 748], "time": 1.0 },
+        { "type": "dialogue", "path": "s4d12.resolution" },
+        { "type": "move_player", "position": [448, -160], "time": 2.0 },
+        { "type": "spawn_actor", "id": "harpy", "scene": "res://scenes/cutscene/cutscene_harpy_swamp.tscn", "position": [448, -160] },
+        { "type": "move_actor", "id": "harpy", "position": [448, 144], "time": 2.0, "scroll_background": true },
+        { "type": "dialogue", "path": "s4d12.resolution2" }
+      ]
+    },
     "s5c1": {
       "description": "5-3 人形撃破後：暗転明け〜ハーピーとの別れ",
       "steps": [

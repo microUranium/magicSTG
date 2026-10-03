@@ -181,15 +181,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "はぁ……はぁ……。"
-      },
-      {
-        "speaker_name": "フェリス",
-        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": null,
-        "speaker_side": "left",
-        "box_direction": "left",
-        "text": "た、倒したの…？"
+        "text": "なんとか倒した、けど…。"
       },
       {
         "speaker_name": "フェリス",
@@ -197,7 +189,7 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "良かった…。マジで終わったかと思った…。"
+        "text": "もう…さっきから魔物が多すぎて全然休まらないよ…。"
       },
       {
         "speaker_name": "フェリス",

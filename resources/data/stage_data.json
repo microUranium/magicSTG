@@ -1420,6 +1420,21 @@
   },
 
   "cutscenes": {
+    "s2c1": {
+      "description": "2-3 大蛇撃破後：暗転して遺跡の洞窟へ場面転換",
+      "steps": [
+        { "type": "wait", "time": 2.0 },
+        { "type": "dialogue", "path": "s2d12.resolution" },
+        { "type": "fade_out", "time": 0.8 },
+        { "type": "move_player", "position": [448, -160], "time": 0.0 },
+        { "type": "set_background", "texture": "res://assets/gfx/backgrounds/background_ruins.png" },
+        { "type": "set_scroll_speed", "speed": 100.0, "time": 0.0 },
+        { "type": "play_bgm", "path": "res://assets/audio/bgm/stage2_bgm_cave.mp3", "volume_db": 0.0, "fade_in": 1.0 },
+        { "type": "wait", "time": 0.4 },
+        { "type": "fade_in", "time": 0.8 },
+        { "type": "dialogue", "path": "s2d12.resolution2" }
+      ]
+    },
     "s4c1": {
       "description": "4-3 ボス撃破後：自機の退場〜ハーピーとの会話",
       "steps": [

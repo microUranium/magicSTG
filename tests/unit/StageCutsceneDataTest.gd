@@ -19,6 +19,8 @@ func test_all_cutscenes_reference_existing_resources() -> void:
           assert_bool(ResourceLoader.exists(step["texture"])).is_true()
         "spawn_actor":
           assert_bool(ResourceLoader.exists(step["scene"])).is_true()
+        "play_bgm":
+          assert_bool(ResourceLoader.exists(step["path"])).is_true()
 
 
 func test_fixed_seeds_reference_existing_cutscenes() -> void:
@@ -36,4 +38,4 @@ func test_fixed_seeds_reference_existing_cutscenes() -> void:
         assert_dict(GameDataRegistry.get_cutscene_data(cutscene_id)).is_not_empty()
 
   # 4-3 と 5-3 の演出がシードから参照されていること
-  assert_array(referenced).contains(["s4c1", "s5c1"])
+  assert_array(referenced).contains(["s2c1", "s4c1", "s5c1"])

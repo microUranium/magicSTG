@@ -17,8 +17,8 @@ func _ready():
 
 
 func take_damage(amount: int) -> void:
-  if ai._phase_idx == 0 or ai._phase_idx == 2 or ai._phase_idx == 4 or ai._phase_idx == 7:
-    return
+  if ai._phase_idx == 0 or ai._phase_idx == 2 or ai._phase_idx == 4 or ai._phase_idx >= 7:
+    return  # 会話フェーズと撃破後の演出フェーズではダメージを受け付けない
   super.take_damage(amount)
 
 
@@ -51,6 +51,13 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
     StageSignals.emit_destroy_bullet()  # Destroy bullet
     StageSignals.emit_bgm_stop_requested(1.0)  # BGM停止リクエスト
     StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+
+    if ai.skip_dialogue:
+      # 会話スキップ時は演出を行わず、通常のボスと同じように撃破して終了する
+      _spawn_destroy_particles()
+      queue_free()
+      return
+
     ai._next_phase()
 
 

@@ -97,7 +97,7 @@ func test_boss_cutscene_patterns_block_player_control() -> void:
   # セリフ間の演出パターンにフラグが設定されていること
   var expected := {
     "res://scenes/enemy/enemy_boss_vampire.tscn": 1,
-    "res://scenes/enemy/enemy_boss_doll.tscn": 1,
+    "res://scenes/enemy/enemy_boss_doll.tscn": 6,  # セリフ間 1 + 撃破後の演出 5
     "res://scenes/enemy/enemy_boss_devil.tscn": 1,
   }
   for scene_path in expected.keys():

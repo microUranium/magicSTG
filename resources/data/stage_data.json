@@ -1417,6 +1417,25 @@
     "stage2_boss": {
       "description": "Stage 2 Boss Waves - Boss encounters"
     }
+  },
+
+  "cutscenes": {
+    "s5c1": {
+      "description": "5-3 人形撃破後：暗転明け〜ハーピーとの別れ",
+      "steps": [
+        { "type": "set_scroll_speed", "speed": 0.0, "time": 0.0 },
+        { "type": "set_background", "texture": "res://assets/gfx/backgrounds/background_mountain.png" },
+        { "type": "spawn_actor", "id": "harpy", "scene": "res://scenes/cutscene/cutscene_harpy.tscn", "position": [448, 444] },
+        { "type": "move_player", "position": [448, 748], "time": 0.0 },
+        { "type": "wait", "time": 0.4 },
+        { "type": "fade_in", "time": 0.8 },
+        { "type": "wait", "time": 0.3 },
+        { "type": "dialogue", "path": "s5d12.resolution2" },
+        { "type": "exit_actor", "id": "harpy", "position": [448, -160], "time": 0.75 },
+        { "type": "wait", "time": 0.4 },
+        { "type": "dialogue", "path": "s5d12.resolution3" }
+      ]
+    }
   }
 
 }

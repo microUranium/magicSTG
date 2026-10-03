@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=3 uid="uid://ocsviq60pkl0"]
+[gd_scene load_steps=104 format=3 uid="uid://ocsviq60pkl0"]
 
 [ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
@@ -1071,9 +1071,9 @@ metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_7efgs"]
 script = ExtResource("5_01hkn")
-movement_type = 2
-move_to = Vector2(0, 0)
-move_time = 2.0
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 1.5
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -1113,6 +1113,163 @@ patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_7efgs"), SubReso
 loop_type = 0
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
+[sub_resource type="Resource" id="Resource_cs8a"]
+script = ExtResource("5_01hkn")
+movement_type = 0
+move_to = Vector2(160, 144)
+move_time = 0.4
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs8b"]
+script = ExtResource("5_01hkn")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s5d12.battle_progression4"
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs8c"]
+script = ExtResource("5_01hkn")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.75
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs8e"]
+script = ExtResource("5_01hkn")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs8d"]
+script = ExtResource("5_01hkn")
+movement_type = 0
+move_to = Vector2(448, 144)
+move_time = 1.2
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs9a"]
+script = ExtResource("5_01hkn")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s5d12.resolution1"
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cs9b"]
+script = ExtResource("5_01hkn")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.2
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_cutscene8"]
+script = ExtResource("4_x5nyp")
+patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_cs8a"), SubResource("Resource_cs8b"), SubResource("Resource_cs8c"), SubResource("Resource_cs8e"), SubResource("Resource_cs8d")])
+loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
+[sub_resource type="Resource" id="Resource_cutscene9"]
+script = ExtResource("4_x5nyp")
+patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_cs9a"), SubResource("Resource_cs9b")])
+loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 [sub_resource type="Curve" id="Curve_qjr2w"]
 _data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
 point_count = 2
@@ -1189,7 +1346,7 @@ max_hp = 4200
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("3_ub1xv")
-phases = Array[ExtResource("4_x5nyp")]([SubResource("Resource_cfl6d"), SubResource("Resource_xpm5u"), SubResource("Resource_n1gte"), SubResource("Resource_ukbev"), SubResource("Resource_3oicd"), SubResource("Resource_xgh5u"), SubResource("Resource_dnf4c"), SubResource("Resource_p10k2")])
+phases = Array[ExtResource("4_x5nyp")]([SubResource("Resource_cfl6d"), SubResource("Resource_xpm5u"), SubResource("Resource_n1gte"), SubResource("Resource_ukbev"), SubResource("Resource_3oicd"), SubResource("Resource_xgh5u"), SubResource("Resource_dnf4c"), SubResource("Resource_p10k2"), SubResource("Resource_cutscene8"), SubResource("Resource_cutscene9")])
 visual_config = SubResource("Resource_1wo3o")
 visual_config_note = SubResource("Resource_64bv2")
 _bgm = ExtResource("9_fclmm")

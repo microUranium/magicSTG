@@ -969,7 +969,10 @@
         "face_right": "res://assets/gfx/sprites/doll_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "そうだ！私に良い考えがあるわ！"
+        "text": "そうだ！私に良い考えがあるわ！",
+        "bgm": "res://assets/audio/bgm/stage5_bgm_kari.mp3",
+        "bgm_volume_db": -10.0,
+        "bgm_fade_in": 0.0
       },
       {
         "speaker_name": "フェリス",
@@ -1240,7 +1243,9 @@
         "speaker_side": "right",
         "box_direction": "right",
         "text": "やばっ。じゃ、じゃああたしは行くから！"
-      },
+      }
+    ],
+    "resolution3": [
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",

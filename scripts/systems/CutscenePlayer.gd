@@ -10,7 +10,9 @@ class_name CutscenePlayer
 ##   set_scroll_speed{"speed": 値, "time": 秒}        背景スクロール速度を変更する
 ##   stop_bgm        {"fade": 秒}
 ##   spawn_actor     {"id": 名前, "scene": "res://...", "position": [x, y]}
-##   move_actor      {"id": 名前, "position": [x, y], "time": 秒}
+##   move_actor      {"id": 名前, "position": [x, y], "time": 秒,
+##                    "scroll_background": true なら移動速度に合わせて背景をスクロールし、
+##                                         到着と同時に停止する（カメラ移動の表現）}
 ##   exit_actor      {"id": 名前, "position": [x, y], "time": 秒}  画面外へ退場させて削除
 ##   despawn_actor   {"id": 名前}
 ##   move_player     {"position": [x, y], "time": 秒}  time<=0 ならワープ
@@ -154,16 +156,24 @@ func _move_actor(step: Dictionary, exit_after_move: bool) -> void:
 
   var target := _to_vector2(step.get("position", null), actor.global_position)
   var duration := _get_time(step, "time")
+  var scroll_background: bool = step.get("scroll_background", false)
+
+  if scroll_background:
+    # アクターの移動速度と同じ速さで背景を流し、カメラが追っているように見せる
+    var speed := actor.global_position.distance_to(target) / duration if duration > 0.0 else 0.0
+    StageSignals.emit_request_change_background_scroll_speed(speed, 0.0)
 
   if exit_after_move:
     _actors.erase(String(step.get("id", "")))
     actor.exit_to(target, duration)
     await _wait(duration)
-    return
+  else:
+    var tween := actor.move_to(target, duration)
+    if tween:
+      await tween.finished
 
-  var tween := actor.move_to(target, duration)
-  if tween:
-    await tween.finished
+  if scroll_background:
+    StageSignals.emit_request_change_background_scroll_speed(0.0, 0.0)
 
 
 func _despawn_actor(actor_id: String) -> void:

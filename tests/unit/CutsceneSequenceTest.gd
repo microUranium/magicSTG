@@ -116,6 +116,40 @@ func test_move_player_warps_registered_player() -> void:
   stub.queue_free()
 
 
+func test_move_actor_scrolls_background_at_matching_speed() -> void:
+  var scroll_requests: Array = []
+  var collector := func(speed, time): scroll_requests.append([speed, time])
+  StageSignals.request_change_background_scroll_speed.connect(collector)
+
+  var steps := [
+    {
+      "type": "spawn_actor",
+      "id": "harpy",
+      "scene": "res://scenes/cutscene/cutscene_harpy_swamp.tscn",
+      "position": [448, -160]
+    },
+    {
+      "type": "move_actor",
+      "id": "harpy",
+      "position": [448, 144],
+      "time": 0.5,
+      "scroll_background": true
+    },
+  ]
+
+  var emitter := monitor_signals(_cutscene_player)
+  _cutscene_player.play("test", {"steps": steps})
+
+  # 移動距離 304px / 0.5秒 = 608px/秒 で背景が流れ始める
+  assert_array(scroll_requests).is_equal([[608.0, 0.0]])
+
+  await assert_signal(emitter).wait_until(2000).is_emitted("cutscene_finished", ["test"])
+
+  # 到着と同時に停止する
+  assert_array(scroll_requests).is_equal([[608.0, 0.0], [0.0, 0.0]])
+  StageSignals.request_change_background_scroll_speed.disconnect(collector)
+
+
 #---------------------------------------------------------------------
 # シードからの演出イベント
 #---------------------------------------------------------------------

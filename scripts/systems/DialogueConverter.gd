@@ -30,6 +30,8 @@ static func convert_json_to_dialogue_lines(json_data: Array) -> Array[DialogueLi
     _load_face_texture(line, dict_data, "face_left")
     _load_face_texture(line, dict_data, "face_right")
 
+    _load_bgm(line, dict_data)
+
     dialogue_lines.append(line)
   return dialogue_lines
 
@@ -72,6 +74,26 @@ static func get_dialogue_data_from_path(dialogue_path: String) -> DialogueData:
 
   print_debug("DialogueConverter: Converting JSON data to DialogueData")
   return convert_json_to_dialogue_data(json_data)
+
+
+## 内部ヘルパー: 行ごとの BGM 指定を読み込む
+static func _load_bgm(line: DialogueLine, line_data: Dictionary) -> void:
+  var bgm_path = line_data.get("bgm", null)
+  if bgm_path == null or not bgm_path is String or bgm_path.is_empty():
+    return
+
+  if not ResourceLoader.exists(bgm_path):
+    push_warning("DialogueConverter: BGM file does not exist: %s" % bgm_path)
+    return
+
+  var stream = load(bgm_path) as AudioStream
+  if stream == null:
+    push_warning("DialogueConverter: Failed to load BGM: %s" % bgm_path)
+    return
+
+  line.bgm = stream
+  line.bgm_volume_db = float(line_data.get("bgm_volume_db", line.bgm_volume_db))
+  line.bgm_fade_in = float(line_data.get("bgm_fade_in", line.bgm_fade_in))
 
 
 ## 内部ヘルパー: テクスチャ読み込み処理

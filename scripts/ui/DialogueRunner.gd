@@ -77,9 +77,17 @@ func _show_current_line() -> void:
   var line: DialogueLine = _dialogue_data.lines[_line_idx]
 
   _read_faces(line)
+  _play_line_bgm(line)
   if not _msgbox.visible:
     await _msgbox.fade_in(line.box_direction)
   _msgbox.show_line(line)
+
+
+func _play_line_bgm(line: DialogueLine) -> void:
+  """行に BGM が指定されていれば、その行の表示に合わせて再生する。"""
+  if line.bgm == null:
+    return
+  StageSignals.emit_bgm_play_requested(line.bgm, line.bgm_fade_in, line.bgm_volume_db)
 
 
 func _on_advance() -> void:

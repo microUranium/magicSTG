@@ -150,6 +150,32 @@ func test_move_actor_scrolls_background_at_matching_speed() -> void:
   StageSignals.request_change_background_scroll_speed.disconnect(collector)
 
 
+func test_play_bgm_step_requests_playback() -> void:
+  var requests: Array = []
+  var collector := func(stream, fade, volume_db): requests.append([stream, fade, volume_db])
+  StageSignals.bgm_play_requested.connect(collector)
+
+  var steps := [
+    {
+      "type": "play_bgm",
+      "path": "res://assets/audio/bgm/stage2_bgm_cave.mp3",
+      "volume_db": -10.0,
+      "fade_in": 2.0
+    }
+  ]
+
+  var emitter := monitor_signals(_cutscene_player)
+  _cutscene_player.play("test", {"steps": steps})
+  await assert_signal(emitter).wait_until(2000).is_emitted("cutscene_finished", ["test"])
+
+  assert_int(requests.size()).is_equal(1)
+  assert_str(requests[0][0].resource_path).is_equal("res://assets/audio/bgm/stage2_bgm_cave.mp3")
+  assert_float(requests[0][1]).is_equal(2.0)
+  assert_float(requests[0][2]).is_equal(-10.0)
+
+  StageSignals.bgm_play_requested.disconnect(collector)
+
+
 #---------------------------------------------------------------------
 # シードからの演出イベント
 #---------------------------------------------------------------------

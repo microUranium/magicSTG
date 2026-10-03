@@ -8,6 +8,7 @@ class_name CutscenePlayer
 ##   fade_in         {"time": 秒}                     暗転を解除する
 ##   set_background  {"texture": "res://..."}         フェードなしで背景を差し替える
 ##   set_scroll_speed{"speed": 値, "time": 秒}        背景スクロール速度を変更する
+##   play_bgm        {"path": "res://...", "volume_db": dB, "fade_in": 秒}
 ##   stop_bgm        {"fade": 秒}
 ##   spawn_actor     {"id": 名前, "scene": "res://...", "position": [x, y]}
 ##   move_actor      {"id": 名前, "position": [x, y], "time": 秒,
@@ -83,6 +84,8 @@ func _execute_step(step: Dictionary) -> void:
       StageSignals.emit_request_change_background_scroll_speed(
         float(step.get("speed", 0.0)), _get_time(step, "time")
       )
+    "play_bgm":
+      _play_bgm(step)
     "stop_bgm":
       StageSignals.emit_bgm_stop_requested(_get_time(step, "fade"))
     "spawn_actor":
@@ -124,6 +127,22 @@ func _set_background(texture_path: String) -> void:
     push_warning("CutscenePlayer: Failed to load background '%s'" % texture_path)
     return
   StageSignals.emit_request_background_texture_change(texture)
+
+
+func _play_bgm(step: Dictionary) -> void:
+  var bgm_path := String(step.get("path", ""))
+  if bgm_path.is_empty():
+    push_warning("CutscenePlayer: play_bgm without path")
+    return
+
+  var stream := load(bgm_path) as AudioStream
+  if stream == null:
+    push_warning("CutscenePlayer: Failed to load BGM '%s'" % bgm_path)
+    return
+
+  StageSignals.emit_bgm_play_requested(
+    stream, _get_time(step, "fade_in"), float(step.get("volume_db", -10.0))
+  )
 
 
 func _spawn_actor(step: Dictionary) -> void:

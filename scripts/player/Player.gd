@@ -23,6 +23,8 @@ var _is_sneaking: bool = false
 var _rear_mode: bool = false  # 後方攻撃モード
 var _damage_flash_time: float = 0.0
 var _paused: bool = false  # ポーズ状態
+var _clamp_enabled: bool = true  # 移動範囲制限（演出で画面外へ出す間は false）
+var _move_tween: Tween = null  # 演出用の自動移動
 var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
 
 # === 無敵・迷彩（加護による見た目と被弾制御） ===
@@ -154,6 +156,8 @@ func _handle_input(delta):
 
 
 func _clamp_inside_playrect():
+  if not _clamp_enabled:  # 演出で画面外へ出している間は制限しない
+    return
   var rect := PlayArea.get_play_rect()
   position.x = clamp(
     position.x, rect.position.x + player_size.x / 2, rect.end.x - player_size.x / 2
@@ -206,6 +210,38 @@ func set_paused(paused: bool) -> void:
   if _paused == paused:
     return
   _paused = paused
+
+
+#---------------------------------------------------------------------
+# 演出用の自動移動
+#---------------------------------------------------------------------
+func move_to(target_position: Vector2, duration: float) -> Tween:
+  """演出用に自機を自動移動させる。duration<=0 なら即時ワープ。
+  移動先がプレイエリア外なら制限を解除したままにする（画面外への退場用）。"""
+  if _move_tween and _move_tween.is_valid():
+    _move_tween.kill()
+    _move_tween = null
+
+  _clamp_enabled = false
+
+  if duration <= 0.0:
+    global_position = target_position
+    _update_clamp_for(target_position)
+    return null
+
+  _move_tween = create_tween()
+  _move_tween.tween_property(self, "global_position", target_position, duration)
+  _move_tween.tween_callback(_update_clamp_for.bind(target_position))
+  return _move_tween
+
+
+func set_position_clamp_enabled(enabled: bool) -> void:
+  """移動範囲制限の有効／無効を切り替える。"""
+  _clamp_enabled = enabled
+
+
+func _update_clamp_for(target_position: Vector2) -> void:
+  _clamp_enabled = PlayArea.get_play_rect().abs().has_point(target_position)
 
 
 func _exit_tree():

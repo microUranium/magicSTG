@@ -8,6 +8,7 @@ var enemies: Dictionary = {}
 var spawn_patterns: Dictionary = {}
 var dialogues: Dictionary = {}
 var wave_pools: Dictionary = {}
+var cutscenes: Dictionary = {}
 
 var _data_loaded: bool = false
 
@@ -28,6 +29,7 @@ func load_stage_data(_data: Dictionary = {}) -> bool:
   spawn_patterns = data.get("spawn_patterns", {})
   dialogues = data.get("dialogues", {})
   wave_pools = data.get("wave_pools", {})
+  cutscenes = data.get("cutscenes", {})
 
   # 会話データはステージ別の外部ファイルに分割されている。
   # テスト等で辞書を直接注入された場合は外部ファイルを読まない。
@@ -125,6 +127,13 @@ func get_dialogue_data(dialogue_path: String) -> Array:
     )
     return []
   return pool[dialogue_id] as Array
+
+
+func get_cutscene_data(cutscene_id: String) -> Dictionary:
+  if not cutscenes.has(cutscene_id):
+    push_warning("GameDataRegistry: Cutscene '%s' not found" % cutscene_id)
+    return {}
+  return cutscenes[cutscene_id]
 
 
 func get_all_wave_template_names() -> Array[String]:

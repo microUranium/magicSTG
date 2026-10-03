@@ -121,6 +121,9 @@ func _on_stage_cleared() -> void:
   if _pause_panel:
     _pause_panel.disable_pause()
 
+  # 演出中に暗転したままステージが終わらないようにする
+  StageSignals.emit_request_screen_fade(false, 0.3)
+
   # ライフサイクル処理
   var lifecycle_controller = _component_registry.get_component("lifecycle")
   if lifecycle_controller:
@@ -144,6 +147,9 @@ func _on_game_over() -> void:
   # ポーズ無効化
   if _pause_panel:
     _pause_panel.disable_pause()
+
+  # 演出中に暗転したままステージが終わらないようにする
+  StageSignals.emit_request_screen_fade(false, 0.3)
 
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)

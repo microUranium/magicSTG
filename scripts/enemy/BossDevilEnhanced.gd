@@ -1,7 +1,10 @@
 extends EnemyBase
 
+const FINAL_PHASE_IDX := 8  # 撃破演出フェーズ（phase7 の最終ラッシュ終了後に遷移してくる）
+
 @onready var ai: BossDevilEnhancedAI = $EnemyAI
 @onready var attack_collision: CollisionShape2D = $CollisionShape_attack
+@export var defeat_delay: float = 0.0  # phase7 終了から撃破処理までの間（秒）
 var prev_position: Vector2 = Vector2.ZERO
 
 var damage = 10
@@ -10,18 +13,38 @@ var damage = 10
 func _ready():
   super._ready()
   StageSignals.emit_request_change_background_scroll_speed(0, 2.5)  # スクロール速度を0に
+  # 撃破はダメージではなくフェーズ遷移で駆動する（FINAL_PHASE_IDX 到達＝自動撃破）
+  ai.phase_changed.connect(_on_ai_phase_changed)
 
 
 func take_damage(amount: int) -> void:
-  if (
-    ai._phase_idx == 0
-    or ai._phase_idx == 2
-    or ai._phase_idx == 4
-    or ai._phase_idx == 6
-    or ai._phase_idx == 7
-  ):
-    return  # Phase 0ではダメージを受け付けない
+  if ai._phase_idx == 0 or ai._phase_idx == 2 or ai._phase_idx == 4 or ai._phase_idx >= 6:
+    return  # 会話フェーズと最終ラッシュ〜撃破演出ではダメージを受け付けない
   super.take_damage(amount)
+
+
+func _on_ai_phase_changed(phase_idx: int) -> void:
+  if phase_idx == FINAL_PHASE_IDX:
+    _defeat_boss()
+
+
+func _defeat_boss() -> void:
+  if not mark_dead_once():  # 撃破処理の多重実行を防ぐ
+    return
+
+  if defeat_delay > 0.0:
+    await get_tree().create_timer(defeat_delay, false).timeout
+    if not is_instance_valid(self):
+      return
+
+  if not skip_boss_defeat_effect:
+    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
+    StageSignals.emit_request_start_vibration()  # Start vibration
+    StageSignals.emit_destroy_bullet()  # Destroy bullet
+    StageSignals.emit_bgm_stop_requested(1.0)  # BGM停止リクエスト
+    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+  _spawn_destroy_particles()
+  queue_free()
 
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
@@ -44,16 +67,6 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
     StageSignals.emit_destroy_bullet()  # Destroy bullet
     StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
-  elif ai._phase_idx == 8:
-    if not mark_dead_once():  # 同一フレームでの多重被弾による撃破処理の重複を防ぐ
-      return
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_request_start_vibration()  # Start vibration
-    StageSignals.emit_destroy_bullet()  # Destroy bullet
-    StageSignals.emit_bgm_stop_requested(1.0)  # BGM停止リクエスト
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
-    _spawn_destroy_particles()
-    queue_free()
 
 
 func _process(delta: float) -> void:

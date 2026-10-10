@@ -1,9 +1,7 @@
 [gd_scene load_steps=104 format=3 uid="uid://ocsviq60pkl0"]
 
-[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
-
 [ext_resource type="Texture2D" uid="uid://b5rcfnuhnabre" path="res://assets/gfx/sprites/enemy_boss_doll_sprite.png" id="1_ncbgs"]
-[ext_resource type="Script" path="res://scripts/enemy/BossDoll.gd" id="1_x5nyp"]
+[ext_resource type="Script" uid="uid://dgg8ly4c6l6r8" path="res://scripts/enemy/BossDoll.gd" id="1_x5nyp"]
 [ext_resource type="Script" uid="uid://bevw3h06e6lg6" path="res://scripts/enemy/BossDollAI.gd" id="3_ub1xv"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_2km0j"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="4_x5nyp"]
@@ -17,6 +15,7 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="12_i2doi"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="13_5p7v6"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_rchal"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhi1k"]
 atlas = ExtResource("1_ncbgs")
@@ -160,6 +159,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s5d12.battle_conversation2"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_27ulj"]
@@ -199,12 +199,16 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s5d12.battle_conversation3"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_cfl6d"]
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([ExtResource("6_t7ghq"), ExtResource("7_2km0j"), SubResource("Resource_8ldyq"), SubResource("Resource_27ulj"), SubResource("Resource_71nr6")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_x5nyp"]
@@ -224,6 +228,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_01hkn"]
@@ -243,6 +248,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_t7ghq"]
@@ -262,6 +268,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_2km0j"]
@@ -281,6 +288,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_85er7"]
@@ -300,6 +308,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_fclmm"]
@@ -319,6 +328,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_qjr2w"]
@@ -338,6 +348,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_i2doi"]
@@ -357,6 +368,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_5p7v6"]
@@ -376,6 +388,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_rchal"]
@@ -395,6 +408,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_8rn8w"]
@@ -414,6 +428,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_5v5eo"]
@@ -433,6 +448,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_5axc1"]
@@ -452,6 +468,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_4kq7k"]
@@ -471,6 +488,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_xpm5u"]
@@ -479,6 +497,7 @@ patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_x5nyp"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.8
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_x5eck"]
@@ -498,6 +517,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_h8w0g"]
@@ -517,12 +537,16 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s5d12.battle_progression"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_n1gte"]
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_x5eck"), SubResource("Resource_h8w0g")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_qskyv"]
@@ -542,6 +566,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_p00on"]
@@ -561,6 +586,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_63ra1"]
@@ -580,6 +606,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_rgpmg"]
@@ -599,6 +626,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_aouh0"]
@@ -618,6 +646,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_aef4w"]
@@ -637,6 +666,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_nshvq"]
@@ -656,6 +686,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ak786"]
@@ -675,6 +706,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u6mvx"]
@@ -694,6 +726,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_hmfel"]
@@ -713,6 +746,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_arfk7"]
@@ -732,6 +766,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_q7nhh"]
@@ -751,6 +786,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ukbev"]
@@ -759,6 +795,7 @@ patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_qskyv"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.4
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_tldiw"]
@@ -778,12 +815,16 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s5d12.battle_progression2"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_3oicd"]
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_x5eck"), SubResource("Resource_tldiw")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_3liu4"]
@@ -803,6 +844,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_nguj4"]
@@ -822,6 +864,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ksggt"]
@@ -841,6 +884,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_uwqpx"]
@@ -860,6 +904,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_dsp4k"]
@@ -879,6 +924,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_qmmyp"]
@@ -898,6 +944,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_2l704"]
@@ -917,6 +964,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_a01dr"]
@@ -936,6 +984,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_a23dc"]
@@ -955,6 +1004,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_g6hm8"]
@@ -974,6 +1024,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ve4oi"]
@@ -993,6 +1044,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_vestm"]
@@ -1012,6 +1064,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_xgh5u"]
@@ -1020,6 +1073,7 @@ patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_3liu4"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_toot0"]
@@ -1039,6 +1093,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_iq3aw"]
@@ -1058,6 +1113,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = false
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_dnf4c"]
@@ -1086,6 +1142,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_p1bvy"]
@@ -1105,12 +1162,16 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s5d12.battle_progression3"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_p10k2"]
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_7efgs"), SubResource("Resource_p1bvy")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_cs8a"]
@@ -1213,6 +1274,15 @@ dialogue_path = ""
 block_player_control = true
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
+[sub_resource type="Resource" id="Resource_cutscene8"]
+script = ExtResource("4_x5nyp")
+patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_cs8a"), SubResource("Resource_cs8b"), SubResource("Resource_cs8c"), SubResource("Resource_cs8e"), SubResource("Resource_cs8d")])
+loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
+metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
 [sub_resource type="Resource" id="Resource_cs9a"]
 script = ExtResource("5_01hkn")
 movement_type = 2
@@ -1226,9 +1296,9 @@ use_movement_bounds = false
 movement_bounds = Rect2(0, 0, 1, 1)
 core_to_enable = ""
 core_duration = 3.0
-change_animation = false
-animation_name = ""
-restore_animation = true
+change_animation = true
+animation_name = "default"
+restore_animation = false
 dialogue_path = "s5d12.resolution1"
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
@@ -1253,15 +1323,6 @@ dialogue_path = ""
 block_player_control = true
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
-[sub_resource type="Resource" id="Resource_cutscene8"]
-script = ExtResource("4_x5nyp")
-patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_cs8a"), SubResource("Resource_cs8b"), SubResource("Resource_cs8c"), SubResource("Resource_cs8e"), SubResource("Resource_cs8d")])
-loop_type = 0
-show_hp_bar = false
-end_hp_ratio = 0.0
-bar_merge_with_previous = false
-metadata/_custom_type_script = "uid://cy6oe8emo4iir"
-
 [sub_resource type="Resource" id="Resource_cutscene9"]
 script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_cs9a"), SubResource("Resource_cs9b")])
@@ -1270,6 +1331,7 @@ show_hp_bar = false
 end_hp_ratio = 0.0
 bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
+
 [sub_resource type="Curve" id="Curve_qjr2w"]
 _data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
 point_count = 2
@@ -1308,6 +1370,10 @@ color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_8rn8w")
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
@@ -1321,6 +1387,10 @@ scale = 1.0
 color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = false
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 fade_in_initial_alpha = 0.2
 fade_in_duration = 0.5
@@ -1360,4 +1430,3 @@ attack_patterns_additive = Array[ExtResource("14_rchal")]([])
 auto_create_core = true
 
 [node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
-mode = 1

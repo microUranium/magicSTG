@@ -29,7 +29,9 @@ const HARPY_ENTRANCE_TIME := 0.4  # ハーピーの登場（人形が左へ避�
 const CUTSCENE_BGM_HARPY := preload("res://assets/audio/bgm/testBoss_bgm.mp3")
 const CUTSCENE_BGM_HARPY_DB := -15.0  # 1-3 のボスと同じ音量
 const CUTSCENE_BGM_WIND := preload("res://assets/audio/bgm/stage5_bgm_wind.mp3")
+const CUTSCENE_BGM_STORM := preload("res://assets/audio/bgm/stage5_bgm_storm.mp3")
 const CUTSCENE_BGM_WIND_DB := -10.0
+const CUTSCENE_BGM_STORM_DB := 0.0
 const CUTSCENE_BGM_FADE_IN := 2.0
 const SCREEN_EXIT_TIME := 0.75  # ハーピーと自機が画面上へ退場する時間
 const SCREEN_FADE_OUT_TIME := 0.8
@@ -101,7 +103,13 @@ func _next_phase():
 func _next_pattern():
   super._next_pattern()
   _handle_cutscene_pattern_started()
-  if _phase_idx == 0 and _idx % patterns.size() == 4:
+  if _phase_idx == 0 and _idx % patterns.size() == 1:
+    StageSignals.emit_bgm_stop_requested(bgm_fade_in)
+  elif _phase_idx == 0 and _idx % patterns.size() == 2:
+    StageSignals.emit_bgm_play_requested(
+      CUTSCENE_BGM_STORM, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_STORM_DB
+    )
+  elif _phase_idx == 0 and _idx % patterns.size() == 4:
     StageSignals.emit_bgm_stop_requested(bgm_fade_in)  # BGM停止リクエスト
   elif _phase_idx == 0 and _idx % patterns.size() == 0:
     StageSignals.emit_bgm_play_requested(_bgm, 0, -10)  # BGM再生リクエスト

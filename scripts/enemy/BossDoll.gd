@@ -14,6 +14,7 @@ func _ready():
     attack_collision.disabled = true
 
   connect("area_entered", Callable(self, "_on_area_entered"))
+  StageSignals.emit_request_change_background_scroll_speed(0, 2)
 
 
 func take_damage(amount: int) -> void:

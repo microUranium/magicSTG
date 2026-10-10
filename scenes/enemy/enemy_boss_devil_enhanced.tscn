@@ -383,7 +383,7 @@ core_duration = 3.0
 change_animation = false
 animation_name = ""
 restore_animation = true
-dialogue_path = "s6d11.battle_progression"
+dialogue_path = "s6d12.battle_progression"
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -761,7 +761,7 @@ core_duration = 3.0
 change_animation = false
 animation_name = ""
 restore_animation = true
-dialogue_path = "s6d11.battle_progression"
+dialogue_path = "s6d12.battle_progression2"
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1379,7 +1379,7 @@ core_duration = 3.0
 change_animation = false
 animation_name = ""
 restore_animation = true
-dialogue_path = "s6d11.battle_progression"
+dialogue_path = "s6d12.battle_progression3"
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 

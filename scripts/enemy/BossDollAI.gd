@@ -16,7 +16,28 @@ class_name BossDollAI
 @export var _bgm: AudioStream
 @export var bgm_fade_in := 2.0
 
+## 撃破後の演出（人形が画面上中央へ → ハーピー登場 → 退場 → 暗転）で使うフェーズ番号
+const CUTSCENE_PHASE_DOLL_TALK := 7
+const CUTSCENE_PHASE_HARPY := 8
+const CUTSCENE_PHASE_FAREWELL := 9
+
+const CUTSCENE_HARPY_SCENE := preload("res://scenes/cutscene/cutscene_harpy.tscn")
+const PLAYER_STANDBY_POSITION := Vector2(448, 748)  # 画面下中央
+const SCREEN_TOP_EXIT_POSITION := Vector2(448, -160)  # 画面上の外
+const HARPY_STAGE_POSITION := Vector2(448, 144)  # 画面上中央
+const HARPY_ENTRANCE_TIME := 0.4  # ハーピーの登場（人形が左へ避けるのと同じ長さ）
+const CUTSCENE_BGM_HARPY := preload("res://assets/audio/bgm/testBoss_bgm.mp3")
+const CUTSCENE_BGM_HARPY_DB := -15.0  # 1-3 のボスと同じ音量
+const CUTSCENE_BGM_WIND := preload("res://assets/audio/bgm/stage5_bgm_wind.mp3")
+const CUTSCENE_BGM_STORM := preload("res://assets/audio/bgm/stage5_bgm_storm.mp3")
+const CUTSCENE_BGM_WIND_DB := -10.0
+const CUTSCENE_BGM_STORM_DB := 0.0
+const CUTSCENE_BGM_FADE_IN := 2.0
+const SCREEN_EXIT_TIME := 0.75  # ハーピーと自機が画面上へ退場する時間
+const SCREEN_FADE_OUT_TIME := 0.8
+
 var _phase_idx := 0
+var _cutscene_harpy: CutsceneActor = null
 
 
 func _ready():
@@ -81,7 +102,14 @@ func _next_phase():
 
 func _next_pattern():
   super._next_pattern()
-  if _phase_idx == 0 and _idx % patterns.size() == 4:
+  _handle_cutscene_pattern_started()
+  if _phase_idx == 0 and _idx % patterns.size() == 1:
+    StageSignals.emit_bgm_stop_requested(bgm_fade_in)
+  elif _phase_idx == 0 and _idx % patterns.size() == 2:
+    StageSignals.emit_bgm_play_requested(
+      CUTSCENE_BGM_STORM, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_STORM_DB
+    )
+  elif _phase_idx == 0 and _idx % patterns.size() == 4:
     StageSignals.emit_bgm_stop_requested(bgm_fade_in)  # BGM停止リクエスト
   elif _phase_idx == 0 and _idx % patterns.size() == 0:
     StageSignals.emit_bgm_play_requested(_bgm, 0, -10)  # BGM再生リクエスト
@@ -107,10 +135,75 @@ func _next_pattern():
 func _on_pattern_finished(cb_token: int):
   if cb_token != _token:  # 重複防止
     return
-  if _idx >= patterns.size() and (_phase_idx == 0 or _phase_idx == 2 or _phase_idx == 4):
+  if (
+    _idx >= patterns.size()
+    and (
+      _phase_idx == 0
+      or _phase_idx == 2
+      or _phase_idx == 4
+      or _phase_idx == CUTSCENE_PHASE_DOLL_TALK
+      or _phase_idx == CUTSCENE_PHASE_HARPY
+    )
+  ):
     _next_phase()
+  elif _idx >= patterns.size() and _phase_idx == CUTSCENE_PHASE_FAREWELL:
+    # 暗転中に人形を退場させる（撃破扱い）。ウェーブ完了 → ステージ側の演出イベントへ。
+    enemy_node.queue_free()
   else:
     super._on_pattern_finished(cb_token)
+
+
+#---------------------------------------------------------------------
+# 撃破後の演出
+#---------------------------------------------------------------------
+func _handle_cutscene_pattern_started() -> void:
+  """演出フェーズの各パターン開始時に、自機・ハーピー・暗転を動かす。"""
+  if _phase_idx == CUTSCENE_PHASE_DOLL_TALK and _idx == 1:
+    # 人形が画面上中央へ移動するのに合わせて、自機を画面下中央へ自動移動させる
+    _move_player_to(PLAYER_STANDBY_POSITION, 1.5)
+  elif _phase_idx == CUTSCENE_PHASE_HARPY and _idx == 1:
+    _spawn_cutscene_harpy()
+  elif _phase_idx == CUTSCENE_PHASE_HARPY and _idx == 2:
+    # battle_progression4 開始に合わせてハーピーのテーマを流す
+    StageSignals.emit_bgm_play_requested(
+      CUTSCENE_BGM_HARPY, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_HARPY_DB
+    )
+  elif _phase_idx == CUTSCENE_PHASE_HARPY and _idx == 3:
+    _exit_cutscene_harpy_and_player()
+    StageSignals.emit_bgm_play_requested(
+      CUTSCENE_BGM_WIND, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_WIND_DB
+    )
+  elif _phase_idx == CUTSCENE_PHASE_FAREWELL and _idx == 2:
+    StageSignals.emit_request_screen_fade(true, SCREEN_FADE_OUT_TIME)
+
+
+func _spawn_cutscene_harpy() -> void:
+  if is_instance_valid(_cutscene_harpy):
+    return
+  var harpy := CUTSCENE_HARPY_SCENE.instantiate() as CutsceneActor
+  if harpy == null:
+    push_warning("BossDollAI: Failed to instantiate cutscene harpy")
+    return
+  _cutscene_harpy = harpy
+  var parent := get_tree().current_scene
+  if parent == null:
+    parent = enemy_node.get_parent()
+  parent.add_child(harpy)
+  harpy.warp_to(Vector2(HARPY_STAGE_POSITION.x, SCREEN_TOP_EXIT_POSITION.y))
+  harpy.move_to(HARPY_STAGE_POSITION, HARPY_ENTRANCE_TIME)
+
+
+func _exit_cutscene_harpy_and_player() -> void:
+  if is_instance_valid(_cutscene_harpy):
+    _cutscene_harpy.exit_to(SCREEN_TOP_EXIT_POSITION, SCREEN_EXIT_TIME)
+  _cutscene_harpy = null
+  _move_player_to(SCREEN_TOP_EXIT_POSITION, SCREEN_EXIT_TIME)
+
+
+func _move_player_to(target_position: Vector2, duration: float) -> void:
+  var player := TargetService.get_player()
+  if player and player.has_method("move_to"):
+    player.move_to(target_position, duration)
 
 
 func _setup_phase_attacks():
@@ -126,7 +219,7 @@ func _setup_phase_attacks():
     6:
       _clear_all_pattern_cores()
       _set_attack_patterns(phase5_patterns4)
-    7:
+    7, 8, 9:  # 撃破後の演出フェーズ
       _clear_all_pattern_cores()
 
 

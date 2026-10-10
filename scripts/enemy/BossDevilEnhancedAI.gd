@@ -124,6 +124,8 @@ func _setup_phase_attacks():
     7:
       _set_attack_patterns(phase4_patterns_1)
       _attack_final_rush()
+    8:
+      _clear_all_pattern_cores()  # 撃破演出フェーズでは残弾コアを止める
 
 
 func _next_pattern():
@@ -689,7 +691,9 @@ func _attack_final_rush():
   var c = 0
   var d = 0.5
 
-  while delay_count < 43:
+  while delay_count < 35:
+    if _phase_idx != 7 or not is_instance_valid(enemy_node):
+      return  # フェーズが変わった／撃破済みならラッシュを中止
     if delay_count < 5:
       c = counts[0]
       d = delays[0]

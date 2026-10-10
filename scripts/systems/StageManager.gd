@@ -40,6 +40,9 @@ func _ready() -> void:
   # ダイアログシステム統合
   _setup_dialogue_integration()
 
+  # 演出中のプレイヤー操作停止要求を受け取る
+  StageSignals.cutscene_pause_requested.connect(_handle_cutscene_pause_request)
+
   # ポーズシステム統合
   _setup_pause_system()
 
@@ -118,6 +121,9 @@ func _on_stage_cleared() -> void:
   if _pause_panel:
     _pause_panel.disable_pause()
 
+  # 演出中に暗転したままステージが終わらないようにする
+  StageSignals.emit_request_screen_fade(false, 0.3)
+
   # ライフサイクル処理
   var lifecycle_controller = _component_registry.get_component("lifecycle")
   if lifecycle_controller:
@@ -141,6 +147,9 @@ func _on_game_over() -> void:
   # ポーズ無効化
   if _pause_panel:
     _pause_panel.disable_pause()
+
+  # 演出中に暗転したままステージが終わらないようにする
+  StageSignals.emit_request_screen_fade(false, 0.3)
 
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)
@@ -237,6 +246,21 @@ func _handle_dialogue_request(dd: DialogueData, finished_cb: Callable) -> void:
       if _pause_panel and lifecycle_controller and lifecycle_controller.is_stage_running():
         _pause_panel.enable_pause()
   )
+
+
+func _handle_cutscene_pause_request(paused: bool) -> void:
+  """会話以外の演出中もダイアログ中と同様にポーズ操作を禁止する"""
+  if not _pause_panel:
+    return
+
+  if paused:
+    _pause_panel.disable_pause()
+    return
+
+  # ステージ実行中のみポーズ再有効化
+  var lifecycle_controller = _component_registry.get_component("lifecycle")
+  if lifecycle_controller and lifecycle_controller.is_stage_running():
+    _pause_panel.enable_pause()
 
 
 # -------------------------------------------------

@@ -8,10 +8,12 @@ signal stage_failed
 
 @export var wave_executor_path: NodePath
 @export var dialogue_runner_path: NodePath
+@export var cutscene_player_path: NodePath
 @export var inter_wave_delay: float = 3.0  # ウェーブ間の待ち時間
 
 var _wave_executor: WaveExecutor
 var _dialogue_runner: DialogueRunner
+var _cutscene_player: CutscenePlayer
 var _current_seed: String = ""
 var _event_queue: Array[Dictionary] = []
 var _current_event_index: int = 0
@@ -31,10 +33,16 @@ func _ready() -> void:
     if _dialogue_runner:
       _dialogue_runner.dialogue_finished.connect(_on_dialogue_completed)
 
+  if cutscene_player_path:
+    _cutscene_player = get_node_or_null(cutscene_player_path)
+    if _cutscene_player:
+      _cutscene_player.cutscene_finished.connect(_on_cutscene_finished)
+
   # StageSignalsからの攻撃コア停止要求を処理
   StageSignals.attack_cores_pause_requested.connect(_pause_attack_cores)
   StageSignals.blessings_pause_requested.connect(_pause_blessings)
   StageSignals.player_control_pause_requested.connect(_pause_player_control)
+  StageSignals.cutscene_pause_requested.connect(_handle_cutscene_pause_request)
 
 
 func set_dependencies(wave_executor: WaveExecutor, dialogue_runner: DialogueRunner) -> void:
@@ -82,7 +90,16 @@ func _parse_seed(seed_value: String) -> bool:
     part = part.strip_edges()
     if part.is_empty():
       continue
-    if part.begins_with("D"):
+    if part.begins_with("C"):
+      var cutscene_id := part.substr(1)
+      var cutscene_data := GameDataRegistry.get_cutscene_data(cutscene_id)
+      if cutscene_data.is_empty():
+        push_warning("StageController: Cutscene '%s' not found" % cutscene_id)
+        continue
+      _event_queue.append(
+        {"type": "cutscene", "cutscene_id": cutscene_id, "cutscene_data": cutscene_data}
+      )
+    elif part.begins_with("D"):
       var dialogue_path := part.substr(1)
       var dialogue_data := GameDataRegistry.get_dialogue_data(dialogue_path)
       if dialogue_data.is_empty():
@@ -119,6 +136,8 @@ func _execute_next_event() -> void:
       _execute_wave_event(event)
     "dialogue":
       _execute_dialogue_event(event)
+    "cutscene":
+      _execute_cutscene_event(event)
     _:
       push_warning("StageController: Unknown event type '%s'" % event_type)
       _advance_to_next_event()
@@ -171,6 +190,23 @@ func _execute_dialogue_event(event: Dictionary) -> void:
   )
 
 
+func _execute_cutscene_event(event: Dictionary) -> void:
+  if not _cutscene_player:
+    push_error("StageController: CutscenePlayer not found")
+    _advance_to_next_event()
+    return
+
+  var cutscene_id: String = event.get("cutscene_id", "")
+  print_debug("StageController: Executing cutscene '%s'" % cutscene_id)
+  _cutscene_player.play(cutscene_id, event.get("cutscene_data", {}))
+
+
+func _on_cutscene_finished(_cutscene_id: String) -> void:
+  if not _is_running:
+    return
+  _advance_to_next_event()
+
+
 func _advance_to_next_event() -> void:
   if not _is_running:
     return
@@ -199,11 +235,24 @@ func _fail_stage() -> void:
 
 
 func _on_wave_completed() -> void:
+  # 直後が演出イベントの場合は、暗転が長引かないよう待ち時間を挟まない
+  if _is_next_event_cutscene():
+    print_debug("StageController: Wave completed - cutscene follows, skipping delay")
+    _advance_to_next_event()
+    return
+
   print_debug(
     "StageController: Wave completed - waiting %.1f seconds before next event" % inter_wave_delay
   )
   await get_tree().create_timer(inter_wave_delay, false).timeout
   _advance_to_next_event()
+
+
+func _is_next_event_cutscene() -> bool:
+  var next_index := _current_event_index + 1
+  if next_index >= _event_queue.size():
+    return false
+  return _event_queue[next_index].get("type", "") == "cutscene"
 
 
 func _on_wave_failed() -> void:
@@ -226,6 +275,8 @@ func _on_stage_dialogue_finished(token: String) -> void:
 
 func stop_stage() -> void:
   _is_running = false
+  if _cutscene_player:
+    _cutscene_player.stop()
   _pause_attack_cores(true)  # ステージ停止時は攻撃コアを停止
   _pause_blessings(true)  # ステージ停止時はBlessingを停止
   _pause_player_control(true)  # ステージ停止時はプレイヤー操作を無効化
@@ -255,6 +306,13 @@ func get_total_events() -> int:
 
 func is_stage_running() -> bool:
   return _is_running
+
+
+func _handle_cutscene_pause_request(paused: bool) -> void:
+  """会話以外の演出中も会話中と同じようにプレイヤー操作を止める"""
+  _pause_attack_cores(paused)
+  _pause_blessings(paused)
+  _pause_player_control(paused)
 
 
 func _pause_attack_cores(paused: bool) -> void:

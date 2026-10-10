@@ -15,6 +15,12 @@ func _ready():
 
   connect("area_entered", Callable(self, "_on_area_entered"))
 
+  # 登場〜会話の間は眠っている演出のためアニメーションを止めておく
+  # （会話後に BossBearAI.start_boss_animation() で動き出す）
+  if animated_sprite:
+    animated_sprite.stop()
+    animated_sprite.frame = 0
+
 
 func take_damage(amount: int) -> void:
   if ai._phase_idx == 0:

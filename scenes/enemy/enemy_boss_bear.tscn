@@ -1,9 +1,9 @@
-[gd_scene load_steps=41 format=3 uid="uid://d1qrjjwil2eru"]
+[gd_scene load_steps=45 format=3 uid="uid://d1qrjjwil2eru"]
 
 [ext_resource type="Script" uid="uid://8rohnyi311pb" path="res://scripts/enemy/BossBear.gd" id="1_grr34"]
 [ext_resource type="Texture2D" uid="uid://i11btmh4g00n" path="res://assets/gfx/sprites/enemy_boss_bear_sprite.png" id="2_7infs"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="4_8gjqd"]
-[ext_resource type="Script" path="res://scripts/enemy/BossBearAI.gd" id="4_g7xud"]
+[ext_resource type="Script" uid="uid://bal3pdrbrhyn8" path="res://scripts/enemy/BossBearAI.gd" id="4_g7xud"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="6_oad3j"]
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="7_bqy6d"]
 [ext_resource type="Resource" uid="uid://dplytlmu133et" path="res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres" id="8_7msdg"]
@@ -72,13 +72,93 @@ core_duration = 3.0
 change_animation = false
 animation_name = ""
 restore_animation = true
-dialogue_path = "s4d11.battle_conversation"
+dialogue_path = "s5d11.battle_conversation"
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_intro_a"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.5
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_intro_b"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.3
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_intro_c"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.2
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+block_player_control = true
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_intro_talk2"]
+script = ExtResource("7_bqy6d")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 0.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = "s5d11.battle_conversation2"
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_8gjqd"]
 script = ExtResource("6_oad3j")
-patterns = Array[ExtResource("7_bqy6d")]([ExtResource("8_7msdg"), ExtResource("9_st8mf"), SubResource("Resource_oovd5")])
+patterns = Array[ExtResource("7_bqy6d")]([ExtResource("8_7msdg"), ExtResource("9_st8mf"), SubResource("Resource_oovd5"), SubResource("Resource_intro_a"), SubResource("Resource_intro_b"), SubResource("Resource_intro_c"), SubResource("Resource_intro_talk2")])
 loop_type = 0
 show_hp_bar = false
 end_hp_ratio = 0.0

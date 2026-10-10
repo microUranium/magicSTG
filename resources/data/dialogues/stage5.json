@@ -204,6 +204,14 @@
     ],
     "resolution2": [
       {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_3.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "！？"
+      },
+      {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_3.png",
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_0.png",
@@ -305,7 +313,9 @@
         "face_right": "res://assets/gfx/sprites/gothic_girl_face_4.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "あのハーピーがぜーんぶ台無しにしていったものね！"
+        "text": "あのハーピーがぜーんぶ台無しにしていったものね！",
+        "sfx": "story_thunder",
+        "flash": 0.3
       },
       {
         "speaker_name": "フェリス",
@@ -326,7 +336,7 @@
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_3.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_5.png",
         "speaker_side": "right",
         "box_direction": "right",
         "text": "もう少しでシィルお姉さんを完全に引き込むことができたのに。残念だわ。"
@@ -334,7 +344,7 @@
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_1.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_5.png",
         "speaker_side": "left",
         "box_direction": "left",
         "text": "さっきから何の話をしてるの…？"
@@ -366,7 +376,7 @@
       {
         "speaker_name": "少女",
         "face_left": "res://assets/gfx/sprites/felis_face_0.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_5.png",
         "speaker_side": "right",
         "box_direction": "right",
         "text": "うふふ、少し油断してしまったけれど、時間の問題ね！"
@@ -398,7 +408,7 @@
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_4.png",
         "speaker_side": "left",
         "box_direction": "left",
         "text": "（さっきから誰と話してるんだよ…！）"
@@ -406,7 +416,7 @@
       {
         "speaker_name": "フェリス",
         "face_left": "res://assets/gfx/sprites/felis_face_1.png",
-        "face_right": "res://assets/gfx/sprites/gothic_girl_face_2.png",
+        "face_right": "res://assets/gfx/sprites/gothic_girl_face_4.png",
         "speaker_side": "left",
         "box_direction": "left",
         "text": "（やばい、は、早くこの場所から逃げ出さないと！）"

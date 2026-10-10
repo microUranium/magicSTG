@@ -1448,6 +1448,16 @@
         { "type": "wait", "time": 0.5 }
       ]
     },
+    "s5c2": {
+      "description": "5-1 熊撃破後：嵐の中での再会",
+      "steps": [
+        { "type": "wait", "time": 2.0 },
+        { "type": "dialogue", "path": "s5d11.resolution" },
+        { "type": "wait", "time": 1.5 },
+        { "type": "play_bgm", "path": "res://assets/audio/bgm/stage5_bgm_storm.mp3", "volume_db": 0.0, "fade_in": 1.0 },
+        { "type": "dialogue", "path": "s5d11.resolution2" }
+      ]
+    },
     "s5c1": {
       "description": "5-3 人形撃破後：暗転明け〜ハーピーとの別れ",
       "steps": [

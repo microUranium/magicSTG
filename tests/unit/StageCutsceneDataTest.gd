@@ -38,4 +38,4 @@ func test_fixed_seeds_reference_existing_cutscenes() -> void:
         assert_dict(GameDataRegistry.get_cutscene_data(cutscene_id)).is_not_empty()
 
   # 4-3 と 5-3 の演出がシードから参照されていること
-  assert_array(referenced).contains(["s2c1", "s4c1", "s5c1"])
+  assert_array(referenced).contains(["s2c1", "s4c1", "s5c1", "s5c2"])

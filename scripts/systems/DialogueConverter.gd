@@ -31,6 +31,9 @@ static func convert_json_to_dialogue_lines(json_data: Array) -> Array[DialogueLi
     _load_face_texture(line, dict_data, "face_right")
 
     _load_bgm(line, dict_data)
+    line.sfx = dict_data.get("sfx", "")
+    line.sfx_volume_db = float(dict_data.get("sfx_volume_db", line.sfx_volume_db))
+    line.flash = float(dict_data.get("flash", line.flash))
 
     dialogue_lines.append(line)
   return dialogue_lines

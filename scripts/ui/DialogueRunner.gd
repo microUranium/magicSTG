@@ -77,17 +77,35 @@ func _show_current_line() -> void:
   var line: DialogueLine = _dialogue_data.lines[_line_idx]
 
   _read_faces(line)
-  _play_line_bgm(line)
+  _apply_line_effects(line)
   if not _msgbox.visible:
     await _msgbox.fade_in(line.box_direction)
   _msgbox.show_line(line)
 
 
+func _apply_line_effects(line: DialogueLine) -> void:
+  """行に指定された BGM・効果音・フラッシュを、その行の表示に合わせて再生する。"""
+  _play_line_bgm(line)
+  _play_line_sfx(line)
+  _play_line_flash(line)
+
+
 func _play_line_bgm(line: DialogueLine) -> void:
-  """行に BGM が指定されていれば、その行の表示に合わせて再生する。"""
   if line.bgm == null:
     return
   StageSignals.emit_bgm_play_requested(line.bgm, line.bgm_fade_in, line.bgm_volume_db)
+
+
+func _play_line_sfx(line: DialogueLine) -> void:
+  if line.sfx.is_empty():
+    return
+  StageSignals.emit_signal("sfx_play_requested", line.sfx, Vector2.INF, line.sfx_volume_db, 0)
+
+
+func _play_line_flash(line: DialogueLine) -> void:
+  if line.flash <= 0.0:
+    return
+  StageSignals.emit_request_hud_flash(line.flash)
 
 
 func _on_advance() -> void:

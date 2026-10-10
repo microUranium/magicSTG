@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=18 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=19 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://co2t4xwn1wjpu" path="res://assets/audio/sfx/ui_hover.wav" id="15_a31j7"]
 [ext_resource type="AudioStream" uid="uid://c8xj675y67v8u" path="res://assets/audio/sfx/girl_laugh.wav" id="16_a31j7"]
 [ext_resource type="AudioStream" uid="uid://bwpa3ghxfa01d" path="res://assets/audio/sfx/fortitude.wav" id="17_ftd01"]
+[ext_resource type="AudioStream" uid="uid://dg0mdfxobrslh" path="res://assets/audio/sfx/story_thunder.wav" id="18_thndr"]
 
 [resource]
 script = ExtResource("1_tnkwu")
@@ -37,6 +38,7 @@ table = Dictionary[String, AudioStream]({
 "pause_open": ExtResource("14_qh1xs"),
 "power_up_boss": ExtResource("8_1e7oh"),
 "shot_beam": ExtResource("11_mkvwg"),
+"story_thunder": ExtResource("18_thndr"),
 "ui_hover": ExtResource("15_a31j7")
 })
 metadata/_custom_type_script = "uid://de03wt8svtbcg"

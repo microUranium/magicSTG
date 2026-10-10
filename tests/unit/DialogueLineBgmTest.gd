@@ -46,6 +46,62 @@ func test_converter_ignores_missing_bgm_file() -> void:
   assert_object(lines[0].bgm).is_null()
 
 
+func test_converter_reads_sfx_and_flash_from_json() -> void:
+  var lines := DialogueConverter.convert_json_to_dialogue_lines(
+    [
+      {"speaker_name": "A", "text": "演出なし"},
+      {
+        "speaker_name": "A",
+        "text": "ここで雷が鳴る",
+        "sfx": "story_thunder",
+        "sfx_volume_db": -5.0,
+        "flash": 0.3
+      }
+    ]
+  )
+
+  assert_str(lines[0].sfx).is_empty()
+  assert_float(lines[0].flash).is_equal(0.0)
+  assert_str(lines[1].sfx).is_equal("story_thunder")
+  assert_float(lines[1].sfx_volume_db).is_equal(-5.0)
+  assert_float(lines[1].flash).is_equal(0.3)
+
+
+func test_dialogue_runner_plays_line_sfx_and_flash() -> void:
+  var runner := DialogueRunner.new()
+  add_child(runner)
+
+  var sfx_requests: Array = []
+  var flash_requests: Array = []
+  var sfx_collector := func(name, _pos, volume_db, _pitch): sfx_requests.append([name, volume_db])
+  var flash_collector := func(duration): flash_requests.append(duration)
+  StageSignals.sfx_play_requested.connect(sfx_collector)
+  StageSignals.request_hud_flash.connect(flash_collector)
+
+  runner._apply_line_effects(DialogueLine.new())
+  assert_array(sfx_requests).is_empty()
+  assert_array(flash_requests).is_empty()
+
+  var line := DialogueLine.new()
+  line.sfx = "story_thunder"
+  line.sfx_volume_db = 0.0
+  line.flash = 0.3
+  runner._apply_line_effects(line)
+
+  assert_array(sfx_requests).is_equal([["story_thunder", 0.0]])
+  assert_array(flash_requests).is_equal([0.3])
+
+  StageSignals.sfx_play_requested.disconnect(sfx_collector)
+  StageSignals.request_hud_flash.disconnect(flash_collector)
+  runner.queue_free()
+
+
+func test_thunder_sfx_is_registered_in_catalog() -> void:
+  var catalog = load("res://assets/SFX/SFX_Catalog.tres")
+
+  assert_bool(catalog.table.has("story_thunder")).is_true()
+
+
 func test_dialogue_runner_plays_line_bgm() -> void:
   var runner := DialogueRunner.new()
   add_child(runner)

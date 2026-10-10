@@ -12,3 +12,10 @@ class_name DialogueLine
 @export var bgm: AudioStream = null
 @export var bgm_volume_db: float = -10.0
 @export var bgm_fade_in: float = 0.0
+
+## この行の表示に合わせて鳴らす効果音（SFXカタログ名。空なら鳴らさない）
+@export var sfx: String = ""
+@export var sfx_volume_db: float = 0.0
+
+## この行の表示に合わせた画面フラッシュの長さ（秒。0 なら光らせない）
+@export var flash: float = 0.0

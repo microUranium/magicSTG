@@ -7,7 +7,15 @@
         "face_right": null,
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "あのハーピーが言うにはこの海岸の先に遺跡があって、そこにあいつの言ってた人がいるらしいけど…。"
+        "text": "あのハーピーが言うにはこの海岸の先に遺跡があって、"
+      },
+      {
+        "speaker_name": "フェリス",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "そこに手がかりを握ってる人がいるらしいけど…。"
       },
       {
         "speaker_name": "フェリス",

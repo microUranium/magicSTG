@@ -323,7 +323,7 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "この島の歴史や生態は当然把握しているし、今朝、港の町で起こった喧嘩で誰が勝ったのかも知っている。"
+        "text": "この島の歴史や生態は当然把握しているし、さっき森の向こうの町で起こった喧嘩で誰が勝ったのかも知っている。"
       },
       {
         "speaker_name": "吸血鬼",
@@ -573,7 +573,15 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "たった一人でサンドパイソンを相手して、遺跡の最深部に辿り着いてもまだ余力を残しているなんて。"
+        "text": "あのサンドパイソンは"
+      },
+      {
+        "speaker_name": "吸血鬼",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "そんな敵をたった一人で相手して、ここまで辿り着いてまだ余力を残しているなんて。"
       },
       {
         "speaker_name": "吸血鬼",
@@ -689,7 +697,7 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "ふ～ん。さすが情報屋さん。あたしの精霊をそこまで見抜く人はほとんどいないよ。"
+        "text": "さすが情報屋さん。あたしの精霊をそこまで見抜く人はほとんどいないよ。"
       },
       {
         "speaker_name": "フェリス",
@@ -697,7 +705,7 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
         "speaker_side": "left",
         "box_direction": "left",
-        "text": "大体あたし自身に蓄積された魔力量だけを見て判断する人が多いんだよね。"
+        "text": "大体あたし自身が持ってる魔力量だけを見て判断する人が多いんだけど。"
       },
       {
         "speaker_name": "吸血鬼",
@@ -721,7 +729,23 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "術者の魔力から拠出して作り出す精霊は、大抵燃費が悪い上に大した魔法も使えないことが多い。"
+        "text": "術者の魔力から作り出す精霊か。確かにできないことはない。"
+      },
+      {
+        "speaker_name": "吸血鬼",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "でも、人間がそれをしても大抵は燃費が悪い上に大した魔法も使えないことが多いんだ。"
+      },
+      {
+        "speaker_name": "吸血鬼",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/vampire_face_0.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "僕が知っている中でも、それを得意としているのは魔族か、もっと強大な悪魔か…。"
       },
       {
         "speaker_name": "吸血鬼",
@@ -753,7 +777,15 @@
         "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "ボクも少し熱くなってきたし、もうちょっと付き合ってもらうよ？"
+        "text": "なぜキミがそれほどの魔力を操れるのか、機会があればじっくり話を聞いてみたいな。"
+      },
+      {
+        "speaker_name": "吸血鬼",
+        "face_left": "res://assets/gfx/sprites/felis_face_0.png",
+        "face_right": "res://assets/gfx/sprites/vampire_face_1.png",
+        "speaker_side": "right",
+        "box_direction": "right",
+        "text": "ふふっ。ボクも少し熱くなってきたし、もうちょっと付き合ってもらうよ？"
       },
       {
         "speaker_name": "フェリス",

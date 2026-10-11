@@ -1473,6 +1473,13 @@
         { "type": "wait", "time": 0.4 },
         { "type": "dialogue", "path": "s5d12.resolution3" }
       ]
+    },
+    "s6c1": {
+      "description": "6-1 魔族撃破後：退場を見送ってからの後語り",
+      "steps": [
+        { "type": "wait", "time": 0.4 },
+        { "type": "dialogue", "path": "s6d11.resolution3" }
+      ]
     }
   }
 

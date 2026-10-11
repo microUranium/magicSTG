@@ -112,11 +112,17 @@ func test_stage5_cutscene_data_is_valid() -> void:
 
 
 func test_stage5_3_seed_contains_cutscene_event() -> void:
+  # シードは実データから読み、演出イベントが末尾に残っていることを確認する
+  var select_data: StageSelectData = load("res://resources/data/stage_select_data.tres")
+  var stage := select_data.get_stage_by_ids("chapter5", "stage5_3")
+  assert_object(stage).is_not_null()
+  assert_str(stage.fixed_seed).ends_with("-Cs5c1")
+
   var controller := StageController.new()
   add_child(controller)
 
-  assert_bool(controller.start_stage("Ds5d12.battle_conversation-s5z2-Cs5c1")).is_true()
-  assert_int(controller.get_total_events()).is_equal(3)
+  assert_bool(controller.start_stage(stage.fixed_seed)).is_true()
+  assert_int(controller.get_total_events()).is_equal(stage.fixed_seed.split("-").size())
 
   controller.stop_stage()
   controller.queue_free()

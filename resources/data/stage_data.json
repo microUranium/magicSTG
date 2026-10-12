@@ -1942,6 +1942,19 @@
         }
       ]
     },
+    "s5z3": {
+      "pool": "stage5_boss",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "boss_bear_skip_dialogue",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
     "s611": {
       "pool": "stage6",
       "weight": 4,
@@ -2591,6 +2604,13 @@
     "boss_bear": {
       "scene_path": "res://scenes/enemy/enemy_boss_bear.tscn",
       "spawn_weight": 1.0
+    },
+    "boss_bear_skip_dialogue": {
+      "scene_path": "res://scenes/enemy/enemy_boss_bear.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true"
+      }
     },
     "boss_doll": {
       "scene_path": "res://scenes/enemy/enemy_boss_doll.tscn",

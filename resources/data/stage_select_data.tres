@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StageSelectData" load_steps=36 format=3 uid="uid://dtmqpbvr6bhmq"]
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=38 format=3 uid="uid://dtmqpbvr6bhmq"]
 
 [ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
 [ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
@@ -234,11 +234,44 @@ dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
+[sub_resource type="Resource" id="StageData_5_2"]
+script = ExtResource("3_stage")
+stage_name = "5-2 屋敷脱出"
+chapter_id = "chapter5"
+stage_id = "stage5_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage5"
+}, {
+"count": 1,
+"pool": "stage5_boss"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="StageData_6_2"]
+script = ExtResource("3_stage")
+stage_name = "6-2 魔族追跡"
+chapter_id = "chapter6"
+stage_id = "stage6_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage6"
+}])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
 [sub_resource type="Resource" id="Resource_t647l"]
 script = ExtResource("2_chapter")
 chapter_id = "chapter5"
 chapter_name = "第5章 幽霊屋敷"
-stages = Array[ExtResource("3_stage")]([SubResource("Resource_o7xy0"), SubResource("Resource_7lq61")])
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_o7xy0"), SubResource("StageData_5_2"), SubResource("Resource_7lq61")])
 is_unlocked = true
 background_texture = ExtResource("7_x38wm")
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
@@ -271,7 +304,7 @@ metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 script = ExtResource("2_chapter")
 chapter_id = "chapter6"
 chapter_name = "第6章 守り人の山"
-stages = Array[ExtResource("3_stage")]([SubResource("Resource_ks7vi"), SubResource("Resource_ls1bl")])
+stages = Array[ExtResource("3_stage")]([SubResource("Resource_ks7vi"), SubResource("StageData_6_2"), SubResource("Resource_ls1bl")])
 is_unlocked = true
 background_texture = ExtResource("8_vynet")
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StageSelectData" load_steps=32 format=3 uid="uid://dtmqpbvr6bhmq"]
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=36 format=3 uid="uid://dtmqpbvr6bhmq"]
 
 [ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
 [ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
@@ -276,7 +276,53 @@ is_unlocked = true
 background_texture = ExtResource("8_vynet")
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
+[sub_resource type="Resource" id="StageData_debug_3"]
+script = ExtResource("3_stage")
+stage_name = "DEBUG-3 遺跡の雑魚比較"
+chapter_id = "chapter_debug"
+stage_id = "debug_stage3"
+is_seed_fixed = true
+fixed_seed = "s3x_lantern-s3x_grimoire-s3x_bat_a-s3x_lantern_b_weak"
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="StageData_debug_5"]
+script = ExtResource("3_stage")
+stage_name = "DEBUG-5 屋敷の雑魚比較"
+chapter_id = "chapter_debug"
+stage_id = "debug_stage5"
+is_seed_fixed = true
+fixed_seed = "s5x_bat_b-s5x_ghost-s5x_lantern_b-s5x_lantern-s5x_grimoire_strong"
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="StageData_debug_6"]
+script = ExtResource("3_stage")
+stage_name = "DEBUG-6 山の雑魚比較"
+chapter_id = "chapter_debug"
+stage_id = "debug_stage6"
+is_seed_fixed = true
+fixed_seed = "s6x_bird_d-s6x_flower_c-s6x_flower_b_strong-s6x_swamp_bird-s6x_cedar"
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="ChapterData_debug"]
+script = ExtResource("2_chapter")
+chapter_id = "chapter_debug"
+chapter_name = "DEBUG 雑魚敵の強さ比較"
+stages = Array[ExtResource("3_stage")]([SubResource("StageData_debug_3"), SubResource("StageData_debug_5"), SubResource("StageData_debug_6")])
+is_unlocked = true
+background_texture = ExtResource("5_x38wm")
+is_debug_only = true
+metadata/_custom_type_script = "uid://dnqf62vu42hqi"
+
 [resource]
 script = ExtResource("2_1ifpm")
-chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj"), SubResource("Resource_wg655"), SubResource("Resource_t647l"), SubResource("Resource_umupn")])
+chapters = Array[ExtResource("2_chapter")]([SubResource("Resource_0rge8"), SubResource("Resource_r0atf"), SubResource("Resource_1lwtj"), SubResource("Resource_wg655"), SubResource("Resource_t647l"), SubResource("Resource_umupn"), SubResource("ChapterData_debug")])
 metadata/_custom_type_script = "uid://dpox3am3xjmyy"

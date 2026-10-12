@@ -906,7 +906,7 @@
     },
     "s311": {
       "pool": "stage3",
-      "weight": 3,
+      "weight": 4,
       "layers": [
         {
           "enemy": "enemy_lantern",
@@ -919,7 +919,7 @@
     },
     "s312": {
       "pool": "stage3",
-      "weight": 3,
+      "weight": 6,
       "layers": [
         {
           "enemy": "enemy_lantern",
@@ -932,7 +932,7 @@
     },
     "s321": {
       "pool": "stage3",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_grimoire",
@@ -965,7 +965,7 @@
     },
     "s331": {
       "pool": "stage3",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_bat_a",
@@ -978,7 +978,7 @@
     },
     "s3g1": {
       "pool": "stage3",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_lantern",
@@ -993,6 +993,254 @@
           "pattern": "from_top_spacing", 
           "interval": 0.0,
           "delay": 2.0
+        }
+      ]
+    },
+    "s313": {
+      "pool": "stage3",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s332": {
+      "pool": "stage3",
+      "weight": 6,
+      "layers": [
+        {
+          "enemy": "enemy_bat_a",
+          "count": 6,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s341": {
+      "pool": "stage3",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s342": {
+      "pool": "stage3",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3g2": {
+      "pool": "stage3",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bat_a",
+          "count": 8,
+          "pattern": "perimeter_sequential",
+          "interval": 0.4,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s3g3": {
+      "pool": "stage3",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s3g4": {
+      "pool": "stage3",
+      "weight": 2,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bat_a",
+          "count": 6,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 4.0
+        }
+      ]
+    },
+    "s3a1": {
+      "layers": [
+        {
+          "enemy": "enemy_bat_a",
+          "count": 3,
+          "pattern": "perimeter_sequential",
+          "interval": 0.6,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3a2": {
+      "layers": [
+        {
+          "enemy": "enemy_grimoire",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3a3": {
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s3b1": {
+      "layers": [
+        {
+          "enemy": "enemy_bat_a",
+          "count": 12,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_bat_a",
+          "count": 12,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 5.0
+        }
+      ]
+    },
+    "s3b2": {
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 6.0
+        },
+        {
+          "enemy": "enemy_bat_a",
+          "count": 6,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 4.0
+        }
+      ]
+    },
+    "s3b3": {
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b_weak",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_bat_a",
+          "count": 10,
+          "pattern": "perimeter_sequential",
+          "interval": 0.3,
+          "delay": 5.0
+        },
+        {
+          "enemy": "enemy_grimoire",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 8.0
         }
       ]
     },
@@ -1020,7 +1268,7 @@
     },
     "s411": {
       "pool": "stage4",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_swamp_bird",
@@ -1033,7 +1281,7 @@
     },
     "s421": {
       "pool": "stage4",
-      "weight": 3,
+      "weight": 4,
       "layers": [
         {
           "enemy": "enemy_living_wood",
@@ -1046,7 +1294,7 @@
     },
     "s431": {
       "pool": "stage4",
-      "weight": 3,
+      "weight": 6,
       "layers": [
         {
           "enemy": "enemy_spike",
@@ -1059,7 +1307,7 @@
     },
     "s441": {
       "pool": "stage4",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_piranha",
@@ -1067,6 +1315,280 @@
           "pattern": "line_horiz", 
           "interval": 0.0,
           "delay": 0.0
+        }
+      ]
+    },
+    "s412": {
+      "pool": "stage4",
+      "weight": 6,
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s413": {
+      "pool": "stage4",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s422": {
+      "pool": "stage4",
+      "weight": 2,
+      "layers": [
+        {
+          "enemy": "enemy_living_wood",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s432": {
+      "pool": "stage4",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_spike",
+          "count": 5,
+          "pattern": "single_random",
+          "interval": 0.4,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s433": {
+      "pool": "stage4",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_spike",
+          "count": 6,
+          "pattern": "burst_same_pos",
+          "interval": 0.2,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s442": {
+      "pool": "stage4",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_piranha",
+          "count": 3,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s4g1": {
+      "pool": "stage4",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_piranha",
+          "count": 2,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s4g2": {
+      "pool": "stage4",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_living_wood",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_spike",
+          "count": 4,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s4g3": {
+      "pool": "stage4",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_piranha",
+          "count": 2,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_spike",
+          "count": 4,
+          "pattern": "burst_same_pos",
+          "interval": 0.2,
+          "delay": 4.0
+        }
+      ]
+    },
+    "s4a1": {
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 1,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s4a2": {
+      "layers": [
+        {
+          "enemy": "enemy_spike",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 1.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s4a3": {
+      "layers": [
+        {
+          "enemy": "enemy_piranha",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 1,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s4b1": {
+      "layers": [
+        {
+          "enemy": "enemy_spike",
+          "count": 6,
+          "pattern": "burst_same_pos",
+          "interval": 0.2,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_spike",
+          "count": 6,
+          "pattern": "burst_same_pos",
+          "interval": 0.2,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 5.0
+        }
+      ]
+    },
+    "s4b2": {
+      "layers": [
+        {
+          "enemy": "enemy_piranha",
+          "count": 5,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_spike",
+          "count": 5,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 5.0
+        }
+      ]
+    },
+    "s4b3": {
+      "layers": [
+        {
+          "enemy": "enemy_living_wood",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_spike",
+          "count": 6,
+          "pattern": "burst_same_pos",
+          "interval": 0.2,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 6.0
+        },
+        {
+          "enemy": "enemy_piranha",
+          "count": 3,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 8.0
         }
       ]
     },
@@ -1101,7 +1623,7 @@
     },
     "s511": {
       "pool": "stage5",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_bat_b",
@@ -1114,7 +1636,7 @@
     },
     "s521": {
       "pool": "stage5",
-      "weight": 3,
+      "weight": 5,
       "layers": [
         {
           "enemy": "enemy_ghost",
@@ -1135,6 +1657,266 @@
           "pattern": "from_top_spacing", 
           "interval": 0.0,
           "delay": 0.0
+        }
+      ]
+    },
+    "s512": {
+      "pool": "stage5",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_bat_b",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s522": {
+      "pool": "stage5",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_ghost",
+          "count": 1,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_ghost",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s532": {
+      "pool": "stage5",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s541": {
+      "pool": "stage5",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s542": {
+      "pool": "stage5",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 4,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s551": {
+      "pool": "stage5",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_grimoire_strong",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s5g1": {
+      "pool": "stage5",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire_strong",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s5g2": {
+      "pool": "stage5",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_bat_b",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_ghost",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 3.0
+        }
+      ]
+    },
+    "s5g3": {
+      "pool": "stage5",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s5a1": {
+      "layers": [
+        {
+          "enemy": "enemy_ghost",
+          "count": 1,
+          "pattern": "single_random",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s5a2": {
+      "layers": [
+        {
+          "enemy": "enemy_grimoire_strong",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s5a3": {
+      "layers": [
+        {
+          "enemy": "enemy_bat_b",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_lantern",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s5b1": {
+      "layers": [
+        {
+          "enemy": "enemy_bat_b",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_ghost",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_bat_b",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 6.0
+        }
+      ]
+    },
+    "s5b2": {
+      "layers": [
+        {
+          "enemy": "enemy_lantern",
+          "count": 4,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_grimoire_strong",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_grimoire_strong",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 6.0
+        }
+      ]
+    },
+    "s5b3": {
+      "layers": [
+        {
+          "enemy": "enemy_lantern_b",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_ghost",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_lantern",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 5.0
         }
       ]
     },
@@ -1162,7 +1944,7 @@
     },
     "s611": {
       "pool": "stage6",
-      "weight": 5,
+      "weight": 4,
       "layers": [
         {
           "enemy": "enemy_bird_d",
@@ -1183,6 +1965,279 @@
           "pattern": "from_top_spacing",
           "interval": 0.0,
           "delay": 0.0
+        }
+      ]
+    },
+    "s612": {
+      "pool": "stage6",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_bird_d",
+          "count": 3,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s613": {
+      "pool": "stage6",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_bird_d",
+          "count": 3,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bird_d",
+          "count": 3,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s622": {
+      "pool": "stage6",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_flower_c",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s631": {
+      "pool": "stage6",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b_strong",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s632": {
+      "pool": "stage6",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b_strong",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s641": {
+      "pool": "stage6",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s651": {
+      "pool": "stage6",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_cedar",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s6g1": {
+      "pool": "stage6",
+      "weight": 5,
+      "layers": [
+        {
+          "enemy": "enemy_flower_c",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bird_d",
+          "count": 3,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s6g2": {
+      "pool": "stage6",
+      "weight": 4,
+      "layers": [
+        {
+          "enemy": "enemy_cedar",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s6g3": {
+      "pool": "stage6",
+      "weight": 3,
+      "layers": [
+        {
+          "enemy": "enemy_flower_b_strong",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_flower_c",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s6a1": {
+      "layers": [
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 2,
+          "pattern": "single_random",
+          "interval": 0.5,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s6a2": {
+      "layers": [
+        {
+          "enemy": "enemy_bird_d",
+          "count": 1,
+          "pattern": "burst_same_pos",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bird_d",
+          "count": 1,
+          "pattern": "burst_same_pos",
+          "interval": 0.0,
+          "delay": 2.0
+        }
+      ]
+    },
+    "s6a3": {
+      "layers": [
+        {
+          "enemy": "enemy_flower_c",
+          "count": 1,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s6b1": {
+      "layers": [
+        {
+          "enemy": "enemy_bird_d",
+          "count": 4,
+          "pattern": "burst_same_pos",
+          "interval": 0.3,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bird_d",
+          "count": 4,
+          "pattern": "burst_same_pos",
+          "interval": 0.3,
+          "delay": 2.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 3,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 4.0
+        }
+      ]
+    },
+    "s6b2": {
+      "layers": [
+        {
+          "enemy": "enemy_flower_c",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_flower_b_strong",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_swamp_bird",
+          "count": 4,
+          "pattern": "single_random",
+          "interval": 0.3,
+          "delay": 5.0
+        }
+      ]
+    },
+    "s6b3": {
+      "layers": [
+        {
+          "enemy": "enemy_cedar",
+          "count": 2,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 0.0
+        },
+        {
+          "enemy": "enemy_bird_d",
+          "count": 3,
+          "pattern": "burst_same_pos",
+          "interval": 0.4,
+          "delay": 3.0
+        },
+        {
+          "enemy": "enemy_flower_c",
+          "count": 3,
+          "pattern": "from_top_spacing",
+          "interval": 0.0,
+          "delay": 6.0
         }
       ]
     },

@@ -2,7 +2,6 @@
 extends GdUnitTestSuite
 
 const DEVIL_SCENE := preload("res://scenes/enemy/enemy_boss_devil.tscn")
-const STAGE6_1_SEED := "Ds6d11.intro-s6z1-Cs6c1"
 
 var _devil: Node2D
 var _dialogue_paths: Array[String] = []
@@ -125,13 +124,15 @@ func test_stage6_1_seed_plays_resolution3_after_boss() -> void:
   var select_data: StageSelectData = load("res://resources/data/stage_select_data.tres")
   var stage := select_data.get_stage_by_ids("chapter6", "stage6_1")
   assert_object(stage).is_not_null()
-  assert_str(stage.fixed_seed).is_equal(STAGE6_1_SEED)
+  # 雑魚ウェーブの構成は変わりうるため、シードは実データから読み、導入・ボス・後語りの位置だけを確認する
+  assert_str(stage.fixed_seed).starts_with("Ds6d11.intro-")
+  assert_str(stage.fixed_seed).ends_with("-s6z1-Cs6c1")
 
   var controller := StageController.new()
   add_child(controller)
 
   assert_bool(controller.start_stage(stage.fixed_seed)).is_true()
-  assert_int(controller.get_total_events()).is_equal(3)  # intro + ボスウェーブ + 後語りのカットシーン
+  assert_int(controller.get_total_events()).is_equal(stage.fixed_seed.split("-").size())
 
   controller.stop_stage()
   controller.queue_free()

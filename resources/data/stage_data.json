@@ -1351,6 +1351,10 @@
       "scene_path": "res://scenes/enemy/enemy_living_wood.tscn",
       "spawn_weight": 1.0
     },
+    "enemy_cedar": {
+      "scene_path": "res://scenes/enemy/enemy_cedar.tscn",
+      "spawn_weight": 1.0
+    },
     "enemy_spike": {
       "scene_path": "res://scenes/enemy/enemy_spike.tscn",
       "spawn_weight": 1.0

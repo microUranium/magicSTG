@@ -271,7 +271,10 @@
         "face_right": "res://assets/gfx/sprites/devil_face_1.png",
         "speaker_side": "right",
         "box_direction": "right",
-        "text": "くぅ…。まさかこれほどとは…！"
+        "text": "くぅ…。まさかこれほどとは…！",
+        "bgm": "res://assets/audio/bgm/stage5_bgm_wind.mp3",
+        "bgm_volume_db": -10.0,
+        "bgm_fade_in": 2.0
       },
       {
         "speaker_name": "フェリス",

@@ -149,3 +149,18 @@ func test_stage6_cutscene_plays_resolution3() -> void:
       assert_array(GameDataRegistry.get_dialogue_data(step["path"])).is_not_empty()
 
   assert_array(dialogue_paths).is_equal(["s6d11.resolution3"])
+
+
+func test_resolution_starts_wind_bgm_on_first_line() -> void:
+  var dialogue_data := DialogueConverter.get_dialogue_data_from_path("s6d11.resolution")
+  assert_object(dialogue_data).is_not_null()
+
+  var first_line: DialogueLine = dialogue_data.lines[0]
+  assert_object(first_line.bgm).is_not_null()
+  assert_str(first_line.bgm.resource_path).is_equal("res://assets/audio/bgm/stage5_bgm_wind.mp3")
+  assert_float(first_line.bgm_volume_db).is_equal(-10.0)
+  assert_float(first_line.bgm_fade_in).is_equal(2.0)
+
+  # 以降の行では BGM を切り替えない
+  for i in range(1, dialogue_data.lines.size()):
+    assert_object(dialogue_data.lines[i].bgm).is_null()

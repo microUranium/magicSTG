@@ -7,6 +7,10 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 
 @export var movement_type: MovementType = MovementType.STRAIGHT
 @export var initial_speed: float = 200.0
+## initial_speed より大きい値を設定すると、弾ごとに initial_speed〜この値の範囲で初速をランダムに決める。
+## 0（または initial_speed 以下）なら initial_speed 固定。
+## 弾の speed から動く移動タイプ（直進・減速・加速など）に効く。螺旋・ブーメランは initial_speed を直接参照するため対象外。
+@export var initial_speed_max: float = 0.0
 
 # 減速設定
 @export var deceleration_rate: float = 100.0
@@ -67,3 +71,10 @@ enum RotationMode { MOVEMENT_DIRECTION, SELF_ROTATION, FIXED }  # 移動方向�
 @export var rotation_mode: RotationMode = RotationMode.MOVEMENT_DIRECTION  # 回転モード
 @export_range(0.0, 360.0, 0.1, "radians_as_degrees") var initial_rotation: float = 0.0  # 初期角度（度）、FIXED/SELF_ROTATIONモードで使用
 @export var angular_velocity: float = 0.0  # 角速度（度/秒）、負の値で逆回転
+
+
+# 弾1発ぶんの初速を決める（initial_speed_max が設定されていれば範囲内でランダム）
+func roll_initial_speed() -> float:
+  if initial_speed_max > initial_speed:
+    return randf_range(initial_speed, initial_speed_max)
+  return initial_speed

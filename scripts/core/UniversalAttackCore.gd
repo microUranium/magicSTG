@@ -334,7 +334,7 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
   bullet.direction = base_dir
   bullet.speed = pattern.bullet_speed
   bullet.damage = pattern.damage
-  bullet.bullet_lifetime = pattern.bullet_lifetime
+  bullet.bullet_lifetime = pattern.roll_bullet_lifetime()
   bullet.target_group = pattern.target_group
 
   if "penetration_count" in bullet:
@@ -435,7 +435,7 @@ func _spawn_spread_bullet(
   bullet.direction = direction
   bullet.speed = pattern.bullet_speed * speed_multiplier
   bullet.damage = pattern.damage
-  bullet.bullet_lifetime = pattern.bullet_lifetime
+  bullet.bullet_lifetime = pattern.roll_bullet_lifetime()
   bullet.target_group = pattern.target_group
 
   # 拡散弾は1F無敵を有効化（生成直後の元の敵への再ヒットを防止）
@@ -749,7 +749,7 @@ func _spawn_bullet(
   bullet.speed = pattern.bullet_speed
   bullet.damage = pattern.damage
   bullet.bullet_range = pattern.bullet_range
-  bullet.bullet_lifetime = pattern.bullet_lifetime
+  bullet.bullet_lifetime = pattern.roll_bullet_lifetime()
   if "penetration_count" in bullet:
     bullet.penetration_count = pattern.penetration_count
 

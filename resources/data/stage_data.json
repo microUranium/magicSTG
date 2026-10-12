@@ -1235,6 +1235,10 @@
       "scene_path": "res://scenes/enemy/enemy_flower_b.tscn",
       "spawn_weight": 1.0
     },
+    "enemy_flower_b_strong": {
+      "scene_path": "res://scenes/enemy/enemy_flower_b_strong.tscn",
+      "spawn_weight": 1.0
+    },
     "enemy_flower_c": {
       "scene_path": "res://scenes/enemy/enemy_flower_c.tscn",
       "spawn_weight": 1.0
@@ -1263,8 +1267,16 @@
       "scene_path": "res://scenes/enemy/enemy_lantern_b.tscn",
       "spawn_weight": 1.0
     },
+    "enemy_lantern_b_weak": {
+      "scene_path": "res://scenes/enemy/enemy_lantern_b_weak.tscn",
+      "spawn_weight": 1.0
+    },
     "enemy_grimoire": {
       "scene_path": "res://scenes/enemy/enemy_grimoire.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_grimoire_strong": {
+      "scene_path": "res://scenes/enemy/enemy_grimoire_strong.tscn",
       "spawn_weight": 1.0
     },
     "enemy_bat_a": {

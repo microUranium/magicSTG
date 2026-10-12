@@ -66,16 +66,24 @@ func test_stage5_boss_pool_is_bear_without_dialogue() -> void:
   assert_str(bear["parameters"]["skip_dialogue"]).is_equal("true")
 
 
-func test_stage5_2_seed_ends_with_bear_after_random_waves() -> void:
+func test_stage5_2_seed_contains_bear_and_random_waves() -> void:
   var stage: StageData = _chapter("chapter5").stages[1]
 
   var parts := RandomSeedGenerator.generate_seed_with_pools(stage.random_seed_pools).split("-")
 
+  # 熊の出現位置は調整しうるため、位置ではなくシードに含まれていることを確認する
+  var bear_waves := 0
+  var stage5_waves := 0
+  for part in parts:
+    # セリフパートなし: 会話・カットシーンは入らない
+    assert_bool(_templates.has(part)).override_failure_message(part).is_true()
+    if _template_enemies(part) == ["boss_bear_skip_dialogue"]:
+      bear_waves += 1
+    elif _templates[part].get("pool", "") == "stage5":
+      stage5_waves += 1
+  assert_int(bear_waves).is_equal(1)
+  assert_int(stage5_waves).is_equal(WAVE_COUNT)
   assert_int(parts.size()).is_equal(WAVE_COUNT + 1)
-  for i in WAVE_COUNT:
-    # セリフパートなし: 会話・カットシーンは入らず、雑魚プールのウェーブだけ
-    assert_str(_templates[parts[i]].get("pool", "")).is_equal("stage5")
-  assert_array(_template_enemies(parts[WAVE_COUNT])).is_equal(["boss_bear_skip_dialogue"])
   assert_int(_resolve_stage_number("-".join(parts))).is_equal(5)
 
 

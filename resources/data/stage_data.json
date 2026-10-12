@@ -1266,6 +1266,30 @@
         }
       ]
     },
+    "s3z3": {
+      "pool": "stage3_boss",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "boss_robe_skip_dialogue",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s3z4": {
+      "layers": [
+        {
+          "enemy": "boss_robe_skip_dialogue_skip_bgm_change",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
     "s411": {
       "pool": "stage4",
       "weight": 5,
@@ -1616,6 +1640,30 @@
           "enemy": "boss_bird_swamp",
           "count": 1,
           "pattern": "line_horiz", 
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s4z3": {
+      "pool": "stage4_boss",
+      "weight": 10,
+      "layers": [
+        {
+          "enemy": "boss_spider_skip_dialogue",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s4z4": {
+      "layers": [
+        {
+          "enemy": "boss_spider_skip_dialogue_skip_bgm_change",
+          "count": 1,
+          "pattern": "line_horiz",
           "interval": 0.0,
           "delay": 0.0
         }
@@ -2547,6 +2595,22 @@
       "scene_path": "res://scenes/enemy/enemy_boss_robe.tscn",
       "spawn_weight": 1.0
     },
+    "boss_robe_skip_dialogue": {
+      "scene_path": "res://scenes/enemy/enemy_boss_robe.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true"
+      }
+    },
+    "boss_robe_skip_dialogue_skip_bgm_change": {
+      "scene_path": "res://scenes/enemy/enemy_boss_robe.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true",
+        "skip_bgm_change": "true",
+        "skip_boss_defeat_effect": "true"
+      }
+    },
     "boss_vampire": {
       "scene_path": "res://scenes/enemy/enemy_boss_vampire.tscn",
       "spawn_weight": 1.0
@@ -2574,6 +2638,22 @@
     "boss_spider": {
       "scene_path": "res://scenes/enemy/enemy_boss_spider.tscn",
       "spawn_weight": 1.0
+    },
+    "boss_spider_skip_dialogue": {
+      "scene_path": "res://scenes/enemy/enemy_boss_spider.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true"
+      }
+    },
+    "boss_spider_skip_dialogue_skip_bgm_change": {
+      "scene_path": "res://scenes/enemy/enemy_boss_spider.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true",
+        "skip_bgm_change": "true",
+        "skip_boss_defeat_effect": "true"
+      }
     },
     "enemy_harpy_swamp": {
       "scene_path": "res://scenes/enemy/enemy_harpy_swamp.tscn",

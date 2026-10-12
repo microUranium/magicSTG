@@ -29,7 +29,7 @@
 | enemy_fugu_a | — | ● 5+3 | — | — | — | — | |
 | enemy_sea_bird | — | ● 8+4 | — | — | — | — | |
 | enemy_flower_b | — | ● 5+3 | — | — | — | ● 3+1（派生版） | stage6に登場する方は攻撃手段、HP共に強化 |
-| enemy_lantern | — | — | ● 6+4 | — | ● 4+3 | — | stage5に登場する方は攻撃手段、HP据え置き |
+| enemy_lantern | — | — | ● 6+4 | — | ● 4+2 | — | stage5に登場する方は攻撃手段、HP据え置き |
 | enemy_grimoire | — | — | ● 4+3 | — | ● 2+2（派生版） | — | stage5に登場する方は攻撃手段強化、HP据え置き |
 | enemy_bat_a | — | — | ● 4+4 | — | — | — | |
 | enemy_swamp_bird | — | — | — | ● 5+5 | — | ● 2+3 | stage6に登場する方は攻撃手段HP共に据え置き |
@@ -38,8 +38,8 @@
 | enemy_spike | — | — | — | ● 5+4 | — | — | |
 | enemy_piranha | — | — | — | ● 4+3 | — | — | |
 | enemy_bat_b | — | — | — | — | ● 3+2 | — | |
-| enemy_ghost | — | — | — | — | ● 3+3 | — | |
-| enemy_lantern_b | — | — | ● 4+2（派生版） | — | ● 3+1 | — | stage3に登場する方は攻撃手段、HP共に弱体化 |
+| enemy_ghost | — | — | — | — | ● 3+2 | — | |
+| enemy_lantern_b | — | — | ● 4+2（派生版） | — | ● 3 | — | stage3に登場する方は攻撃手段、HP共に弱体化 |
 | enemy_bird_d | — | — | — | — | — | ● 4+3 | |
 | enemy_flower_c | — | — | — | — | — | ● 4+3 | |
 | **雑魚種類数（現状）** | 4 | 5 | 4 | 4 | 5 | 5 | |

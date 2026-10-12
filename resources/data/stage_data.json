@@ -1895,31 +1895,6 @@
         }
       ]
     },
-    "s5b3": {
-      "layers": [
-        {
-          "enemy": "enemy_lantern_b",
-          "count": 2,
-          "pattern": "from_top_spacing",
-          "interval": 0.0,
-          "delay": 0.0
-        },
-        {
-          "enemy": "enemy_ghost",
-          "count": 2,
-          "pattern": "single_random",
-          "interval": 0.5,
-          "delay": 3.0
-        },
-        {
-          "enemy": "enemy_lantern",
-          "count": 3,
-          "pattern": "from_top_spacing",
-          "interval": 0.0,
-          "delay": 5.0
-        }
-      ]
-    },
     "s5z1": {
       "layers": [
         {
@@ -1948,6 +1923,17 @@
       "layers": [
         {
           "enemy": "boss_bear_skip_dialogue",
+          "count": 1,
+          "pattern": "line_horiz",
+          "interval": 0.0,
+          "delay": 0.0
+        }
+      ]
+    },
+    "s5z4": {
+      "layers": [
+        {
+          "enemy": "boss_bear_skip_dialogue_skip_bgm_change",
           "count": 1,
           "pattern": "line_horiz",
           "interval": 0.0,
@@ -2610,6 +2596,15 @@
       "spawn_weight": 1.0,
       "parameters": {
         "skip_dialogue": "true"
+      }
+    },
+    "boss_bear_skip_dialogue_skip_bgm_change": {
+      "scene_path": "res://scenes/enemy/enemy_boss_bear.tscn",
+      "spawn_weight": 1.0,
+      "parameters": {
+        "skip_dialogue": "true",
+        "skip_bgm_change": "true",
+        "skip_boss_defeat_effect": "true"
       }
     },
     "boss_doll": {

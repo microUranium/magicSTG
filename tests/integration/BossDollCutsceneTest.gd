@@ -128,6 +128,26 @@ func test_stage5_3_seed_contains_cutscene_event() -> void:
   controller.queue_free()
 
 
+func test_stage5_3_bear_appears_right_before_doll_without_effects() -> void:
+  var select_data: StageSelectData = load("res://resources/data/stage_select_data.tres")
+  var parts := select_data.get_stage_by_ids("chapter5", "stage5_3").fixed_seed.split("-")
+
+  # 人形戦前の会話 → 人形 の直前のウェーブが熊
+  var doll_talk := parts.find("Ds5d12.battle_conversation")
+  assert_int(doll_talk).is_greater(0)
+  assert_str(parts[doll_talk + 1]).is_equal("s5z2")
+  var bear_wave := parts[doll_talk - 1]
+  var layers: Array = GameDataRegistry.get_wave_template(bear_wave)["layers"]
+  assert_int(layers.size()).is_equal(1)
+
+  # 熊の登場演出・BGM 変更・撃破演出はすべて切る
+  var bear: Dictionary = GameDataRegistry.get_enemy_data(layers[0]["enemy"])
+  assert_str(bear["scene_path"]).is_equal("res://scenes/enemy/enemy_boss_bear.tscn")
+  assert_dict(bear["parameters"]).is_equal(
+    {"skip_dialogue": "true", "skip_bgm_change": "true", "skip_boss_defeat_effect": "true"}
+  )
+
+
 func test_battle_progression3_switches_bgm_on_its_line() -> void:
   var dialogue_data := DialogueConverter.get_dialogue_data_from_path("s5d12.battle_progression3")
   assert_object(dialogue_data).is_not_null()
@@ -136,7 +156,6 @@ func test_battle_progression3_switches_bgm_on_its_line() -> void:
   for line in dialogue_data.lines:
     if line.bgm != null:
       bgm_lines.append(line)
-
   assert_int(bgm_lines.size()).is_equal(1)
   assert_str(bgm_lines[0].bgm.resource_path).is_equal("res://assets/audio/bgm/stage5_bgm_kari.mp3")
   assert_float(bgm_lines[0].bgm_volume_db).is_equal(-10.0)  # 5-3 開始時と同じ音量

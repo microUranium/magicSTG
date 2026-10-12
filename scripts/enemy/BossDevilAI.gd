@@ -12,6 +12,12 @@ class_name BossDevilAI
 @export var _bgm: AudioStream
 @export var bgm_fade_in := 2.0
 
+## 撃破後演出フェーズ（落下 → 静止 → 跳ね上がり → 暗転なしの撃破演出 → 退場 → 後語り）
+const FINALE_PHASE_IDX := 4
+# _next_pattern() 内では _idx が「開始したパターンの次」を指すため、
+# 跳ね上がり直後の待機パターン（パターン番号5）開始時は _idx == 6 になる
+const FINALE_FLASH_IDX := 6
+
 var _phase_idx := 0
 
 
@@ -66,6 +72,9 @@ func _next_phase():
 func _on_pattern_finished(cb_token: int):
   if cb_token != _token:  # 重複防止
     return
+  if _phase_idx == FINALE_PHASE_IDX and _idx >= patterns.size():
+    enemy_node.queue_free()  # 撃破後演出を流し切ったらボスを消してウェーブを完了させる
+    return
   if _idx >= patterns.size() and (_phase_idx == 0 or _phase_idx == 2):
     _next_phase()
   else:
@@ -92,13 +101,11 @@ func _next_pattern():
   elif _phase_idx == 3 and (_idx % patterns.size() == 2 or _idx % patterns.size() == 6):
     _clear_all_pattern_cores()
     _set_attack_patterns(phase2_patterns_2)
-  elif _phase_idx == 4 and _idx % patterns.size() == 3:
+  elif _phase_idx == FINALE_PHASE_IDX and _idx == FINALE_FLASH_IDX:
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     # destroy_boss はボス位置で定位、break_shield は演出音として非2D再生
     StageSignals.emit_signal("sfx_play_requested", "destroy_boss", enemy_node.global_position, 0, 2)
     StageSignals.emit_signal("sfx_play_requested", "break_shield", Vector2.INF, 0, 2)
-  elif _phase_idx == 4 and _idx % patterns.size() == 0:
-    enemy_node.queue_free()  # 最終フェーズの最後のパターンが終わったら敵を消す
 
 
 func _set_attack_patterns(patterns: Array[AttackPattern]):

@@ -12,6 +12,9 @@ signal enemy_defeated(enemy)
 signal attack_cores_pause_requested(paused: bool)
 signal blessings_pause_requested(paused: bool)
 signal player_control_pause_requested(paused: bool)
+signal cutscene_pause_requested(paused: bool)  # 会話以外の演出中にプレイヤー操作を止める要求
+signal request_screen_fade(to_black: bool, duration: float)  # 全画面暗転（HUDより背面）
+signal request_background_texture_change(texture: Texture2D)  # フェードなしで背景を差し替え
 signal player_defeat_requested
 
 ## ───── BGM 系シグナル ─────
@@ -25,6 +28,18 @@ signal sfx_play_stream_requested(stream: AudioStream, pos: Vector2, vol_db: floa
 
 func emit_request_dialogue(dd, cb):
   emit_signal("request_dialogue", dd, cb)
+
+
+func emit_cutscene_pause_requested(paused: bool) -> void:
+  emit_signal("cutscene_pause_requested", paused)
+
+
+func emit_request_screen_fade(to_black: bool, duration: float) -> void:
+  emit_signal("request_screen_fade", to_black, duration)
+
+
+func emit_request_background_texture_change(texture: Texture2D) -> void:
+  emit_signal("request_background_texture_change", texture)
 
 
 func emit_request_hud_flash(fade_duration):

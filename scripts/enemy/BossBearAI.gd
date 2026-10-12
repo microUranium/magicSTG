@@ -10,6 +10,12 @@ class_name BossBearAI
 @export var _bgm: AudioStream
 @export var bgm_fade_in := 2.0
 
+## 登場時の演出（会話 → 自機が近づく → 熊が目を覚ます → 自機が後ずさる）
+const INTRO_PLAYER_APPROACH_OFFSET := Vector2(0, 180)  # ボスからどれだけ手前まで寄るか
+const INTRO_PLAYER_APPROACH_TIME := 1.5
+const INTRO_PLAYER_RETREAT_POSITION := Vector2(448, 480)  # 画面中央
+const INTRO_PLAYER_RETREAT_TIME := 0.2
+
 var _phase_idx := 0
 var _phase_transition_counter := 0
 
@@ -45,6 +51,8 @@ func _next_phase():
   if _phase_idx >= phases.size():
     _phase_idx -= 2  # 最終フェーズに到達したら前のフェーズに戻る
 
+  start_boss_animation()  # 会話をスキップした場合でも戦闘フェーズでは必ず動かす
+
   var phase := phases[_phase_idx]
   patterns = phase.patterns
   loop_type = phase.loop_type
@@ -59,6 +67,39 @@ func _next_phase():
   phase_changed.emit(_phase_idx)
 
   _next_pattern()
+
+
+func _next_pattern():
+  super._next_pattern()
+  _handle_intro_pattern_started()
+
+
+func _handle_intro_pattern_started() -> void:
+  """登場フェーズの各パターン開始時に、自機の接近・熊の起動・後ずさりを行う。"""
+  if _phase_idx != 0 or skip_dialogue:
+    return
+
+  if _idx == 4:
+    _move_player_to(
+      enemy_node.global_position + INTRO_PLAYER_APPROACH_OFFSET, INTRO_PLAYER_APPROACH_TIME
+    )
+  elif _idx == 5:
+    start_boss_animation()
+  elif _idx == 6:
+    _move_player_to(INTRO_PLAYER_RETREAT_POSITION, INTRO_PLAYER_RETREAT_TIME)
+
+
+func start_boss_animation() -> void:
+  """会話中は止めていたアニメーションを動かし始める。"""
+  var sprite := enemy_node.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+  if sprite and not sprite.is_playing():
+    sprite.play("default")
+
+
+func _move_player_to(target_position: Vector2, duration: float) -> void:
+  var player := TargetService.get_player()
+  if player and player.has_method("move_to"):
+    player.move_to(target_position, duration)
 
 
 func _on_pattern_finished(cb_token: int):
@@ -76,10 +117,6 @@ func _on_pattern_finished(cb_token: int):
         super._on_pattern_finished(cb_token)
   else:
     super._on_pattern_finished(cb_token)
-
-
-func _next_pattern():
-  super._next_pattern()
 
 
 func _setup_phase_attacks():

@@ -122,85 +122,44 @@ MagicSTGの新しいステージ生成システムは、シード値ベースで
       "type": "fixed_positions", 
       "positions": [[400,300]]
     }
-  },
+  }
+}
+```
 
-  "dialogues": {
-    "stage1": {
-      "intro": [
-        {
-          "speaker_name": "フェアリー",
-          "face_left": "res://textures/faces/fairy_normal.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "新しいステージが始まるよ！"
-        },
-        {
-          "speaker_name": "フェアリー",
-          "face_left": "res://textures/faces/fairy_excited.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "敵が来るから準備して！"
-        }
-      ],
-      "mid_battle": [
-        {
-          "speaker_name": "プレイヤー",
-          "face_left": null,
-          "face_right": "res://textures/faces/player_serious.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "この敵、強いな..."
-        },
-        {
-          "speaker_name": "プレイヤー",
-          "face_left": null,
-          "face_right": "res://textures/faces/player_determined.png",
-          "speaker_side": "right",
-          "box_direction": "right",
-          "text": "でも負けるわけにはいかない！"
-        }
-      ],
-      "victory": [
-        {
-          "speaker_name": "フェアリー",
-          "face_left": "res://textures/faces/fairy_happy.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "やったね！"
-        },
-        {
-          "speaker_name": "フェアリー",
-          "face_left": "res://textures/faces/fairy_excited.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "次のステージに進もう！"
-        }
-      ]
-    },
-    "boss_stage": {
-      "boss_intro": [
-        {
-          "speaker_name": "ボス",
-          "face_left": "res://textures/faces/boss_menacing.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "よくここまで来たな..."
-        },
-        {
-          "speaker_name": "ボス",
-          "face_left": "res://textures/faces/boss_angry.png",
-          "face_right": null,
-          "speaker_side": "left",
-          "box_direction": "left",
-          "text": "だが、ここで終わりだ！"
-        }
-      ]
-    }
+### 会話データ（resources/data/dialogues/stage*.json）
+
+会話データ（dialogues）は肥大化対策のため stage_data.json 本体から分離され、
+ステージごとのファイル `resources/data/dialogues/stage1.json`〜`stage6.json` に格納される。
+
+- GameDataRegistry が起動時に `res://resources/data/dialogues/` 内の全 `.json` ファイルを読み込み、`dialogues` 辞書にマージする
+- 各ファイルのトップレベルは「会話プール名 → 会話データ」の辞書（例: stage1.json は `s1d11` / `s1d12` を含む）
+- 参照方法は従来どおり `GameDataRegistry.get_dialogue_data("プール名.会話ID")`（例: `s1d11.intro`）で、シード文字列内の `Dpool.dialogue_id` 記法も変更なし
+- プール名が複数ファイルで重複した場合は警告を出し、後から読んだ内容で上書きされる
+- `load_stage_data()` にテスト用辞書を注入した場合、外部ファイルは読み込まれない
+
+```json
+{
+  "s1d11": {
+    "intro": [
+      {
+        "speaker_name": "フェアリー",
+        "face_left": "res://textures/faces/fairy_normal.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "新しいステージが始まるよ！"
+      }
+    ],
+    "victory": [
+      {
+        "speaker_name": "フェアリー",
+        "face_left": "res://textures/faces/fairy_happy.png",
+        "face_right": null,
+        "speaker_side": "left",
+        "box_direction": "left",
+        "text": "やったね！"
+      }
+    ]
   }
 }
 ```

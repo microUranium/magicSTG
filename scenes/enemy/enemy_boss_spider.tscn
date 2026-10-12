@@ -71,6 +71,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s4d11.battle_conversation"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_md488"]
@@ -99,6 +100,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_1k3hq"]
@@ -118,6 +120,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_fg38x"]
@@ -137,6 +140,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_gfwgc"]
@@ -156,6 +160,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_uspes"]
@@ -175,6 +180,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u32tt"]
@@ -194,6 +200,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_6sp45"]
@@ -213,6 +220,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_cvbmj"]
@@ -232,6 +240,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_g13fj"]
@@ -251,6 +260,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_f67gb"]
@@ -270,6 +280,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_k5yli"]
@@ -289,6 +300,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u4538"]
@@ -308,6 +320,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_xu823"]
@@ -336,6 +349,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_qousy"]
@@ -355,6 +369,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_emf8d"]
@@ -374,6 +389,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_xcv7w"]
@@ -393,6 +409,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_fh05a"]
@@ -421,6 +438,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_3tkki"]

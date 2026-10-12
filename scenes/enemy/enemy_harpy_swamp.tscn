@@ -72,6 +72,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_hf5wd"]
@@ -91,6 +92,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ohmgs"]
@@ -110,6 +112,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s4d12.battle_conversation"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_hpe1h"]
@@ -138,6 +141,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_tak31"]
@@ -157,6 +161,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_j6mvf"]
@@ -176,6 +181,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_638n6"]
@@ -195,6 +201,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s4d12.battle_conversation2"
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u02ya"]
@@ -223,6 +230,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_8tou6"]
@@ -242,6 +250,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_qgs3w"]

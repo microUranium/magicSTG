@@ -16,6 +16,7 @@ var _token: int = 0
 var _active_tw: Tween = null
 var _last_movement_direction: Vector2 = Vector2.ZERO  # 前回の移動方向を記憶
 var _stage_lifecycle: StageLifecycleController = null
+var _player_control_blocked: bool = false  # 演出パターンによる操作ロック中か
 
 
 func _ready():
@@ -41,6 +42,9 @@ func _next_pattern():
     _idx += 1
 
   _token += 1
+
+  # 演出パターン中は会話中と同様にプレイヤー操作を止める
+  _set_player_control_blocked(_current.block_player_control)
 
   if _current.dialogue_path != "" and skip_dialogue:
     _on_pattern_finished(_token)  # ダイアログをスキップしてパターン完了を通知
@@ -75,3 +79,27 @@ func _cancel_current_pattern() -> void:
     _active_tw.kill()
   _active_tw = null
   _token += 1
+  _set_player_control_blocked(false)
+
+
+func _exit_tree() -> void:
+  # 演出途中で敵が消えた場合に操作ロックが残らないようにする
+  _set_player_control_blocked(false)
+
+
+func _set_player_control_blocked(blocked: bool) -> void:
+  """演出によるプレイヤー操作ロックの ON/OFF"""
+  if blocked:
+    # 会話終了時に StageController 側で一括解除されるため、毎回ロックを掛け直す
+    _player_control_blocked = true
+    StageSignals.emit_cutscene_pause_requested(true)
+    return
+
+  if not _player_control_blocked:
+    return
+  _player_control_blocked = false
+
+  # ステージ終了時はステージ側がポーズ状態を管理するため、ここでは解除しない
+  if is_instance_valid(_stage_lifecycle) and not _stage_lifecycle.is_stage_running():
+    return
+  StageSignals.emit_cutscene_pause_requested(false)

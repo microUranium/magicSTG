@@ -5,17 +5,18 @@ var item_instance: ItemInstance
 var player: Player
 var speed: float = 100.0  # プレイヤーに向かう速度
 
-@export var item_image_blessing: Texture2D
-@export var item_image_core: Texture2D
+## ItemInstance.RarityTier の値をインデックスとしたレアリティ別スプライト
+@export var item_images_blessing: Array[Texture2D] = []
+@export var item_images_core: Array[Texture2D] = []
 @onready var sprite := $Sprite2D
 
 
 func _ready() -> void:
   connect("area_entered", Callable(self, "_on_area_entered"))
   if item_instance.prototype.item_type == item_instance.prototype.ItemType.BLESSING:
-    sprite.texture = item_image_blessing
+    sprite.texture = _pick_texture(item_images_blessing, item_instance.get_rarity_tier())
   else:
-    sprite.texture = item_image_core
+    sprite.texture = _pick_texture(item_images_core, item_instance.get_rarity_tier())
 
   # ランダムな方向に向かって少し移動
   var angle: float = randf() * 2 * PI
@@ -42,6 +43,14 @@ func _process(delta: float) -> void:
   if is_instance_valid(player):
     var direction: Vector2 = (player.global_position - global_position).normalized()
     position += direction * speed * delta  # プレイヤーに向かって移動
+
+
+## 指定ティアのスプライトを返す。未設定の場合はそれ以下で最も高いティアのものを使う
+func _pick_texture(textures: Array[Texture2D], tier: int) -> Texture2D:
+  for i in range(min(tier, textures.size() - 1), -1, -1):
+    if textures[i]:
+      return textures[i]
+  return null
 
 
 func _on_area_entered(body: Node) -> void:

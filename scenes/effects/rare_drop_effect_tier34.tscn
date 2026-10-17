@@ -1,0 +1,102 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/RareDropEffect.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dbalbsi3kv0g3" path="res://assets/gfx/effects/sparkle.png" id="2_sparkle"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_soft"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_soft"]
+gradient = SubResource("Gradient_soft")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_fade"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.8, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_shrink"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.5, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_twinkle"]
+_data = [Vector2(0, 0), 0.0, 4.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="RareDropEffectTier34" type="Node2D"]
+script = ExtResource("1_script")
+glow_scale_min = 1.1
+glow_scale_max = 1.3
+glow_pulse_sec = 1.2
+
+[node name="Glow" type="Sprite2D" parent="."]
+modulate = Color(0.55, 0.85, 1, 0.45)
+texture_filter = 2
+material = SubResource("CanvasItemMaterial_add")
+texture = SubResource("GradientTexture2D_soft")
+
+[node name="SpawnRing" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_add")
+emitting = false
+amount = 12
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.3
+texture = ExtResource("2_sparkle")
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 220.0
+initial_velocity_max = 280.0
+damping_min = 350.0
+damping_max = 450.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_shrink")
+color = Color(0.6, 0.9, 1, 1)
+color_ramp = SubResource("Gradient_fade")
+
+[node name="LoopAura" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_add")
+amount = 7
+lifetime = 1.0
+lifetime_randomness = 0.3
+texture = ExtResource("2_sparkle")
+emission_shape = 1
+emission_sphere_radius = 34.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -30)
+initial_velocity_min = 0.0
+initial_velocity_max = 15.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_twinkle")
+color = Color(0.65, 0.92, 1, 1)
+
+[node name="PickupBurst" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_add")
+emitting = false
+amount = 10
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.3
+texture = ExtResource("2_sparkle")
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 260.0
+damping_min = 350.0
+damping_max = 450.0
+scale_amount_min = 2.0
+scale_amount_max = 2.5
+scale_amount_curve = SubResource("Curve_shrink")
+color = Color(0.6, 0.9, 1, 1)

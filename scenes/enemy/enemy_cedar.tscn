@@ -1,0 +1,100 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy/EnemyCedar.gd" id="1_cedar"]
+[ext_resource type="Texture2D" uid="uid://cxg6y52h68lab" path="res://assets/gfx/sprites/enemy_cedar_sprite.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="3_hp"]
+[ext_resource type="Script" uid="uid://cwb6miskv0vod" path="res://scripts/enemy/ForwardMoveAndStopAI.gd" id="4_ai"]
+[ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="5_slot"]
+[ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="6_slot_script"]
+[ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="7_core"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="8_bullet"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="9_pattern"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="10_visual"]
+[ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="11_movement"]
+[ext_resource type="Texture2D" uid="uid://eeykk5dmkswh" path="res://assets/gfx/sprites/bullet_enemy_sprite_2.png" id="12_pollen_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cedar0"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cedar1"]
+atlas = ExtResource("2_tex")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cedar"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cedar0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cedar1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cedar"]
+size = Vector2(133, 181)
+
+[sub_resource type="Resource" id="Resource_pollen_visual"]
+script = ExtResource("10_visual")
+texture = ExtResource("12_pollen_tex")
+scale = 1.0
+color = Color(1, 1, 1, 1)
+collision_radius = 8.0
+enable_particles = false
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_pollen_movement"]
+script = ExtResource("11_movement")
+movement_type = 1
+initial_speed = 150.0
+initial_speed_max = 600.0
+deceleration_rate = 200.0
+min_speed = 20.0
+metadata/_custom_type_script = "uid://urppv4s7es6g"
+
+[sub_resource type="Resource" id="Resource_pollen"]
+script = ExtResource("9_pattern")
+pattern_type = 0
+bullet_scene = ExtResource("8_bullet")
+target_group = "players"
+damage = 5
+bullet_lifetime = 2.5
+bullet_lifetime_max = 3.5
+auto_start = false
+bullet_visual_config = SubResource("Resource_pollen_visual")
+bullet_movement_config = SubResource("Resource_pollen_movement")
+bullet_count = 50
+direction_type = 2
+angle_spread = 0.0
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[node name="EnemyCedar" type="Area2D" groups=["enemies"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_cedar")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_cedar")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(6.5, 32.5)
+shape = SubResource("RectangleShape2D_cedar")
+
+[node name="HpNode" type="Node" parent="."]
+script = ExtResource("3_hp")
+max_hp = 500
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("4_ai")
+base_speed = 150.0
+
+[node name="AttackCoreSlot" parent="." instance=ExtResource("5_slot")]
+script = ExtResource("6_slot_script")
+default_core_scene = ExtResource("7_core")
+attack_pattern = SubResource("Resource_pollen")
+auto_create_core = true

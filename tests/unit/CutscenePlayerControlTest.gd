@@ -32,7 +32,7 @@ func _make_pattern(block_player_control: bool, move_time: float) -> EnemyPattern
   return pattern
 
 
-func _setup_ai(patterns: Array[EnemyPatternResource]) -> void:
+func _setup_ai(patterns: Array[EnemyPatternResource], skip_dialogue := false) -> void:
   _root = Node2D.new()
   _root.name = "CutsceneTestEnemy"
   add_child(_root)
@@ -40,6 +40,7 @@ func _setup_ai(patterns: Array[EnemyPatternResource]) -> void:
   _ai = EnemyPatternedAIBase.new()
   _ai.name = "EnemyAI"
   _ai.patterns = patterns
+  _ai.skip_dialogue = skip_dialogue
   _root.add_child(_ai)
 
 
@@ -63,6 +64,15 @@ func test_non_blocking_pattern_does_not_request_pause() -> void:
   await await_idle_frame()
 
   assert_array(_events).is_empty()
+
+
+func test_blocking_pattern_does_not_pause_when_dialogue_skipped() -> void:
+  # 会話を省略する個体（ランダムステージのボス等）は演出も省略扱いにし、操作を止めない
+  _setup_ai([_make_pattern(true, 0.1), _make_pattern(true, 0.1), _make_pattern(false, 5.0)], true)
+
+  await await_millis(400)
+
+  assert_array(_events).not_contains([true])
 
 
 func test_pause_is_released_when_blocking_pattern_finishes() -> void:

@@ -128,6 +128,31 @@ func test_stage5_3_seed_contains_cutscene_event() -> void:
   controller.queue_free()
 
 
+func test_stage5_3_seed_contains_bear_without_effects() -> void:
+  var select_data: StageSelectData = load("res://resources/data/stage_select_data.tres")
+  var parts := select_data.get_stage_by_ids("chapter5", "stage5_3").fixed_seed.split("-")
+
+  # 熊の出現位置は調整しうるため、位置ではなくシードに含まれていることを確認する。
+  # 熊の登場演出・BGM 変更・撃破演出はすべて切る
+  var muted := {
+    "skip_dialogue": "true", "skip_bgm_change": "true", "skip_boss_defeat_effect": "true"
+  }
+  var bear_waves := 0
+  for part in parts:
+    var template := GameDataRegistry.get_wave_template(part)
+    if template.is_empty():
+      continue  # 会話・カットシーン
+    for layer in template["layers"]:
+      var enemy := GameDataRegistry.get_enemy_data(layer["enemy"])
+      if (
+        enemy.get("scene_path", "") == "res://scenes/enemy/enemy_boss_bear.tscn"
+        and enemy.get("parameters", {}) == muted
+      ):
+        bear_waves += 1
+
+  assert_int(bear_waves).is_equal(1)
+
+
 func test_battle_progression3_switches_bgm_on_its_line() -> void:
   var dialogue_data := DialogueConverter.get_dialogue_data_from_path("s5d12.battle_progression3")
   assert_object(dialogue_data).is_not_null()
@@ -136,7 +161,6 @@ func test_battle_progression3_switches_bgm_on_its_line() -> void:
   for line in dialogue_data.lines:
     if line.bgm != null:
       bgm_lines.append(line)
-
   assert_int(bgm_lines.size()).is_equal(1)
   assert_str(bgm_lines[0].bgm.resource_path).is_equal("res://assets/audio/bgm/stage5_bgm_kari.mp3")
   assert_float(bgm_lines[0].bgm_volume_db).is_equal(-10.0)  # 5-3 開始時と同じ音量

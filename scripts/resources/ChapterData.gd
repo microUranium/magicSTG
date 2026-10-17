@@ -6,6 +6,7 @@ class_name ChapterData
 @export var stages: Array[StageData] = []
 @export var is_unlocked: bool = false
 @export var background_texture: Texture2D
+@export var is_debug_only: bool = false  # true の場合、デバッグビルドでのみステージ選択に表示する
 
 
 func get_stage_by_id(stage_id: String) -> StageData:

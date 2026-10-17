@@ -116,7 +116,7 @@ func apply_movement_config(config: BulletMovementConfig = null):
 
   if not movement_config:
     return
-  speed = movement_config.initial_speed
+  speed = movement_config.roll_initial_speed()
   _original_speed = speed
   _velocity = direction * speed
 

@@ -21,6 +21,9 @@ enum SpawnPositionMode {
 @export var damage: int = 5
 @export var bullet_range: float = 0.0  # 弾丸の射程距離 0なら無限
 @export var bullet_lifetime: float = 0.0  # 弾丸の有効時間 0なら無限
+## bullet_lifetime より大きい値を設定すると、弾ごとに bullet_lifetime〜この値の範囲で有効時間をランダムに決める。
+## 0（または bullet_lifetime 以下）なら bullet_lifetime 固定。
+@export var bullet_lifetime_max: float = 0.0
 @export var auto_start: bool = true  # AttackCoreの自動発射設定
 @export var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
 ## 敵に接触している間ダメージを与える間隔（秒）。
@@ -196,6 +199,13 @@ func calculate_random_spread_direction(base_dir: Vector2) -> Vector2:
   var total_angle = random_angle + deg_to_rad(angle_offset)
 
   return base_dir.rotated(total_angle)
+
+
+# 弾1発ぶんの有効時間を決める（bullet_lifetime_max が設定されていれば範囲内でランダム）
+func roll_bullet_lifetime() -> float:
+  if bullet_lifetime_max > bullet_lifetime:
+    return randf_range(bullet_lifetime, bullet_lifetime_max)
+  return bullet_lifetime
 
 
 # パターンが複合型かどうか

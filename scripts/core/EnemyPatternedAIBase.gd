@@ -43,8 +43,9 @@ func _next_pattern():
 
   _token += 1
 
-  # 演出パターン中は会話中と同様にプレイヤー操作を止める
-  _set_player_control_blocked(_current.block_player_control)
+  # 演出パターン中は会話中と同様にプレイヤー操作を止める。
+  # 会話を省略する個体（ランダムステージのボス等）では演出も省略扱いとし、操作は止めない
+  _set_player_control_blocked(_current.block_player_control and not skip_dialogue)
 
   if _current.dialogue_path != "" and skip_dialogue:
     _on_pattern_finished(_token)  # ダイアログをスキップしてパターン完了を通知

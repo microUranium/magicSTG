@@ -34,6 +34,7 @@ target_group = "enemies"
 damage = 1
 bullet_range = 0.0
 bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
 contact_damage_tick_sec = 0.0

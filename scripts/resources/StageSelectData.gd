@@ -18,9 +18,11 @@ func get_stage_by_ids(chapter_id: String, stage_id: String) -> StageData:
   return null
 
 
-func get_unlocked_chapters() -> Array[ChapterData]:
+func get_unlocked_chapters(include_debug: bool = OS.is_debug_build()) -> Array[ChapterData]:
   var unlocked: Array[ChapterData] = []
   for chapter in chapters:
+    if chapter.is_debug_only and not include_debug:
+      continue
     if chapter.is_unlocked:
       unlocked.append(chapter)
   return unlocked

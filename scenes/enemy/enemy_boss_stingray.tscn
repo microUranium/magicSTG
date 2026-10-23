@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dr6vsncc5ib1w"]
+[gd_scene load_steps=44 format=3 uid="uid://dr6vsncc5ib1w"]
 
 [ext_resource type="Script" uid="uid://ci0qfur25d4yq" path="res://scripts/enemy/BossStingray.gd" id="1_cx5sj"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_yhp0k"]
@@ -18,6 +18,9 @@
 [ext_resource type="AudioStream" uid="uid://dvv6ukxxiu24b" path="res://assets/audio/bgm/stage12_midBoss_bgm.mp3" id="13_lxd5g"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_78n74"]
 [ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_stingray_attackcore_boomerang.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_stingray_blessing_nullify.tres" id="dt_3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sl4ln"]
 atlas = ExtResource("3_fd8xa")
@@ -299,6 +302,7 @@ collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_cx5sj")
 destroy_particles_scene = ExtResource("2_yhp0k")
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")

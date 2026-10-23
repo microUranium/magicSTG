@@ -1,8 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://dim7ob3h80u4d"]
+[gd_scene load_steps=34 format=3 uid="uid://dim7ob3h80u4d"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_ntsss"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_vjvpt"]
-[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_w4hoy"]
 [ext_resource type="Texture2D" uid="uid://cn3rser0hqcxt" path="res://assets/gfx/sprites/enemy_swamp_bird_sprite.png" id="4_ntsss"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="5_bq12l"]
 [ext_resource type="Script" uid="uid://c5tsg03ojv325" path="res://scripts/enemy/DistanceKeepingAI.gd" id="6_6dd6g"]
@@ -16,6 +15,11 @@
 [ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="12_pm6pc"]
 [ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="13_yiqv5"]
 [ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="14_08dbw"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_attackcore_magic_bullet.tres" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_attackcore_magical_ball.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_attackcore_normal_beam.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_attackcore_triple_burst.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_blessing_camouflage.tres" id="dt_5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vjvpt"]
 atlas = ExtResource("4_ntsss")
@@ -179,7 +183,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_ntsss")
-drop_table = Array[ExtResource("2_vjvpt")]([ExtResource("3_w4hoy")])
+drop_table = Array[ExtResource("2_vjvpt")]([ExtResource("dt_1"), ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

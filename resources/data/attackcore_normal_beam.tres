@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=5 format=3 uid="uid://bmmatk3mro6is"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=7 format=3 uid="uid://bmmatk3mro6is"]
 
 [ext_resource type="PackedScene" uid="uid://cpvyvr12to1f1" path="res://scenes/attackCores/player/beam.tscn" id="1_74b3g"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_ukr3k"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="2_pye4m"]
 [ext_resource type="Texture2D" uid="uid://b7kjvjbi3xglx" path="res://assets/gfx/sprites/icon_magic_beam.png" id="2_ukr3k"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [resource]
 script = ExtResource("2_pye4m")
@@ -20,4 +22,5 @@ item_type = 1
 display_name = "ビーム"
 description = "チャージ後、一定時間持続するビームを放ちます。"
 icon = ExtResource("2_ukr3k")
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct")])
 metadata/_custom_type_script = "uid://31siypvcpkwh"

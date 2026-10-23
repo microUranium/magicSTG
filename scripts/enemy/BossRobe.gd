@@ -32,6 +32,7 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
     else:
       StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
     _spawn_destroy_particles()
+    _drop_item()  # 中ボスはドロップする（章ボスの報酬は別経路で扱う）
     queue_free()
 
   if ai._phase_idx == 3:

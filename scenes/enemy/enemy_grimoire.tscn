@@ -1,9 +1,7 @@
-[gd_scene load_steps=38 format=3 uid="uid://hfpv5mpgr26q"]
+[gd_scene load_steps=41 format=3 uid="uid://hfpv5mpgr26q"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_3xngf"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_nm61o"]
-[ext_resource type="Resource" uid="uid://bpvxkjd10aoum" path="res://resources/itemdrop/droptableentry_debug_core.tres" id="3_84bg0"]
-[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="4_hdcbw"]
 [ext_resource type="Texture2D" uid="uid://dr7te4bd08tan" path="res://assets/gfx/sprites/enemy_fugu_sprite.png" id="5_kfxd3"]
 [ext_resource type="Texture2D" uid="uid://ba025xmdwjhmo" path="res://assets/gfx/sprites/enemy_grimoire_sprite.png" id="6_3xngf"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="7_eqixl"]
@@ -18,6 +16,11 @@
 [ext_resource type="Texture2D" uid="uid://b8sktavbxitmm" path="res://assets/gfx/sprites/bullet_dark.png" id="14_3xngf"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_vg3nm"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_g5mi1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_blessing_regen.tres" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_blessing_shield.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_blessing_hp_boost.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_attackcore_magic_bullet.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_blessing_laststand.tres" id="dt_5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7y43"]
 atlas = ExtResource("5_kfxd3")
@@ -195,7 +198,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_3xngf")
-drop_table = Array[ExtResource("2_nm61o")]([ExtResource("3_84bg0"), ExtResource("4_hdcbw")])
+drop_table = Array[ExtResource("2_nm61o")]([ExtResource("dt_1"), ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

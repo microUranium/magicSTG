@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DropTableEntry" load_steps=4 format=3]
+
+[ext_resource type="Resource" uid="uid://btduv61qerhj" path="res://resources/data/attackcore_magic_bullet.tres" id="1_item"]
+[ext_resource type="Resource" path="res://resources/itemdrop/enchantmentrule_chapter_3_preset.tres" id="2_rule"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="3_script"]
+
+[resource]
+script = ExtResource("3_script")
+prototype = ExtResource("1_item")
+probability = 0.121
+enchant_rule = ExtResource("2_rule")

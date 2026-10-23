@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=18 format=3]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=23 format=3 uid="uid://bii5887fmmtgy"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="2_movecfg"]
@@ -10,15 +10,22 @@
 [ext_resource type="Texture2D" uid="uid://bdwl1xukq0b4b" path="res://assets/gfx/sprites/icon_magic_magical_ball.png" id="8_icon"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="9_item"]
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="10_explosion"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="ae_bullet_lifetime_pct"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [sub_resource type="Resource" id="Resource_movement"]
 script = ExtResource("2_movecfg")
 movement_type = 5
 initial_speed = 250.0
+initial_speed_max = 0.0
 deceleration_rate = 100.0
 min_speed = 50.0
 acceleration_rate = 50.0
 max_speed = 500.0
+contact_speed = 0.0
 wave_amplitude = 50.0
 wave_frequency = 2.0
 homing_duration = 3.0
@@ -84,6 +91,10 @@ scale = 2.0
 color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = false
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 explosion_config = SubResource("Resource_explosion")
 fade_in_initial_alpha = 1.0
@@ -99,8 +110,10 @@ target_group = "enemies"
 damage = 3
 bullet_range = 0.0
 bullet_lifetime = 3.5
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 2
+contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_visual")
 bullet_movement_config = SubResource("Resource_movement")
 bullet_count = 1
@@ -137,6 +150,11 @@ warning_configs = Array[ExtResource("7_warn")]([])
 persist_offscreen = true
 max_offscreen_distance = 2000.0
 forced_lifetime = 16.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]
@@ -154,4 +172,5 @@ item_type = 1
 display_name = "マジカルボール"
 description = "画面端でバウンドする弾を発射します。"
 icon = ExtResource("8_icon")
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add"), ExtResource("ae_bullet_lifetime_pct")])
 metadata/_custom_type_script = "uid://31siypvcpkwh"

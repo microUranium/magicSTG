@@ -11,14 +11,19 @@ const MAX_FIRST_STAGE_DEDICATED_ENEMIES := 3
 const STAGE_ENEMIES := {
   3: ["enemy_lantern", "enemy_grimoire", "enemy_bat_a", "enemy_lantern_b_weak"],
   4: ["enemy_swamp_bird", "enemy_living_wood", "enemy_spike", "enemy_piranha"],
-  5: ["enemy_bat_b", "enemy_ghost", "enemy_lantern_b", "enemy_lantern", "enemy_grimoire_strong"],
-  6: ["enemy_bird_d", "enemy_flower_c", "enemy_flower_b_strong", "enemy_swamp_bird", "enemy_cedar"],
+  5:
+  ["enemy_bat_b", "enemy_ghost", "enemy_lantern_b", "enemy_lantern_ch5", "enemy_grimoire_strong"],
+  6:
+  [
+    "enemy_bird_d", "enemy_flower_c", "enemy_flower_b_strong", "enemy_swamp_bird_ch6", "enemy_cedar"
+  ],
 }
 
 # 敵の AI に合う出現パターン
 const FROM_TOP := ["from_top_spacing"]  # ForwardMoveAndStop: 上から下へ進んで止まる
 const ALLOWED_PATTERNS := {
   "enemy_lantern": FROM_TOP,
+  "enemy_lantern_ch5": FROM_TOP,  # 5 章のドロップ用派生版
   "enemy_lantern_b": FROM_TOP,
   "enemy_lantern_b_weak": FROM_TOP,
   "enemy_living_wood": FROM_TOP,
@@ -34,6 +39,7 @@ const ALLOWED_PATTERNS := {
   "enemy_spike": ["single_random", "burst_same_pos"],
   # DistanceKeeping: 自機と距離を保つ
   "enemy_swamp_bird": ["single_random"],
+  "enemy_swamp_bird_ch6": ["single_random"],  # 6 章のドロップ用派生版
   "enemy_ghost": ["single_random"],
   # LineHorizMove: 横一列に整列する
   "enemy_piranha": ["line_horiz"],

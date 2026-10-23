@@ -1,7 +1,7 @@
 extends Node
 
 var _rng := RandomNumberGenerator.new()
-const enchantment_max_count := 2  # 最大エンチャント数
+const enchantment_max_count := 3  # 最大エンチャント数
 
 
 # -------------------------------------------------
@@ -19,10 +19,15 @@ func spawn_drop(pos: Vector2, drop_table: Array[DropTableEntry]) -> void:
 # Private Methods
 # -------------------------------------------------
 func _roll_enchantments(inst: ItemInstance, rule: EnchantmentRule) -> void:
-  if rule == null or rule.pool.is_empty():
+  if rule == null:
+    return
+  # アイテムが許可していないエンチャントは抽選候補から外す
+  var table := rule.pool.filter(
+    func(enc: Enchantment) -> bool: return inst.prototype.allows_enchantment(enc)
+  )
+  if table.is_empty():
     return
   var count: int = min(enchantment_max_count, int(_weighted_pick(rule.count_weights)))
-  var table = rule.pool.duplicate()
   for i in count:
     if table.is_empty():
       break  # No more enchantments to pick

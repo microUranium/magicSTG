@@ -1,0 +1,11 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dwv2nynhx5ojt" path="res://scenes/enemy/enemy_lantern.tscn" id="0_base"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_nullify.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_proximity.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_camouflage.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_attackcore_fireball.tres" id="dt_5"]
+
+[node name="EnemyLantern" instance=ExtResource("0_base")]
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])

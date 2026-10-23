@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://c31x6u3h3j02y"]
+[gd_scene load_steps=49 format=3 uid="uid://c31x6u3h3j02y"]
 
 [ext_resource type="Script" uid="uid://6lylowgff5sb" path="res://scripts/enemy/BossSpider.gd" id="1_m3mwo"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_md488"]
@@ -17,6 +17,9 @@
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_qousy"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_emf8d"]
 [ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_spider_attackcore_elec_shock.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_spider_blessing_fortitude.tres" id="dt_3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_md488"]
 atlas = ExtResource("3_oovd5")
@@ -472,6 +475,7 @@ collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_m3mwo")
 destroy_particles_scene = ExtResource("2_md488")
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")

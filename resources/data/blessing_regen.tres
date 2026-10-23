@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="BlessingItem" load_steps=4 format=3 uid="uid://bu5le1yukmyk1"]
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=6 format=3 uid="uid://bu5le1yukmyk1"]
 
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1_4o0dt"]
 [ext_resource type="PackedScene" uid="uid://dybfiah44oqiw" path="res://scenes/blessings/regen_blessing.tscn" id="1_rdobt"]
 [ext_resource type="Texture2D" uid="uid://bpdd4hh4gi8bg" path="res://assets/gfx/sprites/icon_blessing_regen.png" id="2_rdobt"]
+[ext_resource type="Resource" uid="uid://bsuqagbovywcw" path="res://resources/data/enchantment_regen_interval_sec_pct.tres" id="ae_regen_interval_sec_pct"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [resource]
 script = ExtResource("1_4o0dt")
@@ -16,4 +18,5 @@ item_type = 0
 display_name = "回復の加護"
 description = "一定間隔で体力を回復します。"
 icon = ExtResource("2_rdobt")
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_regen_interval_sec_pct")])
 metadata/_custom_type_script = "uid://bclm6we4v4mkb"

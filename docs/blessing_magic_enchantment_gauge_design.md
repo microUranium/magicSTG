@@ -220,7 +220,11 @@ GenericGauge / GaugeManager ← HUD描画側
 | `Enchantment` (Resource) | `id` / `display_name` / `description` / `tiers[]`。`get_modifiers(level)` でその tier の modifier 辞書を返す |
 | `EnchantmentTier` (Resource) | `level`(1〜3) と `modifiers`(キー→数値) |
 | `EnchantmentRule` (Resource) | ドロップ時の付与ルール。`pool[]`（候補）/`count_weights`（個数）/`level_weights`（レベル） |
+| `ItemBase.allowed_enchantments` | そのアイテムに付与されうるエンチャント。抽選時に `pool` をこれで絞り込む（`id` で照合）。空なら制限なし |
 | `ItemInstance.enchantments` | `Dictionary[Enchantment, int]`（個体に付与されたエンチャントとレベル） |
+
+- ドロップ時の付与個数は `LootSystem.enchantment_max_count`（**3 個**）が上限。`count_weights` で上限を超える個数を指定しても切り詰められる。同じエンチャントは重複しないため、`pool` を許可エンチャントで絞り込んだ候補が上限より少なければ、その数で止まる。
+- レアリティは付与エンチャントのレベル合計で決まる（`ItemInstance.get_rarity_tier()`）：0 = NORMAL / 1〜2 = COMMON / 3〜4 = UNCOMMON / 5〜6 = RARE / 7〜8 = EPIC / 9 以上 = LEGENDARY。3 個 × Lv3 で LEGENDARY に届く。
 
 ### 3.2 modifier キー命名規約
 
@@ -255,16 +259,59 @@ GenericGauge / GaugeManager ← HUD描画側
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
 | 残留 | `bullet_lifetime_pct` | 弾寿命 +% | +50% / +50% / +200% | 攻撃コア |
 | 貫通 | `penetration_add` | 貫通回数 + | +1 / +2 / +4 | 攻撃コア |
+| 追尾 | `homing_correction_px_add` | 追尾の横ズレ補正 +px | +60 / +150 / +300 | 攻撃コア（SPIRAL / BOOMERANG / バリア弾は対象外） |
 
 ### 3.5 新規エンチャント追加手順
 
 1. 装備側が対象キー（`xxx_pct`/`xxx_add`）を集計しているか確認。無ければ `_recalc_stats()` 等に `_sum_pct/_sum_add` を追加。
 2. `resources/data/tiers/tier_<key>_1..3.tres` を作成（`level` と `modifiers`）。
 3. `resources/data/enchantment_<key>.tres` を作成（`id`/`display_name`/`description`/`tiers`）。
-4. 付与対象の `EnchantmentRule`（`resources/itemdrop/enchantmentrule_*.tres`）の `pool` に追加。
-5. （任意）`default_player_save.json` に付与済み個体を追加。
+4. 効く装備の `allowed_enchantments`（`resources/data/attackcore_*.tres` / `blessing_*.tres`）に追加。
+5. 付与対象の `EnchantmentRule`（`resources/itemdrop/enchantmentrule_*.tres`）の `pool` に追加。
+6. （任意）`default_player_save.json` に付与済み個体を追加。
 
-> 例：「速復」(`shield_recover_delay_pct`) は `DefensiveBlessing._recalc_stats()` が既にキーを集計済みのため、リソース作成と pool 追加のみで実装できた。
+> 例：「速復」(`shield_recover_delay_pct`) は `DefensiveBlessing._recalc_stats()` が既にキーを集計済みのため、リソース作成と `allowed_enchantments`／pool への追加のみで実装できる。
+
+### 3.6 アイテム別 許可エンチャント
+
+ドロップ時、`LootSystem._roll_enchantments()` は `EnchantmentRule.pool` のうち、アイテムの `allowed_enchantments` に含まれるものだけを抽選する（`id` で照合）。許可リストの実体は各アイテムの `.tres` で、この表はその写し。`.tres` を変更したら表も更新すること。
+
+- `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
+- 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
+- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・ビーム・全加護）は、その数までしか付与されない。
+
+#### 攻撃コア
+
+| コア | `.tres` | 速射 | 増輪 | 貫通 | 残留 | 炸裂 | 追尾 | 除外理由 |
+|---|---|:-:|:-:|:-:|:-:|:-:|:-:|---|
+| エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
+| ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
+| バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
+| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増輪：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
+| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増輪：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
+| バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：バリア弾はコード上で対象外 |
+| ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
+| マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
+| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増輪：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
+| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増輪は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
+
+- 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
+- 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。
+
+#### 加護
+
+| 加護 | `.tres` | 許可エンチャント |
+|---|---|---|
+| 障壁の加護 | `blessing_shield` | 堅固・速復 |
+| 体力増強の加護 | `blessing_hp_boost` | 増健 |
+| 回復の加護 | `blessing_regen` | 速治 |
+| 背水の加護 | `blessing_laststand` | 必死・無我 |
+| 近接の加護 | `blessing_proximity` | 凝集・無我 |
+| 打消の加護 | `blessing_nullify` | 保持・強奪 |
+| 迷彩の加護 | `blessing_camouflage` | 保持 |
+| 不屈の加護 | `blessing_fortitude` | 保持 |
+
+- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`camouflage_duration_pct`（迷彩）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
 
 ---
 

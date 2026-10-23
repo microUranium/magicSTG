@@ -323,8 +323,8 @@
         ]
       },
       {
-        "uid": "attackcore_bubble_shot_3",
-        "id": "attackcore_bubble_shot",
+        "uid": "attackcore_elec_shock_4",
+        "id": "attackcore_elec_shock",
         "enchantments": [
           {
             "id": "homing_correction_px_add",
@@ -333,12 +333,20 @@
         ]
       },
       {
-        "uid": "attackcore_elec_shock_4",
-        "id": "attackcore_elec_shock",
+        "uid": "attackcore_magic_bullet_tooltip_test",
+        "id": "attackcore_magic_bullet",
         "enchantments": [
           {
             "id": "homing_correction_px_add",
-            "level": 2
+            "level": 3
+          },
+          {
+            "id": "penetration_add",
+            "level": 3
+          },
+          {
+            "id": "bullet_count_add",
+            "level": 3
           }
         ]
       }

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=11 format=3 uid="uid://btduv61qerhj"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=16 format=3 uid="uid://btduv61qerhj"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_k7kja"]
@@ -8,6 +8,11 @@
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="3_visual"]
 [ext_resource type="Texture2D" uid="uid://dy8hs1fh4tu5e" path="res://assets/gfx/sprites/bullet_sprite.png" id="4_tex"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="5_jnoq5"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="ae_homing"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [sub_resource type="Resource" id="Resource_visual"]
 script = ExtResource("3_visual")
@@ -95,4 +100,5 @@ item_type = 1
 display_name = "エネルギーショット"
 description = "高速連射可能な魔弾を発射します。"
 icon = ExtResource("2_k7kja")
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add"), ExtResource("ae_homing")])
 metadata/_custom_type_script = "uid://31siypvcpkwh"

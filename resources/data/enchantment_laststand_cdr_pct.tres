@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://bzcdrench005x"]
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://b0cdrench005x"]
 
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1"]
 [ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2"]
@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 script = ExtResource("2")
 level = 2
 modifiers = {
-"laststand_cdr_pct": 0.30
+"laststand_cdr_pct": 0.3
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 
@@ -23,7 +23,7 @@ metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 script = ExtResource("2")
 level = 3
 modifiers = {
-"laststand_cdr_pct": 0.50
+"laststand_cdr_pct": 0.5
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
 

@@ -2,6 +2,20 @@
 extends GdUnitTestSuite
 class_name WarpUtilityTest
 
+# headless ではビューポートが 64x64 でプレイ領域が負の幅になるため、実画面相当の領域に固定する
+const PLAY_RECT := Rect2(0, 0, 896, 960)
+
+var _saved_play_rect: Rect2
+
+
+func before_test() -> void:
+  _saved_play_rect = PlayArea.get_play_rect()
+  PlayArea._play_rect = PLAY_RECT
+
+
+func after_test() -> void:
+  PlayArea._play_rect = _saved_play_rect
+
 
 func test_calculate_behind_position_basic():
   """基本的な背後座標計算のテスト"""

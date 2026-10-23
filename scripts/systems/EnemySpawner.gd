@@ -21,7 +21,7 @@ var _layer_queues: Dictionary = {}  # layer_id -> Array[SpawnEvent]
 var _layer_states: Dictionary = {}  # layer_id -> LayerState
 var _active_layers: Array[String] = []  # 現在アクティブなレイヤーID
 
-@onready var enemy_layer: Node = get_tree().current_scene.get_node("EnemyLayer")  # 敵を生成するレイヤー
+@onready var enemy_layer: Node = _find_enemy_layer()  # 敵を生成するレイヤー
 
 
 class LayerState:
@@ -37,6 +37,12 @@ class LayerState:
   func _init(id: String, events: Array[SpawnEvent]):
     layer_id = id
     spawn_queue = events.duplicate()
+
+
+func _find_enemy_layer() -> Node:
+  # テスト実行中など current_scene が無いときは null（生成時に警告して処理する）
+  var scene := get_tree().current_scene
+  return scene.get_node_or_null("EnemyLayer") if scene else null
 
 
 #----------------------------------------------------------------------

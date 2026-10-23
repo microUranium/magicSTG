@@ -3,6 +3,19 @@ extends GdUnitTestSuite
 const BulletStubScript := preload("res://tests/stubs/BulletStub.gd")
 const UniversalAttackCore := preload("res://scripts/core/UniversalAttackCore.gd")
 
+var _bullet_root: Node2D
+
+
+func before_test() -> void:
+  # テスト実行中は current_scene が無いため、弾の生成先を明示する
+  _bullet_root = auto_free(Node2D.new())
+  add_child(_bullet_root)
+  TargetService.set_bullet_parent(_bullet_root)
+
+
+func after_test() -> void:
+  TargetService.set_bullet_parent(null)
+
 
 # ★ AttackCoreItem をメモリ上で生成
 func _make_attack_core_item() -> AttackCoreItem:
@@ -54,9 +67,9 @@ func test_universal_attack_core_with_instance() -> void:
 
   await get_tree().process_frame
 
-  # 子ノードに BulletStub が出たか？
+  # 弾の生成先に BulletStub が出たか？
   var bullets: Array[BulletStub] = []
-  for node in get_tree().current_scene.get_children():
+  for node in _bullet_root.get_children():
     if node is BulletStub:
       bullets.append(node)
 

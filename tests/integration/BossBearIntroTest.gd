@@ -45,7 +45,9 @@ func test_animation_is_stopped_until_conversation_ends(timeout := 20000) -> void
   # 会話の後に自機がボスへ近づく
   await await_millis(2600)
   assert_bool(_sprite().is_playing()).is_false()
-  assert_vector(_player_stub.last_target).is_equal(_bear.global_position + Vector2(0, 280))
+  assert_vector(_player_stub.last_target).is_equal(
+    _bear.global_position + BossBearAI.INTRO_PLAYER_APPROACH_OFFSET
+  )
 
   # 近づき終わるとボスが目を覚ます
   await await_millis(1200)
@@ -53,7 +55,7 @@ func test_animation_is_stopped_until_conversation_ends(timeout := 20000) -> void
 
   # その後に自機が画面中央へ後ずさり、2回目の会話を経て戦闘フェーズへ進む
   await await_millis(1200)
-  assert_vector(_player_stub.last_target).is_equal(Vector2(448, 480))
+  assert_vector(_player_stub.last_target).is_equal(BossBearAI.INTRO_PLAYER_RETREAT_POSITION)
   assert_int(_bear.ai._phase_idx).is_equal(1)
 
 

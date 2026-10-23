@@ -1,8 +1,7 @@
-[gd_scene load_steps=23 format=3 uid="uid://drjfn106mg5fh"]
+[gd_scene load_steps=26 format=3 uid="uid://drjfn106mg5fh"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_yewhx"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_38f5m"]
-[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_vbroa"]
 [ext_resource type="Texture2D" uid="uid://b7loyro504i55" path="res://assets/gfx/sprites/enemy_bat_a_sprite.png" id="4_yewhx"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="5_pnr8h"]
 [ext_resource type="Script" uid="uid://ce8r8dpvey3lb" path="res://scripts/enemy/RushAttackAI.gd" id="6_yewhx"]
@@ -15,6 +14,10 @@
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="12_xlcf0"]
 [ext_resource type="Texture2D" uid="uid://3yypeo6i8jgl" path="res://assets/gfx/sprites/bullet_ultrasound_sprite.png" id="13_hr08y"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="13_xlcf0"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bat_a_attackcore_boomerang.tres" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bat_a_attackcore_magic_bullet.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bat_a_attackcore_magical_ball.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bat_a_attackcore_barrier_orb.tres" id="dt_4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_38f5m"]
 atlas = ExtResource("4_yewhx")
@@ -154,7 +157,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_yewhx")
-drop_table = Array[ExtResource("2_38f5m")]([ExtResource("3_vbroa")])
+drop_table = Array[ExtResource("2_38f5m")]([ExtResource("dt_1"), ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

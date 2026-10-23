@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemy/EnemyCedar.gd" id="1_cedar"]
 [ext_resource type="Texture2D" uid="uid://cxg6y52h68lab" path="res://assets/gfx/sprites/enemy_cedar_sprite.png" id="2_tex"]
@@ -12,6 +12,11 @@
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="10_visual"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="11_movement"]
 [ext_resource type="Texture2D" uid="uid://eeykk5dmkswh" path="res://assets/gfx/sprites/bullet_enemy_sprite_2.png" id="12_pollen_tex"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_cedar_blessing_camouflage.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_cedar_blessing_fortitude.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_cedar_blessing_hp_boost.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_cedar_blessing_laststand.tres" id="dt_5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cedar0"]
 atlas = ExtResource("2_tex")
@@ -76,6 +81,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_cedar")
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

@@ -1,5 +1,12 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" uid="uid://dim7ob3h80u4d" path="res://scenes/enemy/enemy_swamp_bird.tscn" id="0_base"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_ch6_attackcore_magic_bullet.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_ch6_attackcore_magical_ball.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_ch6_attackcore_normal_beam.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_ch6_attackcore_triple_burst.tres" id="dt_5"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_swamp_bird_ch6_blessing_camouflage.tres" id="dt_6"]
 
 [node name="EnemySwampBird" instance=ExtResource("0_base")]
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5"), ExtResource("dt_6")])

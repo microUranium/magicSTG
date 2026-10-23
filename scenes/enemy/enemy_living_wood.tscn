@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://xfsf7fy74cpk"]
+[gd_scene load_steps=18 format=3 uid="uid://xfsf7fy74cpk"]
 
 [ext_resource type="Script" uid="uid://d1162chtcf17" path="res://scripts/enemy/EnemyLivingWood.gd" id="1_8ellf"]
 [ext_resource type="Texture2D" uid="uid://c74kld5b5pjju" path="res://assets/gfx/sprites/enemy_living_wood_sprite.png" id="5_wlw01"]
@@ -7,6 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="8_1rak8"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="9_d3lmj"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="10_301yv"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_living_wood_blessing_shield.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_living_wood_blessing_nullify.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_living_wood_blessing_hp_boost.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_living_wood_blessing_regen.tres" id="dt_5"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_living_wood_attackcore_fireball.tres" id="dt_6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6y7ro"]
 atlas = ExtResource("5_wlw01")
@@ -37,6 +43,7 @@ size = Vector2(133, 181)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_8ellf")
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5"), ExtResource("dt_6")])
 shield_amount = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

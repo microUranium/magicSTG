@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://d1qrjjwil2eru"]
+[gd_scene load_steps=48 format=3 uid="uid://d1qrjjwil2eru"]
 
 [ext_resource type="Script" uid="uid://8rohnyi311pb" path="res://scripts/enemy/BossBear.gd" id="1_grr34"]
 [ext_resource type="Texture2D" uid="uid://i11btmh4g00n" path="res://assets/gfx/sprites/enemy_boss_bear_sprite.png" id="2_7infs"]
@@ -15,6 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_q3hgb"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_r3ja4"]
 [ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
+[ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_attackcore_needleshot.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_blessing_camouflage.tres" id="dt_3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ws6x4"]
 atlas = ExtResource("2_7infs")
@@ -395,6 +398,7 @@ metadata/_custom_type_script = "uid://bgake8ntgc47w"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_grr34")
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")

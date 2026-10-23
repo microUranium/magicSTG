@@ -1,8 +1,7 @@
-[gd_scene load_steps=47 format=3 uid="uid://dma74i0yga7s0"]
+[gd_scene load_steps=51 format=3 uid="uid://dma74i0yga7s0"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_ibse3"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_136wy"]
-[ext_resource type="Resource" uid="uid://dccuu0cipycr7" path="res://resources/itemdrop/droptableentry_debug_shield.tres" id="3_b7rij"]
 [ext_resource type="Texture2D" uid="uid://boatkam2pyiry" path="res://assets/gfx/sprites/enemy_ghost_sprite.png" id="4_ibse3"]
 [ext_resource type="Script" uid="uid://dovrmdtqiurir" path="res://scripts/player/HpNode.gd" id="5_uhi0n"]
 [ext_resource type="Script" uid="uid://c5tsg03ojv325" path="res://scripts/enemy/DistanceKeepingAI.gd" id="6_8u4fp"]
@@ -18,6 +17,11 @@
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="15_b7rij"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_l3mub"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_70k4c"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_ghost_attackcore_barrier_orb.tres" id="dt_1"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_ghost_attackcore_boomerang.tres" id="dt_2"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_ghost_attackcore_bubble_shot.tres" id="dt_3"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_ghost_attackcore_elec_shock.tres" id="dt_4"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_ghost_attackcore_magic_bullet.tres" id="dt_5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_136wy"]
 atlas = ExtResource("4_ibse3")
@@ -262,7 +266,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_ibse3")
-drop_table = Array[ExtResource("2_136wy")]([ExtResource("3_b7rij")])
+drop_table = Array[ExtResource("2_136wy")]([ExtResource("dt_1"), ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.705882)

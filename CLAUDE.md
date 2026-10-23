@@ -42,7 +42,9 @@ MagicSTG is a bullet-hell shoot-em-up game built in Godot 4.4. The game features
 - **PlayArea**: Game boundaries and coordinate utilities
 - **StageSignals**: Event bus for stage-related communications
 - **InventoryService**: Inventory management and item operations
-- **PlayerSaveData**: Persistent player data
+- **PlayerSaveData**: Inventory/equipment state and its save-data (Dictionary) conversion
+- **StageDataManager**: Stage definitions (read-only) and stage progress (current stage, unlocks, clears)
+- **SaveManager**: Sole owner of the save file (`user://save_data.json`); auto-saves on leaving the result/equipment screens and loads on startup
 - **ItemDB**: Item database and lookup
 - **BGMController**: Background music management
 - **SFXManager**: Sound effects system

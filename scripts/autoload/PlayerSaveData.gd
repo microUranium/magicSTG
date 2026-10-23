@@ -1,10 +1,10 @@
 extends Node
+## 所持品・装備の状態を保持し、セーブデータ（Dictionary）との相互変換を行う。
+## ファイルの読み書きは SaveManager が一元管理するため、ここでは行わない。
 
 signal equipment_changed  # 引数なし（変更検知だけ通知）
 signal data_loaded  # 引数なし（ロード完了通知）
 
-const SAVE_PATH := "user://player_save.json"
-const DEFAULT_SAVE_SRC := "res://resources/data/default_player_save.json"
 const MAX_ATTACK_CORES := 3  # 必要に応じて変更
 const MAX_BLESSINGS := 3  # 必要に応じて変更
 
@@ -21,41 +21,6 @@ class _Equipment:
     cp._attack_core = _attack_core.duplicate()
     cp._blessings = _blessings.duplicate()
     return cp
-
-  ## ---------- シリアライズ ----------
-  func to_dict() -> Dictionary:
-    return {
-      "attack_core": _attack_core.map(PlayerSaveData._serialize_item),
-      "blessings": _blessings.map(PlayerSaveData._serialize_item)
-    }
-
-  static func from_dict(src: Dictionary) -> _Equipment:
-    var e := _Equipment.new()
-
-    var _to_arr = func(v):
-      if v is Array:
-        return v
-      elif v == null:
-        return []
-      else:
-        return [v]
-
-    var ac_raw: Array = _to_arr.call(src.get("attack_core"))
-    var bl_raw: Array = _to_arr.call(src.get("blessings"))
-
-    e._attack_core.clear()
-    for r in ac_raw:
-      var inst: ItemInstance = PlayerSaveData._deserialize_item(r)
-      if inst:
-        e._attack_core.append(inst)
-
-    e._blessings.clear()
-    for r in bl_raw:
-      var inst: ItemInstance = PlayerSaveData._deserialize_item(r)
-      if inst:
-        e._blessings.append(inst)
-
-    return e
 
 
 # ───────────────────────────────────
@@ -110,53 +75,41 @@ func apply_equipment(attack_cores: Array[ItemInstance], blessings: Array[ItemIns
 # ───────────────────────────────────
 # private 共通処理
 # ───────────────────────────────────
-func _ready():
-  _load()
-
-
 func _after_change() -> void:
-  _save()
   emit_signal("equipment_changed")
 
 
-# ───────────── セーブ / ロード ───────────────
-func _save():
-  var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-  if f:
-    f.store_string(JSON.stringify(_current.to_dict(), "\t"))
-    f.close()
+# ───────────── セーブデータ変換 ───────────────
+## 所持品（InventoryService）と装備をセーブデータ形式に変換する。
+## 形式は default_player_save.json と同じ { "inventory": {...}, "equipped": [uid, ...] }。
+func to_save_dict() -> Dictionary:
+  var all_items: Array = InventoryService.get_items()
+  all_items.append_array(get_all_equipped_items())
+
+  var ac_list := []
+  var bl_list := []
+  for item: ItemInstance in all_items:
+    if item.prototype.item_type == ItemBase.ItemType.ATTACK_CORE:
+      ac_list.append(_serialize_item(item))
+    elif item.prototype.item_type == ItemBase.ItemType.BLESSING:
+      bl_list.append(_serialize_item(item))
+
+  return {
+    "inventory": {"attack_core": ac_list, "blessings": bl_list},
+    "equipped": get_all_equipped_items().map(func(item: ItemInstance): return item.uid)
+  }
 
 
-func _load():
-  if FileAccess.file_exists(SAVE_PATH):
-    if _try_load_from(SAVE_PATH):
-      return
-    push_warning("Corrupted user save; fallback to default.")
-  if not _try_load_from(DEFAULT_SAVE_SRC):
-    push_error("Default save missing or invalid; starting with empty data.")
-    _current = _Equipment.new()
-    _save()  # 空のセーブを書き出し
+## セーブデータから所持品と装備を復元する。
+## 形式が不正な場合は何も変更せず false を返す。
+func load_from_dict(root: Dictionary) -> bool:
+  if not (root.get("inventory") is Dictionary):
+    push_warning("Invalid save data; missing 'inventory' key.")
+    return false
 
+  _load_items(root)
   emit_signal("data_loaded")  # ロード完了通知
-
-
-# ------------------------------------------------
-func _try_load_from(path: String) -> bool:
-  var f := FileAccess.open(path, FileAccess.READ)
-  if f == null:
-    return false
-  var data: Dictionary = JSON.parse_string(f.get_as_text())
-  f.close()
-  if typeof(data) != TYPE_DICTIONARY:
-    push_warning("Invalid save file format; expected Dictionary, got %s." % typeof(data))
-    return false
-
-  if data.has("inventory"):
-    _load_items(data)
-    return true
-  else:
-    push_warning("Invalid save file format; missing 'inventory' key.")
-    return false
+  return true
 
 
 # ───────── ItemInstance ⇔ JSON 変換 util ──────
@@ -196,7 +149,7 @@ func _load_items(root: Dictionary) -> void:
   var inv: Dictionary = root.get("inventory", {})
   var ac_raw: Array = inv.get("attack_core", [])
   var bl_raw: Array = inv.get("blessings", [])
-  var equipped_uids: Array = root.get("equipped", {})
+  var equipped_uids: Array = root.get("equipped", [])
 
   # 1) 所持品を生成して InventoryService へ
   InventoryService.clear()

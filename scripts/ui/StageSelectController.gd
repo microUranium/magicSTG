@@ -1,6 +1,8 @@
 extends Control
 class_name StageSelectController
 
+const StageProgressDebugPanel := preload("res://scripts/ui/StageProgressDebugPanel.gd")
+
 var current_chapter_index: int = 0
 var prev_chapter_index: int = -1
 var selected_stage: StageData = null
@@ -35,9 +37,29 @@ func _ready() -> void:
     to_main_menu_btn.pressed.connect(_on_return_button_pressed)
 
   StageDataManager.stage_data_loaded.connect(_on_stage_data_loaded)
+  StageDataManager.progress_changed.connect(_on_progress_changed)
 
   if StageDataManager.stage_select_data:
     _on_stage_data_loaded()
+
+  if OS.is_debug_build():
+    _setup_debug_progress_panel()
+
+
+## 進行状況を変更するデバッグパネルと、その表示切替ボタンを配置する（デバッグビルドのみ）
+func _setup_debug_progress_panel() -> void:
+  var panel := StageProgressDebugPanel.new()
+  panel.position = Vector2(16, 120)
+  panel.custom_minimum_size = Vector2(860, 760)
+  panel.visible = false
+  add_child(panel)
+
+  var toggle := Button.new()
+  toggle.text = "DEBUG"
+  toggle.toggle_mode = true
+  toggle.position = Vector2(16, 900)
+  toggle.toggled.connect(func(on: bool): panel.visible = on)
+  add_child(toggle)
 
 
 func _on_stage_data_loaded() -> void:
@@ -48,6 +70,31 @@ func _on_stage_data_loaded() -> void:
 
   current_chapter_index = 0
   update_chapter_display()
+
+
+## 解放・クリア状態の変化を表示へ反映する。
+## 表示中のチャプターが引き続き解放されていればボタン表示だけを更新し、
+## ロックされた場合は先頭のチャプターを表示し直す。
+func _on_progress_changed() -> void:
+  var chapters = StageDataManager.get_unlocked_chapters()
+  var shown_stage = stage_buttons[0].stage_data if not stage_buttons.is_empty() else null
+  var shown_index := -1
+  for i in chapters.size():
+    if shown_stage and chapters[i].stages.has(shown_stage):
+      shown_index = i
+      break
+
+  if shown_index >= 0:
+    current_chapter_index = shown_index
+    for button in stage_buttons:
+      button.update_display()
+  else:
+    current_chapter_index = 0
+    if chapters.is_empty():
+      clear_stage_buttons(Vector2.ZERO)
+    else:
+      update_chapter_display()
+  _update_chapter_button_states()
 
 
 func update_chapter_display() -> void:

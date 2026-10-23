@@ -112,6 +112,93 @@ func test_apply_progress_dict_ignores_unknown_ids() -> void:
 
 
 # ───────────────────────────────────
+# 進行状況の直接編集（デバッグ用）
+# ───────────────────────────────────
+func test_capture_initial_state_keeps_first_snapshot() -> void:
+  _data.unlock_stage("c1", "s1_2")
+  _data.capture_initial_state()  # 2回目の呼び出しは無視される
+
+  _data.restore_initial_state()
+
+  assert_bool(_data.get_stage_by_ids("c1", "s1_2").is_unlocked).is_false()
+
+
+func test_reset_progress_restores_definition_state() -> void:
+  StageDataManager.current_stage = StageDataManager.get_stage_by_ids("c1", "s1_2")
+  StageDataManager.mark_current_stage_cleared()
+
+  StageDataManager.reset_progress()
+
+  assert_bool(StageDataManager.get_chapter_by_id("c2").is_unlocked).is_false()
+  assert_bool(StageDataManager.get_stage_by_ids("c2", "s2_1").is_unlocked).is_false()
+  assert_bool(StageDataManager.is_stage_cleared("c1", "s1_2")).is_false()
+  assert_bool(StageDataManager.get_stage_by_ids("c1", "s1_1").is_unlocked).is_true()
+
+
+func test_set_stage_unlocked_unlocks_and_locks() -> void:
+  StageDataManager.set_stage_unlocked("c1", "s1_2", true)
+  assert_bool(StageDataManager.get_stage_by_ids("c1", "s1_2").is_unlocked).is_true()
+  assert_array(StageDataManager.get_progress_dict()["unlocked_stages"]).contains_exactly(
+    ["c1/s1_2"]
+  )
+
+  StageDataManager.set_stage_unlocked("c1", "s1_2", false)
+  assert_bool(StageDataManager.get_stage_by_ids("c1", "s1_2").is_unlocked).is_false()
+  assert_array(StageDataManager.get_progress_dict()["unlocked_stages"]).is_empty()
+
+
+func test_set_chapter_unlocked_unlocks_and_locks() -> void:
+  StageDataManager.set_chapter_unlocked("c2", true)
+  assert_bool(StageDataManager.get_chapter_by_id("c2").is_unlocked).is_true()
+  assert_array(StageDataManager.get_progress_dict()["unlocked_chapters"]).contains_exactly(["c2"])
+
+  StageDataManager.set_chapter_unlocked("c2", false)
+  assert_bool(StageDataManager.get_chapter_by_id("c2").is_unlocked).is_false()
+  assert_array(StageDataManager.get_progress_dict()["unlocked_chapters"]).is_empty()
+
+
+func test_set_stage_cleared_toggles_clear() -> void:
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+  assert_bool(StageDataManager.is_stage_cleared("c1", "s1_1")).is_true()
+
+  StageDataManager.set_stage_cleared("c1", "s1_1", false)
+  assert_bool(StageDataManager.is_stage_cleared("c1", "s1_1")).is_false()
+
+
+func test_set_stage_cleared_ignores_unknown_stage() -> void:
+  StageDataManager.set_stage_cleared("c1", "missing", true)
+
+  assert_array(StageDataManager.get_progress_dict()["cleared_stages"]).is_empty()
+
+
+func test_unlock_all_unlocks_every_chapter_and_stage() -> void:
+  StageDataManager.unlock_all()
+
+  for chapter in _data.chapters:
+    assert_bool(chapter.is_unlocked).is_true()
+    for stage in chapter.stages:
+      assert_bool(stage.is_unlocked).is_true()
+  assert_array(StageDataManager.get_progress_dict()["cleared_stages"]).is_empty()
+
+
+func test_unlock_all_with_clear_marks_every_stage_cleared() -> void:
+  StageDataManager.unlock_all(true)
+
+  (
+    assert_array(StageDataManager.get_progress_dict()["cleared_stages"])
+    . contains_exactly_in_any_order(["c1/s1_1", "c1/s1_2", "debug/d1", "c2/s2_1"])
+  )
+
+
+func test_progress_changed_emitted_on_edit() -> void:
+  var emitter := monitor_signals(StageDataManager, false)
+
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+
+  await assert_signal(emitter).wait_until(50).is_emitted("progress_changed")
+
+
+# ───────────────────────────────────
 # Helpers
 # ───────────────────────────────────
 func _build_stage_select_data() -> StageSelectData:

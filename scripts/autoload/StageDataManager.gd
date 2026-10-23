@@ -4,10 +4,15 @@ signal stage_data_loaded
 signal stage_unlocked(chapter_id: String, stage_id: String)
 signal chapter_unlocked(chapter_id: String)
 signal stage_cleared(chapter_id: String, stage_id: String)
+signal progress_changed  # 解放・クリア状態が変化した（UI の再描画用）
 
 ## ステージ構成の定義データ。読み取り専用とし、進行状況はセーブデータ（SaveManager）側で保持する。
 const STAGE_DATA_PATH = "res://resources/data/stage_select_data.tres"
-var stage_select_data: StageSelectData
+var stage_select_data: StageSelectData:
+  set(value):
+    stage_select_data = value
+    if value:
+      value.capture_initial_state()  # リセット用に定義上の解放状態を記録しておく
 
 ## 現在プレイ中のステージ（ステージ選択から開始した場合のみ設定される）
 var current_stage: StageData = null
@@ -101,6 +106,7 @@ func mark_current_stage_cleared() -> void:
     unlock_chapter(next.chapter_id)
   if not next.is_unlocked:
     unlock_stage(next.chapter_id, next.stage_id)
+  progress_changed.emit()
 
 
 ## ステージのプレイを終える（リザルト画面退出時に呼ぶ）。
@@ -133,12 +139,14 @@ func get_progress_dict() -> Dictionary:
   }
 
 
-## セーブデータの進行状況を定義データへ反映する。
-## 定義データ上で初期解放されているものはそのまま残り、ここで解放状態が戻ることはない。
+## セーブデータの進行状況を反映する。
+## 解放状態をいったん定義データの初期状態に戻してから、進行による解放・クリアを重ねる。
 func apply_progress_dict(progress: Dictionary) -> void:
   _unlocked_chapters.clear()
   _unlocked_stages.clear()
   _cleared_stages.clear()
+  if stage_select_data:
+    stage_select_data.restore_initial_state()
 
   for chapter_id in progress.get("unlocked_chapters", []):
     if not unlock_chapter(chapter_id):
@@ -151,6 +159,65 @@ func apply_progress_dict(progress: Dictionary) -> void:
 
   for key in progress.get("cleared_stages", []):
     _cleared_stages[str(key)] = true
+  progress_changed.emit()
+
+
+# ───────────── 進行状況の直接編集（デバッグ用） ───────────────
+## 進行状況を初期状態（定義データどおり、クリアなし）に戻す。
+func reset_progress() -> void:
+  apply_progress_dict({})
+
+
+## チャプターの解放状態を設定する。
+## 定義上で初期解放されているものをロックした場合、次回ロード時には解放に戻る。
+func set_chapter_unlocked(chapter_id: String, unlocked: bool) -> void:
+  var chapter := get_chapter_by_id(chapter_id)
+  if chapter == null or chapter.is_unlocked == unlocked:
+    return
+  if unlocked:
+    unlock_chapter(chapter_id)
+  else:
+    chapter.is_unlocked = false
+    _unlocked_chapters.erase(chapter_id)
+  progress_changed.emit()
+
+
+## ステージの解放状態を設定する。
+## 定義上で初期解放されているものをロックした場合、次回ロード時には解放に戻る。
+func set_stage_unlocked(chapter_id: String, stage_id: String, unlocked: bool) -> void:
+  var stage := get_stage_by_ids(chapter_id, stage_id)
+  if stage == null or stage.is_unlocked == unlocked:
+    return
+  if unlocked:
+    unlock_stage(chapter_id, stage_id)
+  else:
+    stage.is_unlocked = false
+    _unlocked_stages.erase(_stage_key(chapter_id, stage_id))
+  progress_changed.emit()
+
+
+func set_stage_cleared(chapter_id: String, stage_id: String, cleared: bool) -> void:
+  if get_stage_by_ids(chapter_id, stage_id) == null:
+    return
+  var key := _stage_key(chapter_id, stage_id)
+  if cleared:
+    _cleared_stages[key] = true
+  else:
+    _cleared_stages.erase(key)
+  progress_changed.emit()
+
+
+## すべてのチャプター・ステージを解放する。clear が true ならすべてクリア済みにもする。
+func unlock_all(clear: bool = false) -> void:
+  for chapter in get_all_chapters():
+    if not chapter.is_unlocked:
+      unlock_chapter(chapter.chapter_id)
+    for stage in chapter.stages:
+      if not stage.is_unlocked:
+        unlock_stage(chapter.chapter_id, stage.stage_id)
+      if clear:
+        _cleared_stages[_stage_key(chapter.chapter_id, stage.stage_id)] = true
+  progress_changed.emit()
 
 
 static func _stage_key(chapter_id: String, stage_id: String) -> String:

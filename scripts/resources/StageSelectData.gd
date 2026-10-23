@@ -3,6 +3,27 @@ class_name StageSelectData
 
 @export var chapters: Array[ChapterData] = []
 
+# 定義上の初期解放状態（ChapterData / StageData → bool）。進行状況のリセットに使う
+var _initial_unlocked := {}
+var _initial_captured := false
+
+
+## 現在の解放状態を初期状態として記録する。2回目以降の呼び出しでは何もしない。
+func capture_initial_state() -> void:
+  if _initial_captured:
+    return
+  _initial_captured = true
+  for chapter in chapters:
+    _initial_unlocked[chapter] = chapter.is_unlocked
+    for stage in chapter.stages:
+      _initial_unlocked[stage] = stage.is_unlocked
+
+
+## 解放状態を capture_initial_state() で記録した状態に戻す。
+func restore_initial_state() -> void:
+  for res in _initial_unlocked:
+    res.is_unlocked = _initial_unlocked[res]
+
 
 func get_chapter_by_id(chapter_id: String) -> ChapterData:
   for chapter in chapters:

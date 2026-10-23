@@ -269,6 +269,46 @@ GenericGauge / GaugeManager ← HUD描画側
 
 > 例：「速復」(`shield_recover_delay_pct`) は `DefensiveBlessing._recalc_stats()` が既にキーを集計済みのため、リソース作成と `allowed_enchantments`／pool への追加のみで実装できる。
 
+### 3.6 アイテム別 許可エンチャント
+
+ドロップ時、`LootSystem._roll_enchantments()` は `EnchantmentRule.pool` のうち、アイテムの `allowed_enchantments` に含まれるものだけを抽選する（`id` で照合）。許可リストの実体は各アイテムの `.tres` で、この表はその写し。`.tres` を変更したら表も更新すること。
+
+- `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
+- 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
+
+#### 攻撃コア
+
+| コア | `.tres` | 速射 | 増輪 | 貫通 | 残留 | 炸裂 | 追尾 | 除外理由 |
+|---|---|:-:|:-:|:-:|:-:|:-:|:-:|---|
+| エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
+| ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
+| バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
+| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増輪：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
+| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増輪：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
+| バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：バリア弾はコード上で対象外 |
+| ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
+| マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
+| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増輪：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
+| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増輪は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
+
+- 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
+- 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。
+
+#### 加護
+
+| 加護 | `.tres` | 許可エンチャント |
+|---|---|---|
+| 障壁の加護 | `blessing_shield` | 堅固・速復 |
+| 体力増強の加護 | `blessing_hp_boost` | 増健 |
+| 回復の加護 | `blessing_regen` | 速治 |
+| 背水の加護 | `blessing_laststand` | 必死・無我 |
+| 近接の加護 | `blessing_proximity` | 凝集・無我 |
+| 打消の加護 | `blessing_nullify` | 保持・強奪 |
+| 迷彩の加護 | `blessing_camouflage` | 保持 |
+| 不屈の加護 | `blessing_fortitude` | 保持 |
+
+- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`camouflage_duration_pct`（迷彩）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
+
 ---
 
 ## 4. 汎用ゲージシステム

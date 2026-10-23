@@ -223,6 +223,9 @@ GenericGauge / GaugeManager ← HUD描画側
 | `ItemBase.allowed_enchantments` | そのアイテムに付与されうるエンチャント。抽選時に `pool` をこれで絞り込む（`id` で照合）。空なら制限なし |
 | `ItemInstance.enchantments` | `Dictionary[Enchantment, int]`（個体に付与されたエンチャントとレベル） |
 
+- ドロップ時の付与個数は `LootSystem.enchantment_max_count`（**3 個**）が上限。`count_weights` で上限を超える個数を指定しても切り詰められる。同じエンチャントは重複しないため、`pool` を許可エンチャントで絞り込んだ候補が上限より少なければ、その数で止まる。
+- レアリティは付与エンチャントのレベル合計で決まる（`ItemInstance.get_rarity_tier()`）：0 = NORMAL / 1〜2 = COMMON / 3〜4 = UNCOMMON / 5〜6 = RARE / 7〜8 = EPIC / 9 以上 = LEGENDARY。3 個 × Lv3 で LEGENDARY に届く。
+
 ### 3.2 modifier キー命名規約
 
 | 接尾辞 | 合成 | 例 |
@@ -275,6 +278,7 @@ GenericGauge / GaugeManager ← HUD描画側
 
 - `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
 - 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
+- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・ビーム・全加護）は、その数までしか付与されない。
 
 #### 攻撃コア
 

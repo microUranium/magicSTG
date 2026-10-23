@@ -331,6 +331,24 @@
             "level": 2
           }
         ]
+      },
+      {
+        "uid": "attackcore_magic_bullet_tooltip_test",
+        "id": "attackcore_magic_bullet",
+        "enchantments": [
+          {
+            "id": "homing_correction_px_add",
+            "level": 3
+          },
+          {
+            "id": "penetration_add",
+            "level": 3
+          },
+          {
+            "id": "bullet_count_add",
+            "level": 3
+          }
+        ]
       }
     ],
     "blessings": [

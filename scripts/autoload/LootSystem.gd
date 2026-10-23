@@ -1,7 +1,7 @@
 extends Node
 
 var _rng := RandomNumberGenerator.new()
-const enchantment_max_count := 2  # 最大エンチャント数
+const enchantment_max_count := 3  # 最大エンチャント数
 
 
 # -------------------------------------------------

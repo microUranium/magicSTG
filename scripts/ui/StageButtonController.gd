@@ -39,6 +39,9 @@ func update_display() -> void:
 
   var is_locked = not stage_data.is_unlocked
 
+  # 未解放のステージはボタンごと表示しない（親の VBoxContainer が詰めて並べる）
+  visible = not is_locked
+
   if lock_overlay:
     lock_overlay.visible = is_locked
 

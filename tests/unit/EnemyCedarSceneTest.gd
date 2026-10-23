@@ -1,5 +1,5 @@
 # === enemy_cedar（スギ）のテスト ===
-# 通常攻撃はせず、HP が 20% 減るごとに花粉を 30 発ばらまく（撃破時も含む）
+# 通常攻撃はせず、HP が 20% 減るごとに花粉を 50 発ばらまく（撃破時も含む）
 extends GdUnitTestSuite
 
 const LIVING_WOOD := "res://scenes/enemy/enemy_living_wood.tscn"
@@ -7,7 +7,7 @@ const CEDAR := "res://scenes/enemy/enemy_cedar.tscn"
 const CEDAR_TEXTURE := "res://assets/gfx/sprites/enemy_cedar_sprite.png"
 const POLLEN_TEXTURE := "res://assets/gfx/sprites/bullet_enemy_sprite_2.png"
 const STAGE_DATA := "res://resources/data/stage_data.json"
-const POLLEN_PER_BURST := 30
+const POLLEN_PER_BURST := 50
 
 var _bullet_root: Node2D
 
@@ -70,7 +70,7 @@ func test_pollen_does_not_fire_automatically() -> void:
   assert_bool(_pollen().auto_start).is_false()
 
 
-func test_pollen_scatters_30_bullets_in_random_directions() -> void:
+func test_pollen_scatters_50_bullets_in_random_directions() -> void:
   var pollen := _pollen()
 
   assert_int(pollen.pattern_type).is_equal(AttackPattern.PatternType.SINGLE_SHOT)

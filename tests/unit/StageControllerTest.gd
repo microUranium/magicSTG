@@ -101,17 +101,10 @@ func _setup_game_data_registry_mock():
 
 func _cleanup_game_data_registry_mock():
   """GameDataRegistryのモック状態をクリーンアップ"""
-  # null参照エラー防止のため、存在確認してからクリーンアップ
+  # 空にすると後続スイートが実データを参照できなくなるため、実データを読み直す
   if GameDataRegistry:
+    GameDataRegistry.reload_data()
     GameDataRegistry._data_loaded = _original_data_loaded
-    if GameDataRegistry.has_method("clear") or "wave_templates" in GameDataRegistry:
-      GameDataRegistry.wave_templates = {}
-    if GameDataRegistry.has_method("clear") or "dialogues" in GameDataRegistry:
-      GameDataRegistry.dialogues = {}
-    if GameDataRegistry.has_method("clear") or "enemies" in GameDataRegistry:
-      GameDataRegistry.enemies = {}
-    if GameDataRegistry.has_method("clear") or "spawn_patterns" in GameDataRegistry:
-      GameDataRegistry.spawn_patterns = {}
 
 
 func test_dependency_injection():

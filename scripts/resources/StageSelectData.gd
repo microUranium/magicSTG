@@ -28,6 +28,36 @@ func get_unlocked_chapters(include_debug: bool = OS.is_debug_build()) -> Array[C
   return unlocked
 
 
+## 指定ステージの次のステージを返す（無ければ null）。
+## チャプター内の最後のステージであれば、次のチャプター（デバッグ専用は除く）の最初のステージを返す。
+func get_next_stage(chapter_id: String, stage_id: String) -> StageData:
+  var chapter_index := -1
+  for i in chapters.size():
+    if chapters[i].chapter_id == chapter_id:
+      chapter_index = i
+      break
+  if chapter_index < 0:
+    return null
+
+  var stages: Array[StageData] = chapters[chapter_index].stages
+  var stage_index := -1
+  for i in stages.size():
+    if stages[i].stage_id == stage_id:
+      stage_index = i
+      break
+  if stage_index < 0:
+    return null
+  if stage_index + 1 < stages.size():
+    return stages[stage_index + 1]
+
+  for i in range(chapter_index + 1, chapters.size()):
+    var chapter := chapters[i]
+    if chapter.is_debug_only or chapter.stages.is_empty():
+      continue
+    return chapter.stages[0]
+  return null
+
+
 func unlock_stage(chapter_id: String, stage_id: String) -> bool:
   var stage = get_stage_by_ids(chapter_id, stage_id)
   if stage:

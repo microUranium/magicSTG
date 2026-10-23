@@ -124,6 +124,9 @@ func _on_stage_cleared() -> void:
   # 演出中に暗転したままステージが終わらないようにする
   StageSignals.emit_request_screen_fade(false, 0.3)
 
+  # 進行状況を更新（ファイルへの保存はリザルト画面退出時）
+  StageDataManager.mark_current_stage_cleared()
+
   # ライフサイクル処理
   var lifecycle_controller = _component_registry.get_component("lifecycle")
   if lifecycle_controller:

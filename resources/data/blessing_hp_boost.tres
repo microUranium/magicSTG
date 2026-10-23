@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://chpb0ostbls01" path="res://scenes/blessings/hp_boost_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://s3xbrwsxxcuj" path="res://assets/gfx/sprites/icon_blessing_hp_boost.png" id="3"]
-[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 [ext_resource type="Resource" uid="uid://b0hpaddench01" path="res://resources/data/enchantment_hp_add.tres" id="ae_hp_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [resource]
 script = ExtResource("1")
@@ -18,5 +18,5 @@ item_type = 0
 display_name = "体力増強の加護"
 description = "身につけると最大体力が増加します。"
 icon = ExtResource("3")
-metadata/_custom_type_script = "uid://bclm6we4v4mkb"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_hp_add")])
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

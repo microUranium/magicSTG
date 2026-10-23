@@ -3,15 +3,15 @@
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cfort1flbls11" path="res://scenes/blessings/fortitude_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://bjce5uu7i12so" path="res://assets/gfx/sprites/icon_blessing_fortitude.png" id="3"]
-[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 [ext_resource type="Resource" uid="uid://b0usesadd004" path="res://resources/data/enchantment_blessing_uses_add.tres" id="ae_blessing_uses_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [resource]
 script = ExtResource("1")
 blessing_scene = ExtResource("2")
 base_modifiers = {
-"fortitude_revive_hp_ratio": 0.5,
 "fortitude_invincible_sec": 2.0,
+"fortitude_revive_hp_ratio": 0.5,
 "max_uses": 1
 }
 id = &"blessing_fortitude"
@@ -19,5 +19,5 @@ item_type = 0
 display_name = "不屈の加護"
 description = "致命的なダメージを受けた時、体力を回復して即座に復活し、一定時間無敵になります。1ステージの使用回数に限りがあります。"
 icon = ExtResource("3")
-metadata/_custom_type_script = "uid://bclm6we4v4mkb"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_blessing_uses_add")])
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

@@ -1759,7 +1759,7 @@
       "weight": 5,
       "layers": [
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 3,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -1772,7 +1772,7 @@
       "weight": 3,
       "layers": [
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 4,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -1798,7 +1798,7 @@
       "weight": 5,
       "layers": [
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 2,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -1845,7 +1845,7 @@
           "delay": 0.0
         },
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 2,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -1885,7 +1885,7 @@
           "delay": 0.0
         },
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 2,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -1921,7 +1921,7 @@
     "s5b2": {
       "layers": [
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 4,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -2092,7 +2092,7 @@
       "weight": 5,
       "layers": [
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 3,
           "pattern": "single_random",
           "interval": 0.3,
@@ -2145,7 +2145,7 @@
           "delay": 0.0
         },
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 3,
           "pattern": "single_random",
           "interval": 0.3,
@@ -2176,7 +2176,7 @@
     "s6a1": {
       "layers": [
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 2,
           "pattern": "single_random",
           "interval": 0.5,
@@ -2230,7 +2230,7 @@
           "delay": 2.0
         },
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 3,
           "pattern": "single_random",
           "interval": 0.3,
@@ -2255,7 +2255,7 @@
           "delay": 3.0
         },
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 4,
           "pattern": "single_random",
           "interval": 0.3,
@@ -2390,7 +2390,7 @@
     "s5x_lantern": {
       "layers": [
         {
-          "enemy": "enemy_lantern",
+          "enemy": "enemy_lantern_ch5",
           "count": 1,
           "pattern": "from_top_spacing",
           "interval": 0.0,
@@ -2445,7 +2445,7 @@
     "s6x_swamp_bird": {
       "layers": [
         {
-          "enemy": "enemy_swamp_bird",
+          "enemy": "enemy_swamp_bird_ch6",
           "count": 1,
           "pattern": "single_random",
           "interval": 0.0,
@@ -2517,6 +2517,10 @@
     },
     "enemy_lantern": {
       "scene_path": "res://scenes/enemy/enemy_lantern.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_lantern_ch5": {
+      "scene_path": "res://scenes/enemy/enemy_lantern_ch5.tscn",
       "spawn_weight": 1.0
     },
     "enemy_lantern_b": {
@@ -2617,6 +2621,10 @@
     },
     "enemy_swamp_bird": {
       "scene_path": "res://scenes/enemy/enemy_swamp_bird.tscn",
+      "spawn_weight": 1.0
+    },
+    "enemy_swamp_bird_ch6": {
+      "scene_path": "res://scenes/enemy/enemy_swamp_bird_ch6.tscn",
       "spawn_weight": 1.0
     },
     "enemy_living_wood": {

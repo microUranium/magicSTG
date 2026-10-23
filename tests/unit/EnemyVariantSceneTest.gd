@@ -9,6 +9,9 @@ const GRIMOIRE := "res://scenes/enemy/enemy_grimoire.tscn"
 const GRIMOIRE_STRONG := "res://scenes/enemy/enemy_grimoire_strong.tscn"
 const FLOWER_B := "res://scenes/enemy/enemy_flower_b.tscn"
 const FLOWER_B_STRONG := "res://scenes/enemy/enemy_flower_b_strong.tscn"
+const LANTERN_CH5 := "res://scenes/enemy/enemy_lantern_ch5.tscn"
+const SWAMP_BIRD := "res://scenes/enemy/enemy_swamp_bird.tscn"
+const SWAMP_BIRD_CH6 := "res://scenes/enemy/enemy_swamp_bird_ch6.tscn"
 const STAGE_DATA := "res://resources/data/stage_data.json"
 
 
@@ -171,3 +174,19 @@ func test_variants_are_registered_in_stage_data() -> void:
   assert_str(enemies["enemy_lantern_b_weak"]["scene_path"]).is_equal(LANTERN_B_WEAK)
   assert_str(enemies["enemy_grimoire_strong"]["scene_path"]).is_equal(GRIMOIRE_STRONG)
   assert_str(enemies["enemy_flower_b_strong"]["scene_path"]).is_equal(FLOWER_B_STRONG)
+  assert_str(enemies["enemy_lantern_ch5"]["scene_path"]).is_equal(LANTERN_CH5)
+  assert_str(enemies["enemy_swamp_bird_ch6"]["scene_path"]).is_equal(SWAMP_BIRD_CH6)
+
+
+# --- 章ごとにドロップテーブルを分けるための派生版（ドロップ以外は元シーンと同じ）---
+
+
+func test_chapter_drop_variants_keep_base_stats() -> void:
+  for pair in [[LANTERN, LANTERN_CH5], [SWAMP_BIRD, SWAMP_BIRD_CH6]]:
+    var base := _instantiate(pair[0])
+    var variant := _instantiate(pair[1])
+
+    assert_object(variant.get_script()).is_equal(base.get_script())
+    assert_int(variant.get_node("HpNode").max_hp).is_equal(base.get_node("HpNode").max_hp)
+    assert_str(variant.name).is_equal(base.name)
+    assert_array(variant.get_groups()).contains(["enemies"])

@@ -16,8 +16,8 @@
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="17_r3ja4"]
 [ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
-[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_attackcore_needleshot.tres" id="dt_2"]
-[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_blessing_camouflage.tres" id="dt_3"]
+[ext_resource type="Resource" uid="uid://df3u0uxgxjx4y" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_attackcore_needleshot.tres" id="dt_2"]
+[ext_resource type="Resource" uid="uid://ccqfdlqw57wju" path="res://resources/itemdrop/entries/droptableentry_enemy_boss_bear_blessing_camouflage.tres" id="dt_3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ws6x4"]
 atlas = ExtResource("2_7infs")

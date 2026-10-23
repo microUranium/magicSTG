@@ -1,19 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckxwukmh08a5p"]
+[gd_scene load_steps=14 format=3 uid="uid://ckxwukmh08a5p"]
 
-[ext_resource type="Texture2D" uid="uid://cvisuide6r8rk" path="res://assets/gfx/sprites/magic_common_sprite.png" id="1_tfr3g"]
 [ext_resource type="Script" uid="uid://dusftmjboyxew" path="res://scripts/item/DroppedItem.gd" id="1_ukli2"]
-[ext_resource type="Texture2D" uid="uid://uh3ylg2y3bxw" path="res://assets/gfx/sprites/blessing_common_sprite.png" id="2_u24bx"]
+[ext_resource type="Texture2D" uid="uid://dky6n2rscl257" path="res://assets/gfx/sprites/blessing_tier12_sprite.png" id="2_bt12"]
+[ext_resource type="Texture2D" uid="uid://cbce50t7kiebg" path="res://assets/gfx/sprites/blessing_tier34_sprite.png" id="3_bt34"]
+[ext_resource type="Texture2D" uid="uid://bn7x2thnrw7ji" path="res://assets/gfx/sprites/blessing_tier5_sprite.png" id="4_bt5"]
+[ext_resource type="Texture2D" uid="uid://br6y1eqrf6jqw" path="res://assets/gfx/sprites/blessing_tier6_sprite.png" id="5_bt6"]
+[ext_resource type="Texture2D" uid="uid://btdsmsyf7bbmg" path="res://assets/gfx/sprites/magic_tier12_sprite.png" id="6_mt12"]
+[ext_resource type="Texture2D" uid="uid://dqm8livvxmgdo" path="res://assets/gfx/sprites/magic_tier34_sprite.png" id="7_mt34"]
+[ext_resource type="Texture2D" uid="uid://n6lujgu5brjq" path="res://assets/gfx/sprites/magic_tier5_sprite.png" id="8_mt5"]
+[ext_resource type="Texture2D" uid="uid://bqhpahd54cfyu" path="res://assets/gfx/sprites/magic_tier6_sprite.png" id="9_mt6"]
+[ext_resource type="PackedScene" path="res://scenes/effects/rare_drop_effect_tier34.tscn" id="12_fx_tier34"]
+[ext_resource type="PackedScene" path="res://scenes/effects/rare_drop_effect_epic.tscn" id="10_fx_epic"]
+[ext_resource type="PackedScene" path="res://scenes/effects/rare_drop_effect_legendary.tscn" id="11_fx_legendary"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ukli2"]
 size = Vector2(64, 64)
 
 [node name="DroppedItem" type="Area2D"]
 script = ExtResource("1_ukli2")
-item_image_blessing = ExtResource("2_u24bx")
-item_image_core = ExtResource("1_tfr3g")
+item_images_blessing = Array[Texture2D]([ExtResource("2_bt12"), ExtResource("2_bt12"), ExtResource("3_bt34"), ExtResource("3_bt34"), ExtResource("4_bt5"), ExtResource("5_bt6")])
+item_images_core = Array[Texture2D]([ExtResource("6_mt12"), ExtResource("6_mt12"), ExtResource("7_mt34"), ExtResource("7_mt34"), ExtResource("8_mt5"), ExtResource("9_mt6")])
+rarity_effect_scenes = Array[PackedScene]([null, null, ExtResource("12_fx_tier34"), ExtResource("12_fx_tier34"), ExtResource("10_fx_epic"), ExtResource("11_fx_legendary")])
+homing_delay_sec_by_tier = Array[float]([0.5, 0.5, 0.5, 0.5, 0.9, 1.3])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_tfr3g")
+texture = ExtResource("6_mt12")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 0)

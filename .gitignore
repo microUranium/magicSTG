@@ -24,3 +24,5 @@ nul
 
 # Claude settings
 .claude/
+# Local tools (not tracked)
+/tools/

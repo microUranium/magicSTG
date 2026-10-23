@@ -8,10 +8,10 @@
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_item"]
 [ext_resource type="Texture2D" uid="uid://cd2wybur8n8ri" path="res://assets/gfx/sprites/icon_magic_triple_burst.png" id="5_icon"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="5_kaxon"]
-[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 [ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
-[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="ae_homing"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [sub_resource type="Resource" id="Resource_visual"]
 script = ExtResource("2_visual")
@@ -20,6 +20,10 @@ scale = 1.0
 color = Color(1, 1, 1, 1)
 collision_radius = 8.0
 enable_particles = false
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
@@ -34,8 +38,10 @@ target_group = "enemies"
 damage = 10
 bullet_range = 0.0
 bullet_lifetime = 2.0
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
+contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_visual")
 bullet_count = 1
 rapid_fire_count = 1
@@ -44,6 +50,8 @@ burst_delay = 0.5
 burst_count = 3
 burst_interval = 0.05
 min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
 spawn_position_mode = 0
 spawn_position_offset = Vector2(0, 0)
 spawn_positions_multi = Array[Vector2]([])
@@ -69,6 +77,11 @@ warning_configs = Array[ExtResource("5_kaxon")]([])
 persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]
@@ -86,5 +99,5 @@ item_type = 1
 display_name = "トリプルバースト"
 description = "3点バーストの魔弾を放ちます。敵に近いほど連射性能が上がります。"
 icon = ExtResource("5_icon")
-metadata/_custom_type_script = "uid://31siypvcpkwh"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_penetration_add"), ExtResource("ae_homing")])
+metadata/_custom_type_script = "uid://31siypvcpkwh"

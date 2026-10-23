@@ -9,11 +9,11 @@
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="5_item"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="6_1ywg5"]
 [ext_resource type="Texture2D" uid="uid://dudcq4xfguoxq" path="res://assets/gfx/sprites/icon_magic_barrier_orb.png" id="6_icon"]
-[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
-[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
-[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
 [ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="ae_bullet_lifetime_pct"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [sub_resource type="Resource" id="Resource_barrier_movement"]
 script = ExtResource("3_barrier")
@@ -33,6 +33,10 @@ scale = 2.0
 color = Color(1, 1, 1, 1)
 collision_radius = 12.0
 enable_particles = false
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
@@ -47,8 +51,10 @@ target_group = "enemies"
 damage = 2
 bullet_range = 0.0
 bullet_lifetime = 3.0
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 1
+contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_visual")
 barrier_movement_config = SubResource("Resource_barrier_movement")
 bullet_count = 4
@@ -85,6 +91,11 @@ warning_configs = Array[ExtResource("6_1ywg5")]([])
 persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]
@@ -103,5 +114,5 @@ item_type = 1
 display_name = "バリアオーブ"
 description = "精霊の周囲を回転する魔力球を展開し、触れた敵にダメージを与えます。"
 icon = ExtResource("6_icon")
-metadata/_custom_type_script = "uid://31siypvcpkwh"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add"), ExtResource("ae_bullet_lifetime_pct")])
+metadata/_custom_type_script = "uid://31siypvcpkwh"

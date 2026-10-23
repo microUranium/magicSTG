@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=17 format=3]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=17 format=3 uid="uid://cfkh05y6peea3"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="2_movecfg"]
@@ -9,25 +9,28 @@
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="7_warn"]
 [ext_resource type="Texture2D" uid="uid://ba5ceibuornle" path="res://assets/gfx/sprites/icon_magic_boomerang.png" id="8_icon"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="9_item"]
-[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
-[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 
 [sub_resource type="Resource" id="Resource_movement"]
 script = ExtResource("2_movecfg")
 movement_type = 7
 initial_speed = 1200.0
+initial_speed_max = 0.0
 deceleration_rate = 100.0
 min_speed = 50.0
 acceleration_rate = 50.0
 max_speed = 500.0
+contact_speed = 0.0
 wave_amplitude = 50.0
 wave_frequency = 2.0
 homing_duration = 3.0
 max_turn_angle_per_second = 180.0
 gravity_strength = 980.0
 gravity_direction = Vector2(0, 1)
+gravity_follows_direction = false
 air_resistance = 0.0
 boomerang_outbound_time = 0.75
 boomerang_return_accel = 1800.0
@@ -73,8 +76,10 @@ target_group = "enemies"
 damage = 3
 bullet_range = 0.0
 bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 3
+contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_visual")
 bullet_movement_config = SubResource("Resource_movement")
 bullet_count = 1
@@ -111,6 +116,11 @@ warning_configs = Array[ExtResource("7_warn")]([])
 persist_offscreen = true
 max_offscreen_distance = 2000.0
 forced_lifetime = 8.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [resource]
@@ -128,5 +138,5 @@ item_type = 1
 display_name = "ブーメラン"
 description = "ブーメランのように戻ってくる弾を発射します。"
 icon = ExtResource("8_icon")
-metadata/_custom_type_script = "uid://31siypvcpkwh"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add")])
+metadata/_custom_type_script = "uid://31siypvcpkwh"

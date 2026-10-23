@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cl4ststbls03q" path="res://scenes/blessings/laststand_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://jiw4e1fd2we5" path="res://assets/gfx/sprites/icon_blessing_last_stand.png" id="3"]
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
-[ext_resource type="Resource" uid="uid://bzcdrench005x" path="res://resources/data/enchantment_laststand_cdr_pct.tres" id="ae_laststand_cdr_pct"]
-[ext_resource type="Resource" uid="uid://bzmugaench002" path="res://resources/data/enchantment_muga.tres" id="ae_muga"]
+[ext_resource type="Resource" uid="uid://b0cdrench005x" path="res://resources/data/enchantment_laststand_cdr_pct.tres" id="ae_laststand_cdr_pct"]
+[ext_resource type="Resource" uid="uid://b0mugaench002" path="res://resources/data/enchantment_muga.tres" id="ae_muga"]
 
 [resource]
 script = ExtResource("1")

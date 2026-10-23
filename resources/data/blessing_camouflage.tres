@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ccamo1flbls10" path="res://scenes/blessings/camouflage_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://dwd56hnxpgak4" path="res://assets/gfx/sprites/icon_blessing_camouflage.png" id="3"]
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
-[ext_resource type="Resource" uid="uid://bzusesadd004" path="res://resources/data/enchantment_blessing_uses_add.tres" id="ae_blessing_uses_add"]
+[ext_resource type="Resource" uid="uid://b0usesadd004" path="res://resources/data/enchantment_blessing_uses_add.tres" id="ae_blessing_uses_add"]
 
 [resource]
 script = ExtResource("1")

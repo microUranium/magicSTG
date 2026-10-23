@@ -21,5 +21,5 @@ item_type = 0
 display_name = "障壁の加護"
 description = "敵の攻撃を完全に遮断する魔法障壁を展開します。"
 icon = ExtResource("2_skbd8")
-metadata/_custom_type_script = "uid://bclm6we4v4mkb"
 allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_shield_hp_pct"), ExtResource("ae_shield_recover_delay_pct")])
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

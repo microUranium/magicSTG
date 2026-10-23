@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=12 format=3 uid="uid://deqfhbmsqs4xp"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=17 format=3 uid="uid://deqfhbmsqs4xp"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_core"]
@@ -8,6 +8,11 @@
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="4_d1sb0"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_item"]
 [ext_resource type="Texture2D" uid="uid://qeyb1s8vwptw" path="res://assets/gfx/sprites/icon_magic_elec_shock.png" id="5_icon"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_spread_bullet_count_add.tres" id="ae_spread_bullet_count_add"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="ae_homing"]
 
 [sub_resource type="Resource" id="Resource_visual"]
 script = ExtResource("2_visual")
@@ -135,3 +140,4 @@ display_name = "エレキショック"
 description = "電撃を放ちます。電撃が敵にヒットすると、その敵を中心に攻撃が拡散します。"
 icon = ExtResource("5_icon")
 metadata/_custom_type_script = "uid://31siypvcpkwh"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_penetration_add"), ExtResource("ae_spread_bullet_count_add"), ExtResource("ae_homing")])

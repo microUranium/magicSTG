@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=13 format=3 uid="uid://bhqs6qvw78t65"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=18 format=3 uid="uid://bhqs6qvw78t65"]
 
 [ext_resource type="PackedScene" uid="uid://br565nd5vqltf" path="res://scenes/bullets/enhanced_barrier_bullet.tscn" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_core"]
@@ -9,6 +9,11 @@
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="5_item"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="6_1ywg5"]
 [ext_resource type="Texture2D" uid="uid://dudcq4xfguoxq" path="res://assets/gfx/sprites/icon_magic_barrier_orb.png" id="6_icon"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="ae_bullet_lifetime_pct"]
 
 [sub_resource type="Resource" id="Resource_barrier_movement"]
 script = ExtResource("3_barrier")
@@ -99,3 +104,4 @@ display_name = "バリアオーブ"
 description = "精霊の周囲を回転する魔力球を展開し、触れた敵にダメージを与えます。"
 icon = ExtResource("6_icon")
 metadata/_custom_type_script = "uid://31siypvcpkwh"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add"), ExtResource("ae_bullet_lifetime_pct")])

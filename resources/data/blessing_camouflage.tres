@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="BlessingItem" load_steps=4 format=3 uid="uid://dcamo1flres10"]
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=6 format=3 uid="uid://dcamo1flres10"]
 
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ccamo1flbls10" path="res://scenes/blessings/camouflage_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://dwd56hnxpgak4" path="res://assets/gfx/sprites/icon_blessing_camouflage.png" id="3"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://bzusesadd004" path="res://resources/data/enchantment_blessing_uses_add.tres" id="ae_blessing_uses_add"]
 
 [resource]
 script = ExtResource("1")
@@ -18,3 +20,4 @@ display_name = "迷彩の加護"
 description = "発動中は姿をくらまし、自機狙いや追尾の対象から外れます。指定キーで発動し、1ステージの使用回数に限りがあります。"
 icon = ExtResource("3")
 metadata/_custom_type_script = "uid://bclm6we4v4mkb"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_blessing_uses_add")])

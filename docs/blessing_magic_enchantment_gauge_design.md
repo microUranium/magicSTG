@@ -220,6 +220,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | `Enchantment` (Resource) | `id` / `display_name` / `description` / `tiers[]`。`get_modifiers(level)` でその tier の modifier 辞書を返す |
 | `EnchantmentTier` (Resource) | `level`(1〜3) と `modifiers`(キー→数値) |
 | `EnchantmentRule` (Resource) | ドロップ時の付与ルール。`pool[]`（候補）/`count_weights`（個数）/`level_weights`（レベル） |
+| `ItemBase.allowed_enchantments` | そのアイテムに付与されうるエンチャント。抽選時に `pool` をこれで絞り込む（`id` で照合）。空なら制限なし |
 | `ItemInstance.enchantments` | `Dictionary[Enchantment, int]`（個体に付与されたエンチャントとレベル） |
 
 ### 3.2 modifier キー命名規約
@@ -255,16 +256,18 @@ GenericGauge / GaugeManager ← HUD描画側
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
 | 残留 | `bullet_lifetime_pct` | 弾寿命 +% | +50% / +50% / +200% | 攻撃コア |
 | 貫通 | `penetration_add` | 貫通回数 + | +1 / +2 / +4 | 攻撃コア |
+| 追尾 | `homing_correction_px_add` | 追尾の横ズレ補正 +px | +60 / +150 / +300 | 攻撃コア（SPIRAL / BOOMERANG / バリア弾は対象外） |
 
 ### 3.5 新規エンチャント追加手順
 
 1. 装備側が対象キー（`xxx_pct`/`xxx_add`）を集計しているか確認。無ければ `_recalc_stats()` 等に `_sum_pct/_sum_add` を追加。
 2. `resources/data/tiers/tier_<key>_1..3.tres` を作成（`level` と `modifiers`）。
 3. `resources/data/enchantment_<key>.tres` を作成（`id`/`display_name`/`description`/`tiers`）。
-4. 付与対象の `EnchantmentRule`（`resources/itemdrop/enchantmentrule_*.tres`）の `pool` に追加。
-5. （任意）`default_player_save.json` に付与済み個体を追加。
+4. 効く装備の `allowed_enchantments`（`resources/data/attackcore_*.tres` / `blessing_*.tres`）に追加。
+5. 付与対象の `EnchantmentRule`（`resources/itemdrop/enchantmentrule_*.tres`）の `pool` に追加。
+6. （任意）`default_player_save.json` に付与済み個体を追加。
 
-> 例：「速復」(`shield_recover_delay_pct`) は `DefensiveBlessing._recalc_stats()` が既にキーを集計済みのため、リソース作成と pool 追加のみで実装できた。
+> 例：「速復」(`shield_recover_delay_pct`) は `DefensiveBlessing._recalc_stats()` が既にキーを集計済みのため、リソース作成と `allowed_enchantments`／pool への追加のみで実装できる。
 
 ---
 

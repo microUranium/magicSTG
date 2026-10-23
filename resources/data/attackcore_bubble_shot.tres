@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=18 format=3 uid="uid://b8wgybr7gmojq"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=23 format=3 uid="uid://b8wgybr7gmojq"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_6l0x7"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="1_pwxes"]
@@ -10,6 +10,11 @@
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="7_1j6lm"]
 [ext_resource type="Texture2D" uid="uid://btdu721kaieqq" path="res://assets/gfx/sprites/icon_magic_bubble_shot.png" id="8_pwxes"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="8_x25hv"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="ae_bullet_lifetime_pct"]
 
 [sub_resource type="Resource" id="Resource_1j6lm"]
 script = ExtResource("1_pwxes")
@@ -150,3 +155,4 @@ display_name = "バブルショット"
 description = "ゆっくり拡散する短距離の泡を発射します。"
 icon = ExtResource("8_pwxes")
 metadata/_custom_type_script = "uid://31siypvcpkwh"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_bullet_count_add"), ExtResource("ae_penetration_add"), ExtResource("ae_bullet_lifetime_pct")])

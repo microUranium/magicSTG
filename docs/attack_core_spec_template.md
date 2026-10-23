@@ -70,7 +70,8 @@
 
 ## 4. エンチャント適合
 
-既存の攻撃コア向け5種が「効く／効かない」を明示する。効かないキーがあるのは可（意図の明記が必要）。
+既存の攻撃コア向けエンチャントが「効く／効かない」を明示する。効かないキーがあるのは可（意図の明記が必要）。
+「効く」かつドロップで付与してよいものを `.tres` の `allowed_enchantments` に登録する（未登録のものはドロップ抽選から除外される）。
 
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
@@ -79,6 +80,7 @@
 | 貫通 | `penetration_add` | | |
 | 残留 | `bullet_lifetime_pct` | ※ `bullet_lifetime > 0` が前提 | |
 | 炸裂 | `spread_bullet_count_add` | ※ `on_hit_pattern` がある場合のみ | |
+| 追尾 | `homing_correction_px_add` | ※ movement_type が SPIRAL / BOOMERANG、またはバリア弾だと無効 | |
 
 - **新規エンチャントキーが必要か**：必要／不要
   - 必要な場合：キー名 `____`、集計箇所（`PlayerAttackPatternFactory.update_pattern_from_enchantments()` への追記）、tier値 Lv1/2/3
@@ -108,7 +110,7 @@
 
 - [ ] `assets/gfx/sprites/bullet_____.png`
 - [ ] `assets/gfx/sprites/icon_magic_____.png`
-- [ ] `resources/data/attackcore_____.tres`
+- [ ] `resources/data/attackcore_____.tres`（4章に従い `allowed_enchantments` を設定）
 - [ ] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
 - [ ] （ドロップさせる場合）`resources/itemdrop/` のドロップテーブル／`enchantmentrule_*.tres` の `pool`
 - [ ] `tests/unit/` にテスト追加

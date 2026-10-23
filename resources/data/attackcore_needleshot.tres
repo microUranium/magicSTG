@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=13 format=3]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=16 format=3]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="2_movecfg"]
@@ -9,6 +9,9 @@
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="7_warn"]
 [ext_resource type="Texture2D" uid="uid://cm4128mo1b5jo" path="res://assets/gfx/sprites/icon_magic_needle_shot.png" id="8_icon"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="9_item"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="ae_homing"]
 
 [sub_resource type="Resource" id="Resource_movement"]
 script = ExtResource("2_movecfg")
@@ -124,3 +127,4 @@ display_name = "ニードルショット"
 description = "敵に持続的にダメージを与える針状の弾を発射します。"
 icon = ExtResource("8_icon")
 metadata/_custom_type_script = "uid://31siypvcpkwh"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_homing")])

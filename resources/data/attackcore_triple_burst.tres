@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=11 format=3 uid="uid://dck1c5hn85fnp"]
+[gd_resource type="Resource" script_class="AttackCoreItem" load_steps=15 format=3 uid="uid://dck1c5hn85fnp"]
 
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="1_core"]
@@ -8,6 +8,10 @@
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="4_item"]
 [ext_resource type="Texture2D" uid="uid://cd2wybur8n8ri" path="res://assets/gfx/sprites/icon_magic_triple_burst.png" id="5_icon"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="5_kaxon"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="ae_homing"]
 
 [sub_resource type="Resource" id="Resource_visual"]
 script = ExtResource("2_visual")
@@ -83,3 +87,4 @@ display_name = "トリプルバースト"
 description = "3点バーストの魔弾を放ちます。敵に近いほど連射性能が上がります。"
 icon = ExtResource("5_icon")
 metadata/_custom_type_script = "uid://31siypvcpkwh"
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_cooldown_pct"), ExtResource("ae_penetration_add"), ExtResource("ae_homing")])

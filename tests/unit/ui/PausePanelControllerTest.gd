@@ -4,12 +4,22 @@ class_name PausePanelControllerTest
 
 # テスト対象のシーン
 const PAUSE_PANEL_SCENE := "res://scenes/ui/pause_panel.tscn"
+const TEST_SETTINGS_PATH := "user://test_pause_panel_settings.cfg"
 
 var _controller: PausePanelController
 var _test_scene: Node
+var _orig_settings_path: String
+var _orig_volumes: Dictionary
 
 
 func before_test() -> void:
+  # パネルを閉じると設定が保存されるため、保存先をテスト用に差し替える
+  _orig_settings_path = SettingsManager.settings_path
+  _orig_volumes = SettingsManager._volumes.duplicate()
+  SettingsManager.settings_path = TEST_SETTINGS_PATH
+  _remove_test_settings()
+  SettingsManager.load_settings()
+
   # テスト用のシーンセットアップ
   _test_scene = Node.new()
   _test_scene.name = "TestScene"
@@ -28,6 +38,17 @@ func after_test() -> void:
   # リソースクリーンアップ
   if _test_scene:
     _test_scene.queue_free()
+
+  _remove_test_settings()
+  SettingsManager.settings_path = _orig_settings_path
+  SettingsManager._volumes = _orig_volumes
+  SettingsManager._apply_all()
+  SettingsManager._dirty = false
+
+
+func _remove_test_settings() -> void:
+  if FileAccess.file_exists(TEST_SETTINGS_PATH):
+    DirAccess.remove_absolute(TEST_SETTINGS_PATH)
 
 
 #---------------------------------------------------------------------
@@ -485,3 +506,37 @@ func test_multiple_show_hide_cycles() -> void:
     assert_that(_controller.visible).is_false()
     # _has_been_shownは一度trueになったら維持される
     assert_that(_controller._has_been_shown).is_true()
+
+
+#---------------------------------------------------------------------
+# 10. 音量設定テスト
+#---------------------------------------------------------------------
+
+
+func test_volume_settings_present() -> void:
+  """ポーズ画面に4バス分の音量スライダーがある"""
+  assert_that(_controller._volume_settings).is_not_null()
+  assert_array(_controller._volume_settings._sliders.keys()).contains_exactly_in_any_order(
+    SettingsManager.AUDIO_BUSES
+  )
+
+
+func test_show_panel_refreshes_volume_sliders() -> void:
+  """パネル表示時に音量スライダーが現在の設定値に更新される"""
+  SettingsManager.set_bus_volume(&"Music", 0.35)
+
+  _controller.show_panel()
+
+  assert_float(_controller._volume_settings._sliders[&"Music"].value).is_equal_approx(35.0, 0.001)
+
+
+func test_hide_panel_saves_volume_changes() -> void:
+  """パネルを閉じると未保存の音量変更が保存される"""
+  _controller.show_panel()
+  _controller._volume_settings._sliders[&"SFX"].value = 50.0
+  assert_that(SettingsManager.has_unsaved_changes()).is_true()
+
+  _controller.hide_panel()
+
+  assert_that(SettingsManager.has_unsaved_changes()).is_false()
+  assert_that(FileAccess.file_exists(TEST_SETTINGS_PATH)).is_true()

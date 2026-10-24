@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbm3capbd2b4g"]
+[gd_scene load_steps=5 format=3 uid="uid://bbm3capbd2b4g"]
 
 [ext_resource type="Script" uid="uid://pq5woxgf8ki8" path="res://scripts/systems/TitleScreen.gd" id="1_upj3s"]
 [ext_resource type="Texture2D" uid="uid://xm0ft6f46e4t" path="res://assets/gfx/sprites/title_background.png" id="2_gxyay"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_w8mqq"]
+[ext_resource type="PackedScene" path="res://scenes/ui/config_panel.tscn" id="4_config"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -34,9 +35,9 @@ text = "魔術師STG(仮)"
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 932.0
-offset_top = 554.0
+offset_top = 500.0
 offset_right = 932.0
-offset_bottom = 649.0
+offset_bottom = 740.0
 theme_override_constants/separation = 120
 alignment = 1
 
@@ -112,3 +113,39 @@ offset_top = -37.0
 offset_right = -18.0
 offset_bottom = 1.0
 scale = Vector2(2.56382, 2.12473)
+
+[node name="Config" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Config"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.32, 0.69, 0.63, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_w8mqq")
+theme_override_font_sizes/font_size = 80
+text = "設定"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="VBoxContainer/Config"]
+anchors_preset = 0
+offset_left = -82.0
+offset_top = -37.0
+offset_right = -18.0
+offset_bottom = 1.0
+scale = Vector2(2.56382, 2.12473)
+
+[node name="ConfigPanel" parent="." instance=ExtResource("4_config")]
+layout_mode = 1

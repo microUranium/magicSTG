@@ -1,0 +1,127 @@
+[gd_scene load_steps=6 format=3 uid="uid://de0wp1r8fopnn"]
+
+[ext_resource type="Script" path="res://scripts/ui/ConfigPanelController.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dbawqejq7exne" path="res://assets/gfx/sprites/pause_panel.png" id="2_panel"]
+[ext_resource type="FontVariation" path="res://assets/fonts/bitcount_grid_double_regular.tres" id="3_title_font"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="4_font"]
+[ext_resource type="PackedScene" uid="uid://bdv2t5y7gn4w6" path="res://scenes/ui/volume_settings.tscn" id="5_volume"]
+
+[node name="ConfigPanel" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="DarkOverlay" type="ColorRect" parent="."]
+modulate = Color(0, 0, 0, 0.392157)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 340.0
+offset_top = 120.0
+offset_right = 640.0
+offset_bottom = 470.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_panel")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 100
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="ConfigLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 340.0
+offset_top = 135.0
+offset_right = 940.0
+offset_bottom = 255.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_title_font")
+theme_override_font_sizes/font_size = 96
+text = "CONFIG"
+horizontal_alignment = 1
+
+[node name="Content" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 270.0
+offset_right = 890.0
+offset_bottom = 650.0
+horizontal_scroll_mode = 0
+
+[node name="Sections" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 24
+
+[node name="Sound" type="VBoxContainer" parent="Content/Sections"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="Content/Sections/Sound"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.876638, 0.210056, 0.422737, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 40
+text = "サウンド"
+horizontal_alignment = 1
+
+[node name="VolumeSettings" parent="Content/Sections/Sound" instance=ExtResource("5_volume")]
+layout_mode = 2
+
+[node name="Back" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 640.0
+offset_top = 735.0
+offset_right = 640.0
+offset_bottom = 735.0
+
+[node name="Label" type="Label" parent="Back"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -47.0
+offset_right = 225.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(225, 47)
+theme_override_colors/font_color = Color(0.418252, 0.485805, 0.831039, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 64
+text = "もどる"
+horizontal_alignment = 1
+
+[node name="ClickArea" type="Control" parent="Back"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.0
+offset_top = -29.0
+offset_right = -33.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 1.76)

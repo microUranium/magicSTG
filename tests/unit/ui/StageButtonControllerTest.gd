@@ -2,15 +2,19 @@
 extends GdUnitTestSuite
 
 const StageButtonScene := preload("res://scenes/ui/select_stage_container.tscn")
+const TEST_SAVE_PATH := "user://test_stage_button_controller.json"
 
 var _stage: StageData
 var _orig_stage_select_data: StageSelectData
 var _orig_progress: Dictionary
+var _orig_save_path: String
 
 
 func before_test() -> void:
   _orig_stage_select_data = StageDataManager.stage_select_data
   _orig_progress = StageDataManager.get_progress_dict()
+  _orig_save_path = SaveManager.save_path
+  SaveManager.save_path = TEST_SAVE_PATH  # ダイアログ切替時の自動セーブで実データを上書きしない
 
   _stage = StageData.new()
   _stage.stage_name = "TEST"
@@ -29,6 +33,9 @@ func before_test() -> void:
 func after_test() -> void:
   StageDataManager.stage_select_data = _orig_stage_select_data
   StageDataManager.apply_progress_dict(_orig_progress)
+  if FileAccess.file_exists(TEST_SAVE_PATH):
+    DirAccess.remove_absolute(TEST_SAVE_PATH)
+  SaveManager.save_path = _orig_save_path
 
 
 func _make_button(unlocked: bool, cleared: bool = false) -> Control:
@@ -93,11 +100,37 @@ func test_mark_and_toggle_follow_clear_state_change() -> void:
   assert_bool(button.dialogue_toggle.visible).is_true()
 
 
+func test_uncleared_stage_has_dialogue_enabled() -> void:
+  var button := await _make_button(true, false)
+
+  assert_bool(button.dialogue_enabled).is_true()
+
+
+func test_cleared_stage_has_dialogue_disabled_by_default() -> void:
+  var button := await _make_button(true, true)
+
+  assert_bool(button.dialogue_enabled).is_false()
+
+
 func test_dialogue_toggle_switches_dialogue_setting() -> void:
   var button := await _make_button(true, true)
-  _stage.dialogue_enabled = true
-  button.dialogue_enabled = true
 
   button.dialogue_toggle.pressed.emit()
 
-  assert_bool(_stage.dialogue_enabled).is_false()
+  assert_bool(button.dialogue_enabled).is_true()
+  assert_bool(StageDataManager.is_dialogue_enabled(_stage)).is_true()
+
+  button.dialogue_toggle.pressed.emit()
+
+  assert_bool(button.dialogue_enabled).is_false()
+  assert_bool(StageDataManager.is_dialogue_enabled(_stage)).is_false()
+
+
+func test_dialogue_toggle_saves_setting() -> void:
+  var button := await _make_button(true, true)
+
+  button.dialogue_toggle.pressed.emit()
+
+  assert_bool(FileAccess.file_exists(TEST_SAVE_PATH)).is_true()
+  var saved = JSON.parse_string(FileAccess.get_file_as_string(TEST_SAVE_PATH))
+  assert_dict(saved["progress"]["dialogue_settings"]).is_equal({"c1/s1": true})

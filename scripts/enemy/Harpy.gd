@@ -20,9 +20,10 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
 
   if ai._phase_idx == 1 and phase and current_hp > 0 and current_hp <= max_hp * phase.end_hp_ratio:
     # Phase 1で終了HP割合（既定50%）以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_destroy_bullet()  # Destroy bullet
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+    if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
+      StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
+      StageSignals.emit_destroy_bullet()  # Destroy bullet
+      StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
   elif current_hp <= 0:
     if not mark_dead_once():  # 同一フレームでの多重被弾による撃破処理の重複を防ぐ

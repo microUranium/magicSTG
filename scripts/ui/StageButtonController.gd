@@ -32,7 +32,6 @@ func setup_stage_data(data: StageData, fade_direction: Vector2) -> void:
     await ready
 
   stage_data = data
-  dialogue_enabled = data.dialogue_enabled if data else true
   button_fade_in(fade_direction)
   update_display()
 
@@ -61,6 +60,7 @@ func update_display() -> void:
     cleared_mark.visible = is_cleared
 
   # ダイアログの有効・無効はクリア済みのステージでのみ切り替えられる
+  dialogue_enabled = StageDataManager.is_dialogue_enabled(stage_data)
   if dialogue_toggle:
     dialogue_toggle.visible = is_cleared
     dialogue_toggle.disabled = is_locked
@@ -88,7 +88,8 @@ func _on_stage_button_pressed() -> void:
 func _on_dialogue_toggle_pressed() -> void:
   dialogue_enabled = not dialogue_enabled
   if stage_data:
-    stage_data.dialogue_enabled = dialogue_enabled
+    StageDataManager.set_dialogue_enabled(stage_data, dialogue_enabled)
+    SaveManager.save_game()  # 切り替えたらすぐ保存する（ステージ選択画面から終了しても失われないように）
   update_dialogue_icon()
 
 

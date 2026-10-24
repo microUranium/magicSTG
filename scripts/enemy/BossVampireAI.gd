@@ -14,6 +14,8 @@ class_name BossVampireAI
 var firerush_scene: PackedScene = preload("res://scenes/enemy/enemy_boss_vampire_firerush.tscn")
 @export var visual_config_dark: BulletVisualConfig
 
+const DECOY_PATTERN_IDX := 2  # フェーズ2でコウモリを出すパターンの番号
+
 var animated_sprite: AnimatedSprite2D
 var _phase_idx := 0
 var _decoys: Array = []
@@ -71,13 +73,21 @@ func _next_phase():
 
   phase_changed.emit(_phase_idx)
 
+  if _phase_idx == 2 and skip_dialogue:
+    # 会話省略時もコウモリを出すシーンは残す（次フェーズの分身攻撃に必要）。
+    # 中央への移動は即時に済ませ、コウモリを出すパターンから始める
+    enemy_node.global_position = patterns[0].move_to
+    _idx = DECOY_PATTERN_IDX
+  elif _try_skip_dialogue_phase():
+    _next_phase()
+    return
   _next_pattern()
 
 
 func _next_pattern():
   super._next_pattern()
 
-  if _phase_idx == 2 and _idx % patterns.size() == 3:
+  if _phase_idx == 2 and _idx % patterns.size() == DECOY_PATTERN_IDX + 1:
     _spawn_decoys()
   if _phase_idx == 5 and _idx % patterns.size() == 0:
     _clear_all_pattern_cores()

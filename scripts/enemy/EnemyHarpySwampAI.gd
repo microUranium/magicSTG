@@ -8,6 +8,9 @@ var _phase_idx := 0
 
 
 func _ready():
+  if skip_dialogue:
+    get_parent().queue_free()  # 会話省略時は登場しない（沼の鳥のみと戦う）
+    return
   patterns = phases[_phase_idx].patterns
   loop_type = phases[_phase_idx].loop_type
   super._ready()

@@ -95,23 +95,31 @@ func _next_phase():
     StageSignals.emit_request_hud_flash(0.3)
     StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
+  if _phase_idx == 1 and skip_dialogue:
+    # 会話省略時は登場時の演出（嵐のBGM・笑い声）を行わず、戦闘開始と同時にボスBGMへ切り替える
+    StageSignals.emit_bgm_play_requested(_bgm, 0, -10)  # BGM再生リクエスト
+
   phase_changed.emit(_phase_idx)
 
+  if _try_skip_dialogue_phase():
+    _next_phase()
+    return
   _next_pattern()
 
 
 func _next_pattern():
   super._next_pattern()
   _handle_cutscene_pattern_started()
-  if _phase_idx == 0 and _idx % patterns.size() == 1:
+  var intro_cue := _phase_idx == 0 and not skip_dialogue  # 会話省略時は登場時のBGM切替等を行わない
+  if intro_cue and _idx % patterns.size() == 1:
     StageSignals.emit_bgm_stop_requested(bgm_fade_in)
-  elif _phase_idx == 0 and _idx % patterns.size() == 2:
+  elif intro_cue and _idx % patterns.size() == 2:
     StageSignals.emit_bgm_play_requested(
       CUTSCENE_BGM_STORM, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_STORM_DB
     )
-  elif _phase_idx == 0 and _idx % patterns.size() == 4:
+  elif intro_cue and _idx % patterns.size() == 4:
     StageSignals.emit_bgm_stop_requested(bgm_fade_in)  # BGM停止リクエスト
-  elif _phase_idx == 0 and _idx % patterns.size() == 0:
+  elif intro_cue and _idx % patterns.size() == 0:
     StageSignals.emit_bgm_play_requested(_bgm, 0, -10)  # BGM再生リクエスト
     StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
     StageSignals.emit_signal("sfx_play_requested", "girl_laugh", Vector2.INF, -5, 0)

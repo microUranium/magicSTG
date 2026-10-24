@@ -107,6 +107,19 @@ func test_save_and_load_roundtrip_restores_stage_progress() -> void:
   assert_bool(StageDataManager.get_stage_by_ids("c1", "s1_2").is_unlocked).is_true()
 
 
+func test_save_and_load_roundtrip_restores_dialogue_settings() -> void:
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+  StageDataManager.set_dialogue_enabled(StageDataManager.get_stage_by_ids("c1", "s1_1"), true)
+  SaveManager.save_game()
+
+  StageDataManager.stage_select_data = _build_stage_select_data()
+  StageDataManager.apply_progress_dict({})
+  SaveManager.load_game()
+
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_true()
+
+
 func test_load_falls_back_to_default_when_save_missing() -> void:
   InventoryService.clear()
   PlayerSaveData.clear_equipment()

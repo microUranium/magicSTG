@@ -10,9 +10,12 @@ var _mock_dialogue_runner: MockDialogueRunner
 
 # テスト用のモックGameDataRegistry
 var _original_data_loaded: bool
+var _original_current_stage: StageData
 
 
 func before_test():
+  _original_current_stage = StageDataManager.current_stage
+
   # テスト用のシーンセットアップ
   _test_scene = Node.new()
   _test_scene.name = "TestScene"
@@ -35,6 +38,7 @@ func before_test():
 
 func after_test():
   # リソースクリーンアップ
+  StageDataManager.current_stage = _original_current_stage
   _cleanup_game_data_registry_mock()
   if _test_scene:
     _test_scene.queue_free()
@@ -125,6 +129,40 @@ func test_seed_parsing():
 
   # シード値が保存されることを確認
   assert_that(_stage_controller.get_current_seed()).is_equal("test_wave-Dtest_pool.intro")
+
+
+func _event_types() -> Array[String]:
+  var types: Array[String] = []
+  for event in _stage_controller._event_queue:
+    types.append(event.get("type", ""))
+  return types
+
+
+func test_seed_parsing_keeps_dialogue_events_when_dialogue_enabled():
+  var stage := StageData.new()
+  stage.dialogue_enabled = true
+  StageDataManager.current_stage = stage
+
+  (
+    assert_bool(_stage_controller._parse_seed("Dtest_pool.intro-test_wave-Dtest_pool.intro"))
+    . is_true()
+  )
+
+  assert_array(_event_types()).is_equal(["dialogue", "wave", "dialogue"])
+
+
+func test_seed_parsing_skips_dialogue_events_when_dialogue_disabled():
+  var stage := StageData.new()
+  stage.dialogue_enabled = false
+  StageDataManager.current_stage = stage
+
+  (
+    assert_bool(_stage_controller._parse_seed("Dtest_pool.intro-test_wave-Dtest_pool.intro"))
+    . is_true()
+  )
+
+  # 会話を省略するステージではウェーブだけが残る（ボス撃破後すぐにステージクリアになる）
+  assert_array(_event_types()).is_equal(["wave"])
 
 
 func test_invalid_seed_parsing():

@@ -101,8 +101,7 @@ func _play_hover_sfx() -> void:
 
 func _play_click_sfx() -> void:
   """クリック時のSFX再生"""
-  # NOTE: カタログに "ui_click" が未登録のため、既存のUI音 "ui_cancel" を使用
-  StageSignals.emit_signal("sfx_play_requested", "ui_cancel", Vector2.INF, 0.0, 1.0)
+  StageSignals.emit_signal("sfx_play_requested", "ui_click", Vector2.INF, 0.0, 1.0)
 
 
 #func _unhandled_input(event: InputEvent) -> void:

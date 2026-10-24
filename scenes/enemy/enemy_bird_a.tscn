@@ -10,9 +10,9 @@
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="8_fpsli"]
 [ext_resource type="Resource" uid="uid://dysglhbm8dk24" path="res://resources/attackPatterns/single_shot_to_player_straight.tres" id="10_qfbl5"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="11_qfbl5"]
-[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_attackcore_magic_bullet.tres" id="dt_1"]
-[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_blessing_shield.tres" id="dt_2"]
-[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_attackcore_fireball.tres" id="dt_3"]
+[ext_resource type="Resource" uid="uid://cmvtlonqrixn7" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_attackcore_magic_bullet.tres" id="dt_1"]
+[ext_resource type="Resource" uid="uid://bpfjsnxjln4l5" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_blessing_shield.tres" id="dt_2"]
+[ext_resource type="Resource" uid="uid://nw3u1a7ufumn" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_a_attackcore_fireball.tres" id="dt_3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_erd6v"]
 atlas = ExtResource("4_qfbl5")

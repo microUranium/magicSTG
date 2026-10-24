@@ -8,7 +8,8 @@ var dialogue_enabled: bool = true
 
 @onready var button_parent: Control = $Control
 @onready var stage_name_label: Label = $Control/StageName
-@onready var dialogue_toggle: Button = $Control/DialogueSwitchButton
+@onready var dialogue_toggle: Button = $Control/DialogueToggleButton
+@onready var cleared_mark: Control = $Control/ClearedMark
 @onready var lock_overlay: Control = $Control/LockOverlay
 @onready var stage_button: Button = $Control/StageButton
 
@@ -21,7 +22,13 @@ func _ready() -> void:
 
 
 func setup_stage_data(data: StageData, fade_direction: Vector2) -> void:
-  if not stage_name_label or not stage_button or not dialogue_toggle or not lock_overlay:
+  if (
+    not stage_name_label
+    or not stage_button
+    or not dialogue_toggle
+    or not lock_overlay
+    or not cleared_mark
+  ):
     await ready
 
   stage_data = data
@@ -39,13 +46,23 @@ func update_display() -> void:
 
   var is_locked = not stage_data.is_unlocked
 
+  # 未解放のステージはボタンごと表示しない（親の VBoxContainer が詰めて並べる）
+  visible = not is_locked
+
   if lock_overlay:
     lock_overlay.visible = is_locked
 
   if stage_button:
     stage_button.disabled = is_locked
 
+  var is_cleared := StageDataManager.is_stage_cleared(stage_data.chapter_id, stage_data.stage_id)
+
+  if cleared_mark:
+    cleared_mark.visible = is_cleared
+
+  # ダイアログの有効・無効はクリア済みのステージでのみ切り替えられる
   if dialogue_toggle:
+    dialogue_toggle.visible = is_cleared
     dialogue_toggle.disabled = is_locked
     update_dialogue_icon()
 

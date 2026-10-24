@@ -331,6 +331,7 @@ func _run_exit_step(step: int) -> void:
 
 func _commit_and_exit() -> void:
   _apply_changes()
+  SaveManager.save_game()  # 装備画面退出時の自動セーブ
   # タイトルへ戻る
   GameFlow.change_to_title()
 
@@ -353,9 +354,7 @@ func _apply_changes() -> void:
         new_equipment_blessings.append(slot.data.inst)
 
   # 保存データを更新
-  PlayerSaveData.clear_equipment()
-  PlayerSaveData.set_attack_cores(new_equipment_attack_core)
-  PlayerSaveData.set_blessings(new_equipment_blessings)
+  PlayerSaveData.apply_equipment(new_equipment_attack_core, new_equipment_blessings)
 
   # 破棄済みのアイテムが残らないよう削除スロットを空にする
   var empty: Array[ItemPanelData] = []

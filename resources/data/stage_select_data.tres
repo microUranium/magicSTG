@@ -28,7 +28,7 @@ chapter_id = "chapter1"
 stage_id = "stage1_2"
 is_seed_fixed = false
 fixed_seed = ""
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([{
 "count": 10,
@@ -46,7 +46,7 @@ chapter_id = "chapter1"
 stage_id = "stage1_3"
 is_seed_fixed = true
 fixed_seed = "Ds1d12.intro-s113-s122-s1g3-s113-s142-Ds1d12.progression-s134-s1g2-s1g4-s1g3-s1g5-s1z3-s1z2-Ds1d12.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 
@@ -57,6 +57,7 @@ chapter_name = "第1章 馬車道の森"
 stages = Array[ExtResource("3_stage")]([SubResource("StageData_1_1"), SubResource("Resource_7e28f"), SubResource("StageData_1_2")])
 is_unlocked = true
 background_texture = ExtResource("2_cu45u")
+is_debug_only = false
 
 [sub_resource type="Resource" id="Resource_hp741"]
 script = ExtResource("3_stage")
@@ -65,7 +66,7 @@ chapter_id = "chapter2"
 stage_id = "stage2_1"
 is_seed_fixed = true
 fixed_seed = "Ds2d11.intro-s231-s211-s241-s2g1-s231-s211-s221-Ds2d11.progression-s2z1-Ds2d11.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -77,7 +78,7 @@ chapter_id = "chapter2"
 stage_id = "stage2_2"
 is_seed_fixed = false
 fixed_seed = ""
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([{
 "count": 10,
@@ -95,7 +96,7 @@ chapter_id = "chapter2"
 stage_id = "stage2_3"
 is_seed_fixed = true
 fixed_seed = "s223-s213-s2g7-s234-s2g6-s213-s2g9-s2ga-s2g8-s2gb-s2z3-s2z2-Cs2c1"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -105,8 +106,9 @@ script = ExtResource("2_chapter")
 chapter_id = "chapter2"
 chapter_name = "第2章 夕焼け海岸"
 stages = Array[ExtResource("3_stage")]([SubResource("Resource_hp741"), SubResource("Resource_112c6"), SubResource("Resource_cu45u")])
-is_unlocked = true
+is_unlocked = false
 background_texture = ExtResource("4_ljvmy")
+is_debug_only = false
 
 [sub_resource type="Resource" id="Resource_ljvmy"]
 script = ExtResource("3_stage")
@@ -115,7 +117,7 @@ chapter_id = "chapter3"
 stage_id = "stage3_1"
 is_seed_fixed = true
 fixed_seed = "Ds3d11.intro-s3a1-s311-s3a2-s331-Ds3d11.progression-s3a3-s321-s3g1-s3z1-Ds3d11.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -127,7 +129,7 @@ chapter_id = "chapter3"
 stage_id = "stage3_2"
 is_seed_fixed = false
 fixed_seed = ""
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([{
 "count": 10,
@@ -145,7 +147,7 @@ chapter_id = "chapter3"
 stage_id = "stage3_3"
 is_seed_fixed = true
 fixed_seed = "Ds3d12.intro-s313-s3b1-s3g2-s3b2-s322-s3b3-s3g4-s3z4-s3z2-Ds3d12.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -155,8 +157,9 @@ script = ExtResource("2_chapter")
 chapter_id = "chapter3"
 chapter_name = "第3章 コウモリ遺跡"
 stages = Array[ExtResource("3_stage")]([SubResource("Resource_ljvmy"), SubResource("Resource_x38wm"), SubResource("Resource_vynet")])
-is_unlocked = true
+is_unlocked = false
 background_texture = ExtResource("5_x38wm")
+is_debug_only = false
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
 [sub_resource type="Resource" id="Resource_a27gh"]
@@ -166,7 +169,7 @@ chapter_id = "chapter4"
 stage_id = "stage4_1"
 is_seed_fixed = true
 fixed_seed = "Ds4d11.intro-s4a1-s441-s4a2-s431-Ds4d11.progression-s4a3-s411-s421-Ds4d11.progression2-s4z1-Ds4d11.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -178,7 +181,7 @@ chapter_id = "chapter4"
 stage_id = "stage4_2"
 is_seed_fixed = false
 fixed_seed = ""
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([{
 "count": 10,
@@ -196,7 +199,7 @@ chapter_id = "chapter4"
 stage_id = "stage4_3"
 is_seed_fixed = true
 fixed_seed = "Ds4d12.intro-s412-s4b1-s442-Ds4d12.progression-s4b2-s4g2-s4b3-s4z4-Ds4d12.progression2-s4z2-Cs4c1"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -206,8 +209,9 @@ script = ExtResource("2_chapter")
 chapter_id = "chapter4"
 chapter_name = "第4章 帰らずの沼"
 stages = Array[ExtResource("3_stage")]([SubResource("Resource_a27gh"), SubResource("Resource_o304x"), SubResource("Resource_eo1bx")])
-is_unlocked = true
+is_unlocked = false
 background_texture = ExtResource("6_ljvmy")
+is_debug_only = false
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
 [sub_resource type="Resource" id="Resource_o7xy0"]
@@ -217,19 +221,7 @@ chapter_id = "chapter5"
 stage_id = "stage5_1"
 is_seed_fixed = true
 fixed_seed = "Ds5d11.intro-s5a1-s511-s5a2-s541-Ds5d11.progression-s5a3-s532-s5g2-s5z1-Cs5c2"
-is_unlocked = true
-dialogue_enabled = true
-random_seed_pools = Array[Dictionary]([])
-metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
-
-[sub_resource type="Resource" id="Resource_7lq61"]
-script = ExtResource("3_stage")
-stage_name = "5-3 呪いの人形"
-chapter_id = "chapter5"
-stage_id = "stage5_3"
-is_seed_fixed = true
-fixed_seed = "Ds5d12.intro-s512-s5b1-s5g1-s5b2-s531-s5z4-Ds5d12.battle_conversation-s5z2-Cs5c1"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -241,7 +233,7 @@ chapter_id = "chapter5"
 stage_id = "stage5_2"
 is_seed_fixed = false
 fixed_seed = ""
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = false
 random_seed_pools = Array[Dictionary]([{
 "count": 10,
@@ -252,19 +244,16 @@ random_seed_pools = Array[Dictionary]([{
 }])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
-[sub_resource type="Resource" id="StageData_6_2"]
+[sub_resource type="Resource" id="Resource_7lq61"]
 script = ExtResource("3_stage")
-stage_name = "6-2 魔族追跡"
-chapter_id = "chapter6"
-stage_id = "stage6_2"
-is_seed_fixed = false
-fixed_seed = ""
-is_unlocked = true
-dialogue_enabled = false
-random_seed_pools = Array[Dictionary]([{
-"count": 10,
-"pool": "stage6"
-}])
+stage_name = "5-3 呪いの人形"
+chapter_id = "chapter5"
+stage_id = "stage5_3"
+is_seed_fixed = true
+fixed_seed = "Ds5d12.intro-s512-s5b1-s5g1-s5b2-s531-s5z4-Ds5d12.battle_conversation-s5z2-Cs5c1"
+is_unlocked = false
+dialogue_enabled = true
+random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_t647l"]
@@ -272,8 +261,9 @@ script = ExtResource("2_chapter")
 chapter_id = "chapter5"
 chapter_name = "第5章 幽霊屋敷"
 stages = Array[ExtResource("3_stage")]([SubResource("Resource_o7xy0"), SubResource("StageData_5_2"), SubResource("Resource_7lq61")])
-is_unlocked = true
+is_unlocked = false
 background_texture = ExtResource("7_x38wm")
+is_debug_only = false
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
 [sub_resource type="Resource" id="Resource_ks7vi"]
@@ -283,9 +273,24 @@ chapter_id = "chapter6"
 stage_id = "stage6_1"
 is_seed_fixed = true
 fixed_seed = "Ds6d11.intro-s6a1-s611-s6a2-s621-s6a3-s651-s6z1-Cs6c1"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
+[sub_resource type="Resource" id="StageData_6_2"]
+script = ExtResource("3_stage")
+stage_name = "6-2 魔族追跡"
+chapter_id = "chapter6"
+stage_id = "stage6_2"
+is_seed_fixed = false
+fixed_seed = ""
+is_unlocked = false
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([{
+"count": 10,
+"pool": "stage6"
+}])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_ls1bl"]
@@ -295,7 +300,7 @@ chapter_id = "chapter6"
 stage_id = "stage6_3"
 is_seed_fixed = true
 fixed_seed = "s641-s6b1-s6g1-s6b2-s632-s6b3-s6z2-Ds6d12.resolution"
-is_unlocked = true
+is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
@@ -305,8 +310,9 @@ script = ExtResource("2_chapter")
 chapter_id = "chapter6"
 chapter_name = "第6章 守り人の山"
 stages = Array[ExtResource("3_stage")]([SubResource("Resource_ks7vi"), SubResource("StageData_6_2"), SubResource("Resource_ls1bl")])
-is_unlocked = true
+is_unlocked = false
 background_texture = ExtResource("8_vynet")
+is_debug_only = false
 metadata/_custom_type_script = "uid://dnqf62vu42hqi"
 
 [sub_resource type="Resource" id="StageData_debug_3"]

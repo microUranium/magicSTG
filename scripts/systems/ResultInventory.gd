@@ -172,6 +172,8 @@ func _on_back_pressed():
 func _on_ok_pressed():
   # OKボタンが押されたときの処理
   Ephemeralnventory.clear()
+  StageDataManager.finish_stage()
+  SaveManager.save_game()  # リザルト画面退出時の自動セーブ
   # タイトルへ戻る
   GameFlow.change_to_title()
 

@@ -41,15 +41,3 @@ func request_equip(item: ItemInstance) -> bool:
 
 func get_max_size() -> int:
   return INVENTORY_MAX_SIZE
-
-
-func _load_from_savedata():
-  var data = PlayerSaveData.get_all_items()
-  if data:
-    _items.clear()
-    for item_data in data:
-      if item_data is ItemInstance:
-        _items.append(item_data)
-  else:
-    print_debug("No inventory data found; starting with empty inventory.")
-  changed.emit()

@@ -7,7 +7,7 @@ class_name StageData
 @export var is_seed_fixed: bool = true
 @export var fixed_seed: String = ""
 @export var is_unlocked: bool = false
-@export var dialogue_enabled: bool = true
+@export var dialogue_enabled: bool = true  # 未クリア時の会話の有効・無効（クリア後の設定は StageDataManager が保持）
 @export var random_seed_pools: Array[Dictionary] = []  # e.g., [{"pool": "stage1", "count": 5}, {"pool": "stage1_boss", "count": 1}]
 
 

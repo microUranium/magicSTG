@@ -22,6 +22,8 @@ var current_stage: StageData = null
 var _unlocked_chapters := {}
 var _unlocked_stages := {}
 var _cleared_stages := {}
+# ステージ選択画面で会話の有効・無効を切り替えたステージ（ステージのキー → bool）
+var _dialogue_settings := {}
 
 
 func _ready() -> void:
@@ -114,10 +116,28 @@ func finish_stage() -> void:
   current_stage = null
 
 
+## ステージの会話（ボスの演出を含む）が有効か。
+## 未クリアのステージは定義データどおり（初回プレイは会話あり）。
+## クリア済みのステージは既定で無効とし、ステージ選択画面で切り替えた設定があればそれに従う。
+func is_dialogue_enabled(stage: StageData) -> bool:
+  if stage == null:
+    return true
+  var key := _stage_key(stage.chapter_id, stage.stage_id)
+  if not _cleared_stages.has(key):
+    return stage.dialogue_enabled
+  return _dialogue_settings.get(key, false)
+
+
+## ステージ選択画面での会話の有効・無効の切り替えを記録する（セーブ対象）。
+func set_dialogue_enabled(stage: StageData, enabled: bool) -> void:
+  if stage == null:
+    return
+  _dialogue_settings[_stage_key(stage.chapter_id, stage.stage_id)] = enabled
+
+
 ## プレイ中のステージで会話（ボスの演出を含む）を省略するか。
-## ステージ選択画面でダイアログを無効にしたステージが対象。
 func is_dialogue_skipped() -> bool:
-  return current_stage != null and not current_stage.dialogue_enabled
+  return current_stage != null and not is_dialogue_enabled(current_stage)
 
 
 func is_stage_cleared(chapter_id: String, stage_id: String) -> bool:
@@ -141,7 +161,8 @@ func get_progress_dict() -> Dictionary:
   return {
     "unlocked_chapters": _unlocked_chapters.keys(),
     "unlocked_stages": _unlocked_stages.keys(),
-    "cleared_stages": _cleared_stages.keys()
+    "cleared_stages": _cleared_stages.keys(),
+    "dialogue_settings": _dialogue_settings.duplicate()
   }
 
 
@@ -151,6 +172,7 @@ func apply_progress_dict(progress: Dictionary) -> void:
   _unlocked_chapters.clear()
   _unlocked_stages.clear()
   _cleared_stages.clear()
+  _dialogue_settings.clear()
   if stage_select_data:
     stage_select_data.restore_initial_state()
 
@@ -165,6 +187,12 @@ func apply_progress_dict(progress: Dictionary) -> void:
 
   for key in progress.get("cleared_stages", []):
     _cleared_stages[str(key)] = true
+
+  var dialogue_settings = progress.get("dialogue_settings", {})
+  if dialogue_settings is Dictionary:
+    for key in dialogue_settings:
+      if dialogue_settings[key] is bool:
+        _dialogue_settings[str(key)] = dialogue_settings[key]
   progress_changed.emit()
 
 

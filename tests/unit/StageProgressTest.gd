@@ -190,6 +190,70 @@ func test_unlock_all_with_clear_marks_every_stage_cleared() -> void:
   )
 
 
+# ───────────────────────────────────
+# 会話の有効・無効
+# ───────────────────────────────────
+func test_dialogue_enabled_for_uncleared_stage() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_true()
+
+
+func test_uncleared_stage_follows_stage_definition() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  stage.dialogue_enabled = false  # 会話のないランダムステージ等
+
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_false()
+
+
+func test_dialogue_disabled_by_default_after_clear() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_false()
+
+
+func test_dialogue_setting_applies_to_cleared_stage() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+
+  StageDataManager.set_dialogue_enabled(stage, true)
+
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_true()
+
+
+func test_dialogue_skipped_for_current_cleared_stage() -> void:
+  StageDataManager.current_stage = StageDataManager.get_stage_by_ids("c1", "s1_1")
+  assert_bool(StageDataManager.is_dialogue_skipped()).is_false()
+
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+  assert_bool(StageDataManager.is_dialogue_skipped()).is_true()
+
+
+func test_dialogue_settings_roundtrip_through_progress_dict() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)
+  StageDataManager.set_dialogue_enabled(stage, true)
+  var progress := StageDataManager.get_progress_dict()
+
+  StageDataManager.apply_progress_dict({})
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_true()  # 未クリアに戻る
+
+  StageDataManager.apply_progress_dict(progress)
+  assert_dict(progress["dialogue_settings"]).is_equal({"c1/s1_1": true})
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_true()
+
+
+func test_apply_progress_dict_ignores_invalid_dialogue_settings() -> void:
+  StageDataManager.apply_progress_dict(
+    {"cleared_stages": ["c1/s1_1"], "dialogue_settings": {"c1/s1_1": "yes"}}
+  )
+
+  assert_dict(StageDataManager.get_progress_dict()["dialogue_settings"]).is_empty()
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  assert_bool(StageDataManager.is_dialogue_enabled(stage)).is_false()
+
+
 func test_progress_changed_emitted_on_edit() -> void:
   var emitter := monitor_signals(StageDataManager, false)
 

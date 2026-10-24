@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bbxi1yeiuc4rn" path="res://scripts/ui/PausePanelController.gd" id="1_sn6ky"]
 [ext_resource type="FontFile" uid="uid://8gvbged6ruh6" path="res://assets/fonts/BitcountGridDouble-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf" id="2_byapq"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_byapq"]
-[ext_resource type="PackedScene" path="res://scenes/ui/volume_settings.tscn" id="4_volume"]
+[ext_resource type="PackedScene" uid="uid://bdv2t5y7gn4w6" path="res://scenes/ui/volume_settings.tscn" id="4_volume"]
 
 [node name="PausePanel" type="Control"]
 visible = false

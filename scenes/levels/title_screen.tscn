@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://pq5woxgf8ki8" path="res://scripts/systems/TitleScreen.gd" id="1_upj3s"]
 [ext_resource type="Texture2D" uid="uid://xm0ft6f46e4t" path="res://assets/gfx/sprites/title_background.png" id="2_gxyay"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_w8mqq"]
-[ext_resource type="PackedScene" path="res://scenes/ui/config_panel.tscn" id="4_config"]
+[ext_resource type="PackedScene" uid="uid://de0wp1r8fopnn" path="res://scenes/ui/config_panel.tscn" id="4_config"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3

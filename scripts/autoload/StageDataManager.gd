@@ -114,6 +114,12 @@ func finish_stage() -> void:
   current_stage = null
 
 
+## プレイ中のステージで会話（ボスの演出を含む）を省略するか。
+## ステージ選択画面でダイアログを無効にしたステージが対象。
+func is_dialogue_skipped() -> bool:
+  return current_stage != null and not current_stage.dialogue_enabled
+
+
 func is_stage_cleared(chapter_id: String, stage_id: String) -> bool:
   return _cleared_stages.has(_stage_key(chapter_id, stage_id))
 

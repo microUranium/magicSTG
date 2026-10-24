@@ -66,6 +66,9 @@ func _next_phase():
 
   phase_changed.emit(_phase_idx)
 
+  if _try_skip_dialogue_phase():
+    _next_phase()
+    return
   _next_pattern()
 
 

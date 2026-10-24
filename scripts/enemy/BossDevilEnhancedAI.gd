@@ -90,6 +90,9 @@ func _next_phase():
 
   phase_changed.emit(_phase_idx)
 
+  if _try_skip_dialogue_phase():
+    _next_phase()
+    return
   _next_pattern()
 
 
@@ -664,9 +667,10 @@ func _attack_starrush_2(delay = 0.5, count = 10, _phase = 5):
 
 func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
   for i in range(count):
+    # フェーズが変わったら攻撃を中止する。コアは次フェーズの _setup_phase_attacks で入れ替わるため、
+    # ここで消すと次フェーズのコア（会話省略時に即設定される phase7 のバリア弾など）まで消してしまう
     if _phase_idx != _phase:
-      _clear_all_pattern_cores()
-      return  # フェーズが変わったら攻撃を中止
+      return
 
     phase3_patterns_1 = create_phase3_pattern_1()  # パターンを更新して角度をずらす
     _add_attack_patterns(phase3_patterns_1)
@@ -679,7 +683,8 @@ func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
     attack_core_slot.trigger_all_cores()
     await get_tree().create_timer(delay, false).timeout
   await get_tree().create_timer(1, false).timeout
-  _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
+  if _phase_idx == _phase:  # 待機中に次のフェーズへ進んでいたら、次フェーズのコアは残す
+    _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
 
 
 func _attack_final_rush():

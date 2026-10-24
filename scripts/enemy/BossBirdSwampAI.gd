@@ -10,6 +10,11 @@ class_name BossBirdSwampAI
 @export var _bgm: AudioStream
 @export var bgm_fade_in := 2.0
 
+## 会話省略時の登場（ハーピーを出さず、中ボスと同じく画面上から降りてくる）
+const SKIP_INTRO_WARP := preload("res://resources/enemy/harpy/pattern/harpy_pattern1-1.tres")
+const SKIP_INTRO_DESCEND := preload("res://resources/enemy/harpy/pattern/harpy_pattern1-2.tres")
+const SKIP_INTRO_BATTLE_PHASE := 3  # 登場後に始める戦闘フェーズ
+
 var _phase_idx := 0
 var _harpy_swamp_ai: EnemyHarpySwampAI
 var afterimage_scene: PackedScene = preload("res://scenes/effects/after_image.tscn")
@@ -25,12 +30,17 @@ var _afterimage_timer: Timer
 func _ready():
   patterns = phases[_phase_idx].patterns
   loop_type = phases[_phase_idx].loop_type
+  if skip_dialogue:
+    # 下画面からの突進とハーピーとの掛け合いは省略する
+    patterns = [SKIP_INTRO_WARP, SKIP_INTRO_DESCEND]
 
   _initialize_attack_patterns()
   _setup_afterimage_timer()
 
   super._ready()
 
+  if skip_dialogue:
+    return  # ハーピーは出現しないため連携しない
   await get_tree().process_frame
   _harpy_swamp_ai = _get_harpy_swamp_ai()
   print_debug("BossBirdSwampAI: Linked to HarpySwampAI: ", _harpy_swamp_ai != null)
@@ -115,14 +125,23 @@ func _next_phase():
     _spawn_decoys()
   elif _phase_idx == 6:
     _destory_decoys()
+  elif _phase_idx == 7:  # 最後の突進フェーズ
+    StageSignals.emit_request_hud_flash(0.3)
+    StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
 
   phase_changed.emit(_phase_idx)
 
+  if _try_skip_dialogue_phase():
+    _next_phase()
+    return
   _next_pattern()
 
 
 func _on_pattern_finished(cb_token: int):
   if cb_token != _token:  # 重複防止
+    return
+  if skip_dialogue and _phase_idx == 0 and _idx >= patterns.size():
+    _start_battle_after_skipped_intro()
     return
   if (
     _idx >= patterns.size()
@@ -138,6 +157,14 @@ func _on_pattern_finished(cb_token: int):
     _next_phase()
   else:
     super._on_pattern_finished(cb_token)
+
+
+func _start_battle_after_skipped_intro() -> void:
+  """会話省略時の登場後、ボスBGMに切り替えて戦闘フェーズを始める。"""
+  if not skip_bgm_change:
+    StageSignals.emit_bgm_play_requested(_bgm, bgm_fade_in, -15)  # BGM再生リクエスト
+  _phase_idx = SKIP_INTRO_BATTLE_PHASE - 1
+  _next_phase()
 
 
 func _on_harpy_phases_changed():

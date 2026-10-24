@@ -51,21 +51,24 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   if current_hp <= max_hp * 0.9 and ai._phase_idx == 1:
     # Phase 1でHPが95%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_destroy_bullet()  # Destroy bullet
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+    if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
+      StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
+      StageSignals.emit_destroy_bullet()  # Destroy bullet
+      StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
   elif current_hp <= max_hp * 0.6 and ai._phase_idx == 3:
     # Phase 3でHPが90%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_destroy_bullet()  # Destroy bullet
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+    if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
+      StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
+      StageSignals.emit_destroy_bullet()  # Destroy bullet
+      StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
   elif current_hp <= max_hp * 0.1 and ai._phase_idx == 5:
     # Phase 5でHPが10%以下になったら次のフェーズへ
-    StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
-    StageSignals.emit_destroy_bullet()  # Destroy bullet
-    StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
+    if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
+      StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
+      StageSignals.emit_destroy_bullet()  # Destroy bullet
+      StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
 
 

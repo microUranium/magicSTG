@@ -86,9 +86,13 @@ func _parse_seed(seed_value: String) -> bool:
   var parts := seed_value.split("-")
   if parts.is_empty():
     return false
+  # 会話を省略するステージでは、会話・カットシーンを積まずにウェーブだけを流す
+  var skip_dialogue: bool = StageDataManager.is_dialogue_skipped()
   for part in parts:
     part = part.strip_edges()
     if part.is_empty():
+      continue
+    if skip_dialogue and (part.begins_with("C") or part.begins_with("D")):
       continue
     if part.begins_with("C"):
       var cutscene_id := part.substr(1)

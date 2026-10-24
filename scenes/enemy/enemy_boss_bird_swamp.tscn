@@ -91,6 +91,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -111,6 +112,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -140,6 +142,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -160,6 +163,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -189,6 +193,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -218,6 +223,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -238,6 +244,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -258,6 +265,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -278,6 +286,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -307,6 +316,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -327,6 +337,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s4d12.battle_progression_1"
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -356,6 +367,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -376,6 +388,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -396,6 +409,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -416,6 +430,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -445,6 +460,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -465,6 +481,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s4d12.battle_progression_2"
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -494,6 +511,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -514,6 +532,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -534,6 +553,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -554,6 +574,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -574,6 +595,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -594,6 +616,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -614,6 +637,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -643,6 +667,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -663,6 +688,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -683,6 +709,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -703,6 +730,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -723,6 +751,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -743,6 +772,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -763,6 +793,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -783,6 +814,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -803,6 +835,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -823,6 +856,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -852,6 +886,7 @@ change_animation = true
 animation_name = "default"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -872,6 +907,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -892,6 +928,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -912,6 +949,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -932,6 +970,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -952,6 +991,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -972,6 +1012,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -992,6 +1033,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1012,6 +1054,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1032,6 +1075,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1052,6 +1096,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1072,6 +1117,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1092,6 +1138,7 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -1112,6 +1159,7 @@ change_animation = true
 animation_name = "rush"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 

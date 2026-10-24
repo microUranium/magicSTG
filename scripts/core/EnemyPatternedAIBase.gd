@@ -19,6 +19,13 @@ var _stage_lifecycle: StageLifecycleController = null
 var _player_control_blocked: bool = false  # 演出パターンによる操作ロック中か
 
 
+func _enter_tree() -> void:
+  # ステージ選択画面でダイアログを無効にしたステージでは、すべての個体で会話を省略する。
+  # 継承先の _ready（最初のパターン選択）より前に確定させるため _enter_tree で判定する
+  if StageDataManager.is_dialogue_skipped():
+    skip_dialogue = true
+
+
 func _ready():
   super._ready()
   _stage_lifecycle = (
@@ -47,7 +54,7 @@ func _next_pattern():
   # 会話を省略する個体（ランダムステージのボス等）では演出も省略扱いとし、操作は止めない
   _set_player_control_blocked(_current.block_player_control and not skip_dialogue)
 
-  if _current.dialogue_path != "" and skip_dialogue:
+  if skip_dialogue and (_current.dialogue_path != "" or _current.skip_on_dialogue_skip):
     _on_pattern_finished(_token)  # ダイアログをスキップしてパターン完了を通知
     return
 
@@ -64,6 +71,29 @@ func _on_pattern_finished(cb_token: int) -> void:
     return
 
   _next_pattern()
+
+
+func _try_skip_dialogue_phase() -> bool:
+  """会話を省略する個体で、現在のフェーズ（patterns）が会話を含むなら省略する。
+  フェーズ内で最後に移動する先（＝次フェーズの開始位置）へ即時移動し true を返す。
+  呼び出し側は true のときパターンを開始せず、そのまま次のフェーズへ進めること。"""
+  if not skip_dialogue:
+    return false
+
+  var has_dialogue := false
+  var destination = null
+  for pattern in patterns:
+    if pattern.dialogue_path != "":
+      has_dialogue = true
+    elif pattern.movement_type == EnemyPatternResource.MovementType.MOVE_TO_POSITION:
+      destination = pattern.move_to
+
+  if not has_dialogue:
+    return false
+
+  if destination != null and is_instance_valid(enemy_node):
+    enemy_node.global_position = destination
+  return true
 
 
 func get_last_movement_direction() -> Vector2:

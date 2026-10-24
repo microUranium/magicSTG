@@ -1,0 +1,206 @@
+[gd_scene load_steps=9 format=3 uid="uid://bdv2t5y7gn4w6"]
+
+[ext_resource type="Script" path="res://scripts/ui/VolumeSettings.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="2_font"]
+[ext_resource type="Texture2D" uid="uid://cirgid4erssh5" path="res://assets/gfx/sprites/config_slider_base_sprite.png" id="3_track"]
+[ext_resource type="Texture2D" uid="uid://cisdfsa0vuyyl" path="res://assets/gfx/sprites/config_grabber_area_sprite.png" id="4_fill"]
+[ext_resource type="Texture2D" uid="uid://j77fax1bxf2w" path="res://assets/gfx/sprites/config_grabber_sprite.png" id="5_grabber"]
+[ext_resource type="Texture2D" uid="uid://cgn3kgpuj7dud" path="res://assets/gfx/sprites/config_grabber_hover_sprite.png" id="6_grabber_hover"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_track"]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("3_track")
+texture_margin_left = 4.0
+texture_margin_right = 4.0
+region_rect = Rect2(0, 6, 24, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fill"]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("4_fill")
+texture_margin_left = 4.0
+texture_margin_right = 4.0
+region_rect = Rect2(0, 6, 24, 12)
+
+[node name="VolumeSettings" type="VBoxContainer"]
+offset_right = 500.0
+offset_bottom = 228.0
+theme_override_constants/separation = 12
+script = ExtResource("1_script")
+
+[node name="Master" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Name" type="Label" parent="Master"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "マスター"
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="Master"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_icons/grabber = ExtResource("5_grabber")
+theme_override_icons/grabber_highlight = ExtResource("6_grabber_hover")
+theme_override_icons/grabber_disabled = ExtResource("5_grabber")
+theme_override_styles/slider = SubResource("StyleBoxTexture_track")
+theme_override_styles/grabber_area = SubResource("StyleBoxTexture_fill")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_fill")
+step = 5.0
+value = 100.0
+scrollable = false
+
+[node name="Value" type="Label" parent="Master"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Music" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Name" type="Label" parent="Music"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "BGM"
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="Music"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_icons/grabber = ExtResource("5_grabber")
+theme_override_icons/grabber_highlight = ExtResource("6_grabber_hover")
+theme_override_icons/grabber_disabled = ExtResource("5_grabber")
+theme_override_styles/slider = SubResource("StyleBoxTexture_track")
+theme_override_styles/grabber_area = SubResource("StyleBoxTexture_fill")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_fill")
+step = 5.0
+value = 100.0
+scrollable = false
+
+[node name="Value" type="Label" parent="Music"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SFX" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Name" type="Label" parent="SFX"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "効果音"
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="SFX"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_icons/grabber = ExtResource("5_grabber")
+theme_override_icons/grabber_highlight = ExtResource("6_grabber_hover")
+theme_override_icons/grabber_disabled = ExtResource("5_grabber")
+theme_override_styles/slider = SubResource("StyleBoxTexture_track")
+theme_override_styles/grabber_area = SubResource("StyleBoxTexture_fill")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_fill")
+step = 5.0
+value = 100.0
+scrollable = false
+
+[node name="Value" type="Label" parent="SFX"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SFX_UI" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Name" type="Label" parent="SFX_UI"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "UI"
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="SFX_UI"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_icons/grabber = ExtResource("5_grabber")
+theme_override_icons/grabber_highlight = ExtResource("6_grabber_hover")
+theme_override_icons/grabber_disabled = ExtResource("5_grabber")
+theme_override_styles/slider = SubResource("StyleBoxTexture_track")
+theme_override_styles/grabber_area = SubResource("StyleBoxTexture_fill")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_fill")
+step = 5.0
+value = 100.0
+scrollable = false
+
+[node name="Value" type="Label" parent="SFX_UI"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.180392, 0.0941176, 0.317647, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "100"
+horizontal_alignment = 2
+vertical_alignment = 1

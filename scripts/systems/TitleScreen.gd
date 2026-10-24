@@ -4,6 +4,9 @@ extends Control
 @onready var switch_to_stage_select_button: Control = $VBoxContainer/StageSelect/ClickArea
 @onready var _equipment_label: Label = $VBoxContainer/Equipment/Label
 @onready var _stage_select_label: Label = $VBoxContainer/StageSelect/Label
+@onready var switch_to_config_button: Control = $VBoxContainer/Config/ClickArea
+@onready var _config_label: Label = $VBoxContainer/Config/Label
+@onready var _config_panel: ConfigPanelController = $ConfigPanel
 #@onready var switch_to_s1_intro_button: Button = $"SwitchToStageButton_S1-1"
 #@onready var switch_to_s1_boss_button: Button = $"SwitchToStageButton_S1-2"
 
@@ -27,6 +30,7 @@ func _ready() -> void:
   _setup_click_area(
     switch_to_stage_select_button, _stage_select_label, _on_switch_to_stage_select_pressed
   )
+  _setup_click_area(switch_to_config_button, _config_label, _on_config_pressed)
 
 
 func _setup_click_area(area: Control, label: Label, handler: Callable) -> void:
@@ -97,8 +101,7 @@ func _play_hover_sfx() -> void:
 
 func _play_click_sfx() -> void:
   """クリック時のSFX再生"""
-  # NOTE: カタログに "ui_click" が未登録のため、既存のUI音 "ui_cancel" を使用
-  StageSignals.emit_signal("sfx_play_requested", "ui_cancel", Vector2.INF, 0.0, 1.0)
+  StageSignals.emit_signal("sfx_play_requested", "ui_click", Vector2.INF, 0.0, 1.0)
 
 
 #func _unhandled_input(event: InputEvent) -> void:
@@ -141,3 +144,9 @@ func _on_switch_to_equipment_pressed() -> void:
 
 func _on_switch_to_stage_select_pressed() -> void:
   GameFlow.start_stage_select_screen()
+
+
+func _on_config_pressed() -> void:
+  # 設定画面を閉じたときにホバー拡大が残らないよう戻しておく
+  _animate_label_scale(_config_label, NORMAL_SCALE)
+  _config_panel.open()

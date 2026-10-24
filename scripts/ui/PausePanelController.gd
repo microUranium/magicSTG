@@ -19,6 +19,7 @@ signal quit_requested
 @onready var _quit_button_area: Control = $VBoxContainer/Escape/ClickArea
 @onready var _back_label: Label = $VBoxContainer/Back/Label
 @onready var _quit_label: Label = $VBoxContainer/Escape/Label
+@onready var _volume_settings: VolumeSettings = $VolumeSettings
 @onready var _panel_container: Control = self
 
 #---------------------------------------------------------------------
@@ -107,6 +108,10 @@ func show_panel() -> void:
   _is_paused = true
   _has_been_shown = true  # 表示フラグを立てる
 
+  # 音量スライダーを現在の設定値に合わせる
+  if _volume_settings:
+    _volume_settings.refresh()
+
   # 暗転オーバーレイを表示
   if _dark_overlay:
     _dark_overlay.visible = true
@@ -125,6 +130,9 @@ func hide_panel() -> void:
   # 暗転オーバーレイを非表示
   if _dark_overlay:
     _dark_overlay.visible = false
+
+  # 音量設定に未保存の変更があれば保存
+  SettingsManager.save_if_dirty()
 
   # 確認状態をリセット
   if _quit_button_confirmed:

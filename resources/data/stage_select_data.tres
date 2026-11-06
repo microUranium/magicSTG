@@ -20,6 +20,7 @@ fixed_seed = "Ds1d11.intro-s111-s112-s131-s1g1-Ds1d11.progression-s121-s1g1-s112
 is_unlocked = true
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 
 [sub_resource type="Resource" id="Resource_7e28f"]
 script = ExtResource("3_stage")
@@ -37,6 +38,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 1,
 "pool": "stage1_boss"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_1_2"]
@@ -49,6 +51,7 @@ fixed_seed = "Ds1d12.intro-s113-s122-s1g3-s113-s142-Ds1d12.progression-s134-s1g2
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 
 [sub_resource type="Resource" id="Resource_0rge8"]
 script = ExtResource("2_chapter")
@@ -69,6 +72,7 @@ fixed_seed = "Ds2d11.intro-s231-s211-s241-s2g1-s231-s211-s221-Ds2d11.progression
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_112c6"]
@@ -87,6 +91,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 1,
 "pool": "stage2_boss"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_cu45u"]
@@ -99,6 +104,7 @@ fixed_seed = "s223-s213-s2g7-s234-s2g6-s213-s2g9-s2ga-s2g8-s2gb-s2z3-s2z2-Cs2c1"
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_r0atf"]
@@ -120,6 +126,7 @@ fixed_seed = "Ds3d11.intro-s3a1-s311-s3a2-s331-Ds3d11.progression-s3a3-s321-s3g1
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_x38wm"]
@@ -138,6 +145,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 1,
 "pool": "stage3_boss"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_vynet"]
@@ -150,6 +158,7 @@ fixed_seed = "Ds3d12.intro-s313-s3b1-s3g2-s3b2-s322-s3b3-s3g4-s3z4-s3z2-Ds3d12.r
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_1lwtj"]
@@ -172,6 +181,7 @@ fixed_seed = "Ds4d11.intro-s4a1-s441-s4a2-s431-Ds4d11.progression-s4a3-s411-s421
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_o304x"]
@@ -190,6 +200,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 1,
 "pool": "stage4_boss"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_eo1bx"]
@@ -202,6 +213,7 @@ fixed_seed = "Ds4d12.intro-s412-s4b1-s442-Ds4d12.progression-s4b2-s4g2-s4b3-s4z4
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_wg655"]
@@ -224,6 +236,7 @@ fixed_seed = "Ds5d11.intro-s5a1-s511-s5a2-s541-Ds5d11.progression-s5a3-s532-s5g2
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_5_2"]
@@ -242,6 +255,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 1,
 "pool": "stage5_boss"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_7lq61"]
@@ -254,6 +268,7 @@ fixed_seed = "Ds5d12.intro-s512-s5b1-s5g1-s5b2-s531-s5z4-Ds5d12.battle_conversat
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_t647l"]
@@ -276,6 +291,7 @@ fixed_seed = "Ds6d11.intro-s6a1-s611-s6a2-s621-s6a3-s651-s6z1-Cs6c1"
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_6_2"]
@@ -291,6 +307,7 @@ random_seed_pools = Array[Dictionary]([{
 "count": 10,
 "pool": "stage6"
 }])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_ls1bl"]
@@ -303,6 +320,7 @@ fixed_seed = "s641-s6b1-s6g1-s6b2-s632-s6b3-s6z2-Ds6d12.resolution"
 is_unlocked = false
 dialogue_enabled = true
 random_seed_pools = Array[Dictionary]([])
+has_ending = true
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="Resource_umupn"]
@@ -325,6 +343,7 @@ fixed_seed = "s3x_lantern-s3x_grimoire-s3x_bat_a-s3x_lantern_b_weak"
 is_unlocked = true
 dialogue_enabled = false
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_debug_5"]
@@ -337,6 +356,7 @@ fixed_seed = "s5x_bat_b-s5x_ghost-s5x_lantern_b-s5x_lantern-s5x_grimoire_strong"
 is_unlocked = true
 dialogue_enabled = false
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_debug_6"]
@@ -349,6 +369,7 @@ fixed_seed = "s6x_bird_d-s6x_flower_c-s6x_flower_b_strong-s6x_swamp_bird-s6x_ced
 is_unlocked = true
 dialogue_enabled = false
 random_seed_pools = Array[Dictionary]([])
+has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="ChapterData_debug"]

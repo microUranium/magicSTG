@@ -71,6 +71,12 @@ func handle_stage_cleared() -> void:
   stop_bgm()
 
 
+func handle_ending() -> void:
+  """エンディング表示時の音響処理（クリックで画面を離れるまで流し続ける）"""
+  stop_bgm()
+  play_stage_clear_bgm()
+
+
 func handle_game_over() -> void:
   """ゲームオーバー時の音響処理"""
   stop_bgm()

@@ -9,6 +9,7 @@ class_name StageData
 @export var is_unlocked: bool = false
 @export var dialogue_enabled: bool = true  # 未クリア時の会話の有効・無効（クリア後の設定は StageDataManager が保持）
 @export var random_seed_pools: Array[Dictionary] = []  # e.g., [{"pool": "stage1", "count": 5}, {"pool": "stage1_boss", "count": 1}]
+@export var has_ending: bool = false  # クリア時に Stage Clear の代わりにエンディングを表示する（会話省略時は表示しない）
 
 
 func get_seed_for_play() -> String:

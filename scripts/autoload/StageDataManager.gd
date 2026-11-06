@@ -140,6 +140,12 @@ func is_dialogue_skipped() -> bool:
   return current_stage != null and not is_dialogue_enabled(current_stage)
 
 
+## プレイ中のステージのクリア時にエンディングを表示するか。
+## 会話を省略している場合は通常のステージクリアとして扱う。
+func is_ending_enabled() -> bool:
+  return current_stage != null and current_stage.has_ending and not is_dialogue_skipped()
+
+
 func is_stage_cleared(chapter_id: String, stage_id: String) -> bool:
   return _cleared_stages.has(_stage_key(chapter_id, stage_id))
 

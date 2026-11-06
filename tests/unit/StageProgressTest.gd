@@ -230,6 +230,45 @@ func test_dialogue_skipped_for_current_cleared_stage() -> void:
   assert_bool(StageDataManager.is_dialogue_skipped()).is_true()
 
 
+func test_ending_disabled_without_current_stage() -> void:
+  assert_bool(StageDataManager.is_ending_enabled()).is_false()
+
+
+func test_ending_disabled_for_stage_without_ending() -> void:
+  StageDataManager.current_stage = StageDataManager.get_stage_by_ids("c1", "s1_1")
+  assert_bool(StageDataManager.is_ending_enabled()).is_false()
+
+
+func test_ending_enabled_for_stage_with_ending() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  stage.has_ending = true
+  StageDataManager.current_stage = stage
+  assert_bool(StageDataManager.is_ending_enabled()).is_true()
+
+
+func test_ending_disabled_when_dialogue_skipped() -> void:
+  var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
+  stage.has_ending = true
+  StageDataManager.current_stage = stage
+  StageDataManager.set_stage_cleared("c1", "s1_1", true)  # クリア済みは既定で会話省略
+
+  assert_bool(StageDataManager.is_ending_enabled()).is_false()
+
+  StageDataManager.set_dialogue_enabled(stage, true)
+  assert_bool(StageDataManager.is_ending_enabled()).is_true()
+
+
+func test_only_final_stage_has_ending_in_stage_select_data() -> void:
+  var data := load(StageDataManager.STAGE_DATA_PATH) as StageSelectData
+  var ending_stages: Array[String] = []
+  for chapter in data.chapters:
+    for stage in chapter.stages:
+      if stage.has_ending:
+        ending_stages.append(stage.stage_id)
+
+  assert_array(ending_stages).contains_exactly(["stage6_3"])
+
+
 func test_dialogue_settings_roundtrip_through_progress_dict() -> void:
   var stage := StageDataManager.get_stage_by_ids("c1", "s1_1")
   StageDataManager.set_stage_cleared("c1", "s1_1", true)

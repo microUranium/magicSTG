@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://de0wp1r8fopnn"]
 
-[ext_resource type="Script" path="res://scripts/ui/ConfigPanelController.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b612bnq1v13qh" path="res://scripts/ui/ConfigPanelController.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dbawqejq7exne" path="res://assets/gfx/sprites/pause_panel.png" id="2_panel"]
-[ext_resource type="FontVariation" path="res://assets/fonts/bitcount_grid_double_regular.tres" id="3_title_font"]
+[ext_resource type="FontVariation" uid="uid://qut6kfjbdwc6" path="res://assets/fonts/bitcount_grid_double_regular.tres" id="3_title_font"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="4_font"]
 [ext_resource type="PackedScene" uid="uid://bdv2t5y7gn4w6" path="res://scenes/ui/volume_settings.tscn" id="5_volume"]
 

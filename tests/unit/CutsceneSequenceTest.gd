@@ -1,4 +1,4 @@
-# 撃破後演出（CutscenePlayer / ScreenFade / 自機の自動移動）の単体テスト
+# 撃破後演出（CutscenePlayer / CutsceneFade / 自機の自動移動）の単体テスト
 extends GdUnitTestSuite
 
 const CUTSCENE_HARPY_SCENE := preload("res://scenes/cutscene/cutscene_harpy.tscn")
@@ -21,14 +21,14 @@ func before_test():
 
   # ダイアログ要求は即座に完了させる（DialogueRunner の代わり）
   StageSignals.request_dialogue.connect(_on_request_dialogue)
-  StageSignals.request_screen_fade.connect(_on_request_screen_fade)
+  StageSignals.request_cutscene_fade.connect(_on_request_cutscene_fade)
 
 
 func after_test():
   if StageSignals.request_dialogue.is_connected(_on_request_dialogue):
     StageSignals.request_dialogue.disconnect(_on_request_dialogue)
-  if StageSignals.request_screen_fade.is_connected(_on_request_screen_fade):
-    StageSignals.request_screen_fade.disconnect(_on_request_screen_fade)
+  if StageSignals.request_cutscene_fade.is_connected(_on_request_cutscene_fade):
+    StageSignals.request_cutscene_fade.disconnect(_on_request_cutscene_fade)
   if is_instance_valid(_actor_parent):
     _actor_parent.queue_free()
   _cutscene_player = null
@@ -40,7 +40,7 @@ func _on_request_dialogue(_dd, finished_cb: Callable) -> void:
     finished_cb.call_deferred()  # DialogueRunner と同様に非同期で完了を返す
 
 
-func _on_request_screen_fade(to_black: bool, duration: float) -> void:
+func _on_request_cutscene_fade(to_black: bool, duration: float) -> void:
   _fade_events.append([to_black, duration])
 
 
@@ -194,21 +194,21 @@ func test_cutscene_event_is_parsed_from_seed() -> void:
 
 
 #---------------------------------------------------------------------
-# ScreenFade
+# CutsceneFade
 #---------------------------------------------------------------------
-func test_screen_fade_applies_alpha_immediately() -> void:
-  var fade := ScreenFade.new()
+func test_cutscene_fade_applies_alpha_immediately() -> void:
+  var fade := CutsceneFade.new()
   var rect := ColorRect.new()
   rect.name = "FadeRect"
   rect.color = Color(0, 0, 0, 0)
   fade.add_child(rect)
   add_child(fade)
 
-  StageSignals.emit_request_screen_fade(true, 0.0)
+  StageSignals.emit_request_cutscene_fade(true, 0.0)
   assert_bool(fade.is_black()).is_true()
   assert_bool(rect.visible).is_true()
 
-  StageSignals.emit_request_screen_fade(false, 0.0)
+  StageSignals.emit_request_cutscene_fade(false, 0.0)
   assert_bool(fade.is_black()).is_false()
   assert_bool(rect.visible).is_false()
 

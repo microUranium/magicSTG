@@ -13,8 +13,8 @@ var dialogue_enabled: bool = true
 @onready var lock_overlay: Control = $Control/LockOverlay
 @onready var stage_button: Button = $Control/StageButton
 
-## ステージボタンを押したときの効果音（SFXCatalog 名）。空なら鳴らさない
-const STAGE_BUTTON_SFX := ""
+## ステージボタンを押したときの効果音（SFXCatalog 名）
+const STAGE_BUTTON_SFX := "ui_click_stage_button"
 
 
 func _ready() -> void:

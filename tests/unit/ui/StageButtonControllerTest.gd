@@ -167,3 +167,9 @@ func test_dialogue_toggle_gets_default_click_feedback() -> void:
   var feedback := ButtonFeedback.find_on(button.dialogue_toggle)
   assert_object(feedback).is_not_null()
   assert_str(feedback.click_sfx).is_equal(ButtonFeedback.DEFAULT_CLICK_SFX)
+
+
+func test_stage_button_sfx_is_registered_in_catalog() -> void:
+  var catalog: SFXCatalog = load("res://assets/SFX/SFX_Catalog.tres")
+  assert_bool(catalog.table.has(StageButtonController.STAGE_BUTTON_SFX)).is_true()
+  assert_object(catalog.table[StageButtonController.STAGE_BUTTON_SFX]).is_not_null()

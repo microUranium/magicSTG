@@ -49,6 +49,7 @@ MagicSTG is a bullet-hell shoot-em-up game built in Godot 4.4. The game features
 - **ItemDB**: Item database and lookup
 - **BGMController**: Background music management
 - **SFXManager**: Sound effects system
+- **ButtonFeedbackInstaller**: Auto-attaches `ButtonFeedback` (`scripts/ui/ButtonFeedback.gd`: shrink on press, overshoot on release, `ui_click` SFX) to every `BaseButton` added to the tree. Buttons that need a different scale target or SFX attach their own via `ButtonFeedback.attach()` (auto-attach then skips them); opt out with meta `no_button_feedback = true`. Label+ClickArea pseudo-buttons attach it explicitly and connect to its `pressed` signal (fires on release inside the area)
 
 ## Development Commands
 

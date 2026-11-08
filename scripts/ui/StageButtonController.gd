@@ -13,12 +13,25 @@ var dialogue_enabled: bool = true
 @onready var lock_overlay: Control = $Control/LockOverlay
 @onready var stage_button: Button = $Control/StageButton
 
+## ステージボタンを押したときの効果音（SFXCatalog 名）
+const STAGE_BUTTON_SFX := "ui_click_stage_button"
+
 
 func _ready() -> void:
   if stage_button:
     stage_button.pressed.connect(_on_stage_button_pressed)
+    _setup_stage_button_feedback()
   if dialogue_toggle:
     dialogue_toggle.pressed.connect(_on_dialogue_toggle_pressed)
+
+
+## StageButton は透明なので、見た目の部分（button_parent）を押下アニメーションさせる。
+## 効果音は他のボタンと別にするため、自動付与の ui_click ではなく STAGE_BUTTON_SFX を使う
+func _setup_stage_button_feedback() -> void:
+  var feedback := ButtonFeedback.attach(stage_button, STAGE_BUTTON_SFX, button_parent)
+  # button_parent 自体のサイズは見た目と一致しないため、StageButton の中心を拡縮の基準にする
+  feedback.center_pivot = false
+  button_parent.pivot_offset = stage_button.position + stage_button.size / 2.0
 
 
 func setup_stage_data(data: StageData, fade_direction: Vector2) -> void:

@@ -34,6 +34,7 @@ GameDataRegistry="*res://scripts/autoload/GameDataRegistry.gd"
 RandomSeedGenerator="*res://scripts/autoload/RandomSeedGenerator.gd"
 StageDataManager="*res://scripts/autoload/StageDataManager.gd"
 SaveManager="*res://scripts/autoload/SaveManager.gd"
+ButtonFeedbackInstaller="*res://scripts/autoload/ButtonFeedbackInstaller.gd"
 
 [display]
 

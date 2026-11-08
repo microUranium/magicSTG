@@ -42,7 +42,6 @@ offset_top = 824.0
 offset_right = 1131.0
 offset_bottom = 872.0
 scale = Vector2(2, 2)
-focus_mode = 2
 
 [node name="BringAllItemsFromResultInventory" type="Button" parent="."]
 layout_mode = 0

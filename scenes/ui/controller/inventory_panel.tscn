@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4m80irnu0v7g"]
+[gd_scene load_steps=7 format=3 uid="uid://d4m80irnu0v7g"]
 
 [ext_resource type="Script" uid="uid://crkyunqj5y7gx" path="res://scripts/ui/InventoryPanel.gd" id="1_ramef"]
 [ext_resource type="Script" uid="uid://d3kjpgvhtj6a" path="res://scripts/ui/ItemGrid.gd" id="2_76hj5"]
 [ext_resource type="Texture2D" uid="uid://dbxnieavyv5pr" path="res://assets/gfx/sprites/waku_background.png" id="2_taj87"]
-[ext_resource type="Texture2D" uid="uid://cp5rdy7l0xi0s" path="res://assets/gfx/sprites/next_prev_button.png" id="3_76hj5"]
+[ext_resource type="Texture2D" uid="uid://cp5rdy7l0xi0s" path="res://assets/gfx/sprites/prev_button.png" id="3_76hj5"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_en4sb"]
+[ext_resource type="Texture2D" uid="uid://c0l1rlcy3d5rq" path="res://assets/gfx/sprites/next_button.png" id="4_nextb"]
 
 [node name="InventoryPanel" type="Control"]
 layout_mode = 3
@@ -61,7 +62,7 @@ text = "1/1"
 [node name="next" type="Button" parent="ItemListPane/PageControls"]
 layout_mode = 2
 focus_mode = 0
-icon = ExtResource("3_76hj5")
+icon = ExtResource("4_nextb")
 flat = true
 
 [node name="Sort" type="Button" parent="ItemListPane"]

@@ -108,12 +108,39 @@ func test_escape_ignored_while_hidden() -> void:
 func test_back_click_closes_panel() -> void:
   _panel.open()
 
-  var event := InputEventMouseButton.new()
-  event.button_index = MOUSE_BUTTON_LEFT
-  event.pressed = true
-  _panel._on_back_area_input(event)
+  _click_back(Vector2(1, 1))
 
   assert_bool(_panel.visible).is_false()
+
+
+func test_back_press_alone_does_not_close() -> void:
+  _panel.open()
+
+  var press := InputEventMouseButton.new()
+  press.button_index = MOUSE_BUTTON_LEFT
+  press.pressed = true
+  press.position = Vector2(1, 1)
+  _panel._back_button_area.gui_input.emit(press)
+
+  assert_bool(_panel.visible).is_true()
+
+
+func test_back_released_outside_does_not_close() -> void:
+  _panel.open()
+
+  _click_back(Vector2(-10, -10))
+
+  assert_bool(_panel.visible).is_true()
+
+
+func test_close_resets_back_label_scale() -> void:
+  _panel.open()
+  _panel._back_button_area.mouse_entered.emit()
+  await await_millis(200)
+
+  _panel.close()
+
+  assert_vector(_panel.get_node("Back/Label").scale).is_equal(Vector2.ONE)
 
 
 func test_overlay_blocks_input_to_screen_behind() -> void:
@@ -124,6 +151,21 @@ func test_overlay_blocks_input_to_screen_behind() -> void:
 #---------------------------------------------------------------------
 # Helpers
 #---------------------------------------------------------------------
+func _click_back(release_position: Vector2) -> void:
+  """「もどる」の領域内で左クリックを押し、release_position（ローカル座標）で離す"""
+  var press := InputEventMouseButton.new()
+  press.button_index = MOUSE_BUTTON_LEFT
+  press.pressed = true
+  press.position = Vector2(1, 1)
+  _panel._back_button_area.gui_input.emit(press)
+
+  var release := InputEventMouseButton.new()
+  release.button_index = MOUSE_BUTTON_LEFT
+  release.pressed = false
+  release.position = release_position
+  _panel._back_button_area.gui_input.emit(release)
+
+
 func _remove_test_settings() -> void:
   if FileAccess.file_exists(TEST_SETTINGS_PATH):
     DirAccess.remove_absolute(TEST_SETTINGS_PATH)

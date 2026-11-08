@@ -30,16 +30,14 @@ var _can_pause: bool = false  # ステージ実行中のみポーズ可能
 var _quit_button_confirmed: bool = false  # 「あきらめる」ボタンの確認状態
 var _has_been_shown: bool = false  # パネルが一度でも表示されたか
 
-# Tween管理
-var _back_hover_tween: Tween = null
-var _quit_hover_tween: Tween = null
+# ボタンの押下アニメーション・ホバー拡大・効果音
+var _back_feedback: ButtonFeedback = null
+var _quit_feedback: ButtonFeedback = null
 
 #---------------------------------------------------------------------
 # Constants
 #---------------------------------------------------------------------
-const HOVER_SCALE := Vector2(1.1, 1.1)
-const NORMAL_SCALE := Vector2(1.0, 1.0)
-const HOVER_DURATION := 0.15
+const HOVER_SCALE := 1.1
 
 # Quit Button
 const QUIT_TEXT_NORMAL := "あきらめる"
@@ -155,26 +153,25 @@ func is_paused() -> bool:
 # Private Methods
 #---------------------------------------------------------------------
 func _setup_button_detection() -> void:
-  """ボタンのクリック検出とホバー検出をセットアップ"""
+  """ボタンにクリック検出・ホバー拡大・押下アニメーション・効果音をセットアップ"""
   if not _back_button_area or not _quit_button_area:
     push_warning("PausePanelController: Button areas not found")
     return
 
-  # マウスフィルターを設定して入力を受け取る
-  _back_button_area.mouse_filter = Control.MOUSE_FILTER_STOP
-  _quit_button_area.mouse_filter = Control.MOUSE_FILTER_STOP
+  _back_feedback = _attach_button_feedback(_back_button_area, _back_label)
+  _back_feedback.pressed.connect(_on_back_clicked)
 
-  # gui_input シグナルで検出
-  _back_button_area.gui_input.connect(_on_back_area_input)
-  _quit_button_area.gui_input.connect(_on_quit_area_input)
-
-  # ホバー検出
-  _back_button_area.mouse_entered.connect(
-    _on_button_hover_start.bind(_back_label, _back_hover_tween)
-  )
-  _back_button_area.mouse_exited.connect(_on_button_hover_end.bind(_back_label, _back_hover_tween))
-  _quit_button_area.mouse_entered.connect(_on_quit_button_hover_start)
+  _quit_feedback = _attach_button_feedback(_quit_button_area, _quit_label)
+  _quit_feedback.pressed.connect(_on_quit_clicked)
+  # カーソルが外れたら「あきらめる」の確認状態を取り消す
   _quit_button_area.mouse_exited.connect(_on_quit_button_hover_end)
+
+
+func _attach_button_feedback(area: Control, label: Label) -> ButtonFeedback:
+  var feedback := ButtonFeedback.attach(area, ButtonFeedback.DEFAULT_CLICK_SFX, label)
+  feedback.hover_scale = HOVER_SCALE
+  feedback.hover_sfx = ButtonFeedback.DEFAULT_HOVER_SFX
+  return feedback
 
 
 func _force_unpause() -> void:
@@ -201,24 +198,10 @@ func _update_quit_button_state() -> void:
 
 #---------------------------------------------------------------------
 # Button Event Handlers
+# （クリック音・押下アニメーションは ButtonFeedback が担当する）
 #---------------------------------------------------------------------
-func _on_back_area_input(event: InputEvent) -> void:
-  """「もどる」ボタンのクリック検出"""
-  if event is InputEventMouseButton:
-    if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-      _on_back_clicked()
-
-
-func _on_quit_area_input(event: InputEvent) -> void:
-  """「あきらめる」ボタンのクリック検出"""
-  if event is InputEventMouseButton:
-    if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-      _on_quit_clicked()
-
-
 func _on_back_clicked() -> void:
   """「もどる」ボタンがクリックされた"""
-  _play_click_sfx()
   print_debug("PausePanelController: Back button clicked")
   resume_requested.emit()
 
@@ -229,60 +212,19 @@ func _on_quit_clicked() -> void:
     # 初回クリック: 確認状態に移行
     _quit_button_confirmed = true
     _update_quit_button_state()
-    _play_click_sfx()
     print_debug("PausePanelController: Quit button confirmation requested")
   else:
     # 2回目クリック: 退出実行
-    _play_click_sfx()
     print_debug("PausePanelController: Quit button confirmed")
     quit_requested.emit()
 
 
-#---------------------------------------------------------------------
-# Hover Event Handlers
-#---------------------------------------------------------------------
-func _on_button_hover_start(label: Label, tween_ref: Tween) -> void:
-  """ボタンにホバー開始（共通処理）"""
-  _animate_label_scale(label, HOVER_SCALE, tween_ref)
-  _play_hover_sfx()
-
-
-func _on_button_hover_end(label: Label, tween_ref: Tween) -> void:
-  """ボタンからホバー解除（共通処理）"""
-  _animate_label_scale(label, NORMAL_SCALE, tween_ref)
-
-
-func _on_quit_button_hover_start() -> void:
-  """「あきらめる」ボタンにホバー開始"""
-  _animate_label_scale(_quit_label, HOVER_SCALE, _quit_hover_tween)
-  _play_hover_sfx()
-
-
 func _on_quit_button_hover_end() -> void:
-  """「あきらめる」ボタンからホバー解除"""
-  _animate_label_scale(_quit_label, NORMAL_SCALE, _quit_hover_tween)
-
-  # 確認状態の場合はリセット
+  """「あきらめる」ボタンからホバー解除 - 確認状態をリセット"""
   if _quit_button_confirmed:
     _quit_button_confirmed = false
     _update_quit_button_state()
     print_debug("PausePanelController: Quit button confirmation cancelled")
-
-
-func _animate_label_scale(label: Label, target_scale: Vector2, tween_ref: Tween) -> void:
-  """Labelのスケールをアニメーション"""
-  if not label:
-    return
-
-  # 既存のTweenをキャンセル
-  if tween_ref and tween_ref.is_valid():
-    tween_ref.kill()
-
-  # 新しいTweenを作成
-  tween_ref = create_tween()
-  tween_ref.set_ease(Tween.EASE_OUT)
-  tween_ref.set_trans(Tween.TRANS_BACK)
-  tween_ref.tween_property(label, "scale", target_scale, HOVER_DURATION)
 
 
 #---------------------------------------------------------------------
@@ -296,13 +238,3 @@ func _play_pause_open_sfx() -> void:
 func _play_pause_close_sfx() -> void:
   """ポーズ解除時のSFX再生"""
   StageSignals.emit_signal("sfx_play_requested", "pause_close", Vector2.INF, 0.0, 1.0)
-
-
-func _play_hover_sfx() -> void:
-  """ホバー時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_hover", Vector2.INF, -5.0, 1.0)
-
-
-func _play_click_sfx() -> void:
-  """クリック時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_click", Vector2.INF, 0.0, 1.0)

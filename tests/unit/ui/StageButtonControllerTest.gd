@@ -134,3 +134,42 @@ func test_dialogue_toggle_saves_setting() -> void:
   assert_bool(FileAccess.file_exists(TEST_SAVE_PATH)).is_true()
   var saved = JSON.parse_string(FileAccess.get_file_as_string(TEST_SAVE_PATH))
   assert_dict(saved["progress"]["dialogue_settings"]).is_equal({"c1/s1": true})
+
+
+# === 押下フィードバック ===
+func test_stage_button_press_scales_visual_part() -> void:
+  var button: StageButtonController = await _make_button(true)
+  var visual: Control = button.get_node("Control")
+
+  button.stage_button.button_down.emit()
+  await await_millis(100)
+
+  assert_float(visual.scale.x).is_less(1.0)
+  # 拡縮の基準は StageButton の中心
+  assert_vector(visual.pivot_offset).is_equal(
+    button.stage_button.position + button.stage_button.size / 2.0
+  )
+
+
+func test_stage_button_has_single_feedback_with_own_sfx() -> void:
+  var button: StageButtonController = await _make_button(true)
+  await await_idle_frame()  # 自動付与（遅延実行）が済むのを待つ
+
+  var feedbacks := button.stage_button.get_children().filter(func(c): return c is ButtonFeedback)
+  assert_int(feedbacks.size()).is_equal(1)
+  assert_str(feedbacks[0].click_sfx).is_equal(StageButtonController.STAGE_BUTTON_SFX)
+
+
+func test_dialogue_toggle_gets_default_click_feedback() -> void:
+  var button: StageButtonController = await _make_button(true, true)
+  await await_idle_frame()
+
+  var feedback := ButtonFeedback.find_on(button.dialogue_toggle)
+  assert_object(feedback).is_not_null()
+  assert_str(feedback.click_sfx).is_equal(ButtonFeedback.DEFAULT_CLICK_SFX)
+
+
+func test_stage_button_sfx_is_registered_in_catalog() -> void:
+  var catalog: SFXCatalog = load("res://assets/SFX/SFX_Catalog.tres")
+  assert_bool(catalog.table.has(StageButtonController.STAGE_BUTTON_SFX)).is_true()
+  assert_object(catalog.table[StageButtonController.STAGE_BUTTON_SFX]).is_not_null()

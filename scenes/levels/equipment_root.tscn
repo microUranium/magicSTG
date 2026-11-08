@@ -35,6 +35,7 @@ theme_override_constants/separation = 16
 [node name="TabEquip" type="Button" parent="LeftPaneTabs"]
 custom_minimum_size = Vector2(200, 56)
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("6_tabfn")
 theme_override_font_sizes/font_size = 32
 toggle_mode = true
@@ -45,6 +46,7 @@ text = "装備"
 [node name="TabTrash" type="Button" parent="LeftPaneTabs"]
 custom_minimum_size = Vector2(200, 56)
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("6_tabfn")
 theme_override_font_sizes/font_size = 32
 toggle_mode = true

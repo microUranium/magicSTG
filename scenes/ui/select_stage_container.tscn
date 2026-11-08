@@ -53,6 +53,7 @@ offset_top = 36.0
 offset_right = 672.0
 offset_bottom = 108.0
 scale = Vector2(2, 2)
+focus_mode = 0
 icon = ExtResource("2_baru5")
 flat = true
 
@@ -79,6 +80,7 @@ layout_mode = 0
 offset_top = 60.0
 offset_right = 594.0
 offset_bottom = 212.0
+focus_mode = 0
 theme_override_colors/icon_disabled_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_hover_color = Color(0, 0, 0, 0)

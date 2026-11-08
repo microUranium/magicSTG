@@ -45,6 +45,7 @@ alignment = 1
 
 [node name="prev" type="Button" parent="ItemListPane/PageControls"]
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("3_76hj5")
 flat = true
 
@@ -59,11 +60,13 @@ text = "1/1"
 
 [node name="next" type="Button" parent="ItemListPane/PageControls"]
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("3_76hj5")
 flat = true
 
 [node name="Sort" type="Button" parent="ItemListPane"]
 layout_mode = 2
+focus_mode = 0
 text = "ソート"
 
 [node name="Label" type="Label" parent="."]

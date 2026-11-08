@@ -34,7 +34,7 @@ const CUTSCENE_BGM_WIND_DB := -10.0
 const CUTSCENE_BGM_STORM_DB := 0.0
 const CUTSCENE_BGM_FADE_IN := 2.0
 const SCREEN_EXIT_TIME := 0.75  # ハーピーと自機が画面上へ退場する時間
-const SCREEN_FADE_OUT_TIME := 0.8
+const CUTSCENE_FADE_OUT_TIME := 0.8
 
 var _phase_idx := 0
 var _cutscene_harpy: CutsceneActor = null
@@ -182,7 +182,7 @@ func _handle_cutscene_pattern_started() -> void:
       CUTSCENE_BGM_WIND, CUTSCENE_BGM_FADE_IN, CUTSCENE_BGM_WIND_DB
     )
   elif _phase_idx == CUTSCENE_PHASE_FAREWELL and _idx == 2:
-    StageSignals.emit_request_screen_fade(true, SCREEN_FADE_OUT_TIME)
+    StageSignals.emit_request_cutscene_fade(true, CUTSCENE_FADE_OUT_TIME)
 
 
 func _spawn_cutscene_harpy() -> void:

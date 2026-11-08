@@ -114,7 +114,7 @@ func _wait(seconds: float) -> void:
 
 
 func _fade(to_black: bool, duration: float) -> void:
-  StageSignals.emit_request_screen_fade(to_black, duration)
+  StageSignals.emit_request_cutscene_fade(to_black, duration)
   await _wait(duration)
 
 

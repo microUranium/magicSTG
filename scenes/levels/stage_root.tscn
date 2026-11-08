@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://j2mvra4ldqkj" path="res://scenes/ui/controller/dialogue_runner.tscn" id="18_o2yuv"]
 [ext_resource type="Script" uid="uid://vek3ecy03q8c" path="res://scripts/systems/WaveExecutor.gd" id="20_yuom2"]
 [ext_resource type="Script" uid="uid://bmblpot7dnnlb" path="res://scripts/systems/StageController.gd" id="21_end45"]
-[ext_resource type="Script" uid="uid://drgtoqvi2065y" path="res://scripts/ui/ScreenFade.gd" id="22_fade"]
+[ext_resource type="Script" uid="uid://drgtoqvi2065y" path="res://scripts/ui/CutsceneFade.gd" id="22_fade"]
 [ext_resource type="Script" uid="uid://bk5mfuyo6o5we" path="res://scripts/systems/CutscenePlayer.gd" id="23_cutscene"]
 
 [node name="Main" type="Node2D"]
@@ -35,11 +35,11 @@ layer = 100
 [node name="PausePanel" parent="PauseLayer" instance=ExtResource("2_p1fty")]
 z_index = 1
 
-[node name="ScreenFade" type="CanvasLayer" parent="."]
+[node name="CutsceneFade" type="CanvasLayer" parent="."]
 layer = 5
 script = ExtResource("22_fade")
 
-[node name="FadeRect" type="ColorRect" parent="ScreenFade"]
+[node name="FadeRect" type="ColorRect" parent="CutsceneFade"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

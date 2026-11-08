@@ -122,7 +122,7 @@ func _on_stage_cleared() -> void:
     _pause_panel.disable_pause()
 
   # 演出中に暗転したままステージが終わらないようにする
-  StageSignals.emit_request_screen_fade(false, 0.3)
+  StageSignals.emit_request_cutscene_fade(false, 0.3)
 
   # クリア済みにすると会話省略扱いになり判定が変わるため、進行状況の更新より先に判定する
   var play_ending := StageDataManager.is_ending_enabled()
@@ -174,7 +174,7 @@ func _on_game_over() -> void:
     _pause_panel.disable_pause()
 
   # 演出中に暗転したままステージが終わらないようにする
-  StageSignals.emit_request_screen_fade(false, 0.3)
+  StageSignals.emit_request_cutscene_fade(false, 0.3)
 
   StageSignals.emit_signal("attack_cores_pause_requested", true)
   StageSignals.emit_signal("blessings_pause_requested", true)

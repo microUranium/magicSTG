@@ -18,7 +18,7 @@ func before_test():
   TargetService.register_player(_player_stub)
 
   StageSignals.request_dialogue.connect(_on_request_dialogue)
-  StageSignals.request_screen_fade.connect(_on_request_screen_fade)
+  StageSignals.request_cutscene_fade.connect(_on_request_cutscene_fade)
 
   _doll = DOLL_SCENE.instantiate()
   add_child(_doll)
@@ -28,8 +28,8 @@ func before_test():
 func after_test():
   if StageSignals.request_dialogue.is_connected(_on_request_dialogue):
     StageSignals.request_dialogue.disconnect(_on_request_dialogue)
-  if StageSignals.request_screen_fade.is_connected(_on_request_screen_fade):
-    StageSignals.request_screen_fade.disconnect(_on_request_screen_fade)
+  if StageSignals.request_cutscene_fade.is_connected(_on_request_cutscene_fade):
+    StageSignals.request_cutscene_fade.disconnect(_on_request_cutscene_fade)
   TargetService.unregister_player()
   if is_instance_valid(_doll):
     _doll.queue_free()
@@ -42,7 +42,7 @@ func _on_request_dialogue(_dd, finished_cb: Callable) -> void:
     finished_cb.call_deferred()
 
 
-func _on_request_screen_fade(to_black: bool, duration: float) -> void:
+func _on_request_cutscene_fade(to_black: bool, duration: float) -> void:
   _fade_events.append([to_black, duration])
 
 

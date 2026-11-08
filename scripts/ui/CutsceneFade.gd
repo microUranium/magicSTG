@@ -1,7 +1,8 @@
 extends CanvasLayer
-class_name ScreenFade
-## 画面全体を黒で覆う暗転レイヤー。
+class_name CutsceneFade
+## ステージ内の演出（ボス撃破後のカットシーン等）用に画面全体を黒で覆う暗転レイヤー。
 ## HUD(layer 10) より背面に置くため、暗転中も HUD は見えたままになる。
+## シーン遷移時のフェードとは別物（そちらは SceneTransition が担当する）。
 
 @export var fade_rect_path: NodePath = ^"FadeRect"
 
@@ -12,11 +13,11 @@ var _tween: Tween
 func _ready() -> void:
   _rect = get_node_or_null(fade_rect_path) as ColorRect
   if _rect == null:
-    push_warning("ScreenFade: FadeRect not found at path: %s" % fade_rect_path)
+    push_warning("CutsceneFade: FadeRect not found at path: %s" % fade_rect_path)
   else:
     _apply_alpha(0.0)
 
-  StageSignals.request_screen_fade.connect(fade)
+  StageSignals.request_cutscene_fade.connect(fade)
 
 
 func fade(to_black: bool, duration: float) -> void:

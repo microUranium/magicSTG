@@ -124,6 +124,9 @@ func _on_stage_cleared() -> void:
   # 演出中に暗転したままステージが終わらないようにする
   StageSignals.emit_request_screen_fade(false, 0.3)
 
+  # クリア済みにすると会話省略扱いになり判定が変わるため、進行状況の更新より先に判定する
+  var play_ending := StageDataManager.is_ending_enabled()
+
   # 進行状況を更新（ファイルへの保存はリザルト画面退出時）
   StageDataManager.mark_current_stage_cleared()
 
@@ -132,17 +135,36 @@ func _on_stage_cleared() -> void:
   if lifecycle_controller:
     lifecycle_controller.handle_stage_cleared()
 
-  # 音響処理
   var audio_controller = _component_registry.get_component("audio")
+  var ui_controller = _component_registry.get_component("ui")
+
+  # エンディングのあるステージは Stage Clear の代わりにエンディングを表示する
+  if play_ending and ui_controller:
+    await _play_ending(audio_controller, ui_controller)
+    return
+
+  # 音響処理
   if audio_controller:
     audio_controller.handle_stage_cleared()
 
   # UI処理
-  var ui_controller = _component_registry.get_component("ui")
   if ui_controller:
     ui_controller.handle_stage_cleared()
 
   await get_tree().create_timer(7.0, false).timeout
+  GameFlow.start_result_inventory()
+
+
+func _play_ending(audio_controller: StageAudioController, ui_controller: StageUIController) -> void:
+  """エンディング画面を表示し、クリックされたらリザルト画面へ移る"""
+  if audio_controller:
+    audio_controller.handle_ending()
+
+  ui_controller.show_ending()
+  await ui_controller.ending_finished
+
+  if audio_controller:
+    audio_controller.stop_bgm()
   GameFlow.start_result_inventory()
 
 

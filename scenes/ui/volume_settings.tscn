@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bdv2t5y7gn4w6"]
 
-[ext_resource type="Script" path="res://scripts/ui/VolumeSettings.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://tsokfktmmdb0" path="res://scripts/ui/VolumeSettings.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="2_font"]
 [ext_resource type="Texture2D" uid="uid://cirgid4erssh5" path="res://assets/gfx/sprites/config_slider_base_sprite.png" id="3_track"]
 [ext_resource type="Texture2D" uid="uid://cisdfsa0vuyyl" path="res://assets/gfx/sprites/config_grabber_area_sprite.png" id="4_fill"]

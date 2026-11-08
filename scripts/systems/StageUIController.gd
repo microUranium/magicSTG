@@ -4,6 +4,7 @@ class_name StageUIController
 signal ready_prompt_finished
 signal clear_prompt_finished
 signal gameover_prompt_finished
+signal ending_finished
 
 #---------------------------------------------------------------------
 # Inspector
@@ -11,6 +12,7 @@ signal gameover_prompt_finished
 @export var ready_prompt_scene: PackedScene = preload("res://scenes/ui/ready_prompt.tscn")
 @export var clear_prompt_scene: PackedScene = preload("res://scenes/ui/stageclear_prompt.tscn")
 @export var gameover_prompt_scene: PackedScene = preload("res://scenes/ui/gameover_prompt.tscn")
+@export var ending_scene: PackedScene = preload("res://scenes/ui/ending_screen.tscn")
 
 #---------------------------------------------------------------------
 # Runtime
@@ -54,6 +56,12 @@ func show_gameover_prompt() -> void:
   """ゲームオーバープロンプトを表示"""
   if gameover_prompt_scene:
     _show_prompt(gameover_prompt_scene, gameover_prompt_finished)
+
+
+func show_ending() -> void:
+  """エンディング画面を表示（クリックで ending_finished）"""
+  if ending_scene:
+    _show_prompt(ending_scene, ending_finished)
 
 
 #---------------------------------------------------------------------

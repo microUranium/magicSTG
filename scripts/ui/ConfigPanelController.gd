@@ -21,11 +21,9 @@ signal closed
 #---------------------------------------------------------------------
 # Constants
 #---------------------------------------------------------------------
-const HOVER_SCALE := Vector2(1.1, 1.1)
-const NORMAL_SCALE := Vector2(1.0, 1.0)
-const HOVER_DURATION := 0.15
+const HOVER_SCALE := 1.1
 
-var _back_hover_tween: Tween = null
+var _back_feedback: ButtonFeedback = null
 
 
 #---------------------------------------------------------------------
@@ -62,11 +60,7 @@ func close() -> void:
   if not visible:
     return
   SettingsManager.save_if_dirty()
-  visible = false
-  # 閉じた時点のホバー拡大が次回表示時に残らないよう戻す
-  if _back_hover_tween and _back_hover_tween.is_valid():
-    _back_hover_tween.kill()
-  _back_label.scale = NORMAL_SCALE
+  visible = false  # 非表示になると ButtonFeedback がホバー拡大・押下アニメーションを戻す
   closed.emit()
 
 
@@ -78,57 +72,14 @@ func is_open() -> bool:
 # Private Methods
 #---------------------------------------------------------------------
 func _setup_button_detection() -> void:
-  """「もどる」ボタンのクリック検出とホバー検出をセットアップ"""
+  """「もどる」ボタンにクリック検出・ホバー拡大・押下アニメーション・効果音をセットアップ"""
   if not _back_button_area:
     push_warning("ConfigPanelController: Back button area not found")
     return
 
-  _back_button_area.mouse_filter = Control.MOUSE_FILTER_STOP
-  _back_button_area.gui_input.connect(_on_back_area_input)
-  _back_button_area.mouse_entered.connect(_on_back_hover_start)
-  _back_button_area.mouse_exited.connect(_on_back_hover_end)
-
-
-func _animate_back_label_scale(target_scale: Vector2) -> void:
-  """「もどる」Labelのスケールをアニメーション"""
-  if _back_hover_tween and _back_hover_tween.is_valid():
-    _back_hover_tween.kill()
-
-  _back_hover_tween = create_tween()
-  _back_hover_tween.set_ease(Tween.EASE_OUT)
-  _back_hover_tween.set_trans(Tween.TRANS_BACK)
-  _back_hover_tween.tween_property(_back_label, "scale", target_scale, HOVER_DURATION)
-
-
-#---------------------------------------------------------------------
-# Button Event Handlers
-#---------------------------------------------------------------------
-func _on_back_area_input(event: InputEvent) -> void:
-  """「もどる」ボタンのクリック検出"""
-  if event is InputEventMouseButton:
-    if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-      _back_button_area.accept_event()
-      _play_click_sfx()
-      close()
-
-
-func _on_back_hover_start() -> void:
-  _animate_back_label_scale(HOVER_SCALE)
-  _play_hover_sfx()
-
-
-func _on_back_hover_end() -> void:
-  _animate_back_label_scale(NORMAL_SCALE)
-
-
-#---------------------------------------------------------------------
-# Sound Effects
-#---------------------------------------------------------------------
-func _play_hover_sfx() -> void:
-  """ホバー時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_hover", Vector2.INF, -5.0, 1.0)
-
-
-func _play_click_sfx() -> void:
-  """クリック時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_click", Vector2.INF, 0.0, 1.0)
+  _back_feedback = ButtonFeedback.attach(
+    _back_button_area, ButtonFeedback.DEFAULT_CLICK_SFX, _back_label
+  )
+  _back_feedback.hover_scale = HOVER_SCALE
+  _back_feedback.hover_sfx = ButtonFeedback.DEFAULT_HOVER_SFX
+  _back_feedback.pressed.connect(close)

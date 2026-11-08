@@ -341,7 +341,7 @@ func test_button_hover_scale_animation() -> void:
   var initial_scale = back_label.scale
 
   # ホバー開始
-  _controller._on_button_hover_start(back_label, null)
+  _controller._back_button_area.mouse_entered.emit()
 
   # Tweenアニメーションの完了を待つ
   await await_millis(200)
@@ -359,11 +359,11 @@ func test_button_hover_end_scale_restoration() -> void:
   var back_label = _controller.get_node("VBoxContainer/Back/Label")
 
   # まずホバー開始
-  _controller._on_button_hover_start(back_label, null)
+  _controller._back_button_area.mouse_entered.emit()
   await await_millis(200)
 
   # ホバー解除
-  _controller._on_button_hover_end(back_label, null)
+  _controller._back_button_area.mouse_exited.emit()
   await await_millis(200)
 
   # スケールが1.0倍に戻る（近似値で確認）
@@ -381,7 +381,7 @@ func test_quit_button_hover_end_cancels_confirmation() -> void:
   assert_that(_controller._quit_button_confirmed).is_true()
 
   # ホバー解除
-  _controller._on_quit_button_hover_end()
+  _controller._quit_button_area.mouse_exited.emit()
 
   # 確認状態がリセット
   assert_that(_controller._quit_button_confirmed).is_false()
@@ -395,6 +395,66 @@ func test_quit_button_hover_end_cancels_confirmation() -> void:
   assert_that(actual_color.r).is_between(0.96, 0.98)
   assert_that(actual_color.g).is_between(0.25, 0.26)
   assert_that(actual_color.b).is_between(0.46, 0.47)
+
+
+func test_back_click_releases_inside_requests_resume() -> void:
+  """「もどる」を押して領域内で離すと再開を要求する"""
+  _controller.enable_pause()
+  _controller.show_panel()
+  var emitter := monitor_signals(_controller)
+
+  _click_area(_controller._back_button_area, Vector2(1, 1))
+
+  await assert_signal(emitter).wait_until(50).is_emitted("resume_requested")
+
+
+func test_back_click_released_outside_does_nothing() -> void:
+  """「もどる」を押したまま領域外で離すとキャンセル扱い"""
+  _controller.enable_pause()
+  _controller.show_panel()
+  var emitter := monitor_signals(_controller)
+
+  _click_area(_controller._back_button_area, Vector2(-10, -10))
+
+  await assert_signal(emitter).wait_until(50).is_not_emitted("resume_requested")
+
+
+func test_quit_click_enters_confirmation() -> void:
+  """「あきらめる」をクリックすると確認状態になる"""
+  _controller.enable_pause()
+  _controller.show_panel()
+
+  _click_area(_controller._quit_button_area, Vector2(1, 1))
+
+  assert_that(_controller._quit_button_confirmed).is_true()
+
+
+func test_hide_panel_resets_label_scale() -> void:
+  """ホバー中にパネルを閉じても拡大が残らない"""
+  _controller.enable_pause()
+  _controller.show_panel()
+  var back_label = _controller.get_node("VBoxContainer/Back/Label")
+  _controller._back_button_area.mouse_entered.emit()
+  await await_millis(200)
+
+  _controller.hide_panel()
+
+  assert_vector(back_label.scale).is_equal(Vector2.ONE)
+
+
+func _click_area(area: Control, release_position: Vector2) -> void:
+  """領域内で左クリックを押し、release_position（ローカル座標）で離す"""
+  var press := InputEventMouseButton.new()
+  press.button_index = MOUSE_BUTTON_LEFT
+  press.pressed = true
+  press.position = Vector2(1, 1)
+  area.gui_input.emit(press)
+
+  var release := InputEventMouseButton.new()
+  release.button_index = MOUSE_BUTTON_LEFT
+  release.pressed = false
+  release.position = release_position
+  area.gui_input.emit(release)
 
 
 #---------------------------------------------------------------------

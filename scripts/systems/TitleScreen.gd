@@ -13,12 +13,10 @@ extends Control
 #---------------------------------------------------------------------
 # Constants
 #---------------------------------------------------------------------
-const HOVER_SCALE := Vector2(1.1, 1.1)
-const NORMAL_SCALE := Vector2(1.0, 1.0)
-const HOVER_DURATION := 0.15
+const HOVER_SCALE := 1.1
 
-# Label -> 実行中のホバーTween
-var _hover_tweens: Dictionary = {}
+# Label -> そのボタンの ButtonFeedback
+var _feedbacks: Dictionary = {}
 
 
 func _ready() -> void:
@@ -34,74 +32,16 @@ func _ready() -> void:
 
 
 func _setup_click_area(area: Control, label: Label, handler: Callable) -> void:
-  """ClickArea(Control)のクリック検出とホバー検出をセットアップ"""
+  """ClickArea(Control)にクリック検出・ホバー拡大・押下アニメーション・効果音をセットアップ"""
   if not area:
     push_warning("TitleScreen: Click area not found")
     return
 
-  # マウスフィルターを設定して入力を受け取る
-  area.mouse_filter = Control.MOUSE_FILTER_STOP
-
-  # Controlには pressed シグナルが無いため gui_input で検出
-  area.gui_input.connect(_on_click_area_gui_input.bind(area, handler))
-
-  # ホバー検出
-  area.mouse_entered.connect(_on_area_hover_start.bind(label))
-  area.mouse_exited.connect(_on_area_hover_end.bind(label))
-
-
-func _on_click_area_gui_input(event: InputEvent, area: Control, handler: Callable) -> void:
-  """ClickAreaの左クリックを検出してハンドラを呼ぶ"""
-  if event is InputEventMouseButton:
-    if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-      area.accept_event()
-      _play_click_sfx()
-      handler.call()
-
-
-#---------------------------------------------------------------------
-# Hover Event Handlers
-#---------------------------------------------------------------------
-func _on_area_hover_start(label: Label) -> void:
-  """ボタンにホバー開始"""
-  _animate_label_scale(label, HOVER_SCALE)
-  _play_hover_sfx()
-
-
-func _on_area_hover_end(label: Label) -> void:
-  """ボタンからホバー解除"""
-  _animate_label_scale(label, NORMAL_SCALE)
-
-
-func _animate_label_scale(label: Label, target_scale: Vector2) -> void:
-  """Labelのスケールをアニメーション"""
-  if not label:
-    return
-
-  # 既存のTweenをキャンセル
-  var tween: Tween = _hover_tweens.get(label)
-  if tween and tween.is_valid():
-    tween.kill()
-
-  # 新しいTweenを作成
-  tween = create_tween()
-  tween.set_ease(Tween.EASE_OUT)
-  tween.set_trans(Tween.TRANS_BACK)
-  tween.tween_property(label, "scale", target_scale, HOVER_DURATION)
-  _hover_tweens[label] = tween
-
-
-#---------------------------------------------------------------------
-# Sound Effects
-#---------------------------------------------------------------------
-func _play_hover_sfx() -> void:
-  """ホバー時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_hover", Vector2.INF, -5.0, 1.0)
-
-
-func _play_click_sfx() -> void:
-  """クリック時のSFX再生"""
-  StageSignals.emit_signal("sfx_play_requested", "ui_click", Vector2.INF, 0.0, 1.0)
+  var feedback := ButtonFeedback.attach(area, ButtonFeedback.DEFAULT_CLICK_SFX, label)
+  feedback.hover_scale = HOVER_SCALE
+  feedback.hover_sfx = ButtonFeedback.DEFAULT_HOVER_SFX
+  feedback.pressed.connect(handler)
+  _feedbacks[label] = feedback
 
 
 #func _unhandled_input(event: InputEvent) -> void:
@@ -148,5 +88,7 @@ func _on_switch_to_stage_select_pressed() -> void:
 
 func _on_config_pressed() -> void:
   # 設定画面を閉じたときにホバー拡大が残らないよう戻しておく
-  _animate_label_scale(_config_label, NORMAL_SCALE)
+  var feedback: ButtonFeedback = _feedbacks.get(_config_label)
+  if feedback:
+    feedback.clear_hover()
   _config_panel.open()

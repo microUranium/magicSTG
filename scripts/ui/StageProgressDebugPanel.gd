@@ -91,6 +91,7 @@ func _add_row(label_text: String) -> HBoxContainer:
 
 func _add_check(row: HBoxContainer, text: String, on_toggled: Callable) -> CheckBox:
   var check := CheckBox.new()
+  check.focus_mode = Control.FOCUS_NONE
   check.text = text
   check.toggled.connect(func(on: bool): _apply(on_toggled.bind(on)))
   row.add_child(check)
@@ -99,6 +100,7 @@ func _add_check(row: HBoxContainer, text: String, on_toggled: Callable) -> Check
 
 func _add_button(parent: Control, text: String, on_pressed: Callable) -> void:
   var button := Button.new()
+  button.focus_mode = Control.FOCUS_NONE
   button.text = text
   button.pressed.connect(func(): _apply(on_pressed))
   parent.add_child(button)

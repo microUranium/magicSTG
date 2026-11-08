@@ -42,6 +42,7 @@ offset_top = 824.0
 offset_right = 1131.0
 offset_bottom = 872.0
 scale = Vector2(2, 2)
+focus_mode = 2
 
 [node name="BringAllItemsFromResultInventory" type="Button" parent="."]
 layout_mode = 0
@@ -49,6 +50,7 @@ offset_left = 564.0
 offset_top = 462.0
 offset_right = 716.0
 offset_bottom = 520.0
+focus_mode = 0
 theme_override_font_sizes/font_size = 36
 text = "一括移動"
 

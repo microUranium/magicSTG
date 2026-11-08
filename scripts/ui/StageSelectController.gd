@@ -55,6 +55,7 @@ func _setup_debug_progress_panel() -> void:
   add_child(panel)
 
   var toggle := Button.new()
+  toggle.focus_mode = Control.FOCUS_NONE
   toggle.text = "DEBUG"
   toggle.toggle_mode = true
   toggle.position = Vector2(16, 900)

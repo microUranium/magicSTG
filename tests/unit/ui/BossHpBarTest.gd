@@ -11,7 +11,7 @@ const FILL_WAIT_MS := 700  # 充填アニメ(0.5s)完了を待つ余裕
 var _boss: Node2D
 var _ai  # StubPhaseAI（新規class_nameは -d 実行時に未キャッシュのため型注釈なし）
 var _hp: Node
-var _bar: Node2D
+var _bar: CanvasLayer
 
 
 func _make_phase(show_bar: bool, end_ratio: float, merge := false):
@@ -159,3 +159,51 @@ func test_hidden_phase_hides_bar() -> void:
   assert_bool(_bar.visible).is_true()
   _enter_phase(2)  # show=false → 非表示
   assert_bool(_bar.visible).is_false()
+
+
+# --- 画面上部レイアウト ----------------------------------------------------
+
+const PLAY_RECT := Rect2(0, 0, 896, 960)  # 1280x960 から HUD 幅 384 を除いた領域
+
+
+func _bar_rect() -> Rect2:
+  return (_bar.get_node("ProgressBar") as TextureProgressBar).get_global_rect()
+
+
+func test_layout_spans_play_area_without_entering_hud() -> void:
+  _build(0, [_make_phase(true, 0.0)], 100)
+  await await_idle_frame()
+  _bar.apply_layout(PLAY_RECT)
+
+  var r := _bar_rect()
+  assert_float(r.position.x).is_equal_approx(PLAY_RECT.position.x + _bar.margin_x, 0.01)
+  assert_float(r.position.y).is_equal_approx(PLAY_RECT.position.y + _bar.margin_top, 0.01)
+  # 右端はプレイ領域の右端（HUD 境界）を越えない
+  assert_float(r.end.x).is_equal_approx(PLAY_RECT.end.x - _bar.margin_x, 0.01)
+  # 高さはテクスチャのまま（伸長は横方向のみ）
+  assert_float(r.size.y).is_equal(22.0)
+
+
+func test_layout_keeps_scene_default_when_play_rect_invalid() -> void:
+  _build(0, [_make_phase(true, 0.0)], 100)
+  await await_idle_frame()
+  var default_rect := _bar_rect()
+
+  _bar.apply_layout(Rect2(0, 0, -320, 64))  # 未初期化/異常なプレイ領域
+
+  assert_that(_bar_rect()).is_equal(default_rect)
+  assert_bool(default_rect.end.x <= PLAY_RECT.end.x).is_true()  # 既定値も HUD に入らない
+
+
+func test_layout_ignores_boss_transform() -> void:
+  _build(0, [_make_phase(true, 0.0)], 100)
+  await await_idle_frame()
+  _bar.apply_layout(PLAY_RECT)
+  var rect_before := _bar_rect()
+
+  _boss.position = Vector2(300, 500)
+  _boss.rotation = 1.0
+  _boss.scale = Vector2(2, 2)
+  await await_idle_frame()
+
+  assert_that(_bar_rect()).is_equal(rect_before)

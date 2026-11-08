@@ -1,5 +1,5 @@
-extends Node2D
-## ボスにオーバーレイ表示するHPバー（自己配線コンポーネント）。
+extends CanvasLayer
+## 画面上部（プレイエリア幅）に表示するボスHPバー（自己配線コンポーネント）。
 ##
 ## - シーンのボス配下に置くだけで、自身が HpNode.hp_changed と AI.phase_changed を
 ##   購読して表示を制御する。ボス側スクリプトはバーに触れる必要がない。
@@ -9,14 +9,16 @@ extends Node2D
 ##                 充填し、以降のフェーズではリセットしない。
 ##     PER_PHASE … 戦闘フェーズごとに区間 [low, high] を算出しリセット＆再充填する。
 ## - フェーズ開始時の充填は約 0.5s、対数的(EXPO/EASE_OUT)。
-## - ボスが回転・拡大しても影響を受けないよう top_level で追従する。
+## - CanvasLayer なのでボスの位置・回転・拡大の影響を受けず、画面座標で描画される。
+##   横幅は PlayArea のプレイ領域に合わせ、HUD 領域には入らない（9-patch で横に伸長）。
 
 enum Mode { SINGLE, PER_PHASE }
 
 const FILL_DURATION := 0.5  # 充填アニメーションの所要時間（秒）
 
 @export var mode: Mode = Mode.PER_PHASE
-@export var follow_offset: Vector2 = Vector2(0, 70)  # ボス中心からのオフセット（下寄り）
+@export var margin_x: float = 16.0  # プレイ領域の左右端からの余白
+@export var margin_top: float = 12.0  # 画面上端からの余白
 @export var ai_path: NodePath = ^"../EnemyAI"
 @export var hp_node_path: NodePath = ^"../HpNode"
 
@@ -32,7 +34,8 @@ var _shown_once: bool = false  # SINGLE: 初回充填を済ませたか
 
 
 func _ready() -> void:
-  top_level = true  # 親（ボス）の回転・拡大の影響を受けない
+  _layout()
+  get_viewport().size_changed.connect(_layout)
   _bar.max_value = 100.0
   _bar.value = 0.0
   visible = false
@@ -50,10 +53,18 @@ func _ready() -> void:
     _on_phase_changed(_ai._phase_idx)
 
 
-func _process(_delta: float) -> void:
-  var parent := get_parent() as Node2D
-  if parent:
-    global_position = parent.global_position + follow_offset
+## プレイ領域の上端に、左右 margin_x を空けて横幅いっぱいに配置する。高さはテクスチャのまま。
+func _layout() -> void:
+  apply_layout(PlayArea.get_play_rect())
+
+
+## 指定のプレイ領域に合わせてバーを配置する（テストからも直接呼べるよう分離）。
+func apply_layout(rect: Rect2) -> void:
+  if rect.size.x <= margin_x * 2.0:
+    return  # PlayArea 未初期化時はシーン既定値のまま
+  var height: float = float(_bar.texture_over.get_height()) if _bar.texture_over else _bar.size.y
+  _bar.position = Vector2(rect.position.x + margin_x, rect.position.y + margin_top)
+  _bar.size = Vector2(rect.size.x - margin_x * 2.0, height)
 
 
 # --- 信号ハンドラ ---------------------------------------------------------

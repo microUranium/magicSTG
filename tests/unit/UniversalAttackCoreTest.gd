@@ -50,7 +50,7 @@ func test_single_shot_execution():
 
 
 func test_rapid_fire_execution():
-  """連射の実行テスト（修正版）"""
+  """連射の実行テスト：バーストごとに rapid_fire_interval を待ってから次を撃つ"""
   test_pattern.pattern_type = AttackPattern.PatternType.RAPID_FIRE
   test_pattern.rapid_fire_count = 3
   test_pattern.rapid_fire_interval = 0.1
@@ -58,15 +58,30 @@ func test_rapid_fire_execution():
 
   universal_core.clear_spawned_bullets()
 
-  var start_time = Time.get_time_dict_from_system()["second"]
-  var success = await universal_core._execute_rapid_fire(test_pattern)
-  var end_time = Time.get_time_dict_from_system()["second"]
+  # 実時間の計測はフレームの delta 次第でぶれるため、
+  # 「待機中は次のバーストが出ていない → 待ち終えると全弾出ている」順序で検証する
+  var result := {"done": false, "success": false}
+  var run := func() -> void:
+    result.success = await universal_core._execute_rapid_fire(test_pattern)
+    result.done = true
+  run.call()
 
-  assert_that(success).is_true()
+  # 1回目のバーストだけが出て、残りはインターバル待ちになっている
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(3)
+  assert_that(result.done).is_false()
+
+  await _await_until(func() -> bool: return result.done, 2000)
+
+  assert_that(result.done).is_true()
+  assert_that(result.success).is_true()
   assert_that(universal_core.get_spawned_bullet_count()).is_equal(9)  # 3発 × 3回
 
-  var duration = end_time - start_time
-  assert_that(duration).is_greater_equal(0.2)  # 最低限の時間
+
+func _await_until(condition: Callable, timeout_ms: int) -> void:
+  var waited := 0
+  while not condition.call() and waited < timeout_ms:
+    await await_millis(10)
+    waited += 10
 
 
 func test_firing_condition_validation():

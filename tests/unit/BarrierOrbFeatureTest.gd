@@ -64,23 +64,32 @@ func test_barrier_cooldown_delayed_in_player_mode():
   barrier_config.orbit_duration = 0.15  # 短い回転時間
   barrier_config.rotation_speed = 180.0
   test_pattern.barrier_movement_config = barrier_config
+  test_pattern.rapid_fire_interval = 0.0  # 弾間の遅延なし（回転時間の待機だけを見る）
 
   universal_core.attack_pattern = test_pattern
   universal_core.clear_spawned_bullets()
 
-  # 発射前の時刻を記録
-  var start_msec = Time.get_ticks_msec()
+  # 実時間の計測はフレームの delta 次第でぶれる（タイマーが実時間より早く切れうる）ため、
+  # 「回転タイマー待ちの間は完了しない → タイマー満了で完了する」順序で検証する
+  var result := {"done": false, "success": false}
+  var run := func() -> void:
+    result.success = await universal_core._execute_barrier_bullets(test_pattern)
+    result.done = true
+  run.call()
 
-  var success = await universal_core._execute_barrier_bullets(test_pattern)
+  # 全弾は出ているが、回転時間のタイマー待ちでブロックされている
+  assert_that(universal_core.get_spawned_bullet_count()).is_equal(4)
+  assert_that(result.done).is_false()
+  assert_that(universal_core._barrier_duration_timer).is_not_null()
 
-  var elapsed_msec = Time.get_ticks_msec() - start_msec
+  var waited := 0
+  while not result.done and waited < 2000:
+    await await_millis(10)
+    waited += 10
 
   # 成功しているか
-  assert_that(success).is_true()
-  assert_that(universal_core.get_spawned_bullet_count()).is_equal(4)
-
-  # 回転時間分の時間がかかっている（awaitが実行されたことを確認）
-  assert_that(elapsed_msec).is_greater_equal(50)  # タイマー精度のばらつきを許容
+  assert_that(result.done).is_true()
+  assert_that(result.success).is_true()
 
   # タイマーがクリアされている
   assert_that(universal_core._barrier_duration_timer).is_null()

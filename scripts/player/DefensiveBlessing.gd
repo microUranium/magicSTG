@@ -60,9 +60,8 @@ func on_equip(player):
   recover_timer.timeout.connect(recover_shield)
   register_timer(recover_timer)  # ポーズ管理に登録
 
-  # プレイヤー被弾シグナルへ接続
-  if not player_ref.is_connected("damage_received", Callable(self, "on_player_damaged")):
-    player_ref.connect("damage_received", Callable(self, "on_player_damaged"))
+  # 被弾は BlessingContainer 経由の process_damage() だけで受ける。
+  # Player.damage_received にも接続すると、加護処理後の damage=0 で二重に処理が走る。
 
   # プレイヤーにシールドスプライトを配置する場合
   if shield_sprite:
@@ -75,8 +74,6 @@ func on_equip(player):
 
 
 func on_unequip(_player):
-  if player_ref and player_ref.is_connected("damage_received", Callable(self, "on_player_damaged")):
-    player_ref.disconnect("damage_received", Callable(self, "on_player_damaged"))
   shield_sprite.queue_free()
 
 
@@ -122,11 +119,11 @@ func process_damage(_player, damage):
   if is_broken:
     return damage
   else:
-    on_player_damaged(damage)
+    _apply_shield_damage(damage)
     return 0
 
 
-func on_player_damaged(damage):
+func _apply_shield_damage(damage):
   if _paused:  # ポーズ中は処理しない
     return
 

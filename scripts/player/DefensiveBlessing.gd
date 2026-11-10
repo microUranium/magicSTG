@@ -8,6 +8,7 @@ var shield_max: int = 50
 var shield_current: int = 50
 var recover_delay: float = 5.0
 var is_broken: bool = false
+var damage_taken_pct: float = 0.0  # 緩衝：シールドが受けるダメージの増減率（負で軽減）
 
 # === 自然回復（破壊されていない時） ===
 var regen_delay: float = 10.0  # 最後の被弾から回復開始までの秒数
@@ -41,6 +42,7 @@ func _recalc_stats() -> void:
   )
   regen_delay = _proto.base_modifiers.get("shield_regen_delay", regen_delay)
   regen_rate = _proto.base_modifiers.get("shield_regen_rate", regen_rate)
+  damage_taken_pct = _sum_pct("shield_damage_taken_pct")
 
   # 値が変わったらゲージ刷新
   shield_current = shield_max
@@ -119,8 +121,20 @@ func process_damage(_player, damage):
   if is_broken:
     return damage
   else:
-    _apply_shield_damage(damage)
+    _apply_shield_damage(reduce_shield_damage(damage, damage_taken_pct, randf()))
     return 0
+
+
+## 緩衝：シールドが受けるダメージを pct（負で軽減）だけ増減する。
+## 端数は小数部分の確率で切り上げるため、期待値は damage * (1 + pct) に一致する。
+## （ダメージ1の弾も確率で0になる）roll は 0.0〜1.0 の乱数で、テストでは固定値を渡す。
+static func reduce_shield_damage(damage: int, pct: float, roll: float) -> int:
+  if damage <= 0 or pct >= 0.0:
+    return damage
+  # 5 * (1 - 0.2) = 4.0000000000000002 のような浮動小数の誤差で端数が生じないよう丸める
+  var x := snappedf(damage * (1.0 + maxf(pct, -1.0)), 0.000001)
+  var base := int(floor(x))
+  return base + (1 if roll < x - base else 0)
 
 
 func _apply_shield_damage(damage):

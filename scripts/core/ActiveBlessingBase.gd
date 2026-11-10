@@ -55,8 +55,9 @@ func activate() -> bool:
     emit_signal("activation_failed")
     return false
 
-  _uses_remaining -= 1
-  set_gauge(float(_uses_remaining))
+  if not _roll_free_use():  # 幸運が発動したら回数を消費しない
+    _uses_remaining -= 1
+    set_gauge(float(_uses_remaining))
   _on_cooldown = true
   _cooldown_timer.start(cooldown_sec)
   emit_signal("activated", _uses_remaining)

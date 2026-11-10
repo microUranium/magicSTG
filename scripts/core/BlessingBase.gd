@@ -2,6 +2,7 @@ extends GaugeProvider
 class_name BlessingBase
 
 signal blessing_updated
+signal free_use_triggered  # 幸運：使用回数を消費せずに発動した
 
 var _proto: BlessingItem
 var _paused: bool = false
@@ -112,6 +113,18 @@ func _sum_add(key: String) -> float:
     var modifiers := enc.get_modifiers(item_inst.enchantments[enc])
     t += modifiers.get(key, 0)
   return t
+
+
+func _roll_free_use() -> bool:
+  """エンチャント「幸運」：使用回数を消費しないなら true を返す"""
+  var chance := clampf(_sum_pct("blessing_free_use_chance_pct"), 0.0, 1.0)
+  if chance <= 0.0:
+    return false
+  # randf() は 1.0 を含みうるため、確率 1.0 は乱数を使わず確定させる
+  if chance >= 1.0 or randf() < chance:
+    free_use_triggered.emit()
+    return true
+  return false
 
 
 func _ready() -> void:

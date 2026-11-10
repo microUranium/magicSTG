@@ -43,10 +43,11 @@ func process_fatal_damage(player, _damage) -> bool:
   if not is_instance_valid(player) or player.hp_node == null:
     return false
 
-  _uses_remaining -= 1
-  set_gauge(float(_uses_remaining))
-  if _uses_remaining <= 0:
-    set_gauge_style("durability_recovering")  # 使い切ったら無効表示へ
+  if not _roll_free_use():  # 幸運が発動したら回数を消費しない
+    _uses_remaining -= 1
+    set_gauge(float(_uses_remaining))
+    if _uses_remaining <= 0:
+      set_gauge_style("durability_recovering")  # 使い切ったら無効表示へ
 
   _revive(player)
   emit_signal("revived", _uses_remaining)

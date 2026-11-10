@@ -109,6 +109,16 @@ static func update_pattern_from_enchantments(
     1, int(_apply_enchantment_modifiers(item_inst, base_bullet_count, "bullet_count"))
   )
 
+  # 扇の角度の更新
+  # pattern 側の現在値を基準にすると呼び出しのたびに加算が重なるため、
+  # 常に prototype.attack_pattern の角度（パターン未定義なら 0）を基準にして冪等にする。
+  var base_spread := 0.0
+  if item_inst.prototype.attack_pattern:
+    base_spread = item_inst.prototype.attack_pattern.angle_spread
+  pattern.angle_spread = clampf(
+    _apply_enchantment_modifiers(item_inst, base_spread, "angle_spread"), 0.0, 360.0
+  )
+
   # 追尾（エンチャント）の更新
   # pattern 側の現在値を基準にすると呼び出しのたびに加算が重なるため、
   # 常に prototype の基本値（未付与なら 0）を基準にして冪等にする。

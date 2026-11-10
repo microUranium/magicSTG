@@ -255,7 +255,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
 | 速射 | `cooldown_pct` | 連射CT 短縮 | -20% / -50% / -75% | 攻撃コア |
-| 増輪 | `bullet_count_add` | 弾数 + | +1 / +3 / +6 | 攻撃コア |
+| 増弾 | `bullet_count_add`＋`angle_spread_add` | 弾数 +／扇の角度 +° | +2・+20° / +4・+40° / +8・+60° | 攻撃コア |
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
 | 残留 | `bullet_lifetime_pct` | 弾寿命 +% | +50% / +50% / +200% | 攻撃コア |
 | 貫通 | `penetration_add` | 貫通回数 + | +1 / +2 / +4 | 攻撃コア |
@@ -282,18 +282,18 @@ GenericGauge / GaugeManager ← HUD描画側
 
 #### 攻撃コア
 
-| コア | `.tres` | 速射 | 増輪 | 貫通 | 残留 | 炸裂 | 追尾 | 除外理由 |
+| コア | `.tres` | 速射 | 増弾 | 貫通 | 残留 | 炸裂 | 追尾 | 除外理由 |
 |---|---|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
 | ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
 | バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
-| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増輪：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
-| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増輪：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
+| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増弾：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
+| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増弾：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
 | バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：バリア弾はコード上で対象外 |
 | ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
 | マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
-| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増輪：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
-| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増輪は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
+| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増弾：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
+| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増弾は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
 
 - 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
 - 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。

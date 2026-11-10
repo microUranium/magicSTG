@@ -76,7 +76,7 @@
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
 | 速射 | `cooldown_pct` | | |
-| 増輪 | `bullet_count_add` | ※ `angle_spread` が 0 だと弾が重なるだけになる | |
+| 増弾 | `bullet_count_add` | ※ `angle_spread_add` で扇の角度も広がる（基本 `angle_spread` に加算）。CIRCLE 配置では角度は無関係 | |
 | 貫通 | `penetration_add` | | |
 | 残留 | `bullet_lifetime_pct` | ※ `bullet_lifetime > 0` が前提 | |
 | 炸裂 | `spread_bullet_count_add` | ※ `on_hit_pattern` がある場合のみ | |

@@ -141,7 +141,7 @@
 | エンチャント | キー | このコアでの挙動 | 対応 |
 |---|---|---|---|
 | 速射 | `cooldown_pct` | ◯ 主力。CT が唯一の火力ノブなので素直に効く | pool に入れる |
-| 増輪 | `bullet_count_add` | **機構上は効く（✕ではない）**。ただし `angle_spread = 0` なので弾が完全に重なり、接触tick×無限貫通で**素直にN倍DPS**になる（Lv3 = 7本 = 7倍） | **pool から除外** |
+| 増弾 | `bullet_count_add` | **機構上は効く（✕ではない）**。基本 `angle_spread = 0` だが増弾の角度加算（+20/+40/+60°）で扇状に開く。正面の大型敵には複数本が重なり、接触tick×無限貫通で**N倍DPSに近づく**（Lv3 = 9本） | **pool から除外** |
 | 貫通 | `penetration_add` | **構造的に無効**。tick モードでは `BulletBase._on_area_entered()` のダメージ・貫通判定経路を通らないため `penetration_count` を誰も読まない（6章）。付いても無害 | 念のため pool から除外 |
 | 残留 | `bullet_lifetime_pct` | ✕ `bullet_lifetime = 0`（無限）なのでファクトリが 0 のまま返す。意図通り | — |
 | 炸裂 | `spread_bullet_count_add` | ✕ `on_hit_pattern` なし | — |
@@ -152,7 +152,7 @@
 
 `DropTableEntry` は `prototype`（アイテム）と `enchant_rule` が1対1で、`LootSystem._roll_enchantments()` は `entry.enchant_rule.pool` からしか抽選しない。したがって **`droptableentry_needleshot.tres` に専用の `enchantmentrule_needleshot.tres`（`pool` は `cooldown_pct` のみ）を紐付けるだけ**でよく、コード変更は不要。既存の `enchantmentrule_debug_bullet.tres` は使い回さない。
 
-- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に増輪／貫通を付けないこと
+- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に増弾／貫通を付けないこと
 - 「-1 に `penetration_add` を加算して有限化する」という根本の挙動（`PlayerAttackPatternFactory.update_pattern_from_enchantments()`）は本コアでは無害化されるが、**他コアで `penetration_count = -1` を使うと同じ穴を踏む**。別途の課題として残す
 
 ## 5. HUDゲージ
@@ -212,9 +212,9 @@
 - [x] `scripts/core/UniversalAttackCore.gd` の `enable_contact_damage()` 呼び出し
 - [x] `resources/data/attackcore_needleshot.tres`
 - [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
-  - 無エンチャント／速射Lv2／速射Lv3 の3個体（増輪・貫通は付けない）
+  - 無エンチャント／速射Lv2／速射Lv3 の3個体（増弾・貫通は付けない）
 - [ ] `resources/itemdrop/droptableentry_needleshot.tres` ／ `enchantmentrule_needleshot.tres`
-  - **今回は作成しない**。ドロップテーブルは現状 `attackcore_magic_bullet` の1件（`droptableentry_debug_core.tres`）のみで他コアには未設定であり、`enchantmentrule_debug_bullet.tres` の `pool` も `cooldown_pct` だけなので増輪・貫通はそもそもドロップしない。加えて貫通は tick モードで構造的に無効化されている（6章）。作成しても敵シーンの `drop_table` への配線が別途必要で現時点では無効になるため、ドロップ実装をまとめて行うときに対応する
+  - **今回は作成しない**。ドロップテーブルは現状 `attackcore_magic_bullet` の1件（`droptableentry_debug_core.tres`）のみで他コアには未設定であり、`enchantmentrule_debug_bullet.tres` の `pool` も `cooldown_pct` だけなので増弾・貫通はそもそもドロップしない。加えて貫通は tick モードで構造的に無効化されている（6章）。作成しても敵シーンの `drop_table` への配線が別途必要で現時点では無効になるため、ドロップ実装をまとめて行うときに対応する
 - [x] `tests/unit/NeedleShotFeatureTest.gd`（22件）
 - [x] スクリプト変更に対するテスト更新
 

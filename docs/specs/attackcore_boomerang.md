@@ -35,7 +35,7 @@
 | トリプルバースト | BURST_WITH_TRACKING | 3.0 | 0.1 | 弾が消えるまで撃てない高速3連 |
 | エレキショック | SHOT_ON_HIT | 5.0 | 0.3 | 着弾時に拡散弾 |
 
-- **想定される組み合わせ**：貫通でヒット数を増やしたり、増輪で弾数を増やすと単純DPSが上がる。
+- **想定される組み合わせ**：貫通でヒット数を増やしたり、増弾で弾数を増やすと単純DPSが上がる。
 
 ## 2. 挙動仕様
 
@@ -118,7 +118,7 @@
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
 | 速射 | `cooldown_pct` |◯ | 主力。ただし飛翔1.4秒に対しCTが縮むため空中の滞留弾が増える |
-| 増輪 | `bullet_count_add` | ◯ | 主力。`angle_spread 30°` で扇状に開き、面の制圧力が上がる |
+| 増弾 | `bullet_count_add` | ◯ | 主力。基本 `angle_spread 30°` に増弾の角度加算（+20/+40/+60°）が乗り、扇が広がって面の制圧力が上がる |
 | 貫通 | `penetration_add` |◯ | 最重要。往復するためヒット数に乗数的に効く（10章のバランス注視項目） |
 | 残留 | `bullet_lifetime_pct` | ✕(プレイヤーに衝突するまで消えない) | 対象外（意図的） |
 | 炸裂 | `spread_bullet_count_add` | ✕ | 対象外 |
@@ -157,7 +157,7 @@
 - [◯] `assets/gfx/sprites/icon_magic_boomerang.png`
 - [x] `resources/data/attackcore_boomerang.tres`
 - [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
-  - 無エンチャント／増輪Lv2／速射Lv2＋貫通Lv1 の3個体
+  - 無エンチャント／増弾Lv2／速射Lv2＋貫通Lv1 の3個体
 - [ ] （ドロップさせる場合）`resources/itemdrop/` のドロップテーブル／`enchantmentrule_*.tres` の `pool`
 - [x] `tests/unit/BoomerangFeatureTest.gd`（19件）
 - [x] スクリプト変更に対するテスト更新
@@ -201,7 +201,7 @@
 - [ ] 画面上端を越えた弾が戻ってくること（`persist_offscreen = true` の検証）
 - [ ] プレイヤー消滅（被弾死亡）時に弾が残留しないこと
 - [ ] 折り返し地点に敵を置いたときのヒット回数（10章の既知の制約）
-- [ ] 速射Lv3＋増輪Lv3（空中20発以上）での描画・当たり判定の負荷
+- [ ] 速射Lv3＋増弾Lv3（空中20発以上）での描画・当たり判定の負荷
 
 ## 9. 既知の落とし穴（記入不要・確認用）
 

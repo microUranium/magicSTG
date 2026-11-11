@@ -40,7 +40,7 @@ func _ready() -> void:
 func _recalc_stats() -> void:
   super._recalc_stats()
   duration_sec = _proto.base_modifiers.get("camouflage_duration_sec", duration_sec)
-  duration_sec *= 1.0 + _sum_pct("camouflage_duration_pct")
+  duration_sec *= 1.0 + _sum_pct("blessing_duration_pct")  # 持続
 
 
 func on_equip(player) -> void:

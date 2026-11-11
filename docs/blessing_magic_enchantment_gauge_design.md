@@ -250,12 +250,15 @@ GenericGauge / GaugeManager ← HUD描画側
 | 緩衝 | `shield_damage_taken_pct` | シールドが受けるダメージ 軽減（端数は小数部分の確率で切り上げ。ダメージ1も確率で0） | -10% / -20% / -50% | 障壁 |
 | 増健 | `hp_add` | 最大HP +（加算） | +3 / +6 / +10 | 体力増強 |
 | 速治 | `regen_interval_sec_pct` | 回復間隔 短縮 | -20% / -50% / -80% | 再生 |
+| 危癒 | `regen_low_hp_interval_pct` | 体力が少ないほど回復間隔 短縮（残HP3割以下で最大、下限0.2秒） | -15% / -30% / -50% | 再生 |
+| 応急 | `regen_on_hit_chance_pct` | 被弾時（実ダメージ>0）に確率で回復量1回分を即時回復 | 5% / 20% / 50% | 再生 |
 | 必死 | `laststand_cdr_pct` | 低HP時の魔法CT短縮 | +15% / +30% / +50% | 背水 |
 | 無我 | `laststand_max_pct_pct`＋`proximity_max_pct_pct` | 最大ダメージ倍率 +% | +15% / +30% / +50% | 背水・近接 |
 | 凝集 | `proximity_range_add` | 最大ダメ到達距離 +px | +50 / +100 / +180 | 近接 |
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
 | 幸運 | `blessing_free_use_chance_pct` | 発動時に確率で使用回数を消費しない（残り0回では発動不可） | 10% / 30% / 70% | 不屈・打消・迷彩 |
+| 持続 | `blessing_duration_pct` | 加護の効果時間 +%（現状は迷彩の効果時間に適用） | +20% / +50% / +100% | 迷彩 |
 | 速射 | `cooldown_pct` | 連射CT 短縮 | -20% / -50% / -75% | 攻撃コア |
 | 増弾 | `bullet_count_add`＋`angle_spread_add` | 弾数 +／扇の角度 +° | +2・+20° / +4・+40° / +8・+60° | 攻撃コア |
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |

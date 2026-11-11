@@ -4,6 +4,8 @@ class_name BlessingBase
 signal blessing_updated
 signal free_use_triggered  # 幸運：使用回数を消費せずに発動した
 
+const LOW_HP_FLOOR_RATIO_DEFAULT := 0.3  # 体力の減り具合が最大になる残HP割合の既定値
+
 var _proto: BlessingItem
 var _paused: bool = false
 var _managed_timers: Array[Timer] = []  # Timerノードの管理
@@ -115,16 +117,45 @@ func _sum_add(key: String) -> float:
   return t
 
 
-func _roll_free_use() -> bool:
-  """エンチャント「幸運」：使用回数を消費しないなら true を返す"""
-  var chance := clampf(_sum_pct("blessing_free_use_chance_pct"), 0.0, 1.0)
+static func _roll_chance(chance: float) -> bool:
+  """確率 chance（0.0〜1.0）で true を返す"""
   if chance <= 0.0:
     return false
-  # randf() は 1.0 を含みうるため、確率 1.0 は乱数を使わず確定させる
-  if chance >= 1.0 or randf() < chance:
+  # randf() は 1.0 を含みうるため、確率 1.0 以上は乱数を使わず確定させる
+  return chance >= 1.0 or randf() < chance
+
+
+func _roll_free_use() -> bool:
+  """エンチャント「幸運」：使用回数を消費しないなら true を返す"""
+  if _roll_chance(_sum_pct("blessing_free_use_chance_pct")):
     free_use_triggered.emit()
     return true
   return false
+
+
+func _low_hp_floor_ratio() -> float:
+  """残HP割合がこれ以下で「体力の減り具合」が最大(1)になる"""
+  if _proto == null:
+    return LOW_HP_FLOOR_RATIO_DEFAULT
+  return _proto.base_modifiers.get("laststand_floor_ratio", LOW_HP_FLOOR_RATIO_DEFAULT)
+
+
+func _low_hp_factor_from(current_hp: int, max_hp: int) -> float:
+  """体力の減り具合（満タン=0、floor_ratio 以下=1、間は線形）"""
+  if max_hp <= 0:
+    return 0.0
+  var ratio := float(current_hp) / float(max_hp)
+  var denom := 1.0 - _low_hp_floor_ratio()
+  if denom <= 0.0:
+    return 1.0
+  return clampf((1.0 - ratio) / denom, 0.0, 1.0)
+
+
+func _low_hp_factor(player) -> float:
+  """プレイヤーの現在HPから体力の減り具合を求める"""
+  if not is_instance_valid(player) or player.hp_node == null:
+    return 0.0
+  return _low_hp_factor_from(player.hp_node.current_hp, player.hp_node.max_hp)
 
 
 func _ready() -> void:

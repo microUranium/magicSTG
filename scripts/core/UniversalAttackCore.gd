@@ -170,6 +170,8 @@ func _execute_composite_pattern() -> bool:
     var delay = attack_pattern.layer_delays[i] if i < attack_pattern.layer_delays.size() else 0.0
 
     if delay > 0:
+      if not is_inside_tree():
+        return false
       await get_tree().create_timer(delay, false).timeout
 
     if not await _execute_single_pattern(layer_pattern):
@@ -253,8 +255,9 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
       success = false
 
     if burst < pattern.rapid_fire_count - 1:
-      if is_inside_tree():
-        await get_tree().create_timer(pattern.rapid_fire_interval, false).timeout
+      if not is_inside_tree():
+        return false
+      await get_tree().create_timer(pattern.rapid_fire_interval, false).timeout
 
   return success
 
@@ -275,8 +278,9 @@ func _execute_burst_with_tracking(pattern: AttackPattern) -> bool:
       return false
 
     if i < burst_count - 1:
-      if is_inside_tree():
-        await get_tree().create_timer(burst_interval, false).timeout
+      if not is_inside_tree():
+        return false
+      await get_tree().create_timer(burst_interval, false).timeout
 
   return true
 
@@ -478,10 +482,12 @@ func _execute_barrier_bullets(pattern: AttackPattern) -> bool:
       success = false
 
     if pattern.rapid_fire_interval > 0:
+      if not is_inside_tree():
+        return false
       await get_tree().create_timer(pattern.rapid_fire_interval, false).timeout
 
   # プレイヤーモード時のみ: 回転中のゲージ表示 + CD遅延
-  if player_mode:
+  if player_mode and is_inside_tree():
     var orbit_duration = (
       pattern.barrier_movement_config.orbit_duration
       if pattern.barrier_movement_config
@@ -518,6 +524,8 @@ func _execute_spiral(pattern: AttackPattern) -> bool:
       success = false
 
     # 螺旋の時間差
+    if not is_inside_tree():
+      return false
     await get_tree().create_timer(0.05, false).timeout
 
   return success

@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
 [ext_resource type="Resource" uid="uid://b5ygisaornxxp" path="res://resources/data/enchantment_shield_hp_pct.tres" id="ae_shield_hp_pct"]
 [ext_resource type="Resource" uid="uid://csrdpench8j4t" path="res://resources/data/enchantment_shield_recover_delay_pct.tres" id="ae_shield_recover_delay_pct"]
-[ext_resource type="Resource" uid="uid://b0shbuffer01" path="res://resources/data/enchantment_shield_damage_taken_pct.tres" id="ae_shield_damage_taken_pct"]
+[ext_resource type="Resource" uid="uid://ccpby3h8wrcx3" path="res://resources/data/enchantment_shield_damage_taken_pct.tres" id="ae_shield_damage_taken_pct"]
 
 [resource]
 script = ExtResource("1_qkv0m")

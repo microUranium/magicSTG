@@ -57,6 +57,10 @@ func process_fatal_damage(player, _damage) -> bool:
 func _revive(player) -> void:
   # 復活後のHPは「最大HPの割合」で固定する（満タンから即死した場合は減る）
   var hp = player.hp_node
+  # 致命傷は追加の体力（庇護）ごと削り切った扱い。残したままだと下の take_damage が
+  # 追加の体力から先に減らしてしまい、通常の体力が復活時の割合まで下がらない。
+  if hp.get("extra_hp") != null and hp.extra_hp > 0:
+    hp.set_extra_hp(0)
   var revive_hp: int = maxi(1, int(round(hp.max_hp * revive_hp_ratio)))
   var diff: int = revive_hp - hp.current_hp
   if diff > 0:

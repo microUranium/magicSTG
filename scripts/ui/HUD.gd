@@ -20,6 +20,15 @@ func _ready():
   # 初期表示も更新
   _on_hp_changed(hp_node.current_hp, hp_node.max_hp)
 
+  # 追加の体力（庇護）
+  if hp_node.has_signal("extra_hp_changed"):
+    hp_node.connect("extra_hp_changed", Callable(self, "_on_extra_hp_changed"))
+    _on_extra_hp_changed(hp_node.extra_hp, hp_node.extra_hp_max)
+
 
 func _on_hp_changed(current_hp: int, max_hp: int):
   $HPBar.update_hp(current_hp, max_hp)
+
+
+func _on_extra_hp_changed(extra_hp: int, extra_hp_max: int):
+  $HPBar.update_extra(extra_hp, extra_hp_max)

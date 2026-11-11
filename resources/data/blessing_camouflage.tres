@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ccamo1flbls10" path="res://scenes/blessings/camouflage_blessing.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://dwd56hnxpgak4" path="res://assets/gfx/sprites/icon_blessing_camouflage.png" id="3"]
-[ext_resource type="Resource" path="res://resources/data/enchantment_blessing_free_use_chance_pct.tres" id="ae_blessing_free_use_chance_pct"]
+[ext_resource type="Resource" uid="uid://b0blessdur01" path="res://resources/data/enchantment_blessing_duration_pct.tres" id="ae_blessing_duration_pct"]
+[ext_resource type="Resource" uid="uid://8rk6juxqrd21" path="res://resources/data/enchantment_blessing_free_use_chance_pct.tres" id="ae_blessing_free_use_chance_pct"]
 [ext_resource type="Resource" uid="uid://b0usesadd004" path="res://resources/data/enchantment_blessing_uses_add.tres" id="ae_blessing_uses_add"]
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
-[ext_resource type="Resource" uid="uid://b0blessdur01" path="res://resources/data/enchantment_blessing_duration_pct.tres" id="ae_blessing_duration_pct"]
 
 [resource]
 script = ExtResource("1")

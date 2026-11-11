@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2qf1txmx5iug"]
+[gd_scene load_steps=11 format=3 uid="uid://b2qf1txmx5iug"]
 
 [ext_resource type="Script" uid="uid://djv35rytt1dm7" path="res://scripts/ui/HUD.gd" id="1_jn2t8"]
 [ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="2_6axep"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dxio5rlmk5q24" path="res://assets/gfx/sprites/HPBar_over.png" id="3_6axep"]
 [ext_resource type="Script" uid="uid://dsf860vniuhha" path="res://scripts/ui/HUDFlash.gd" id="3_basyl"]
 [ext_resource type="Texture2D" uid="uid://caxwqrvh1bh3n" path="res://assets/gfx/sprites/HPBar_progress.png" id="4_basyl"]
+[ext_resource type="Texture2D" uid="uid://bfva1eiqdoumq" path="res://assets/gfx/sprites/HPBar_progress_extra.png" id="5_extra"]
 [ext_resource type="FontFile" uid="uid://d2gbffi61660y" path="res://assets/fonts/prstartk.ttf" id="8_h022r"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6axep"]
@@ -48,6 +49,19 @@ texture_under = ExtResource("2_jggq7")
 texture_over = ExtResource("3_6axep")
 texture_progress = ExtResource("4_basyl")
 script = ExtResource("2_y0j1j")
+
+[node name="ExtraBar" type="TextureProgressBar" parent="HPBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+nine_patch_stretch = true
+texture_over = ExtResource("3_6axep")
+texture_progress = ExtResource("5_extra")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 909.0

@@ -85,7 +85,9 @@ func _is_fatal(player: Node2D, damage: int) -> bool:
   var hp = player.get("hp_node")
   if hp == null:
     return false
-  return damage >= hp.current_hp
+  # 追加の体力（庇護）が残っていれば、それを使い切るまでは致命傷にならない
+  var extra = hp.get("extra_hp")
+  return damage >= hp.current_hp + (int(extra) if extra != null else 0)
 
 
 # 与ダメージ（自弾→敵）に対する介入 -------------------------------

@@ -101,6 +101,9 @@ func _do_fire() -> bool:
   # 警告表示（warning_configが存在する場合のみ）
   if !attack_pattern.warning_configs.is_empty():
     _base_dir_cached = await _show_attack_warning()
+    # 警告の待ち中にツリーから外れた場合は撃たない（ビームなど以降の処理が get_tree() を使う）
+    if not is_inside_tree():
+      return false
 
   # 実行コンテキストを作成
   _current_execution = ExecutionContext.new(attack_pattern)
@@ -173,6 +176,9 @@ func _execute_composite_pattern() -> bool:
       if not is_inside_tree():
         return false
       await get_tree().create_timer(delay, false).timeout
+      # ツリーから外れるのは待っている間なので、待ちの後にも確認する
+      if not is_inside_tree():
+        return false
 
     if not await _execute_single_pattern(layer_pattern):
       success = false

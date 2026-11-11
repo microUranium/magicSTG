@@ -84,7 +84,8 @@ func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPat
 # Public API
 #---------------------------------------------------------------------
 func trigger() -> void:
-  if not can_fire():
+  # ツリー外（シーン切り替え直後など）では get_tree() が null なので発射しない
+  if not is_inside_tree() or not can_fire():
     return
   _firing = true
   var success = await _do_fire()
@@ -101,7 +102,7 @@ func trigger() -> void:
 
 func force_fire() -> void:
   """強制発射（クールダウン無視）"""
-  if _paused:
+  if _paused or not is_inside_tree():
     return
 
   _firing = true

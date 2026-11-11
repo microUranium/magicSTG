@@ -84,11 +84,16 @@ func _on_pattern_changed_impl(old_pattern: AttackPattern, new_pattern: AttackPat
 # Public API
 #---------------------------------------------------------------------
 func trigger() -> void:
-  if not can_fire():
+  # ツリー外（シーン切り替え直後など）では get_tree() が null なので発射しない
+  if not is_inside_tree() or not can_fire():
     return
   _firing = true
   var success = await _do_fire()
   _firing = false
+
+  # 発射中にツリーから外れた（シーン切り替え直後など）場合は以降の処理をしない
+  if not is_inside_tree():
+    return
 
   if success:
     emit_signal("core_fired")
@@ -97,12 +102,15 @@ func trigger() -> void:
 
 func force_fire() -> void:
   """強制発射（クールダウン無視）"""
-  if _paused:
+  if _paused or not is_inside_tree():
     return
 
   _firing = true
   var success = await _do_fire()
   _firing = false
+
+  if not is_inside_tree():
+    return
 
   if success:
     emit_signal("core_fired")
@@ -127,7 +135,8 @@ func set_owner_actor(new_owner: Node) -> void:
 #---------------------------------------------------------------------
 func _do_fire() -> bool:
   # ProjectileCore / BeamCore などが弾やビームを生成する処理を書く
-  await get_tree().process_frame  # 最低限のawait
+  if is_inside_tree():
+    await get_tree().process_frame  # 最低限のawait
   _last_fire_success = false
   push_warning("AttackCoreBase: _do_fire() is not implemented in child class.")
   return false
@@ -225,6 +234,10 @@ func _update_attack_pattern_stats() -> void:
 
 
 func _start_cooldown():
+  # シーン切り替え時は古いシーンがツリーから外れてからフレーム末に解放されるまで
+  # get_tree() が null になる。その間に呼ばれてもタイマーは作れないので何もしない。
+  if not is_inside_tree():
+    return
   _cooling = true
   _cool_remaining = 0.0  # 退避済みの残り時間は新しいクールダウンで無効化
 
@@ -254,6 +267,8 @@ func _effective_cooldown() -> float:
 
 
 func _on_cooldown_finished():
+  if not is_inside_tree():
+    return
   # ポーズ中またはポーズフラグが立っている場合はスキップ
   if get_tree().paused or _paused:
     # ポーズ解除後に再試行
@@ -278,7 +293,7 @@ func set_paused(state: bool) -> void:
       _cool_remaining = _cool_timer.time_left
       _cool_timer.timeout.disconnect(_on_cooldown_finished)
       _cool_timer = null
-  else:
+  elif is_inside_tree():
     if _cooling and _cool_remaining > 0.0:
       # クールダウン途中でポーズされた場合は残り時間から再開（周期を保持）
       _cool_timer = get_tree().create_timer(_cool_remaining, false)
@@ -296,6 +311,9 @@ func _find_bullet_parent() -> Node:
   var bullet_parent = TargetService.get_bullet_parent()
   if bullet_parent:
     return bullet_parent
+
+  if not is_inside_tree():
+    return null
 
   # フォールバック: 実行シーンがあればそこへ
   if get_tree().current_scene:

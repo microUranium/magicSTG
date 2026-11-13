@@ -6,12 +6,13 @@
 #   4. 下向き（後方発射）でも手前の敵で止まる
 #   5. 当たり判定の幅は 4px
 #   6. 加護の与ダメージ補正が乗る
-#   7. ファクトリー：位置のずらしなし、持続時間はアイテムデータ、貫通エンチャント
-#   8. 付与できるエンチャント（速射・貫通）
+#   7. ファクトリー：位置のずらしなし、持続時間はデータ＋持続エンチャント、貫通エンチャント
+#   8. 付与できるエンチャント（速射・貫通・持続）
 extends GdUnitTestSuite
 
 const PLAYER_BEAM_SCENE := "res://scenes/attackCores/player/beam.tscn"
 const BEAM_ITEM_PATH := "res://resources/data/attackcore_normal_beam.tres"
+const DURATION_PATH := "res://resources/data/enchantment_blessing_duration_pct.tres"
 const PENETRATION_PATH := "res://resources/data/enchantment_penetration_add.tres"
 const COOLDOWN_PATH := "res://resources/data/enchantment_cooldown_pct.tres"
 
@@ -203,6 +204,24 @@ func test_factory_beam_duration_from_data() -> void:
   assert_float(_make_pattern().beam_duration).is_equal_approx(2.0, 0.0001)
 
 
+func test_duration_enchantment_extends_beam() -> void:
+  var expected := {1: 2.4, 2: 3.0, 3: 4.0}
+  for level in expected:
+    var duration := _make_pattern({DURATION_PATH: level}).beam_duration
+    var label := "Lv%d" % level
+    assert_float(duration).override_failure_message(label).is_equal_approx(expected[level], 0.0001)
+
+
+func test_beam_duration_update_is_idempotent() -> void:
+  var inst := ItemInstance.new(load(BEAM_ITEM_PATH))
+  inst.add_enchantment(load(DURATION_PATH), 3)
+  var pattern := PlayerAttackPatternFactory.create_pattern_from_item_instance(inst)
+  PlayerAttackPatternFactory.update_pattern_from_enchantments(pattern, inst)
+  PlayerAttackPatternFactory.update_pattern_from_enchantments(pattern, inst)
+
+  assert_float(pattern.beam_duration).is_equal_approx(4.0, 0.0001)
+
+
 func test_penetration_enchantment_sets_beam_penetration() -> void:
   var expected := {1: 1, 2: 2, 3: 4}
   for level in expected:
@@ -212,5 +231,10 @@ func test_penetration_enchantment_sets_beam_penetration() -> void:
 
 func test_beam_allowed_enchantments() -> void:
   var item: ItemBase = load(BEAM_ITEM_PATH)
-  for path in [COOLDOWN_PATH, PENETRATION_PATH]:
+  for path in [COOLDOWN_PATH, PENETRATION_PATH, DURATION_PATH]:
     assert_bool(item.allows_enchantment(load(path))).override_failure_message(path).is_true()
+
+
+func test_duration_enchantment_description() -> void:
+  var enchant: Enchantment = load(DURATION_PATH)
+  assert_str(enchant.description).is_equal("効果時間が伸びます。")

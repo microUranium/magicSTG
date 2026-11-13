@@ -125,7 +125,7 @@ func _assert_allowed_only(path: String, allowed_item_ids: Array) -> void:
 func test_duration_enchantment_data() -> void:
   var enchant: Enchantment = load(DURATION_PATH)
   assert_str(enchant.display_name).is_equal("持続")
-  assert_str(enchant.description).is_equal("加護の効果時間が伸びます。")
+  assert_str(enchant.description).is_equal("効果時間が伸びます。")
   _assert_tiers(DURATION_PATH, "blessing_duration_pct", {1: 0.2, 2: 0.5, 3: 1.0})
   _assert_allowed_only(DURATION_PATH, ["blessing_camouflage"])
 

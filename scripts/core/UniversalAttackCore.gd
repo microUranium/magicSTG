@@ -12,6 +12,8 @@ class_name UniversalAttackCore
 var _pattern_executors: Dictionary = {}
 var _current_execution: ExecutionContext = null
 var _beam_duration_timer: SceneTreeTimer = null  # ビーム持続時間タイマー
+var _active_beams: Array[Node] = []  # 発射中のビーム（後方射撃の切り替えで向きを変えるため）
+var _active_beam_pattern: AttackPattern = null  # 発射中のビームを撃ったパターン
 var _barrier_duration_timer: SceneTreeTimer = null  # バリア回転時間タイマー
 var _spawned_projectiles: Array[Node] = []  # 生成した弾丸/ビームの追跡
 var _rear_firing_mode: bool = false  # 後方発射モード
@@ -559,7 +561,8 @@ func _execute_beam(pattern: AttackPattern) -> bool:
   )
 
   # 複数ビームの生成
-  var created_beams: Array[Node] = []
+  _active_beams.clear()
+  _active_beam_pattern = pattern
   var target_pos = _get_player_position()
 
   for i in range(beam_count):
@@ -603,7 +606,7 @@ func _execute_beam(pattern: AttackPattern) -> bool:
     # 生成したビームを追跡リストに追加
     _spawned_projectiles.append(beam_instance)
     beam_instance.tree_exiting.connect(_on_projectile_destroyed.bind(beam_instance))
-    created_beams.append(beam_instance)
+    _active_beams.append(beam_instance)
 
   # ビーム持続時間タイマーを設定（ゲージ表示用）
   _beam_duration_timer = get_tree().create_timer(modified_duration, false)
@@ -614,9 +617,11 @@ func _execute_beam(pattern: AttackPattern) -> bool:
 
   # 一定時間後にビームを削除
   await _beam_duration_timer.timeout
-  for beam in created_beams:
+  for beam in _active_beams:
     if is_instance_valid(beam):
       beam.queue_free()
+  _active_beams.clear()
+  _active_beam_pattern = null
 
   _beam_duration_timer = null
   return true
@@ -1075,9 +1080,24 @@ func cleanup_on_death() -> void:
     if is_instance_valid(projectile):
       projectile.queue_free()
   _spawned_projectiles.clear()
+  _active_beams.clear()
+  _active_beam_pattern = null
   _beam_duration_timer = null
 
 
 func set_rear_firing_mode(enabled: bool) -> void:
   """後方発射モードの設定"""
   _rear_firing_mode = enabled
+  _reaim_active_beams()
+
+
+func _reaim_active_beams() -> void:
+  """発射中のビームの向きを、撃つときと同じ計算で求め直す（後方射撃の切り替え用）。
+  ビームは作り直さないので、持続時間の残りはそのまま続く。"""
+  if _active_beam_pattern == null or not is_instance_valid(_owner_actor):
+    return
+  var count := _active_beams.size()
+  for i in count:
+    var beam = _active_beams[i]
+    if is_instance_valid(beam) and beam.has_method("set_beam_direction"):
+      beam.set_beam_direction(_calculate_multi_beam_direction(_active_beam_pattern, i, count))

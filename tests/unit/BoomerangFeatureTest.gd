@@ -303,7 +303,7 @@ func test_resource_file_loads() -> void:
 
   assert_object(core).is_not_null()
   assert_str(str(core.id)).is_equal("attackcore_boomerang")
-  assert_float(core.damage_base).is_equal_approx(3.0, 0.001)
+  assert_float(core.damage_base).is_equal_approx(5.0, 0.001)
   assert_float(core.cooldown_sec_base).is_equal_approx(1.0, 0.001)
   assert_float(core.base_modifiers.get("bullet_speed", 0.0)).is_equal_approx(INITIAL_SPEED, 0.001)
 

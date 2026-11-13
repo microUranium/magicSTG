@@ -238,3 +238,9 @@ func test_beam_allowed_enchantments() -> void:
 func test_duration_enchantment_description() -> void:
   var enchant: Enchantment = load(DURATION_PATH)
   assert_str(enchant.description).is_equal("効果時間が伸びます。")
+
+
+func test_player_beam_deals_2_damage_15_times_per_second() -> void:
+  var beam: UniversalBeam = auto_free(load(PLAYER_BEAM_SCENE).instantiate())
+  assert_float(beam.damage_tick_sec).is_equal_approx(1.0 / 15.0, 0.0001)
+  assert_int(_make_pattern().damage).is_equal(2)

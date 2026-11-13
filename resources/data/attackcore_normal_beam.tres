@@ -14,7 +14,7 @@ script = ExtResource("2_pye4m")
 pattern_type = 1
 core_scene = ExtResource("1_ukr3k")
 projectile_scene = ExtResource("1_74b3g")
-damage_base = 1.0
+damage_base = 2.0
 cooldown_sec_base = 2.0
 base_modifiers = {
 "beam_duration_sec": 2.0

@@ -36,7 +36,7 @@ script = ExtResource("2_pattern")
 pattern_type = 0
 bullet_scene = ExtResource("1_bullet")
 target_group = "enemies"
-damage = 1
+damage = 2
 bullet_range = 0.0
 bullet_lifetime = 0.0
 bullet_lifetime_max = 0.0
@@ -89,7 +89,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 script = ExtResource("1_ypo2y")
 pattern_type = 0
 core_scene = ExtResource("1_k7kja")
-damage_base = 1.0
+damage_base = 2.0
 cooldown_sec_base = 0.2
 base_modifiers = {
 "bullet_speed": 1000.0

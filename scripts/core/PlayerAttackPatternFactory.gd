@@ -59,8 +59,10 @@ static func _determine_pattern_type(
   if attack_core_item.pattern_type == AttackCoreItem.PatternType.BEAM:
     pattern.pattern_type = AttackPattern.PatternType.BEAM
     pattern.beam_scene = attack_core_item.projectile_scene
-    pattern.beam_duration = 2.0
+    pattern.beam_duration = _base_beam_duration(attack_core_item)
     pattern.continuous_damage = true
+    # 既定値 (0, 50) のままだとビームが精霊から下にずれるため、プレイヤーのビームは精霊の位置から出す
+    pattern.beam_offset = Vector2.ZERO
   # ProjectileCoreや他の場合
   else:
     pattern.pattern_type = AttackPattern.PatternType.SINGLE_SHOT
@@ -102,6 +104,13 @@ static func update_pattern_from_enchantments(
   pattern.penetration_count = int(
     _apply_enchantment_modifiers(item_inst, pattern.penetration_count, "penetration")
   )
+
+  # ビームの持続時間の更新（beam_duration_pct / beam_duration_add を持つエンチャントで伸びる）
+  # 常にアイテムデータの基本値を基準にして、再計算しても加算が重ならないようにする
+  if pattern.pattern_type == AttackPattern.PatternType.BEAM:
+    pattern.beam_duration = _apply_enchantment_modifiers(
+      item_inst, _base_beam_duration(item_inst.prototype), "beam_duration"
+    )
 
   # 弾数の更新
   var base_bullet_count = pattern.bullet_count
@@ -151,3 +160,8 @@ static func _sum_enchant_modifier(item_inst: ItemInstance, key: String) -> float
     var modifiers: Dictionary = enc.get_modifiers(item_inst.enchantments[enc])
     total += modifiers.get(key, 0.0)
   return total
+
+
+static func _base_beam_duration(attack_core_item: AttackCoreItem) -> float:
+  """ビームの基本持続時間（アイテムデータの beam_duration_sec。未設定なら 2.0 秒）"""
+  return float(attack_core_item.base_modifiers.get("beam_duration_sec", 2.0))

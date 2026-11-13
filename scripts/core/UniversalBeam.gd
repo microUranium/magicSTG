@@ -2,12 +2,22 @@
 extends Area2D
 class_name UniversalBeam
 
+## 当たり方:
+##   ビームの中心に沿って幅 4px の帯（ShapeCast2D）を手前から調べ、target_group の相手を
+##   手前から順に「貫通数 + 1」体まで集める。相手以外（弾・発射元の敵など）は読み飛ばす。
+##   集め終えたら最後の相手のところでビームが止まり、足りなければ最大長まで伸びる。
+##   集めた相手全員に damage_tick_sec ごとにダメージを与える（自弾なら加護の与ダメージ補正つき）。
+
+const MAX_CAST_SKIPS := 32  # 相手を探すときに読み飛ばす相手以外（弾など）の上限
+
 # === 基本設定 ===
 @export var damage: int = 1
 @export var desired_length: float = 1000.0
 @export var target_group: String = "enemies"
 @export var damage_tick_sec: float = 1.0 / 30.0
 @export var offset: Vector2 = Vector2.ZERO  # ビームのオフセット位置
+## 貫通数。0 = 最初の相手1体のみ、N = 手前から N+1 体、-1 = 無制限
+@export var penetration_count: int = 0
 
 # === 視覚・方向設定 ===
 @export var beam_visual_config: BeamVisualConfig
@@ -17,12 +27,15 @@ class_name UniversalBeam
 # === 内部状態 ===
 var owner_node: Node2D
 var _current_length: float = 0.0
-var _colliding_targets: Array[Node] = []  # 現在コリジョン中のターゲット
+var _hits: Array[Node] = []  # ビームが現在捉えている相手（手前から順）
+var _hit_end_length: float = 0.0  # 相手を集め終えた位置までの長さ（集めきれなければ最大長）
+var _anim_time: float = 0.0  # シェーダーのコマ送り用の経過時間（ポーズ中は進まない）
+var _anim_material: ShaderMaterial = null  # このビーム専用に複製したマテリアル
 
 # === コンポーネント ===
 @onready var ninepatch: NinePatchRect = $NinePatchRect
 @onready var shape: RectangleShape2D = $CollisionShape2D.shape
-@onready var raycast: RayCast2D = $RayCast2D
+@onready var shapecast: ShapeCast2D = $ShapeCast2D
 @onready var dmg_timer: Timer = $DamageTimer
 @onready var particles: GPUParticles2D = $GPUParticles2D
 @onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
@@ -31,11 +44,13 @@ var _colliding_targets: Array[Node] = []  # 現在コリジョン中のターゲ
 
 
 func _ready():
-  _setup_raycast()
+  _setup_shapecast()
   _setup_damage_timer()
   _apply_visual_config()
+  _sync_cast_width()
+  _setup_anim_material()
   _initialize_owner()
-  _setup_collision_signals()
+  _apply_direction()
 
 
 func initialize(
@@ -46,7 +61,7 @@ func initialize(
   self.damage = _damage
   self.beam_direction = direction.normalized()
   self.offset = offset
-  _setup_raycast()
+  _apply_direction()
 
 
 func set_target_group(group: String) -> void:
@@ -57,10 +72,7 @@ func set_target_group(group: String) -> void:
 func set_beam_direction(direction: Vector2) -> void:
   """ビーム方向の設定"""
   beam_direction = direction.normalized()
-  if raycast:
-    raycast.target_position = beam_direction * desired_length
-  # ビーム全体の回転
-  rotation = beam_direction.angle() + PI / 2
+  _apply_direction()
 
 
 func apply_visual_config(config: BeamVisualConfig = null) -> void:
@@ -68,15 +80,27 @@ func apply_visual_config(config: BeamVisualConfig = null) -> void:
   if config:
     beam_visual_config = config
   _apply_visual_config()
+  _sync_cast_width()
+  _setup_anim_material()
 
 
-func _setup_raycast():
-  """RayCast設定"""
-  if not raycast:
+func _apply_direction() -> void:
+  """ビーム全体を beam_direction へ回転させる。
+  子ノード（帯の判定・見た目）はビームから見て常に「上」（-Y）へ伸ばし、向きは回転だけで表す。
+  （判定の向きにも方向ベクトルを掛けると回転が二重にかかり、真上以外で判定がずれる）"""
+  if beam_direction != Vector2.ZERO:
+    rotation = beam_direction.angle() + PI / 2
+  if shapecast:
+    shapecast.target_position = Vector2(0, -desired_length)
+
+
+func _setup_shapecast():
+  """帯の判定の設定。毎フレーム _update_hits() から手動で更新する"""
+  if not shapecast:
     return
-  raycast.target_position = beam_direction * desired_length
-  raycast.enabled = true
-  raycast.exclude_parent = true
+  shapecast.target_position = Vector2(0, -desired_length)
+  shapecast.enabled = false
+  shapecast.exclude_parent = true
 
 
 func _setup_damage_timer():
@@ -86,12 +110,6 @@ func _setup_damage_timer():
   dmg_timer.wait_time = damage_tick_sec
   dmg_timer.timeout.connect(_on_damage_tick)
   dmg_timer.start()
-
-
-func _setup_collision_signals():
-  """コリジョン信号の設定"""
-  area_entered.connect(_on_area_entered)
-  area_exited.connect(_on_area_exited)
 
 
 func _initialize_owner():
@@ -134,9 +152,33 @@ func _apply_visual_config():
     audio_player.play()
 
 
-func _process(_delta: float) -> void:
+func _setup_anim_material() -> void:
+  """シェーダーのコマ送りをビーム側の経過時間で進めるため、マテリアルをこのビーム専用に複製する。
+  シーンや見た目設定のマテリアルは共有されているので、複製しないと他のビームと時間を取り合う。"""
+  if not ninepatch or not (ninepatch.material is ShaderMaterial):
+    return
+  if ninepatch.material == _anim_material:
+    return
+  _anim_material = ninepatch.material.duplicate() as ShaderMaterial
+  ninepatch.material = _anim_material
+  _anim_material.set_shader_parameter("anim_time", _anim_time)
+
+
+func _process(delta: float) -> void:
+  _advance_animation(delta)
   _update_position()
+  if is_queued_for_deletion():
+    return
+  _update_hits()
   _update_length()
+
+
+func _advance_animation(delta: float) -> void:
+  """コマ送りの時間を進める。ポーズ中は _process が止まるのでアニメーションも止まる
+  （シェーダーの TIME はポーズ中も進むため使わない）"""
+  _anim_time += delta
+  if _anim_material:
+    _anim_material.set_shader_parameter("anim_time", _anim_time)
 
 
 func _update_position():
@@ -150,16 +192,76 @@ func _update_position():
     global_position = owner_node.global_position + offset
 
 
+func _required_hits() -> int:
+  return penetration_count + 1 if penetration_count >= 0 else 1 << 30
+
+
+## 帯の判定で、手前から target_group の相手を「貫通数 + 1」体まで集める。
+## ShapeCast2D は最初に当たった位置で重なっているものしか返さないため、
+## 当たったものを除外しては調べ直すことを繰り返す。
+## 帯（幅 4px）の進行方向の厚みはシーン側で 8px にしている。当たった物の一覧は
+## 「当たり位置を少し過ぎた位置（最大 ≒ 4px 先）」で集め直されるため、厚みが薄いと
+## 小さな相手を通り過ぎて何も重なっていない判定になる。
+func _update_hits() -> void:
+  _hits.clear()
+  _hit_end_length = desired_length
+  if not shapecast:
+    return
+
+  var required := _required_hits()
+  shapecast.clear_exceptions()
+  var skips := 0
+  while skips <= MAX_CAST_SKIPS:
+    shapecast.force_shapecast_update()
+    if not shapecast.is_colliding():
+      break
+
+    var excluded_any := false
+    for i in shapecast.get_collision_count():
+      var col = shapecast.get_collider(i)
+      if col == null:
+        continue
+      if col is Node and col.is_in_group(target_group) and col not in _hits:
+        _hits.append(col)
+        if _hits.size() >= required:
+          _hit_end_length = _axis_length_to(shapecast.get_collision_point(i))
+          shapecast.clear_exceptions()
+          return
+      else:
+        skips += 1
+      if col is CollisionObject2D:
+        shapecast.add_exception(col)
+        excluded_any = true
+
+    if not excluded_any:
+      break  # 除外できない相手しかいない場合は無限ループを避けて打ち切る
+  shapecast.clear_exceptions()
+
+
+func _axis_length_to(point: Vector2) -> float:
+  """ビームの根元から、当たった点までのビーム方向の長さ（ビームのローカル座標での長さ）。
+  ShapeCast2D の当たり位置の割合（get_closest_collision_*_fraction）は二分探索の刻み
+  （最大長の 1/256 ≒ 4px）でしか求まらないため、相手表面の当たった点から測る。
+  見た目の設定でビーム全体にスケールがかかっている場合（フグ・ピラニアは 2 倍）、
+  画面上の距離をスケールで割ってからローカルの長さ（見た目・判定の長さ）にする。"""
+  var axis := Vector2.UP.rotated(global_rotation)
+  var screen_length := (point - global_position).dot(axis)
+  var scale_y := absf(global_scale.y)
+  var local_length := screen_length / scale_y if scale_y > 0.0 else screen_length
+  return clampf(local_length, 0.0, desired_length)
+
+
+func _sync_cast_width() -> void:
+  """判定の帯の幅を、ビームのスケールに関係なく画面上で 4px（シーンの設定どおり）に保つ。
+  横方向だけスケールを打ち消す。縦方向は打ち消さないので、届く距離は見た目と同じまま。"""
+  if not shapecast:
+    return
+  shapecast.scale = Vector2(1.0 / scale.x if scale.x != 0.0 else 1.0, 1.0)
+
+
 func _update_length():
   """長さ更新"""
-  var length := desired_length
-
-  # RayCastは視覚的な長さ調整のみに使用（障害物との衝突検出）
-  if raycast and raycast.is_colliding():
-    var col := raycast.get_collider()
-    # 障害物（地形など）との衝突で長さを制限
-    if col and col.is_in_group(target_group):
-      length = global_position.distance_to(raycast.get_collision_point())
+  var length := _hit_end_length if _hits.size() >= _required_hits() else desired_length
 
   if length != _current_length:
     _apply_length(length)
@@ -169,35 +271,40 @@ func _update_length():
 func _apply_length(length: float) -> void:
   """長さ適用"""
   if ninepatch:
-    # 方向に応じた長さ適用
     ninepatch.size.y = length
     ninepatch.position = Vector2(-ninepatch.size.x * 0.5, -length)
 
-  # コリジョン設定
+  # コリジョン設定（ダメージ判定には使わないが、見た目の長さに合わせておく）
   if shape:
     shape.extents.y = length * 0.5
     var collision_node = $CollisionShape2D
     if collision_node:
       collision_node.position = Vector2(0, -length * 0.5)
 
-  # エフェクト位置更新
+  # エフェクト位置更新（子ノードはビームから見て常に上へ伸びる）
   if impact_effect_point:
-    impact_effect_point.position = beam_direction * (-length)
+    impact_effect_point.position = Vector2(0, -length)
 
 
 func _on_damage_tick() -> void:
-  """ダメージ処理（コリジョン判定）"""
+  """ダメージ処理（捉えている相手全員）"""
   _play_beam_sound()
 
-  # コリジョン中のすべてのターゲットにダメージ
-  for target in _colliding_targets:
+  for target in _hits:
     if is_instance_valid(target) and target.is_in_group(target_group):
       if target.has_method("take_damage"):
-        target.take_damage(damage)
+        target.take_damage(_resolve_damage(target))
         _spawn_impact_effect_at_target(target)
 
-  # 無効なターゲットを削除
-  _colliding_targets = _colliding_targets.filter(func(target): return is_instance_valid(target))
+
+func _resolve_damage(target: Node) -> int:
+  """弾（BulletBase._resolve_damage）と同じく、自弾ならプレイヤーの加護の与ダメージ補正を乗せる"""
+  if target_group != "enemies":
+    return damage
+  var player = TargetService.get_player()
+  if is_instance_valid(player) and "blessing_container" in player and player.blessing_container:
+    return player.blessing_container.process_outgoing_damage(target, damage)
+  return damage
 
 
 func _play_beam_sound():
@@ -233,24 +340,12 @@ func _spawn_impact_effect():
   effect.global_position = impact_effect_point.global_position
 
 
-func _on_area_entered(area: Area2D) -> void:
-  """Area2Dとの衝突開始"""
-  if area.is_in_group(target_group) and area not in _colliding_targets:
-    _colliding_targets.append(area)
-
-
-func _on_area_exited(area: Area2D) -> void:
-  """Area2Dとの衝突終了"""
-  if area in _colliding_targets:
-    _colliding_targets.erase(area)
-
-
 func cleanup():
   """クリーンアップ処理"""
   if beam_visual_config and beam_visual_config.end_sound and audio_player:
     audio_player.stream = beam_visual_config.end_sound
     audio_player.play()
 
-  _colliding_targets.clear()
+  _hits.clear()
 
   queue_free()

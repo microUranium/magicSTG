@@ -200,6 +200,7 @@ func _get_available_enchant_keys() -> Array[String]:
     "penetration",
     "bullet_count",
     "spread_bullet_count",
+    "beam_duration",
     "homing_correction_px"
   ]
 

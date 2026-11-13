@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpvyvr12to1f1"]
+[gd_scene load_steps=7 format=3 uid="uid://cpvyvr12to1f1"]
 
 [ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="1_5mxah"]
-[ext_resource type="Script" uid="uid://clftwdfuotu4j" path="res://scripts/player/Beam.gd" id="1_jsy6y"]
+[ext_resource type="Script" uid="uid://nd8f8s26247f" path="res://scripts/core/UniversalBeam.gd" id="1_jsy6y"]
 [ext_resource type="Texture2D" uid="uid://b48s78plwbe1q" path="res://assets/gfx/sprites/beam_sprite.png" id="1_wp73g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsy6y"]
@@ -12,11 +12,16 @@ shader_parameter/fps = 10.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5mxah"]
 size = Vector2(4, 40)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cast"]
+size = Vector2(4, 8)
+
 [node name="Beam" type="Area2D"]
 script = ExtResource("1_jsy6y")
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(0, -800)
+[node name="ShapeCast2D" type="ShapeCast2D" parent="."]
+enabled = false
+shape = SubResource("RectangleShape2D_cast")
+target_position = Vector2(0, -1000)
 collision_mask = 2
 collide_with_areas = true
 
@@ -38,3 +43,13 @@ shape = SubResource("RectangleShape2D_5mxah")
 
 [node name="DamageTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+visible = false
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="MuzzleFlashPoint" type="Node2D" parent="."]
+
+[node name="ImpactEffectPoint" type="Node2D" parent="."]
+position = Vector2(0, -1000)

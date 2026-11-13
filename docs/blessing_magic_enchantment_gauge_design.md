@@ -259,7 +259,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
 | 幸運 | `blessing_free_use_chance_pct` | 発動時に確率で使用回数を消費しない（残り0回では発動不可） | 10% / 30% / 70% | 不屈・打消・迷彩 |
-| 持続 | `blessing_duration_pct` | 加護の効果時間 +%（現状は迷彩の効果時間に適用） | +20% / +50% / +100% | 迷彩 |
+| 持続 | `blessing_duration_pct`＋`beam_duration_pct` | 効果時間 +%（迷彩の効果時間、ビームの照射時間） | +20% / +50% / +100% | 迷彩・ビーム |
 | 速射 | `cooldown_pct` | 連射CT 短縮 | -20% / -50% / -75% | 攻撃コア |
 | 増弾 | `bullet_count_add`＋`angle_spread_add` | 弾数 +／扇の角度 +° | +2・+20° / +4・+40° / +8・+60° | 攻撃コア |
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
@@ -284,7 +284,7 @@ GenericGauge / GaugeManager ← HUD描画側
 
 - `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
 - 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
-- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・ビーム・全加護）は、その数までしか付与されない。
+- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・全加護）は、その数までしか付与されない。
 
 #### 攻撃コア
 
@@ -299,7 +299,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
 | マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
 | ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増弾：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
-| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増弾は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
+| ビーム | `attackcore_normal_beam` | ◯ | – | ◯ | – | – | – | 持続：◯（`beam_duration_pct` で照射時間が伸びる）／貫通：手前から「貫通数 + 1」体に当たる／増弾：`bullet_count` がビーム本数として扱われるが、挙動未確認のため除外／残留・炸裂・追尾：弾パラメータが効かない |
 
 - 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
 - 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。

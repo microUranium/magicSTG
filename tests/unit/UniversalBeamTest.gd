@@ -56,7 +56,7 @@ func _create_mock_beam() -> UniversalBeam:
   var shapecast = ShapeCast2D.new()
   shapecast.name = "ShapeCast2D"
   var cast_shape := RectangleShape2D.new()
-  cast_shape.size = Vector2(4, 1)
+  cast_shape.size = Vector2(4, 8)
   shapecast.shape = cast_shape
   mock_beam.add_child(shapecast)
 

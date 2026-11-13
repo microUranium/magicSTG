@@ -197,6 +197,9 @@ func _required_hits() -> int:
 ## 帯の判定で、手前から target_group の相手を「貫通数 + 1」体まで集める。
 ## ShapeCast2D は最初に当たった位置で重なっているものしか返さないため、
 ## 当たったものを除外しては調べ直すことを繰り返す。
+## 帯（幅 4px）の進行方向の厚みはシーン側で 8px にしている。当たった物の一覧は
+## 「当たり位置を少し過ぎた位置（最大 ≒ 4px 先）」で集め直されるため、厚みが薄いと
+## 小さな相手を通り過ぎて何も重なっていない判定になる。
 func _update_hits() -> void:
   _hits.clear()
   _hit_end_length = desired_length
@@ -211,7 +214,6 @@ func _update_hits() -> void:
     if not shapecast.is_colliding():
       break
 
-    var hit_length := _cast_hit_length()
     var excluded_any := false
     for i in shapecast.get_collision_count():
       var col = shapecast.get_collider(i)
@@ -220,7 +222,7 @@ func _update_hits() -> void:
       if col is Node and col.is_in_group(target_group) and col not in _hits:
         _hits.append(col)
         if _hits.size() >= required:
-          _hit_end_length = hit_length
+          _hit_end_length = _axis_length_to(shapecast.get_collision_point(i))
           shapecast.clear_exceptions()
           return
       else:
@@ -234,12 +236,12 @@ func _update_hits() -> void:
   shapecast.clear_exceptions()
 
 
-func _cast_hit_length() -> float:
-  """直近の判定で最初に当たった位置までの長さ（帯の前端が触れた位置）"""
-  var length := shapecast.get_closest_collision_unsafe_fraction() * desired_length
-  if shapecast.shape is RectangleShape2D:
-    length += (shapecast.shape as RectangleShape2D).size.y * 0.5
-  return minf(length, desired_length)
+func _axis_length_to(point: Vector2) -> float:
+  """ビームの根元から、当たった点までのビーム方向の長さ。
+  ShapeCast2D の当たり位置の割合（get_closest_collision_*_fraction）は二分探索の刻み
+  （最大長の 1/256 ≒ 4px）でしか求まらないため、相手表面の当たった点から測る。"""
+  var axis := Vector2.UP.rotated(global_rotation)
+  return clampf((point - global_position).dot(axis), 0.0, desired_length)
 
 
 func _update_length():

@@ -592,6 +592,10 @@ func _execute_beam(pattern: AttackPattern) -> bool:
     if beam_instance.has_method("set_target_group"):
       beam_instance.set_target_group(target_group)
 
+    # 貫通数（弾と同じくパターンの値を渡す。貫通エンチャントの加算済み）
+    if "penetration_count" in beam_instance:
+      beam_instance.penetration_count = pattern.penetration_count
+
     # ビーム視覚設定の適用
     if pattern.beam_visual_config and beam_instance.has_method("apply_visual_config"):
       beam_instance.apply_visual_config(pattern.beam_visual_config)

@@ -11,6 +11,7 @@ class StubBeam:
   var desired_length: float
   var owner_path: NodePath
   var enemy_group: String
+  var penetration_count: int = 0
 
   func initialize(_actor, _damage, _direction, _beam_offset = Vector2.ZERO):
     initialize_called = true
@@ -164,6 +165,7 @@ func test_beam_with_custom_settings() -> void:
   custom_pattern.beam_duration = 5.0  # テスト中に削除されないよう長めに設定
   custom_pattern.damage = 25
   custom_pattern.target_group = "test_enemies"
+  custom_pattern.penetration_count = 2
   core.attack_pattern = custom_pattern
 
   ## 発射
@@ -178,6 +180,7 @@ func test_beam_with_custom_settings() -> void:
     var beam: StubBeam = beams[0]
     assert_int(beam.damage).is_equal(25)
     assert_str(beam.enemy_group).is_equal("test_enemies")
+    assert_int(beam.penetration_count).is_equal(2)  # パターンの貫通数がビームに渡る
   else:
     push_error("No beam found in custom settings test")
     assert_int(beams.size()).is_greater_equal(1)

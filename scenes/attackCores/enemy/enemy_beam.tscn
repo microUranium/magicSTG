@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://be5bkq7jemq4n"]
+[gd_scene load_steps=7 format=3 uid="uid://be5bkq7jemq4n"]
 
 [ext_resource type="Script" uid="uid://nd8f8s26247f" path="res://scripts/core/UniversalBeam.gd" id="1_0a5vt"]
 [ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="2_j8k3m"]
@@ -12,14 +12,19 @@ shader_parameter/fps = 12.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
 size = Vector2(8, 40)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cast"]
+size = Vector2(4, 1)
+
 [node name="EnemyBeam" type="Area2D"]
 script = ExtResource("1_0a5vt")
 target_group = "players"
 offset = Vector2(0, 50)
 beam_direction = Vector2(0, 1)
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(0, 1000)
+[node name="ShapeCast2D" type="ShapeCast2D" parent="."]
+enabled = false
+shape = SubResource("RectangleShape2D_cast")
+target_position = Vector2(0, -1000)
 collide_with_areas = true
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]

@@ -53,9 +53,12 @@ func _create_mock_beam() -> UniversalBeam:
   ninepatch.name = "NinePatchRect"
   mock_beam.add_child(ninepatch)
 
-  var raycast = RayCast2D.new()
-  raycast.name = "RayCast2D"
-  mock_beam.add_child(raycast)
+  var shapecast = ShapeCast2D.new()
+  shapecast.name = "ShapeCast2D"
+  var cast_shape := RectangleShape2D.new()
+  cast_shape.size = Vector2(4, 1)
+  shapecast.shape = cast_shape
+  mock_beam.add_child(shapecast)
 
   var damage_timer = Timer.new()
   damage_timer.name = "DamageTimer"
@@ -214,19 +217,19 @@ func test_damage_tick_interval():
   assert_that(beam.damage_tick_sec).is_equal(0.1)
 
 
-func test_colliding_targets_management():
-  """コリジョン中ターゲット管理テスト"""
+func test_hits_management():
+  """捉えている相手の管理テスト"""
   # 初期状態は空
-  assert_that(beam._colliding_targets.size()).is_equal(0)
+  assert_that(beam._hits.size()).is_equal(0)
 
   # ターゲット追加（手動テスト）
-  beam._colliding_targets.append(mock_target)
-  assert_that(beam._colliding_targets.size()).is_equal(1)
-  assert_that(beam._colliding_targets[0]).is_equal(mock_target)
+  beam._hits.append(mock_target)
+  assert_that(beam._hits.size()).is_equal(1)
+  assert_that(beam._hits[0]).is_equal(mock_target)
 
-  # クリア
-  beam._colliding_targets.clear()
-  assert_that(beam._colliding_targets.size()).is_equal(0)
+  # cleanup で空になる
+  beam.cleanup()
+  assert_that(beam._hits.size()).is_equal(0)
 
 
 # === エラーハンドリング・堅牢性テスト ===
@@ -324,9 +327,22 @@ func test_beam_component_access():
   # 必要なコンポーネントが存在することを確認
   assert_that(beam.get_node_or_null("CollisionShape2D")).is_not_null()
   assert_that(beam.get_node_or_null("NinePatchRect")).is_not_null()
-  assert_that(beam.get_node_or_null("RayCast2D")).is_not_null()
+  assert_that(beam.get_node_or_null("ShapeCast2D")).is_not_null()
   assert_that(beam.get_node_or_null("DamageTimer")).is_not_null()
   assert_that(beam.get_node_or_null("GPUParticles2D")).is_not_null()
   assert_that(beam.get_node_or_null("AudioStreamPlayer2D")).is_not_null()
   assert_that(beam.get_node_or_null("MuzzleFlashPoint")).is_not_null()
   assert_that(beam.get_node_or_null("ImpactEffectPoint")).is_not_null()
+
+
+# === 向き ===
+
+
+func test_cast_points_up_locally_for_any_direction():
+  """判定はビームから見て常に上へ伸ばし、向きはビーム全体の回転で表す（回転の二重掛けをしない）"""
+  for direction in [Vector2.UP, Vector2.DOWN, Vector2.RIGHT, Vector2(1, 1).normalized()]:
+    beam.initialize(mock_owner, 1, direction)
+    assert_vector(beam.shapecast.target_position).is_equal(Vector2(0, -beam.desired_length))
+    # ローカルの上方向をビームの回転で回すと、指定した方向になる
+    var global_dir := Vector2.UP.rotated(beam.rotation)
+    assert_float(global_dir.distance_to(direction)).is_less(0.001)

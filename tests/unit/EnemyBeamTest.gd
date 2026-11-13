@@ -107,3 +107,46 @@ func test_each_beam_has_own_material() -> void:
     "anim_time"
   )
   assert_float(time_b).is_equal_approx(0.0, 0.0001)
+
+
+# --- 見た目の設定でスケールがかかったビーム（フグ・ピラニアは 2 倍） -------------------
+
+
+## フグ・ピラニアと同じく見た目の設定で 2 倍にしたビームを、敵 (200, 100) から下向きに撃つ
+func _fire_scaled_down() -> UniversalBeam:
+  var shooter: Node2D = auto_free(Node2D.new())
+  add_child(shooter)
+  shooter.global_position = Vector2(200, 100)
+  var beam := _make_beam()
+  var config := BeamVisualConfig.new()
+  config.width = 32.0
+  config.scale = Vector2(2, 2)
+  beam.initialize(shooter, 2, Vector2.DOWN, Vector2(0, 50))
+  beam.apply_visual_config(config)  # UniversalAttackCore と同じく initialize の後に適用
+  await get_tree().physics_frame
+  await get_tree().physics_frame
+  beam._process(0.0)
+  return beam
+
+
+func test_scaled_beam_stops_at_player() -> void:
+  var player := _place_area(DamageCounter.new(), Vector2(200, 600), 1, "players") as DamageCounter
+  var beam := await _fire_scaled_down()
+
+  assert_array(beam._hits).contains_exactly([player])
+  # 画面上の長さ（見た目の長さ × スケール）が、根元 y=150 から自機の円の上端 y=584 まで
+  var screen_length := beam.ninepatch.size.y * beam.global_scale.y
+  assert_float(screen_length).is_equal_approx(584.0 - 150.0, 1.0)
+
+
+func test_scaled_beam_hit_width_stays_4px() -> void:
+  # 半径1の自機：帯の半幅 2px + 半径 1px = 中心から 3px 以内なら当たる（スケール 2 でも同じ）
+  var outside := _place_area(DamageCounter.new(), Vector2(196.0, 400), 1, "players", 1.0)
+  var beam := await _fire_scaled_down()
+  assert_array(beam._hits).is_empty()  # 中心から 4px：当たらない（判定の幅が 8px なら当たる）
+
+  outside.global_position = Vector2(202.5, 400)  # 中心から 2.5px：当たる
+  await get_tree().physics_frame
+  await get_tree().physics_frame
+  beam._process(0.0)
+  assert_array(beam._hits).contains_exactly([outside])

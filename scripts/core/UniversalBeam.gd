@@ -47,6 +47,7 @@ func _ready():
   _setup_shapecast()
   _setup_damage_timer()
   _apply_visual_config()
+  _sync_cast_width()
   _setup_anim_material()
   _initialize_owner()
   _apply_direction()
@@ -79,6 +80,7 @@ func apply_visual_config(config: BeamVisualConfig = null) -> void:
   if config:
     beam_visual_config = config
   _apply_visual_config()
+  _sync_cast_width()
   _setup_anim_material()
 
 
@@ -237,11 +239,24 @@ func _update_hits() -> void:
 
 
 func _axis_length_to(point: Vector2) -> float:
-  """ビームの根元から、当たった点までのビーム方向の長さ。
+  """ビームの根元から、当たった点までのビーム方向の長さ（ビームのローカル座標での長さ）。
   ShapeCast2D の当たり位置の割合（get_closest_collision_*_fraction）は二分探索の刻み
-  （最大長の 1/256 ≒ 4px）でしか求まらないため、相手表面の当たった点から測る。"""
+  （最大長の 1/256 ≒ 4px）でしか求まらないため、相手表面の当たった点から測る。
+  見た目の設定でビーム全体にスケールがかかっている場合（フグ・ピラニアは 2 倍）、
+  画面上の距離をスケールで割ってからローカルの長さ（見た目・判定の長さ）にする。"""
   var axis := Vector2.UP.rotated(global_rotation)
-  return clampf((point - global_position).dot(axis), 0.0, desired_length)
+  var screen_length := (point - global_position).dot(axis)
+  var scale_y := absf(global_scale.y)
+  var local_length := screen_length / scale_y if scale_y > 0.0 else screen_length
+  return clampf(local_length, 0.0, desired_length)
+
+
+func _sync_cast_width() -> void:
+  """判定の帯の幅を、ビームのスケールに関係なく画面上で 4px（シーンの設定どおり）に保つ。
+  横方向だけスケールを打ち消す。縦方向は打ち消さないので、届く距離は見た目と同じまま。"""
+  if not shapecast:
+    return
+  shapecast.scale = Vector2(1.0 / scale.x if scale.x != 0.0 else 1.0, 1.0)
 
 
 func _update_length():

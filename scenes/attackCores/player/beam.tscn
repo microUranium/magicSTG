@@ -4,16 +4,17 @@
 [ext_resource type="Script" uid="uid://nd8f8s26247f" path="res://scripts/core/UniversalBeam.gd" id="1_jsy6y"]
 [ext_resource type="Texture2D" uid="uid://b48s78plwbe1q" path="res://assets/gfx/sprites/beam_sprite.png" id="1_wp73g"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cast"]
+size = Vector2(4, 8)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsy6y"]
 shader = ExtResource("1_5mxah")
 shader_parameter/frame_count = 3
 shader_parameter/fps = 10.0
+shader_parameter/anim_time = -1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5mxah"]
 size = Vector2(4, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cast"]
-size = Vector2(4, 8)
 
 [node name="Beam" type="Area2D"]
 script = ExtResource("1_jsy6y")

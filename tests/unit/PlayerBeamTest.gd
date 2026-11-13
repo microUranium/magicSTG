@@ -15,6 +15,8 @@ const BEAM_ITEM_PATH := "res://resources/data/attackcore_normal_beam.tres"
 const DURATION_PATH := "res://resources/data/enchantment_blessing_duration_pct.tres"
 const PENETRATION_PATH := "res://resources/data/enchantment_penetration_add.tres"
 const COOLDOWN_PATH := "res://resources/data/enchantment_cooldown_pct.tres"
+const BULLET_COUNT_PATH := "res://resources/data/enchantment_bullet_count_add.tres"
+const TRIPLE_BURST_PATH := "res://resources/data/attackcore_triple_burst.tres"
 
 
 class DamageCounterEnemy:
@@ -231,7 +233,7 @@ func test_penetration_enchantment_sets_beam_penetration() -> void:
 
 func test_beam_allowed_enchantments() -> void:
   var item: ItemBase = load(BEAM_ITEM_PATH)
-  for path in [COOLDOWN_PATH, PENETRATION_PATH, DURATION_PATH]:
+  for path in [COOLDOWN_PATH, PENETRATION_PATH, DURATION_PATH, BULLET_COUNT_PATH]:
     assert_bool(item.allows_enchantment(load(path))).override_failure_message(path).is_true()
 
 
@@ -244,3 +246,19 @@ func test_player_beam_deals_2_damage_15_times_per_second() -> void:
   var beam: UniversalBeam = auto_free(load(PLAYER_BEAM_SCENE).instantiate())
   assert_float(beam.damage_tick_sec).is_equal_approx(1.0 / 15.0, 0.0001)
   assert_int(_make_pattern().damage).is_equal(2)
+
+
+func test_bullet_count_enchantment_adds_beams_in_fan() -> void:
+  """増弾 Lv1/2/3 でビームが 3 / 5 / 9 本、扇の角度が 20 / 40 / 60°"""
+  var expected := {1: [3, 20.0], 2: [5, 40.0], 3: [9, 60.0]}
+  for level in expected:
+    var pattern := _make_pattern({BULLET_COUNT_PATH: level})
+    assert_int(pattern.bullet_count).is_equal(expected[level][0])
+    assert_float(pattern.angle_spread).is_equal_approx(expected[level][1], 0.0001)
+
+
+func test_triple_burst_does_not_allow_rapid_fire() -> void:
+  """トリプルバーストは発射間隔が弾の消滅と最短間隔で決まり、速射が効かないため付与しない"""
+  var item: ItemBase = load(TRIPLE_BURST_PATH)
+  assert_bool(item.allows_enchantment(load(COOLDOWN_PATH))).is_false()
+  assert_bool(item.allows_enchantment(load(PENETRATION_PATH))).is_true()

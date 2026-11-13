@@ -117,3 +117,24 @@ func test_toggle_without_active_beam_is_safe() -> void:
 
   assert_array(_core._active_beams).is_empty()
   assert_bool(_core._rear_firing_mode).is_true()
+
+
+func test_multiple_beams_fan_out_and_all_flip() -> void:
+  """増弾で増えた複数のビームは扇状に並び、後方射撃の切り替えで全部向きが変わる"""
+  _core.attack_pattern.bullet_count = 3
+  _core.attack_pattern.angle_spread = 20.0
+  _core.trigger()
+  await get_tree().process_frame
+  assert_int(_core._active_beams.size()).is_equal(3)
+
+  var angles: Array[float] = []
+  for beam in _core._active_beams:
+    angles.append(rad_to_deg(Vector2.UP.angle_to(beam.beam_direction)))
+  assert_float(angles[0]).is_equal_approx(-10.0, 0.01)
+  assert_float(angles[1]).is_equal_approx(0.0, 0.01)
+  assert_float(angles[2]).is_equal_approx(10.0, 0.01)
+
+  _core.set_rear_firing_mode(true)
+
+  for beam in _core._active_beams:
+    assert_float(beam.beam_direction.y).is_greater(0.9)  # 全部下向き

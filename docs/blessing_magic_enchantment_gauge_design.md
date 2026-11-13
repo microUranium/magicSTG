@@ -293,13 +293,13 @@ GenericGauge / GaugeManager ← HUD描画側
 | エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
 | ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
 | バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
-| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増弾：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
+| トリプルバースト | `attackcore_triple_burst` | – | – | ◯ | – | – | ◯ | 速射：弾が消えるまで次を撃たない仕組みと最短間隔（`min_cooldown` 0.0833 秒）で発射間隔が決まり、クールダウンを縮めても効果がない／増弾：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
 | エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増弾：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
 | バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：バリア弾はコード上で対象外 |
 | ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
 | マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
 | ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増弾：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
-| ビーム | `attackcore_normal_beam` | ◯ | – | ◯ | – | – | – | 持続：◯（`beam_duration_pct` で照射時間が伸びる）／貫通：手前から「貫通数 + 1」体に当たる／増弾：`bullet_count` がビーム本数として扱われるが、挙動未確認のため除外／残留・炸裂・追尾：弾パラメータが効かない |
+| ビーム | `attackcore_normal_beam` | ◯ | ◯ | ◯ | – | – | – | 持続：◯（`beam_duration_pct` で照射時間が伸びる）／増弾：ビームが 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に並ぶ／貫通：各ビームが手前から「貫通数 + 1」体に当たる／残留・炸裂・追尾：弾パラメータが効かない |
 
 - 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
 - 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。

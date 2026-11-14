@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" uid="uid://hfpv5mpgr26q" path="res://scenes/enemy/enemy_grimoire.tscn" id="0_base"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="12_nm61o"]
@@ -13,6 +13,7 @@
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_blessing_hp_boost.tres" id="dt_4"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_attackcore_needleshot.tres" id="dt_5"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_attackcore_triple_burst.tres" id="dt_6"]
+[ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_blessing_spacetime.tres" id="dt_7"]
 
 [sub_resource type="Resource" id="Resource_hdcbw"]
 script = ExtResource("12_nm61o")
@@ -108,7 +109,7 @@ warning_configs = Array[ExtResource("16_g5mi1")]([])
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyGrimoire" instance=ExtResource("0_base")]
-drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5"), ExtResource("dt_6")])
+drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5"), ExtResource("dt_6"), ExtResource("dt_7")])
 
 [node name="EnemyAI" parent="."]
 warp_interval = 3.0

@@ -6,6 +6,7 @@
 #   4. tick モードでは貫通判定を通らない（貫通エンチャントの影響を受けない）
 #   5. 接触中は速度が contact_speed に固定される（敵が重なっても維持）
 #   6. 通常弾（tick 0）の挙動が変わっていない
+#   7. 増弾で針が扇状に増える
 extends GdUnitTestSuite
 class_name NeedleShotFeatureTest
 
@@ -435,3 +436,34 @@ func test_damage_per_shot_matches_spec() -> void:
 
     var msg := "%s: 期待 %d / 実測 %d" % [label, expected, target.received]
     assert_int(target.received).override_failure_message(msg).is_equal(expected)
+
+
+# =====================================================================
+# 8. 増弾
+# =====================================================================
+
+
+func test_allows_bullet_count_enchantment() -> void:
+  var core: ItemBase = load("res://resources/data/attackcore_needleshot.tres")
+  var enchant: Enchantment = load("res://resources/data/enchantment_bullet_count_add.tres")
+
+  assert_bool(core.allows_enchantment(enchant)).is_true()
+
+
+func test_bullet_count_enchantment_spreads_needles() -> void:
+  """増弾 Lv1〜3 で針が 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に開くこと"""
+  var core = load("res://resources/data/attackcore_needleshot.tres")
+  var enchant: Enchantment = load("res://resources/data/enchantment_bullet_count_add.tres")
+  var expected := {0: [1, 0.0], 1: [3, 20.0], 2: [5, 40.0], 3: [9, 60.0]}
+  for level in expected:
+    var inst := ItemInstance.new(core)
+    if level > 0:
+      inst.add_enchantment(enchant, level)
+    var pattern := PlayerAttackPatternFactory.create_pattern_from_item_instance(inst)
+    PlayerAttackPatternFactory.update_pattern_from_enchantments(pattern, inst)
+
+    var label := "Lv%d" % level
+    assert_int(pattern.bullet_count).override_failure_message(label).is_equal(expected[level][0])
+    assert_float(pattern.angle_spread).override_failure_message(label).is_equal_approx(
+      expected[level][1], 0.001
+    )

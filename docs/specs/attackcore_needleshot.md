@@ -45,7 +45,7 @@
 | `pattern_type` | 0（SINGLE_SHOT） | 0 SINGLE_SHOT / 1 RAPID_FIRE / 2 BARRIER_BULLETS / 3 SPIRAL / 4 BEAM / 5 CUSTOM / 6 BURST_WITH_TRACKING / 7 SHOT_ON_HIT |
 | `direction_type` | 0（FIXED） | 0 FIXED / 1 TO_PLAYER / 2 RANDOM / 3 CIRCLE / 4 CUSTOM / 5 TO_OWNER |
 | `base_direction` | `Vector2(0, -1)` | プレイヤーは基本 `Vector2(0, -1)` |
-| `angle_spread` / `angle_offset` | 0 / 0 | `bullet_count > 1` のとき効く。本コアは 1 固定運用（4章） |
+| `angle_spread` / `angle_offset` | 0 / 0 | `bullet_count > 1` のとき効く。増弾で弾数と角度が増える（4章） |
 | `spawn_position_mode` | 0（OWNER） | 0 OWNER / 1 FIXED_ABSOLUTE / 2 RELATIVE_TO_OWNER / 3 RELATIVE_TO_TARGET / 4 CUSTOM |
 | `bullet_movement_config.movement_type` | **2（ACCELERATE）** | 0 STRAIGHT / 1 DECELERATE / 2 ACCELERATE / 3 SINE_WAVE / 4 HOMING / 5 GRAVITY / 6 SPIRAL |
 | `bullet_lifetime` | 0（無限） | エンチャント「残留」は 0 だと効かない（意図通り） |
@@ -143,7 +143,7 @@
 | エンチャント | キー | このコアでの挙動 | 対応 |
 |---|---|---|---|
 | 速射 | `cooldown_pct` | ◯ 主力。CT が唯一の火力ノブなので素直に効く | pool に入れる |
-| 増弾 | `bullet_count_add` | **機構上は効く（✕ではない）**。基本 `angle_spread = 0` だが増弾の角度加算（+20/+40/+60°）で扇状に開く。正面の大型敵には複数本が重なり、接触tick×無限貫通で**N倍DPSに近づく**（Lv3 = 9本） | **pool から除外** |
+| 増弾 | `bullet_count_add` | ◯ 基本 `angle_spread = 0` だが増弾の角度加算（+20/+40/+60°）で扇状に開く（3 / 5 / 9 本）。正面の大型敵には複数本が重なり、接触tick×無限貫通で**N倍DPSに近づく**（Lv3 = 9本） | 許可する（当初は除外していたが、2026-11-14 に許可へ変更） |
 | 貫通 | `penetration_add` | **構造的に無効**。tick モードでは `BulletBase._on_area_entered()` のダメージ・貫通判定経路を通らないため `penetration_count` を誰も読まない（6章）。付いても無害 | 念のため pool から除外 |
 | 残留 | `bullet_lifetime_pct` | ✕ `bullet_lifetime = 0`（無限）なのでファクトリが 0 のまま返す。意図通り | — |
 | 炸裂 | `spread_bullet_count_add` | ✕ `on_hit_pattern` なし | — |
@@ -152,9 +152,11 @@
 
 ### 除外の実装
 
+> 現在は、アイテムの `allowed_enchantments`（速射・増弾・追尾）で抽選対象を絞り込んでいる（`docs/blessing_magic_enchantment_gauge_design.md` 3.6）。以下は当初の案として残す。
+
 `DropTableEntry` は `prototype`（アイテム）と `enchant_rule` が1対1で、`LootSystem._roll_enchantments()` は `entry.enchant_rule.pool` からしか抽選しない。したがって **`droptableentry_needleshot.tres` に専用の `enchantmentrule_needleshot.tres`（`pool` は `cooldown_pct` のみ）を紐付けるだけ**でよく、コード変更は不要。既存の `enchantmentrule_debug_bullet.tres` は使い回さない。
 
-- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に増弾／貫通を付けないこと
+- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に貫通を付けないこと
 - 「-1 に `penetration_add` を加算して有限化する」という根本の挙動（`PlayerAttackPatternFactory.update_pattern_from_enchantments()`）は本コアでは無害化されるが、**他コアで `penetration_count = -1` を使うと同じ穴を踏む**。別途の課題として残す
 
 ## 5. HUDゲージ

@@ -320,7 +320,7 @@ GenericGauge / GaugeManager ← HUD描画側
 
 - `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
 - 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
-- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・全加護）は、その数までしか付与されない。
+- 許可エンチャントが上限（3 個）より少ないアイテム（不屈の加護など）は、その数までしか付与されない。
 
 #### 攻撃コア
 
@@ -334,7 +334,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | – | 追尾：バリア弾はコード上で対象外 |
 | ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
 | マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | – | 追尾：効果が薄い |
-| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | – | 増弾：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
+| ニードルショット | `attackcore_needleshot` | ◯ | ◯ | – | – | – | ◯ | – | 増弾：◯（針が 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に並ぶ。大きい敵には複数本が同時に刺さり DPS が大きく伸びる）／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
 | ビーム | `attackcore_normal_beam` | ◯ | ◯ | ◯ | – | – | – | – | 持続：◯（`beam_duration_pct` で照射時間が伸びる）／増弾：ビームが 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に並ぶ／貫通：各ビームが手前から「貫通数 + 1」体に当たる／残留・炸裂・追尾：弾パラメータが効かない |
 
 - 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。

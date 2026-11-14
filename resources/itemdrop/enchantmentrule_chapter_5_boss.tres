@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnchantmentRule" load_steps=24 format=3 uid="uid://btgynp4xfngiv"]
+[gd_resource type="Resource" script_class="EnchantmentRule" load_steps=25 format=3 uid="uid://btgynp4xfngiv"]
 
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1_enchant"]
 [ext_resource type="Script" uid="uid://nasv7r61bej3" path="res://scripts/item/EnchantmentRule.gd" id="2_rule"]
@@ -8,9 +8,10 @@
 [ext_resource type="Resource" uid="uid://bk73r41qbk72l" path="res://resources/data/enchantment_bullet_count_add.tres" id="e_bullet_count_add"]
 [ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="e_bullet_lifetime_pct"]
 [ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="e_cooldown_pct"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_counter_damage_pct.tres" id="e_counter_damage_pct"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_homing.tres" id="e_homing_correction_px_add"]
 [ext_resource type="Resource" uid="uid://b0hpaddench01" path="res://resources/data/enchantment_hp_add.tres" id="e_hp_add"]
-[ext_resource type="Resource" path="res://resources/data/enchantment_hp_extra_pct.tres" id="e_hp_extra_pct"]
+[ext_resource type="Resource" uid="uid://bq7826filmm84" path="res://resources/data/enchantment_hp_extra_pct.tres" id="e_hp_extra_pct"]
 [ext_resource type="Resource" uid="uid://b0cdrench005x" path="res://resources/data/enchantment_laststand_cdr_pct.tres" id="e_laststand_cdr_pct"]
 [ext_resource type="Resource" uid="uid://b0mugaench002" path="res://resources/data/enchantment_muga.tres" id="e_muga"]
 [ext_resource type="Resource" uid="uid://b0stealench06" path="res://resources/data/enchantment_nullify_steal_chance_pct.tres" id="e_nullify_steal_chance_pct"]
@@ -37,4 +38,4 @@ level_weights = {
 2: 0.5,
 3: 0.5
 }
-pool = Array[ExtResource("1_enchant")]([ExtResource("e_bullet_count_add"), ExtResource("e_bullet_lifetime_pct"), ExtResource("e_cooldown_pct"), ExtResource("e_homing_correction_px_add"), ExtResource("e_penetration_add"), ExtResource("e_spread_bullet_count_add"), ExtResource("e_blessing_uses_add"), ExtResource("e_hp_add"), ExtResource("e_laststand_cdr_pct"), ExtResource("e_muga"), ExtResource("e_nullify_steal_chance_pct"), ExtResource("e_proximity_range_add"), ExtResource("e_regen_interval_sec_pct"), ExtResource("e_shield_hp_pct"), ExtResource("e_shield_recover_delay_pct"), ExtResource("e_blessing_free_use_chance_pct"), ExtResource("e_shield_damage_taken_pct"), ExtResource("e_blessing_duration_pct"), ExtResource("e_regen_on_hit_chance_pct"), ExtResource("e_regen_low_hp_interval_pct"), ExtResource("e_hp_extra_pct")])
+pool = Array[ExtResource("1_enchant")]([ExtResource("e_bullet_count_add"), ExtResource("e_bullet_lifetime_pct"), ExtResource("e_cooldown_pct"), ExtResource("e_homing_correction_px_add"), ExtResource("e_penetration_add"), ExtResource("e_spread_bullet_count_add"), ExtResource("e_blessing_uses_add"), ExtResource("e_hp_add"), ExtResource("e_laststand_cdr_pct"), ExtResource("e_muga"), ExtResource("e_nullify_steal_chance_pct"), ExtResource("e_proximity_range_add"), ExtResource("e_regen_interval_sec_pct"), ExtResource("e_shield_hp_pct"), ExtResource("e_shield_recover_delay_pct"), ExtResource("e_blessing_free_use_chance_pct"), ExtResource("e_shield_damage_taken_pct"), ExtResource("e_blessing_duration_pct"), ExtResource("e_regen_on_hit_chance_pct"), ExtResource("e_regen_low_hp_interval_pct"), ExtResource("e_hp_extra_pct"), ExtResource("e_counter_damage_pct")])

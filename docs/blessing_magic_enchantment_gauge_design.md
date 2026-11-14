@@ -53,6 +53,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 被ダメージ介入 | `process_damage(player, dmg) -> int` | デフォルトは素通し |
 | 致命ダメージ介入 | `process_fatal_damage(player, dmg) -> bool` | 全加護通過後、残ダメージで HP が 0 になる時のみ呼ばれる。true で無効化（不屈） |
 | 与ダメージ介入 | `get_damage_bonus_pct(player, enemy, ctx) -> float` | 自弾→敵ヒット時のボーナス率 |
+| 反撃 | `setup_counter(player)` / `teardown_counter()` / `get_counter_bonus_pct() -> float` | エンチャント「反撃」。装備・解除時に `BlessingContainer` が呼ぶ。被弾後 0.67 秒間ボーナス率を返す（背水・近接が `get_damage_bonus_pct` を上書きしているため別関数） |
 | 魔法CT介入 | `get_attack_cooldown_mult(player) -> float` | 1.0=等倍 |
 
 ### 1.4 BlessingContainer の合成ルール
@@ -60,11 +61,15 @@ GenericGauge / GaugeManager ← HUD描画側
 | 介入 | メソッド | 合成方式 |
 |---|---|---|
 | 被ダメージ | `process_damage()` | 各加護を**直列**に通す（前段の結果を次段へ）。通過後に残ダメージが致命傷なら `process_fatal_damage()` を順に回す |
-| 与ダメージ | `process_outgoing_damage(enemy, base, ctx)` | 各加護の `get_damage_bonus_pct` を**加算**し、基底値へ一括適用：`base * (1 + Σbonus)` |
+| 与ダメージ | `process_outgoing_damage(enemy, base, ctx)` | 各加護の `get_damage_bonus_pct` と `get_counter_bonus_pct` を**加算**し、基底値へ一括適用：`round(base * (1 + Σbonus))`。弾・接触ダメージ・ビームが敵に当たった瞬間に呼ばれる |
 | 魔法CT | `get_attack_cooldown_mult()` | 各加護の倍率を**乗算** |
 | アクティブ発動 | `_unhandled_input()` | `blessing_slot_1/2/3` 入力で対応スロットの `ActiveBlessingBase.activate()` |
 
 - スロット上限 `MAX_SLOTS = 3`（`PlayerSaveData.MAX_BLESSINGS` と一致させる）。
+- **【課題】爆発ダメージに与ダメージ補正が乗らない**（2026-11-14 確認、未対応）
+  - `ExplosionEffect._deal_damage_to_target()` が `target.take_damage(damage)` を直接呼んでおり、`process_outgoing_damage()` を通らない。近接・背水・反撃のいずれも爆発には乗らない（現状プレイヤー側で爆発ダメージがあるのはファイアボールの 3 のみ）。
+  - 意図した仕様ではなく、加護の補正を `BulletBase` にだけ入れた（`bdd3050`）際の対応漏れ。爆発（2025-08 作成）は弾とは別ノードでダメージを与えるため対象から漏れた。
+  - 直し方の案：`_deal_damage_to_target()` で、相手グループが `enemies` のときだけ弾と同じく `process_outgoing_damage()` を通す（敵の弾の爆発＝相手が `players` には影響しない）。
 
 ### 1.5 加護の3類型と実装済み一覧
 
@@ -255,6 +260,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 応急 | `regen_on_hit_chance_pct` | 被弾時（実ダメージ>0）に確率で回復量1回分を即時回復 | 5% / 20% / 50% | 再生 |
 | 必死 | `laststand_cdr_pct` | 低HP時の魔法CT短縮 | +15% / +30% / +50% | 背水 |
 | 無我 | `laststand_max_pct_pct`＋`proximity_max_pct_pct` | 最大ダメージ倍率 +% | +15% / +30% / +50% | 背水・近接 |
+| 反撃 | `counter_damage_pct` | 被弾（体力にダメージが通ったとき）から 0.67 秒間、敵に当たった弾の与ダメージ +%。被弾時の弾ではなく命中時に判定。再被弾で効果時間を戻す（重ならない）。爆発には乗らない | +50% / +100% / +200% | 背水・体力増強・近接 |
 | 凝集 | `proximity_range_add` | 最大ダメ到達距離 +px | +50 / +100 / +180 | 近接 |
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
@@ -308,16 +314,16 @@ GenericGauge / GaugeManager ← HUD描画側
 
 | 加護 | `.tres` | 許可エンチャント |
 |---|---|---|
-| 障壁の加護 | `blessing_shield` | 堅固・速復 |
-| 体力増強の加護 | `blessing_hp_boost` | 増健 |
-| 回復の加護 | `blessing_regen` | 速治 |
-| 背水の加護 | `blessing_laststand` | 必死・無我 |
-| 近接の加護 | `blessing_proximity` | 凝集・無我 |
-| 打消の加護 | `blessing_nullify` | 保持・強奪 |
-| 迷彩の加護 | `blessing_camouflage` | 保持 |
-| 不屈の加護 | `blessing_fortitude` | 保持 |
+| 障壁の加護 | `blessing_shield` | 堅固・速復・緩衝 |
+| 体力増強の加護 | `blessing_hp_boost` | 増健・庇護・反撃 |
+| 回復の加護 | `blessing_regen` | 速治・応急・危癒 |
+| 背水の加護 | `blessing_laststand` | 必死・無我・反撃 |
+| 近接の加護 | `blessing_proximity` | 凝集・無我・反撃 |
+| 打消の加護 | `blessing_nullify` | 保持・強奪・幸運 |
+| 迷彩の加護 | `blessing_camouflage` | 保持・幸運・持続 |
+| 不屈の加護 | `blessing_fortitude` | 保持・幸運 |
 
-- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`camouflage_duration_pct`（迷彩）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
+- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
 
 ---
 

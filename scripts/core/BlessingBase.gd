@@ -5,10 +5,16 @@ signal blessing_updated
 signal free_use_triggered  # 幸運：使用回数を消費せずに発動した
 
 const LOW_HP_FLOOR_RATIO_DEFAULT := 0.3  # 体力の減り具合が最大になる残HP割合の既定値
+const COUNTER_DURATION_SEC := 0.67  # 反撃：被弾してから攻撃力が上がっている時間
 
 var _proto: BlessingItem
 var _paused: bool = false
 var _managed_timers: Array[Timer] = []  # Timerノードの管理
+
+# === 反撃（counter_damage_pct） ===
+var _counter_pct: float = 0.0  # 効果時間内に乗る与ダメージボーナス率（未付与なら 0）
+var _counter_player: Node = null
+var _counter_timer: Timer = null  # 効果時間（動いている間が効果時間内）
 var item_inst: ItemInstance:
   set(v):
     item_inst = v
@@ -53,6 +59,53 @@ func process_fatal_damage(_player, _damage) -> bool:
 func get_damage_bonus_pct(_player, _enemy, _ctx: Dictionary) -> float:
   # 自弾が敵にヒットした時の与ダメージボーナス率を返す（0.5 = +50%）。
   # 複数加護の戻り値は BlessingContainer 側で加算合成され、基底値に一括適用される。
+  return 0.0
+
+
+#---------------------------------------------------------------------
+# 反撃：被弾後 COUNTER_DURATION_SEC の間、敵に当たった弾の与ダメージを上げる
+# （背水・近接は get_damage_bonus_pct を上書きしているため、別の関数として持つ）
+#---------------------------------------------------------------------
+func setup_counter(player) -> void:
+  """装備時に BlessingContainer から呼ばれる。反撃が付いていれば被弾を監視する"""
+  _counter_pct = _sum_pct("counter_damage_pct")
+  if _counter_pct <= 0.0 or player == null or not player.has_signal("damage_received"):
+    return
+  if _counter_timer == null:
+    _counter_timer = Timer.new()
+    _counter_timer.name = "CounterTimer"
+    _counter_timer.one_shot = true
+    add_child(_counter_timer)
+  register_timer(_counter_timer)  # ポーズ中は効果時間も止まる
+  _counter_player = player
+  if not player.damage_received.is_connected(_on_counter_damage_received):
+    player.damage_received.connect(_on_counter_damage_received)
+
+
+func teardown_counter() -> void:
+  """解除時に BlessingContainer から呼ばれる"""
+  if (
+    is_instance_valid(_counter_player)
+    and _counter_player.damage_received.is_connected(_on_counter_damage_received)
+  ):
+    _counter_player.damage_received.disconnect(_on_counter_damage_received)
+  _counter_player = null
+  if _counter_timer:
+    _counter_timer.stop()
+
+
+func _on_counter_damage_received(damage) -> void:
+  # 体力に実際にダメージが通ったときだけ（シールドが受け止めた damage=0 などは除外）。
+  # 効果時間内に再び被弾したら、効果時間を戻す（ボーナスは重ならない）。
+  if _paused or damage <= 0:
+    return
+  _counter_timer.start(COUNTER_DURATION_SEC)
+
+
+func get_counter_bonus_pct() -> float:
+  """反撃の効果時間内なら与ダメージボーナス率を返す。弾が敵に当たった瞬間に呼ばれる"""
+  if _counter_timer and not _counter_timer.is_stopped():
+    return _counter_pct
   return 0.0
 
 

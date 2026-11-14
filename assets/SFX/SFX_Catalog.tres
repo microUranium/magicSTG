@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SFXCatalog" load_steps=21 format=3 uid="uid://dkkm54m5pwg45"]
+[gd_resource type="Resource" script_class="SFXCatalog" load_steps=22 format=3 uid="uid://dkkm54m5pwg45"]
 
 [ext_resource type="Script" uid="uid://de03wt8svtbcg" path="res://scripts/systems/SFXCatalog.gd" id="1_tnkwu"]
 [ext_resource type="AudioStream" uid="uid://mc53hk7e18uf" path="res://assets/audio/sfx/destroy_boss_se.wav" id="2_tskcg"]
@@ -20,10 +20,12 @@
 [ext_resource type="AudioStream" uid="uid://dg0mdfxobrslh" path="res://assets/audio/sfx/story_thunder.wav" id="18_thndr"]
 [ext_resource type="AudioStream" uid="uid://4tjwlfjkjcp7" path="res://assets/audio/sfx/ui_click.wav" id="19_uiclk"]
 [ext_resource type="AudioStream" uid="uid://c0sbh43qimwaq" path="res://assets/audio/sfx/ui_click_stage_button.wav" id="20_uiclkst"]
+[ext_resource type="AudioStream" uid="uid://bixdsnqqi7yt" path="res://assets/audio/sfx/activation_blessing_spacetime.wav" id="21_spacetime"]
 
 [resource]
 script = ExtResource("1_tnkwu")
 table = Dictionary[String, AudioStream]({
+"activation_blessing_spacetime": ExtResource("21_spacetime"),
 "break_shield": ExtResource("12_t4efp"),
 "destroy_boss": ExtResource("2_tskcg"),
 "destroy_enemy": ExtResource("3_grn6y"),

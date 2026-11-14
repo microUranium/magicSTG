@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="BlessingItem" load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://bclm6we4v4mkb" path="res://scripts/item/BlessingItem.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/blessings/spacetime_blessing.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/gfx/sprites/icon_blessing_spacetime.png" id="3"]
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" path="res://resources/data/enchantment_blessing_duration_pct.tres" id="ae_blessing_duration_pct"]
+
+[resource]
+script = ExtResource("1")
+blessing_scene = ExtResource("2")
+base_modifiers = {
+"blessing_cooldown_sec": 40.0,
+"spacetime_duration_sec": 7.0,
+"spacetime_radius": 200.0
+}
+id = &"blessing_spacetime"
+item_type = 0
+display_name = "時界の加護"
+description = "一定時間、周囲の弾を減速させる結界を展開します。効果終了時、結界内の弾を消滅させます。"
+icon = ExtResource("3")
+allowed_enchantments = Array[ExtResource("ae_script")]([ExtResource("ae_blessing_duration_pct")])
+metadata/_custom_type_script = "uid://bclm6we4v4mkb"

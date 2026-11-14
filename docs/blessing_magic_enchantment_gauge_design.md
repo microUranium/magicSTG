@@ -88,12 +88,13 @@ GenericGauge / GaugeManager ← HUD描画側
 | 障壁 | `DefensiveBlessing` | シールドが被ダメージを完全吸収。破壊後は時間で復活 | 下記 1.6 参照 |
 | 不屈 | `FortitudeBlessing` | 致命ダメージを受けた瞬間に自動で復活し、一定時間無敵。回数制 | 下記 1.8 参照 |
 
-**C. アクティブ型（`ActiveBlessingBase`。キー発動・使用回数制・短CT）**
+**C. アクティブ型（`ActiveBlessingBase`。キー発動。打消・迷彩は使用回数制・短CT、時界はクールタイム制）**
 
 | 加護 | スクリプト | 効果 | 参照キー |
 |---|---|---|---|
 | 打消 | `NullifyBlessing` | 発動で場の敵弾を全消去（HUDフラッシュ）。「強奪」で撃破時に確率回数回復 | `max_uses`,`blessing_cooldown_sec` / enchant: `blessing_uses_add`,`nullify_steal_chance_pct` |
-| 迷彩 | `CamouflageBlessing` | 一定時間、敵の照準対象から外れる（当たり判定は残る） | `max_uses`,`blessing_cooldown_sec`,`camouflage_duration_sec` / enchant: `blessing_uses_add`,`camouflage_duration_pct` |
+| 迷彩 | `CamouflageBlessing` | 一定時間、敵の照準対象から外れる（当たり判定は残る） | `max_uses`,`blessing_cooldown_sec`,`camouflage_duration_sec` / enchant: `blessing_uses_add`,`blessing_duration_pct` |
+| 時界 | `SpacetimeBlessing` | クールタイムが溜まると発動。周囲の敵弾を消し、自機についていく結界を張る。結界内の敵弾は -95% に減速し、効果終了時に結界内の敵弾を消す | `blessing_cooldown_sec`,`spacetime_duration_sec`,`spacetime_radius` / enchant: `blessing_duration_pct`（下記 1.9 参照） |
 
 `ActiveBlessingBase` パラメータ設計：
 
@@ -162,6 +163,33 @@ GenericGauge / GaugeManager ← HUD描画側
 - **見た目**：無敵中は自機スプライトのみ点滅（`BLINK_INTERVAL=0.08秒`、暗側アルファ0.2）。迷彩の半透明とは `Player._update_sprite_alpha()` で乗算合成される。
 - **発動演出**（`_play_revive_effects()`）：HUDフラッシュ、`request_start_vibration`（撃破時と同じ画面揺れ）、効果音 `fortitude`、星の収束パーティクル `scenes/player/revive_particle_player.tscn`（外周から出て `radial_accel` 負で中心へ収束。撃破時の飛散と逆の動き。寿命後に自動で解放）。
 - **ゲージ**：残回数を `durability` スタイルで表示し、使い切ったら `durability_recovering`（無効化画像）へ切替。
+
+### 1.9 時界の加護（SpacetimeBlessing）詳細
+
+`ActiveBlessingBase` を継承するが、使用回数制ではなく**クールタイム制**（`activate()` / `can_activate()` / `on_equip()` を上書き）。保持・幸運は付けない。
+
+| パラメータ | 既定 | 由来 | 意味 |
+|---|---|---|---|
+| `cooldown_total` | 40.0 | `blessing_cooldown_sec × (1+Σblessing_cooldown_pct)` | クールタイム（効果終了後に 0 から溜まる。ステージ開始時も 0 から） |
+| `duration_sec` | 7.0 | `spacetime_duration_sec × (1+Σblessing_duration_pct)` | 効果時間（持続で伸びる） |
+| `radius` | 200.0 | `(spacetime_radius + Σspacetime_radius_add) × (1+Σspacetime_radius_pct)` | 結界の半径＝発動時・終了時に弾を消す範囲 |
+
+`blessing_cooldown_pct` / `spacetime_radius_add` / `spacetime_radius_pct` は、今後のエンチャント用に読み込みだけ用意している（対応するエンチャントは未作成）。
+
+挙動：
+- **状態**：クールタイム中 → 準備完了 → 効果中 → クールタイム中…。発動は準備完了のときだけ。タイマーはポーズ管理対象（`register_timer`）で、ポーズ・会話中の一時停止中は進まない。
+- **発動**：自機を中心に半径内の敵弾（`target_group == "players"`）を物理空間への問い合わせで集めて消し、結界（`Area2D`、弾のレイヤー2を監視）を張る。
+- **減速**：結界に入った敵弾は `BulletBase.set_time_scale(0.05)`、出ると `1.0`。自弾と敵のビームは対象外。
+- **終了**：半径内の敵弾を消し、残っている減速を解除して結界を消す。
+- **弾の消し方**：`BulletBase.vanish()`。爆発（`_create_explosion_effect`）を起こさない（自機のすぐ近くで消すため、敵弾の爆発に巻き込まれないように）。打消の加護の弾消しは従来どおり爆発する。
+- **ゲージ**（`cooldown` スタイル）：クールタイム中は溜まり、準備完了で満タン、効果中は残り時間に応じて減る（ビームと同じ）。
+
+**弾の時間（`time_scale`）**：`BulletBase.time_scale`（既定 1.0）。`ProjectileBullet._process(delta)` は `_bullet_process(delta × time_scale)` を呼び、サブクラス（`UniversalBullet`・`ScytheBullet`・`FinalStarBullet`・`EnhancedBarrierBullet`）は `_bullet_process` を上書きする。移動・加速・追尾・寿命などがすべて同じ割合で遅くなる。弾が使う Tween は `_track_scaled_tween()` で登録し、`time_scale` に合わせて速度を変える。見た目のアニメーション（スプライトのコマ送り・パーティクル）は遅くしない。
+
+**背景の演出**（`scripts/effects/SpacetimeFieldEffect.gd` ＋ `assets/shaders/spacetime_field.gdshader`）：
+- 背景（`ParallaxBackground`、layer -100）のすぐ上（layer -99）の CanvasLayer に全画面の `ColorRect` を置き、それまでに描かれた画面（＝背景だけ）を読み取って反転する。自機・敵・弾は上の層なので反転しない。
+- 発動の瞬間に全体を反転 → 0.5 秒で結界の外側だけ元に戻る（内側は反転のまま、自機についていく）→ 終了時に内側を一瞬白く光らせ（0.15 秒）、0.3 秒で内側も戻して消える。
+- アニメーションは Tween で動かす（シェーダーの `TIME` はポーズ中も進むため使わない）。演出の秒数は調整前提の仮の値。
 
 ---
 
@@ -322,6 +350,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 打消の加護 | `blessing_nullify` | 保持・強奪・幸運 |
 | 迷彩の加護 | `blessing_camouflage` | 保持・幸運・持続 |
 | 不屈の加護 | `blessing_fortitude` | 保持・幸運 |
+| 時界の加護 | `blessing_spacetime` | 持続 |
 
 - 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
 

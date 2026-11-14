@@ -170,11 +170,11 @@ GenericGauge / GaugeManager ← HUD描画側
 
 | パラメータ | 既定 | 由来 | 意味 |
 |---|---|---|---|
-| `cooldown_total` | 40.0 | `blessing_cooldown_sec × (1+Σblessing_cooldown_pct)` | クールタイム（効果終了後に 0 から溜まる。ステージ開始時も 0 から） |
+| `cooldown_total` | 40.0 | `blessing_cooldown_sec × (1+Σblessing_cooldown_pct)` | クールタイム（効果終了後に 0 から溜まる。ステージ開始時も 0 から）。速復で短くなる |
 | `duration_sec` | 7.0 | `spacetime_duration_sec × (1+Σblessing_duration_pct)` | 効果時間（持続で伸びる） |
-| `radius` | 200.0 | `(spacetime_radius + Σspacetime_radius_add) × (1+Σspacetime_radius_pct)` | 結界の半径＝発動時・終了時に弾を消す範囲 |
+| `radius` | 200.0 | `(spacetime_radius + Σspacetime_radius_add) × (1+Σblessing_area_pct)` | 結界の半径＝発動時・終了時に弾を消す範囲・背景の反転が残る範囲。広範で広がる |
 
-`blessing_cooldown_pct` / `spacetime_radius_add` / `spacetime_radius_pct` は、今後のエンチャント用に読み込みだけ用意している（対応するエンチャントは未作成）。
+付与できるエンチャントは持続・広範・速復。`spacetime_radius_add` は今後のエンチャント用に読み込みだけ用意している（対応するエンチャントは未作成）。
 
 挙動：
 - **状態**：クールタイム中 → 準備完了 → 効果中 → クールタイム中…。発動は準備完了のときだけ。タイマーはポーズ管理対象（`register_timer`）で、ポーズ・会話中の一時停止中は進まない。
@@ -279,7 +279,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 表示名 | id (modifierキー) | 効果 | Lv1 / Lv2 / Lv3 | 主な適用先 |
 |---|---|---|---|---|
 | 堅固 | `shield_hp_pct` | シールド耐久 +% | +50% / +100% / +200% | 障壁 |
-| 速復 | `shield_recover_delay_pct` | シールド復活待機 短縮 | -10% / -20% / -50% | 障壁 |
+| 速復 | `shield_recover_delay_pct`＋`blessing_cooldown_pct` | 加護の再使用時間 短縮（障壁のシールド復活待機、時界のクールタイム） | -10% / -20% / -50% | 障壁・時界 |
 | 緩衝 | `shield_damage_taken_pct` | シールドが受けるダメージ 軽減（端数は小数部分の確率で切り上げ。ダメージ1も確率で0） | -10% / -20% / -50% | 障壁 |
 | 増健 | `hp_add` | 最大HP +（加算） | +3 / +6 / +10 | 体力増強 |
 | 庇護 | `hp_extra_pct` | ステージ開始時に最大HP（増健等の反映後）の割合だけ追加の体力を得る。被弾時は先に減り、回復されない。HPバーに金色で重ねて表示 | +50% / +100% / +200% | 体力増強 |
@@ -294,6 +294,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
 | 幸運 | `blessing_free_use_chance_pct` | 発動時に確率で使用回数を消費しない（残り0回では発動不可） | 10% / 30% / 70% | 不屈・打消・迷彩 |
 | 持続 | `blessing_duration_pct`＋`beam_duration_pct` | 効果時間 +%（迷彩の効果時間、ビームの照射時間） | +20% / +50% / +100% | 迷彩・ビーム |
+| 広範 | `blessing_area_pct` | 加護の効果範囲 +%（時界の結界の半径） | +15% / +30% / +80% | 時界 |
 | 速射 | `cooldown_pct` | 連射CT 短縮 | -20% / -50% / -75% | 攻撃コア |
 | 増弾 | `bullet_count_add`＋`angle_spread_add` | 弾数 +／扇の角度 +° | +2・+20° / +4・+40° / +8・+60° | 攻撃コア |
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
@@ -350,7 +351,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 打消の加護 | `blessing_nullify` | 保持・強奪・幸運 |
 | 迷彩の加護 | `blessing_camouflage` | 保持・幸運・持続 |
 | 不屈の加護 | `blessing_fortitude` | 保持・幸運 |
-| 時界の加護 | `blessing_spacetime` | 持続 |
+| 時界の加護 | `blessing_spacetime` | 持続・広範・速復 |
 
 - 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
 

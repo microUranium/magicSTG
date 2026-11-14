@@ -16,6 +16,8 @@ const SpacetimeBlessing := preload("res://scripts/player/SpacetimeBlessing.gd")
 const FIELD_EFFECT := preload("res://scripts/effects/SpacetimeFieldEffect.gd")
 const ITEM_PATH := "res://resources/data/blessing_spacetime.tres"
 const DURATION_PATH := "res://resources/data/enchantment_blessing_duration_pct.tres"
+const AREA_PATH := "res://resources/data/enchantment_blessing_area_pct.tres"
+const RECOVER_PATH := "res://resources/data/enchantment_shield_recover_delay_pct.tres"
 
 
 ## 爆発したかを記録するテスト用の弾（敵弾は target_group = "players"）
@@ -261,3 +263,64 @@ func test_activation_sound_is_registered_in_catalog() -> void:
   assert_str(catalog.table["activation_blessing_spacetime"].resource_path).is_equal(
     "res://assets/audio/sfx/activation_blessing_spacetime.wav"
   )
+
+
+# --- 広範・速復 -----------------------------------------------------------
+
+
+func test_area_enchantment_data() -> void:
+  var enchant: Enchantment = load(AREA_PATH)
+  assert_str(str(enchant.id)).is_equal("blessing_area_pct")
+  assert_str(enchant.display_name).is_equal("広範")
+  assert_str(enchant.description).is_equal("効果範囲が広がります。")
+  var expected := {1: 0.15, 2: 0.3, 3: 0.8}
+  for level in expected:
+    var value := float(enchant.get_modifiers(level)["blessing_area_pct"])
+    assert_float(value).is_equal_approx(expected[level], 0.0001)
+
+
+func test_spacetime_allows_duration_area_and_recover() -> void:
+  var item: BlessingItem = load(ITEM_PATH)
+  for path in [DURATION_PATH, AREA_PATH, RECOVER_PATH]:
+    assert_bool(item.allows_enchantment(load(path))).override_failure_message(path).is_true()
+  # 広範は時界だけ、速復は障壁にも残る
+  var shield: ItemBase = load("res://resources/data/blessing_shield.tres")
+  assert_bool(shield.allows_enchantment(load(AREA_PATH))).is_false()
+  assert_bool(shield.allows_enchantment(load(RECOVER_PATH))).is_true()
+
+
+func test_area_enchantment_widens_radius() -> void:
+  var expected := {1: 230.0, 2: 260.0, 3: 360.0}
+  for level in expected:
+    var blessing := _make_blessing({AREA_PATH: level})
+    assert_float(blessing.radius).is_equal_approx(expected[level], 0.001)
+
+
+func test_area_enchantment_widens_vanish_range() -> void:
+  var bullet := _make_bullet(Vector2(400, 150))  # 自機から 250px：基本の 200px では範囲外
+  var blessing := _ready_blessing({AREA_PATH: 2})  # 260px
+  await _physics_frames()
+
+  blessing.activate()
+
+  assert_bool(bullet.is_queued_for_deletion()).is_true()
+
+
+func test_recover_enchantment_data() -> void:
+  var enchant: Enchantment = load(RECOVER_PATH)
+  assert_str(str(enchant.id)).is_equal("shield_recover_delay_pct")
+  assert_str(enchant.display_name).is_equal("速復")
+  assert_str(enchant.description).is_equal("加護の再使用時間を短縮します。")
+  var expected := {1: -0.1, 2: -0.2, 3: -0.5}
+  for level in expected:
+    var mods := enchant.get_modifiers(level)
+    assert_float(float(mods["shield_recover_delay_pct"])).is_equal_approx(expected[level], 0.0001)
+    assert_float(float(mods["blessing_cooldown_pct"])).is_equal_approx(expected[level], 0.0001)
+
+
+func test_recover_enchantment_shortens_cooldown() -> void:
+  var expected := {1: 36.0, 2: 32.0, 3: 20.0}
+  for level in expected:
+    var blessing := _make_blessing({RECOVER_PATH: level})
+    assert_float(blessing.cooldown_total).is_equal_approx(expected[level], 0.001)
+    assert_float(blessing._recharge_timer.time_left).is_equal_approx(expected[level], 0.1)

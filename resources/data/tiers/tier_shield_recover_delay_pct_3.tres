@@ -6,6 +6,7 @@
 script = ExtResource("1_srdp3")
 level = 3
 modifiers = {
+"blessing_cooldown_pct": -0.5,
 "shield_recover_delay_pct": -0.5
 }
 metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"

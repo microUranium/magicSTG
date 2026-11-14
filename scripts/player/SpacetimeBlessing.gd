@@ -8,9 +8,9 @@ extends ActiveBlessingBase
 ## 弾は爆発させずに消す（自機のすぐ近くで消すため、敵弾の爆発に巻き込まれないように）。
 ##
 ## base_modifiers（エンチャントで増減できるよう、値はすべてここから読む）:
-##   blessing_cooldown_sec  : クールタイム（× (1 + blessing_cooldown_pct)）
+##   blessing_cooldown_sec  : クールタイム（× (1 + blessing_cooldown_pct)＝速復）
 ##   spacetime_duration_sec : 効果時間（× (1 + blessing_duration_pct)＝持続）
-##   spacetime_radius       : 結界の半径（(+ spacetime_radius_add) × (1 + spacetime_radius_pct)）
+##   spacetime_radius       : 結界の半径（(+ spacetime_radius_add) × (1 + blessing_area_pct)＝広範）
 
 signal field_started
 signal field_ended
@@ -81,7 +81,7 @@ func _recalc_stats() -> void:
   )
   radius = (
     (float(mods.get("spacetime_radius", radius)) + _sum_add("spacetime_radius_add"))
-    * (1.0 + _sum_pct("spacetime_radius_pct"))
+    * (1.0 + _sum_pct("blessing_area_pct"))
   )
 
 

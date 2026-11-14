@@ -26,7 +26,7 @@ func _ready():
   if direction != Vector2.ZERO:
     rotation = direction.angle() + PI / 2  # 上向きが0度なので90度回転
   if speed > min_speed:
-    var tw = get_tree().create_tween()
+    var tw = _track_scaled_tween(get_tree().create_tween())
     tw.tween_property(self, "speed", min_speed, deceleration_time)
     tw.play()
 
@@ -48,6 +48,11 @@ func _start_fade_out():
 
 
 func _process(delta):
+  # 毎フレームの処理は弾の時間（time_scale）で進める。サブクラスは _bullet_process を上書きする
+  _bullet_process(delta * time_scale)
+
+
+func _bullet_process(delta: float) -> void:
   # === 接触継続ダメージ（contact_damage_tick_sec が 0 なら何もしない） ===
   _update_contact_damage(delta)
 

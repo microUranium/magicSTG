@@ -2,5 +2,5 @@ extends UniversalBullet
 class_name ScytheBullet
 
 
-func _process(delta):
-  super._process(delta)
+func _bullet_process(delta: float) -> void:
+  super._bullet_process(delta)

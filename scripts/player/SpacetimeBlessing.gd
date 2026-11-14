@@ -19,6 +19,7 @@ enum State { COOLING, READY, ACTIVE }
 
 const FIELD_EFFECT := preload("res://scripts/effects/SpacetimeFieldEffect.gd")
 const SLOW_TIME_SCALE := 0.05  # 結界内の敵弾の時間の進み方（-95%）
+const WARN_BEFORE_SEC := 2.0  # 効果終了の何秒前から結界を点滅させるか
 const ENEMY_BULLET_GROUP := "players"  # 敵弾の target_group
 ## 弾を探すコリジョンマスク。弾の多くはレイヤー2だが、敵シーンに埋め込まれた弾
 ## （ゴースト・スパイク・沼の鳥など）はレイヤー未設定＝1 のため、1 と 2 の両方を見る。
@@ -137,6 +138,17 @@ func _process(_delta: float) -> void:
       if duration_sec > 0.0:
         set_gauge(_duration_timer.time_left / duration_sec * 100.0)
       _follow_player()
+      _update_warning()
+
+
+func _update_warning() -> void:
+  """効果終了の WARN_BEFORE_SEC 秒前から、結界を点滅させる。
+  効果時間のタイマーから計算するので、一時停止中は点滅もその場で止まる"""
+  if not is_instance_valid(_effect):
+    return
+  var left := _duration_timer.time_left
+  if left > 0.0 and left <= WARN_BEFORE_SEC:
+    _effect.set_warning_elapsed(WARN_BEFORE_SEC - left)
 
 
 func _start_recharge() -> void:

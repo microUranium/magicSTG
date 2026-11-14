@@ -345,3 +345,73 @@ func test_layer1_enemy_bullets_are_slowed_and_vanished() -> void:
 
   blessing._end_field()
   assert_bool(entering.is_queued_for_deletion()).is_true()  # 終了時に消える
+
+
+# --- 演出：終了前の点滅・終了時の縮小 -------------------------------------------
+
+
+func test_field_effect_warning_blink_is_smooth() -> void:
+  """1 周期 0.5 秒：0.35 秒かけて余韻を残しながら暗くなり（最暗 0.15）、0.15 秒で点き直す"""
+  var effect: CanvasLayer = auto_free(FIELD_EFFECT.new())
+  add_child(effect)
+  var mat: ShaderMaterial = effect.get_field_material()
+  effect.start(200.0)
+
+  var cases := [[0.0, 1.0], [0.175, 0.575], [0.35, 0.15], [0.425, 0.575], [0.5, 1.0], [0.85, 0.15]]
+  for c in cases:
+    effect.set_warning_elapsed(c[0])
+    var inside := float(mat.get_shader_parameter("invert_inside"))
+    assert_float(inside).override_failure_message("elapsed=%s" % c[0]).is_equal_approx(c[1], 0.001)
+
+
+func test_field_effect_warning_blink_has_no_jumps() -> void:
+  """0/1 で切り替わらず、細かく区切っても値が大きく飛ばない（周期の切れ目も含む）"""
+  var prev: float = FIELD_EFFECT.blink_value(0.0)
+  var max_step := 0.0
+  for i in range(1, 301):  # 0〜1.5 秒を 0.005 秒刻みで
+    var value: float = FIELD_EFFECT.blink_value(i * 0.005)
+    max_step = maxf(max_step, absf(value - prev))
+    prev = value
+  assert_float(max_step).is_less(0.1)
+
+
+func test_field_effect_finish_shrinks_to_zero() -> void:
+  var effect: CanvasLayer = FIELD_EFFECT.new()
+  add_child(effect)
+  var mat: ShaderMaterial = effect.get_field_material()
+  effect.start(200.0)
+  effect.set_warning_elapsed(0.35)  # 点滅で一番暗いところ
+
+  effect.finish()
+  # 点滅中でも、縮む結界が見えるように内側は反転に戻る
+  assert_float(float(mat.get_shader_parameter("invert_inside"))).is_equal_approx(1.0, 0.001)
+  await effect.tree_exited
+
+  assert_float(float(mat.get_shader_parameter("radius_px"))).is_equal_approx(0.0, 0.001)
+  assert_float(float(mat.get_shader_parameter("flash"))).is_equal_approx(0.0, 0.001)
+
+
+func test_blessing_blinks_field_in_last_two_seconds() -> void:
+  # 演出は current_scene に追加されるため、テストの間だけルート直下の仮のシーンにする
+  var world: Node2D = auto_free(Node2D.new())
+  get_tree().root.add_child(world)
+  var saved_scene := get_tree().current_scene
+  get_tree().current_scene = world
+  var blessing := _ready_blessing()
+  blessing.activate()
+  var mat: ShaderMaterial = blessing._effect.get_field_material()
+
+  blessing._duration_timer.start(3.0)  # 残り 3 秒：まだ点滅しない
+  blessing._process(0.0)
+  assert_float(float(mat.get_shader_parameter("invert_inside"))).is_equal_approx(1.0, 0.001)
+
+  blessing._duration_timer.start(1.65)  # 予告開始から 0.35 秒：一番暗い
+  blessing._process(0.0)
+  assert_float(float(mat.get_shader_parameter("invert_inside"))).is_equal_approx(0.15, 0.01)
+
+  blessing._duration_timer.start(1.5)  # 予告開始から 0.5 秒：点き直している
+  blessing._process(0.0)
+  assert_float(float(mat.get_shader_parameter("invert_inside"))).is_equal_approx(1.0, 0.01)
+
+  blessing._end_field()
+  get_tree().current_scene = saved_scene

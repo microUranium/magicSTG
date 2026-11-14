@@ -50,7 +50,7 @@ func _make_blessing(enchants: Dictionary = {}) -> Node:
   return blessing
 
 
-func _make_bullet(pos: Vector2, target_group := "players") -> StubBullet:
+func _make_bullet(pos: Vector2, target_group := "players", layer := 2) -> StubBullet:
   var bullet := StubBullet.new()
   bullet.target_group = target_group
   var col := CollisionShape2D.new()
@@ -58,7 +58,7 @@ func _make_bullet(pos: Vector2, target_group := "players") -> StubBullet:
   circle.radius = 6.0
   col.shape = circle
   bullet.add_child(col)
-  bullet.collision_layer = 2
+  bullet.collision_layer = layer
   bullet.collision_mask = 0
   add_child(bullet)
   auto_free(bullet)
@@ -324,3 +324,24 @@ func test_recover_enchantment_shortens_cooldown() -> void:
     var blessing := _make_blessing({RECOVER_PATH: level})
     assert_float(blessing.cooldown_total).is_equal_approx(expected[level], 0.001)
     assert_float(blessing._recharge_timer.time_left).is_equal_approx(expected[level], 0.1)
+
+
+# --- レイヤー1の敵弾（ゴースト・スパイク・沼の鳥の埋め込みの弾） ---------------------
+
+
+func test_layer1_enemy_bullets_are_slowed_and_vanished() -> void:
+  """敵シーンに埋め込まれた弾はレイヤー未設定（1）。それでも減速し、発動時・終了時に消える"""
+  var at_start := _make_bullet(Vector2(400, 300), "players", 1)
+  var blessing := _ready_blessing()
+  await _physics_frames()
+
+  blessing.activate()
+  assert_bool(at_start.is_queued_for_deletion()).is_true()  # 発動時に消える
+  await _physics_frames()
+
+  var entering := _make_bullet(Vector2(400, 300), "players", 1)
+  await _physics_frames()
+  assert_float(entering.time_scale).is_equal_approx(0.05, 0.0001)  # 結界で減速
+
+  blessing._end_field()
+  assert_bool(entering.is_queued_for_deletion()).is_true()  # 終了時に消える

@@ -20,7 +20,10 @@ enum State { COOLING, READY, ACTIVE }
 const FIELD_EFFECT := preload("res://scripts/effects/SpacetimeFieldEffect.gd")
 const SLOW_TIME_SCALE := 0.05  # 結界内の敵弾の時間の進み方（-95%）
 const ENEMY_BULLET_GROUP := "players"  # 敵弾の target_group
-const BULLET_LAYER_MASK := 2  # 弾のコリジョンレイヤー
+## 弾を探すコリジョンマスク。弾の多くはレイヤー2だが、敵シーンに埋め込まれた弾
+## （ゴースト・スパイク・沼の鳥など）はレイヤー未設定＝1 のため、1 と 2 の両方を見る。
+## 敵（レイヤー3）や自機（レイヤー1）も引っかかるが、_is_enemy_bullet() で敵弾だけに絞る。
+const BULLET_DETECT_MASK := 1 | 2
 const ACTIVATION_SFX := "activation_blessing_spacetime"  # 発動時の効果音（SFX_Catalog の名前）
 
 var cooldown_total: float = 40.0
@@ -57,7 +60,7 @@ func _ready() -> void:
   _field = Area2D.new()
   _field.name = "Field"
   _field.collision_layer = 0
-  _field.collision_mask = BULLET_LAYER_MASK
+  _field.collision_mask = BULLET_DETECT_MASK
   _field.monitorable = false
   _field.monitoring = false
   _field_shape = CircleShape2D.new()
@@ -229,7 +232,7 @@ func _vanish_enemy_bullets_in_radius() -> void:
   var query := PhysicsShapeQueryParameters2D.new()
   query.shape = shape
   query.transform = Transform2D(0.0, _player_ref.global_position)
-  query.collision_mask = BULLET_LAYER_MASK
+  query.collision_mask = BULLET_DETECT_MASK
   query.collide_with_areas = true
   query.collide_with_bodies = false
   for hit in space.intersect_shape(query, 2048):

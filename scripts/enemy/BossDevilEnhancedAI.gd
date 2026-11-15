@@ -26,6 +26,13 @@ var starrush_scene: PackedScene = preload("res://scenes/enemy/enemy_boss_devil_s
 
 var _phase_idx := 0
 var _phase2_starrush_count := 0
+var _beam_core: UniversalAttackCore = null  # phase5 のビーム専用コア（_pattern_cores とは別に管理）
+
+const DEVIL_BEAM_SCENE := preload("res://scenes/attackCores/enemy/enemy_beam_devil.tscn")
+const DEVIL_BEAM_TEXTURE := preload("res://assets/gfx/sprites/beam_devil_sprite.png")
+const SCREEN_HALF_VERTICAL_DIRECTION := preload(
+  "res://scripts/enemy/ScreenHalfVerticalDirection.gd"
+)
 
 
 func _ready():
@@ -65,6 +72,7 @@ func _next_phase():
     return
 
   _cancel_current_pattern()
+  _cancel_devil_beam()  # フェーズが変わったらビームも止める
 
   _phase_idx += 1
   if _phase_idx >= phases.size():
@@ -152,8 +160,10 @@ func _next_pattern():
   # phase5: _idx は「開始したパターンの次」を指すため、_idx % size == k はパターン番号 k-1 の開始時
   elif _phase_idx == 5 and _idx % patterns.size() == 3:
     _set_attack_patterns(phase3_patterns_2)
+    _start_devil_beam()  # 32方向5連射の間、定期的にビームを撃つ
   elif _phase_idx == 5 and (_idx % patterns.size() == 10 or _idx % patterns.size() == 25):
     _clear_all_pattern_cores()
+    _cancel_devil_beam()  # 32方向5連射の終了に合わせて、警告線・発射中のビームごと止める
   elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 26):
     _set_attack_patterns(phase3_patterns_3)
   elif _phase_idx == 5 and _idx % patterns.size() == 12:
@@ -164,6 +174,7 @@ func _next_pattern():
   elif _phase_idx == 5 and _idx % patterns.size() == 17:
     _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
+    _start_devil_beam()  # 32方向5連射の間、定期的にビームを撃つ
   elif _phase_idx == 5 and _idx % patterns.size() == 27:
     _attack_star_spiral()  # 突進中の渦巻き攻撃
   elif _phase_idx == 5 and _idx % patterns.size() == 0:
@@ -727,6 +738,60 @@ func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
   await get_tree().create_timer(1, false).timeout
   if _phase_idx == _phase:  # 待機中に次のフェーズへ進んでいたら、次フェーズのコアは残す
     _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
+
+
+func create_phase3_beam_pattern() -> AttackPattern:
+  """Phase3相当のビーム（警告線2秒 → 発射5秒 → クールタイム5秒）。
+  ボスが画面の上半分にいれば下向き、下半分にいれば上向きに撃ち、警告線・ビームともボスに追従する"""
+  var pattern := AttackPattern.new()
+  pattern.pattern_type = AttackPattern.PatternType.BEAM
+  pattern.beam_scene = DEVIL_BEAM_SCENE  # 当たり判定の帯も見た目のビーム本体と同じ 128px
+  pattern.target_group = "players"
+  pattern.damage = 2
+  pattern.bullet_count = 1
+  pattern.beam_duration = 5.0
+  pattern.burst_delay = 5.0
+  pattern.auto_start = true
+  pattern.beam_offset = Vector2.ZERO  # 上向き・下向きのどちらでもボスの中心から出す
+  pattern.direction_type = AttackPattern.DirectionType.CUSTOM
+  pattern.custom_script = SCREEN_HALF_VERTICAL_DIRECTION
+
+  # 画像の1コマ（128px）のうちビーム本体は 16px。シーン側で本体を含む中央 64px を等倍で切り出し、
+  # ビーム全体を 8 倍にして本体を 128px に見せる（端の丸い飾りも縦横同じ比率で拡大される）。
+  # 当たり判定の幅は UniversalBeam がスケールを打ち消して 128px に保ち、長さは見た目と揃う
+  var visual := BeamVisualConfig.new()
+  visual.texture = DEVIL_BEAM_TEXTURE
+  visual.width = 64.0
+  visual.scale = Vector2(8, 8)
+  pattern.beam_visual_config = visual
+
+  var warning := AttackWarningConfig.new()
+  warning.warning_duration = 2.0
+  warning.warning_length = 1000.0
+  warning.glow_width = 128.0
+  warning.outline_width = 128.0
+  pattern.warning_configs = [warning]
+
+  return pattern
+
+
+func _start_devil_beam():
+  """ビーム専用コアを追加する。最初の警告線はクールタイム（5秒）の後に出る"""
+  _cancel_devil_beam()
+  _beam_core = attack_core_slot.add_core(core_scene) as UniversalAttackCore
+  if _beam_core == null:
+    return
+  _beam_core.set_attack_pattern(create_phase3_beam_pattern())
+  # 追加時に既定の1秒で始まったクールダウンを、パターンのクールタイムでやり直す
+  _beam_core._start_cooldown()
+
+
+func _cancel_devil_beam():
+  """表示中の警告線・発射中のビームを消し、ビーム専用コアを取り除く"""
+  if is_instance_valid(_beam_core):
+    _beam_core.cancel_attack()
+    attack_core_slot.remove_core(_beam_core)
+  _beam_core = null
 
 
 func _attack_star_spiral(_phase = 5):

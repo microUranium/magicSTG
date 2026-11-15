@@ -11,6 +11,12 @@ signal slot_changed(new_item: ItemInstance)
 ## Constants -----------------------------------------------------------
 const EMPTY_ICON: Texture2D = preload("res://assets/gfx/sprites/item_panel_base.png")
 const ITEM_FRAME: Texture2D = preload("res://assets/gfx/sprites/item_frame.png")
+const BROKEN_ICONS := {
+  ItemBase.ItemType.ATTACK_CORE: preload("res://assets/gfx/sprites/magic_broken_sprite.png"),
+  ItemBase.ItemType.BLESSING: preload("res://assets/gfx/sprites/blessing_broken_sprite.png"),
+}
+const BROKEN_FRAME_COLOR := Color("#808080")  # 破壊済みアイテムの枠色（グレー）
+const BROKEN_MODULATE := Color(0.5, 0.5, 0.5)  # 破壊済みスロットのグレーアウト
 
 ## Ready ---------------------------------------------------------------
 @onready var icon: TextureRect = $TextureRect
@@ -23,21 +29,32 @@ func _ready():
   icon.connect("mouse_exited", _on_hover_exit)
 
 
+## Public API ----------------------------------------------------------
+func is_broken() -> bool:
+  return data != null and data.inst.is_broken
+
+
 ## Private helpers -----------------------------------------------------
 func _refresh():
-  icon.texture = EMPTY_ICON if data == null else data.inst.prototype.icon
-  if data != null:
+  if data == null:
+    icon.texture = EMPTY_ICON
+    frame.texture = null
+  elif data.inst.is_broken:
+    icon.texture = BROKEN_ICONS.get(data.inst.prototype.item_type, data.inst.prototype.icon)
+    frame.texture = ITEM_FRAME
+    frame.modulate = BROKEN_FRAME_COLOR
+  else:
+    icon.texture = data.inst.prototype.icon
     frame.texture = ITEM_FRAME
     frame.modulate = data.inst.get_rarity_color()
-  else:
-    frame.texture = null
+  modulate = BROKEN_MODULATE if is_broken() else Color.WHITE
   queue_redraw()
 
 
-## Drag & Drop -------------------------------------------------------
+## Drag & Drop -------------------------------------------------------
 # Drag 開始
 func _get_drag_data(_pos):
-  if data == null:
+  if data == null or is_broken():
     return null
   var preview_container := Control.new()
   var preview_icon := TextureRect.new()
@@ -67,11 +84,14 @@ func _drop_data(_pos, drop):
 
 # ドロップ受入可否
 func _can_drop_data(_pos, drop):
+  # 破壊済みスロットとの交換を許すと、破壊アイテムが相手側（インベントリ）へ移ってしまう
+  if is_broken():
+    return false
   return drop.has("type") and drop.type == "item"
 
 
 func _on_hover():
-  if data:
+  if data and not is_broken():
     EquipSignals.request_show_item.emit(data.inst)  # アイテム情報を表示
 
 
@@ -81,6 +101,6 @@ func _on_hover_exit():
 
 func _gui_input(event):
   if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-    if data == null:
+    if data == null or is_broken():
       return
     EquipSignals.swap_to_each_grid.emit(self, get_parent())  # 別のインベントリへのアイテム移動要求

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://c6ghog3dcrij3"]
 
 [ext_resource type="PackedScene" uid="uid://dim7ob3h80u4d" path="res://scenes/enemy/enemy_swamp_bird.tscn" id="0_base"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]

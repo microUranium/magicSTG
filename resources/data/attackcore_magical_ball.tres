@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bdwl1xukq0b4b" path="res://assets/gfx/sprites/icon_magic_magical_ball.png" id="8_icon"]
 [ext_resource type="Script" uid="uid://31siypvcpkwh" path="res://scripts/item/AttackCoreItem.gd" id="9_item"]
 [ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="10_explosion"]
-[ext_resource type="Resource" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
+[ext_resource type="Resource" uid="uid://bk73r41qbk72l" path="res://resources/data/enchantment_bullet_count_add.tres" id="ae_bullet_count_add"]
 [ext_resource type="Resource" uid="uid://dck1crqkk2ov5" path="res://resources/data/enchantment_bullet_lifetime_pct.tres" id="ae_bullet_lifetime_pct"]
 [ext_resource type="Resource" uid="uid://d1s06gkc12ui4" path="res://resources/data/enchantment_cooldown_pct.tres" id="ae_cooldown_pct"]
 [ext_resource type="Resource" path="res://resources/data/enchantment_penetration_add.tres" id="ae_penetration_add"]

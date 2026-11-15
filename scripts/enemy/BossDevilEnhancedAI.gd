@@ -9,6 +9,7 @@ class_name BossDevilEnhancedAI
 @export var phase3_patterns_2: Array[AttackPattern]
 @export var phase3_patterns_3: Array[AttackPattern]
 @export var phase3_patterns_4: Array[AttackPattern]
+@export var phase3_patterns_5: Array[AttackPattern]  # 突進後の星の渦巻き3連射
 @export var phase4_patterns_1: Array[AttackPattern]
 @export var phase4_patterns_2: Array[AttackPattern]
 
@@ -148,20 +149,25 @@ func _next_pattern():
     _set_attack_patterns(phase2_patterns_1)
   elif _phase_idx == 3 and (_idx % patterns.size() == 8 or _idx % patterns.size() == 0):
     _clear_all_pattern_cores()
+  # phase5: _idx は「開始したパターンの次」を指すため、_idx % size == k はパターン番号 k-1 の開始時
   elif _phase_idx == 5 and _idx % patterns.size() == 3:
     _set_attack_patterns(phase3_patterns_2)
-  elif _phase_idx == 5 and (_idx % patterns.size() == 10 or _idx % patterns.size() == 24):
+  elif _phase_idx == 5 and (_idx % patterns.size() == 10 or _idx % patterns.size() == 25):
     _clear_all_pattern_cores()
-  elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 25):
+  elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 26):
     _set_attack_patterns(phase3_patterns_3)
-  elif _phase_idx == 5 and _idx % patterns.size() == 15:
-    _clear_all_pattern_cores()
-    _attack_starrush_2(0.5, 10)
+  elif _phase_idx == 5 and _idx % patterns.size() == 12:
+    _attack_star_spiral()  # 下端への突進（パターン12）を終えた
   elif _phase_idx == 5 and _idx % patterns.size() == 16:
     _clear_all_pattern_cores()
+    _attack_starrush_2(0.5, 10)
+  elif _phase_idx == 5 and _idx % patterns.size() == 17:
+    _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
+  elif _phase_idx == 5 and _idx % patterns.size() == 27:
+    _attack_star_spiral()  # 上端への突進（パターン27）を終えた
   elif _phase_idx == 5 and _idx % patterns.size() == 0:
-    _attack_phase3_rush()
+    _attack_phase3_rush()  # 上端から戻り、最後の待機（パターン29）を開始
 
 
 func _set_attack_patterns(patterns: Array[AttackPattern]):
@@ -522,6 +528,42 @@ func create_phase3_pattern_4() -> Array[AttackPattern]:
   return patterns
 
 
+func create_phase3_pattern_5() -> Array[AttackPattern]:
+  """Phase3相当のパターンを作成（突進後に星10個のリングを渦巻状に5連射）"""
+  var patterns: Array[AttackPattern] = []
+
+  var pattern = AttackPatternFactory.create_rapid_fire(
+    AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.1, 5
+  )
+  pattern.target_group = "players"
+  pattern.auto_start = false
+  pattern.burst_delay = 20
+  pattern.bullet_count = 10
+  pattern.direction_type = AttackPattern.DirectionType.CIRCLE
+
+  # 螺旋移動の設定（弾ごとの位相ずれは UniversalAttackCore 側で自動設定される）
+  var movement_config = BulletMovementConfig.new()
+  movement_config.movement_type = BulletMovementConfig.MovementType.SPIRAL
+  movement_config.initial_speed = 0.0  # 中心は発射位置に固定
+  movement_config.spiral_radius_growth = 350.0
+  movement_config.spiral_rotation_speed = 30.0
+  movement_config.spiral_clockwise = true
+  movement_config.spiral_phase_offset = 0.0
+  pattern.bullet_movement_config = movement_config
+
+  if visual_config_star != null:
+    pattern.bullet_visual_config = visual_config_star
+
+  # 画面外でも消えない設定
+  pattern.persist_offscreen = true
+  pattern.max_offscreen_distance = 2000.0  # 発射位置から2000pxまで
+  pattern.forced_lifetime = 5.0  # 最大5秒
+
+  patterns.append(pattern)
+
+  return patterns
+
+
 func create_phase4_pattern_1() -> Array[AttackPattern]:
   """Phase4相当のパターンを作成"""
   var layered_patterns: Array[AttackPattern] = []
@@ -685,6 +727,19 @@ func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
   await get_tree().create_timer(1, false).timeout
   if _phase_idx == _phase:  # 待機中に次のフェーズへ進んでいたら、次フェーズのコアは残す
     _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
+
+
+func _attack_star_spiral(_phase = 5):
+  """星の渦巻き5連射。既存のコア（星バリアなど）は残したまま、追加したコアだけを撃たせる"""
+  phase3_patterns_5 = create_phase3_pattern_5()
+  var first_new := _pattern_cores.size()
+  _add_attack_patterns(phase3_patterns_5)
+  await get_tree().process_frame
+  if _phase_idx != _phase:
+    return  # 待機中にフェーズが変わっていたら撃たない（コアは次フェーズの切り替えで消える）
+  for core in _pattern_cores.slice(first_new):
+    if is_instance_valid(core):
+      core.trigger()
 
 
 func _attack_final_rush():

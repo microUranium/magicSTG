@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StageSelectData" load_steps=38 format=3 uid="uid://dtmqpbvr6bhmq"]
+[gd_resource type="Resource" script_class="StageSelectData" load_steps=39 format=3 uid="uid://dtmqpbvr6bhmq"]
 
 [ext_resource type="Script" uid="uid://dpox3am3xjmyy" path="res://scripts/resources/StageSelectData.gd" id="2_1ifpm"]
 [ext_resource type="Script" uid="uid://dnqf62vu42hqi" path="res://scripts/resources/ChapterData.gd" id="2_chapter"]
@@ -372,11 +372,24 @@ random_seed_pools = Array[Dictionary]([])
 has_ending = false
 metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
+[sub_resource type="Resource" id="StageData_debug_6_test"]
+script = ExtResource("3_stage")
+stage_name = "DEBUG-6 山の単体テスト"
+chapter_id = "chapter_debug"
+stage_id = "debug_stage6_test"
+is_seed_fixed = true
+fixed_seed = "s6z2"
+is_unlocked = true
+dialogue_enabled = false
+random_seed_pools = Array[Dictionary]([])
+has_ending = false
+metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
+
 [sub_resource type="Resource" id="ChapterData_debug"]
 script = ExtResource("2_chapter")
 chapter_id = "chapter_debug"
 chapter_name = "DEBUG 雑魚敵の強さ比較"
-stages = Array[ExtResource("3_stage")]([SubResource("StageData_debug_3"), SubResource("StageData_debug_5"), SubResource("StageData_debug_6")])
+stages = Array[ExtResource("3_stage")]([SubResource("StageData_debug_3"), SubResource("StageData_debug_5"), SubResource("StageData_debug_6"), SubResource("StageData_debug_6_test")])
 is_unlocked = true
 background_texture = ExtResource("5_x38wm")
 is_debug_only = true

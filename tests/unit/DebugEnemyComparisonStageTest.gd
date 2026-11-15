@@ -39,6 +39,12 @@ const EXPECTED_STAGES := {
   },
 }
 
+# 単体テスト用ステージ（stage_id -> ステージ番号）。
+# 調整したい敵に合わせてシードを差し替えて使うため、出現する敵は固定しない
+const FREE_TEST_STAGES := {
+  "debug_stage6_test": 6,
+}
+
 
 func _load_wave_templates() -> Dictionary:
   var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(STAGE_DATA_PATH))
@@ -75,8 +81,10 @@ func test_debug_stages_spawn_each_enemy_alone_in_order() -> void:
   var templates := _load_wave_templates()
   var chapter := _debug_chapter()
 
-  assert_int(chapter.stages.size()).is_equal(EXPECTED_STAGES.size())
+  assert_int(chapter.stages.size()).is_equal(EXPECTED_STAGES.size() + FREE_TEST_STAGES.size())
   for stage in chapter.stages:
+    if FREE_TEST_STAGES.has(stage.stage_id):
+      continue
     assert_bool(EXPECTED_STAGES.has(stage.stage_id)).is_true()
     assert_bool(stage.is_seed_fixed).is_true()
 
@@ -98,10 +106,36 @@ func test_debug_stages_spawn_each_enemy_alone_in_order() -> void:
     assert_array(spawned).is_equal(EXPECTED_STAGES[stage.stage_id]["enemies"])
 
 
+func test_free_test_stages_use_existing_wave_templates() -> void:
+  var templates := _load_wave_templates()
+  var chapter := _debug_chapter()
+
+  for stage_id in FREE_TEST_STAGES:
+    var stage := chapter.get_stage_by_id(stage_id)
+    assert_object(stage).is_not_null()
+    assert_bool(stage.is_seed_fixed).is_true()
+    assert_bool(stage.is_unlocked).is_true()
+    # 会話を省略してボスも演出なしで戦えるようにする
+    assert_bool(stage.dialogue_enabled).is_false()
+
+    for part in stage.fixed_seed.split("-"):
+      # C / D で始まる ID はカットシーン・会話として解釈されてしまう
+      assert_bool(part.begins_with("C") or part.begins_with("D")).is_false()
+      (
+        assert_bool(templates.has(part))
+        . override_failure_message("missing template: " + part)
+        . is_true()
+      )
+
+
 func test_debug_stage_seeds_resolve_to_their_stage_environment() -> void:
   # StageManager._determine_current_stage() はシード中の "s6"〜"s2" を大きい順に探して背景・BGM を決める
   for stage in _debug_chapter().stages:
-    var expected: int = EXPECTED_STAGES[stage.stage_id]["stage_number"]
+    var expected: int = (
+      FREE_TEST_STAGES[stage.stage_id]
+      if FREE_TEST_STAGES.has(stage.stage_id)
+      else EXPECTED_STAGES[stage.stage_id]["stage_number"]
+    )
     var resolved := 1
     for n in [6, 5, 4, 3, 2]:
       if stage.fixed_seed.contains("s%d" % n):

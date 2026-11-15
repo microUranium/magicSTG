@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" uid="uid://dxmx3s51563vw" path="res://assets/gfx/effects/destroy_particle.png" id="1_star"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_shrink"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.839888, 0), -2.79113, 0.0, 0, 0]
+point_count = 2
+
+[node name="MichizureParticle" type="CPUParticles2D"]
+material = SubResource("CanvasItemMaterial_add")
+emitting = false
+texture = ExtResource("1_star")
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+direction = Vector2(1, 1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 120.0
+initial_velocity_max = 120.0
+angular_velocity_min = 180.0
+angular_velocity_max = 180.0
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_shrink")
+color = Color(1, 1, 1, 0.298039)

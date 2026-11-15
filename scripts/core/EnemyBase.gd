@@ -38,6 +38,47 @@ func take_damage(amount: int) -> void:
   flash_white()
 
 
+## 一度に大きなダメージ（道連など）を与える。HP は get_burst_hp_floor() より下には減らさない。
+## HP でフェーズが切り替わるボスで、フェーズを一度に複数飛ばさないためのもの。
+## 下限で止まって与えるダメージが 0 になったときは、何もしない。
+func take_burst_damage(amount: int) -> void:
+  var hp_node = get_node_or_null("HpNode")
+  if hp_node == null:
+    return
+  var clamped := mini(amount, maxi(0, int(hp_node.current_hp) - get_burst_hp_floor()))
+  if clamped > 0:
+    take_damage(clamped)
+
+
+## take_burst_damage() で HP をどこまで減らしてよいか。既定は 0（倒してよい）。
+## HP でフェーズが切り替わるボスは、次のフェーズに切り替わる HP のうち最も高い値を返す
+## （境目ちょうどで止まるので、次のフェーズには必ず進み、その先へは飛ばない）。
+func get_burst_hp_floor() -> int:
+  return 0
+
+
+## HP の割合 ratio で切り替わる境目の HP（current_hp <= max_hp * ratio を満たす最大の整数）
+func hp_threshold(ratio: float) -> int:
+  var hp_node = get_node_or_null("HpNode")
+  if hp_node == null:
+    return 0
+  return floori(hp_node.max_hp * ratio)
+
+
+## HP でフェーズが切り替わるボス向けの get_burst_hp_floor() の共通処理。
+## phase_end_ratios = {フェーズ番号: そのフェーズを終える HP の割合}。
+## 今のフェーズ以降で最初に来る境目を下限にする（境目のないフェーズ＝会話などを挟んでも、
+## その先の境目を飛ばさない）。この先に境目がなければ 0（倒してよい）。
+func phase_burst_hp_floor(phase_idx: int, phase_end_ratios: Dictionary) -> int:
+  var next_idx := -1
+  for idx in phase_end_ratios:
+    if idx >= phase_idx and (next_idx < 0 or idx < next_idx):
+      next_idx = idx
+  if next_idx < 0:
+    return 0
+  return hp_threshold(phase_end_ratios[next_idx])
+
+
 ## 撃破処理の多重実行を防ぐガード。撃破処理へ初めて到達したときのみ true を返す。
 ## 同一フレームで複数の弾が被弾すると on_hp_changed が複数回 current_hp<=0 で呼ばれ、
 ## SFX・ドロップ・弾消去などが二重に走るため、各撃破ブランチの先頭で呼び出すこと。

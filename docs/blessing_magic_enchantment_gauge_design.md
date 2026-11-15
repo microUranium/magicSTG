@@ -155,6 +155,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | `max_uses` | 1 | `max_uses + Σblessing_uses_add` | 1ステージの発動回数 |
 | `revive_hp_ratio` | 0.5 | `fortitude_revive_hp_ratio` | 復活後のHP（最大HPに対する割合） |
 | `invincible_sec` | 2.0 | `fortitude_invincible_sec × (1+Σfortitude_invincible_pct)` | 復活直後の無敵時間 |
+| `michizure_damage` | 0 | `Σfortitude_michizure_damage_add`（道連） | 発動時に画面内の敵全体へ与えるダメージ（0 なら無効） |
 
 挙動：
 - **発動条件**：`BlessingContainer.process_damage()` が全加護を通した後、残ダメージ ≧ 現在HP の時だけ `process_fatal_damage()` が呼ばれる。障壁などが肩代わりできるダメージでは回数を消費しない。
@@ -163,6 +164,33 @@ GenericGauge / GaugeManager ← HUD描画側
 - **見た目**：無敵中は自機スプライトのみ点滅（`BLINK_INTERVAL=0.08秒`、暗側アルファ0.2）。迷彩の半透明とは `Player._update_sprite_alpha()` で乗算合成される。
 - **発動演出**（`_play_revive_effects()`）：HUDフラッシュ、`request_start_vibration`（撃破時と同じ画面揺れ）、効果音 `fortitude`、星の収束パーティクル `scenes/player/revive_particle_player.tscn`（外周から出て `radial_accel` 負で中心へ収束。撃破時の飛散と逆の動き。寿命後に自動で解放）。
 - **ゲージ**：残回数を `durability` スタイルで表示し、使い切ったら `durability_recovering`（無効化画像）へ切替。
+- **道連**（`_michizure()`）：復活の直後に、`enemies` グループのうち `PlayArea.get_play_rect()` 内にいる敵へ `michizure_damage` を与える。幸運で回数を消費しなかったときも発動する。加護のダメージ補正（近接・背水・反撃）は乗らない固定ダメージ。
+  - ダメージは `EnemyBase.take_burst_damage()` で与える。HP を `get_burst_hp_floor()` より下に減らさないため、HP でフェーズが切り替わるボスは一度に 1 フェーズしか進まない（下記）。
+  - ヘビの胴体（`WormSegment`）は受けたダメージを頭へ渡すため、頭に置き換えて 1 回だけ当てる。
+  - 演出：画面内の敵それぞれの位置から `scenes/enemy/michizure_particle.tscn`（撃破時の星 `destroy_particle.tscn` の大きさ 0.5 倍・速さ 120）を出す。
+
+#### 大ダメージの下限（`EnemyBase.take_burst_damage()` / `get_burst_hp_floor()`）
+
+一度に大きなダメージを与えるもの（現状は道連のみ）は、`take_damage()` ではなく `take_burst_damage()` を使う。与えるダメージは `min(量, 今のHP − get_burst_hp_floor())` で、0 以下なら何もしない。
+
+- 既定の下限は 0（倒してよい）。
+- HP でフェーズが切り替わるボスは「次のフェーズに切り替わる HP のうち最も高い値」（`hp_threshold(割合)` ＝ `floor(max_hp × 割合)`）を返す。境目ちょうどで止まるので、次のフェーズには必ず進み、その先へは飛ばない。最後のフェーズでは 0 で、そのまま倒せる。
+- 多段階のボスは `PHASE_END_HP_RATIOS = {フェーズ番号: そのフェーズを終える HP 割合}` を持ち、`on_hp_changed()` の切り替え条件と `phase_burst_hp_floor()` の両方がこれを使う。`phase_burst_hp_floor()` は今のフェーズ以降で最初に来る境目を下限にするため、境目のないフェーズ（会話など）を挟んでも先の境目を飛ばさない。
+- 2 段階のボス（トリ・ローブ・クモ・エイ）は `PHASE_CHANGE_HP_RATIO` を持ち、フェーズ1以下の間だけ下限を返す。ハーピーはフェーズ1の `end_hp_ratio` を使う。
+- クマはフェーズ1と2を行き来し、境目を下回ってから実際に第2形態へ移るまで間があるため、「第2形態に一度入ったか」（`_second_form_reached`）で判定する。
+
+| ボス | 下限（フェーズ → 境目の HP 割合） |
+|---|---|
+| クマ | 第2形態に入るまで 50% |
+| トリ・ローブ・エイ | 1 → 50% |
+| クモ | 1 → 30% |
+| 悪魔 | 1 → 50% |
+| 強化版の悪魔 | 1 → 90%、3 → 60%、5 → 10% |
+| 人形 | 1 → 80%、3 → 40%、5 → 5% |
+| 吸血鬼 | 1 → 80%、3 → 40% |
+| 沼のトリ | 3 → 80%、5 → 25%、8 → 10% |
+| ヘビ | 2 → 30%、3 → 20%、4 → 10% |
+| ハーピー | 1 → `end_hp_ratio` |
 
 ### 1.9 時界の加護（SpacetimeBlessing）詳細
 
@@ -291,6 +319,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 反撃 | `counter_damage_pct` | 被弾（体力にダメージが通ったとき）から 0.67 秒間、敵に当たった弾の与ダメージ +%。被弾時の弾ではなく命中時に判定。再被弾で効果時間を戻す（重ならない）。爆発には乗らない | +50% / +100% / +200% | 背水・体力増強・近接 |
 | 凝集 | `proximity_range_add` | 最大ダメ到達距離 +px | +50 / +100 / +180 | 近接 |
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
+| 道連 | `fortitude_michizure_damage_add` | 不屈の発動時に、画面内の敵全体へダメージ（固定値。ボスは次のフェーズの境目まで） | 150 / 450 / 1000 | 不屈 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
 | 幸運 | `blessing_free_use_chance_pct` | 発動時に確率で使用回数を消費しない（残り0回では発動不可） | 10% / 30% / 70% | 不屈・打消・迷彩 |
 | 持続 | `blessing_duration_pct`＋`beam_duration_pct` | 効果時間 +%（迷彩の効果時間、ビームの照射時間） | +20% / +50% / +100% | 迷彩・ビーム |
@@ -320,7 +349,7 @@ GenericGauge / GaugeManager ← HUD描画側
 
 - `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
 - 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
-- 許可エンチャントが上限（3 個）より少ないアイテム（不屈の加護など）は、その数までしか付与されない。
+- 許可エンチャントが上限（3 個）より少ないアイテムは、その数までしか付与されない（現状は該当なし）。
 
 #### 攻撃コア
 
@@ -351,7 +380,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 近接の加護 | `blessing_proximity` | 凝集・無我・反撃 |
 | 打消の加護 | `blessing_nullify` | 保持・強奪・幸運 |
 | 迷彩の加護 | `blessing_camouflage` | 保持・幸運・持続 |
-| 不屈の加護 | `blessing_fortitude` | 保持・幸運 |
+| 不屈の加護 | `blessing_fortitude` | 保持・幸運・道連 |
 | 時界の加護 | `blessing_spacetime` | 持続・広範・速復 |
 
 - 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。

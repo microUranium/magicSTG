@@ -153,3 +153,115 @@ func test_bring_all_items():  # 結果インベントリから全アイテムを
 
   assert_int(result_inventory.grid_inv.get_items().size()).is_equal(InventoryService.get_max_size())  # インベントリに全アイテムが追加されているはず
   assert_int(result_inventory.grid_results.get_items().size()).is_equal(1)  # 結果アイテムが1つ残っているはず
+
+
+func _broken_item(uid: String, item_type := ItemBase.ItemType.ATTACK_CORE) -> ItemInstance:
+  var item: ItemInstance = ItemInstanceStubScript.dummy_item(uid, item_type)
+  item.is_broken = true
+  return item
+
+
+func test_broken_item_cannot_move_by_right_click() -> void:
+  Ephemeralnventory.add(_broken_item("broken1"))
+
+  result_inventory._load_inventory()
+  result_inventory._show_result_items()
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  result_inventory._on_swap_to_each_grid(
+    result_inventory.grid_results.get_child(0), result_inventory.grid_results
+  )
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  assert_int(result_inventory.grid_inv.get_items().size()).is_equal(0)
+  assert_int(result_inventory.grid_results.get_items().size()).is_equal(1)
+  assert_int(InventoryService.get_items().size()).is_equal(0)
+  assert_int(Ephemeralnventory.get_items().size()).is_equal(1)
+
+
+func test_broken_item_cannot_move_by_drag_to_empty_slot() -> void:
+  Ephemeralnventory.add(_broken_item("broken1"))
+
+  result_inventory._load_inventory()
+  result_inventory._show_result_items()
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  var result_item_panel: ItemSlotPanel = result_inventory.grid_results.get_child(0)
+  var empty_inv_panel: ItemSlotPanel = result_inventory.grid_inv.get_child(0)
+
+  result_inventory._swap_items(result_item_panel, empty_inv_panel)
+
+  assert_object(empty_inv_panel.data).is_null()
+  assert_int(InventoryService.get_items().size()).is_equal(0)
+  assert_int(Ephemeralnventory.get_items().size()).is_equal(1)
+
+
+func test_inventory_item_cannot_swap_with_broken_item() -> void:
+  var broken := _broken_item("broken1")
+  Ephemeralnventory.add(broken)
+  var item_inv: ItemInstance = ItemInstanceStubScript.dummy_item(
+    "inv1", ItemBase.ItemType.ATTACK_CORE
+  )
+  InventoryService.try_add(item_inv)
+
+  result_inventory._load_inventory()
+  result_inventory._show_result_items()
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  var inv_item_panel: ItemSlotPanel = result_inventory.grid_inv.get_child(0)
+  var result_item_panel: ItemSlotPanel = result_inventory.grid_results.get_child(0)
+
+  # インベントリのアイテムを破壊済みスロットへドロップしても交換されない
+  result_inventory._swap_items(inv_item_panel, result_item_panel)
+
+  assert_str(inv_item_panel.data.inst.uid).is_equal(item_inv.uid)
+  assert_str(result_item_panel.data.inst.uid).is_equal(broken.uid)
+  assert_bool(InventoryService.get_items().has(broken)).is_false()
+  assert_bool(Ephemeralnventory.get_items().has(broken)).is_true()
+
+
+func test_bring_all_items_leaves_broken_items() -> void:
+  var broken := _broken_item("broken1")
+  var movable: ItemInstance = ItemInstanceStubScript.dummy_item(
+    "result1", ItemBase.ItemType.ATTACK_CORE
+  )
+  Ephemeralnventory.add(broken)
+  Ephemeralnventory.add(movable)
+
+  result_inventory._load_inventory()
+  result_inventory._show_result_items()
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  result_inventory._on_bring_all_items_from_result_inventory_pressed()
+
+  await get_tree().process_frame  # UI 更新待ち
+
+  assert_int(result_inventory.grid_inv.get_items().size()).is_equal(1)
+  assert_str(result_inventory.grid_inv.get_items()[0].inst.uid).is_equal(movable.uid)
+  assert_int(result_inventory.grid_results.get_items().size()).is_equal(1)
+  assert_str(result_inventory.grid_results.get_items()[0].inst.uid).is_equal(broken.uid)
+  assert_bool(Ephemeralnventory.get_items().has(broken)).is_true()
+  assert_bool(InventoryService.get_items().has(broken)).is_false()
+
+
+func test_leave_warning_not_needed_when_empty() -> void:
+  assert_bool(result_inventory._needs_leave_warning()).is_false()
+
+
+func test_leave_warning_not_needed_with_only_broken_items() -> void:
+  Ephemeralnventory.add(_broken_item("broken1", ItemBase.ItemType.ATTACK_CORE))
+  Ephemeralnventory.add(_broken_item("broken2", ItemBase.ItemType.BLESSING))
+
+  assert_bool(result_inventory._needs_leave_warning()).is_false()
+
+
+func test_leave_warning_needed_with_movable_item() -> void:
+  Ephemeralnventory.add(_broken_item("broken1"))
+  Ephemeralnventory.add(ItemInstanceStubScript.dummy_item("result1", ItemBase.ItemType.ATTACK_CORE))
+
+  assert_bool(result_inventory._needs_leave_warning()).is_true()

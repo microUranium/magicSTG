@@ -77,6 +77,9 @@ func _swap_items(src: Node, dst: Node) -> void:
     return
   if not src_grid or not dst_grid:
     return
+  # 破壊済みアイテムはどちら側にあっても移動・交換させない
+  if src.is_broken() or dst.is_broken():
+    return
 
   # グリッド間の移動の場合、それぞれのアイテム所持情報を更新
   if src_grid != dst_grid:
@@ -137,6 +140,8 @@ func _on_swap_to_each_grid(src: Node, grid: Node):
       return  # 不明なグリッド
 
   if src is ItemSlotPanel and src.data:
+    if src.is_broken():
+      return  # 破壊済みアイテムは移動できない
     var item: ItemPanelData = src.data
     var items: Array[ItemPanelData] = _collect_inventory_items(dst_grid)
     if dst_grid == grid_inv:
@@ -163,10 +168,15 @@ func _on_request_show_item(item: ItemInstance):
 
 
 func _on_back_pressed():
-  if grid_results.get_items().size() > 0:
+  if _needs_leave_warning():
     _show_popup_dialogue("取得アイテム欄にあるアイテムは失われます。", _on_ok_pressed)
   else:
     _on_ok_pressed()
+
+
+func _needs_leave_warning() -> bool:
+  # 破壊済みアイテムは元々持ち帰れないので、それしか残っていなければ警告しない
+  return Ephemeralnventory.has_movable_items()
 
 
 func _on_ok_pressed():
@@ -187,6 +197,8 @@ func _on_bring_all_items_from_result_inventory_pressed():
   for item in _collect_inventory_items(grid_results):
     if item.inst:
       var inst: ItemInstance = item.inst
+      if inst.is_broken:
+        continue  # 破壊済みアイテムは取得アイテム欄に残す
       if InventoryService.try_add(inst):
         Ephemeralnventory.remove(inst)
         result_items.erase(item)

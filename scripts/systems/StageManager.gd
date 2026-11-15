@@ -203,6 +203,8 @@ func _on_game_over() -> void:
     ui_controller.handle_game_over()
 
   await get_tree().create_timer(5.0, false).timeout
+  # 演出中に拾ったアイテムも対象にするため、遷移の直前に破壊判定する
+  Ephemeralnventory.roll_breakage()
   GameFlow.start_result_inventory()
 
 

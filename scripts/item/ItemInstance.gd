@@ -17,6 +17,9 @@ const RARITY_COLORS = {
 var uid: String = ""  # ユニークID
 var prototype: ItemBase
 var enchantments: Dictionary[Enchantment, int] = {}  # enchant: level
+## ゲームオーバー時の破壊判定で破壊されたか（ランタイムのみ。セーブ対象外）
+## 破壊されたアイテムはリザルト画面でインベントリへ移動できない
+var is_broken: bool = false
 
 # --- 互換用ダミー ---
 ## 将来の Stack 実装時、

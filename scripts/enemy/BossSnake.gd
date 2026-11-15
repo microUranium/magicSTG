@@ -3,6 +3,9 @@ class_name BossSnake
 
 signal change_body_attack(_phase_idx: int)  # ボディアタックの変更を通知
 
+## HP でフェーズが切り替わる境目 {フェーズ番号: そのフェーズを終える HP の割合}
+const PHASE_END_HP_RATIOS := {2: 0.3, 3: 0.2, 4: 0.1}
+
 # 衝突ダメージ設定
 @export var damage: int = 10  # プレイヤーに与えるダメージ
 
@@ -31,17 +34,21 @@ func _on_area_entered(body):
     body.take_damage(damage)
 
 
+func get_burst_hp_floor() -> int:
+  return phase_burst_hp_floor(ai._phase_idx, PHASE_END_HP_RATIOS)
+
+
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   """HP変更時の処理"""
-  if current_hp <= max_hp * 0.3 and ai._phase_idx == 2:
+  if current_hp <= max_hp * PHASE_END_HP_RATIOS[2] and ai._phase_idx == 2:
     # Phase 2でHPが30%以下になったら次のフェーズへ
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)
-  elif current_hp <= max_hp * 0.2 and ai._phase_idx == 3:
+  elif current_hp <= max_hp * PHASE_END_HP_RATIOS[3] and ai._phase_idx == 3:
     # Phase 3でHPが20%以下になったら次のフェーズへ
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)
-  elif current_hp <= max_hp * 0.1 and ai._phase_idx == 4:
+  elif current_hp <= max_hp * PHASE_END_HP_RATIOS[4] and ai._phase_idx == 4:
     # Phase 4でHPが10%以下になったら次のフェーズへ
     ai._phase_idx += 1
     change_body_attack.emit(ai._phase_idx)

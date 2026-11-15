@@ -10,6 +10,13 @@ func take_damage(amount: int) -> void:
   super.take_damage(amount)
 
 
+func get_burst_hp_floor() -> int:
+  # フェーズ1の間は、フェーズの終了 HP 割合（end_hp_ratio）より下に減らさない
+  if ai._phase_idx <= 1 and ai.phases.size() > 1:
+    return hp_threshold(ai.phases[1].end_hp_ratio)
+  return 0
+
+
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
   # HPバーは BossHpBar(PER_PHASE) が自己配線で表示。ここではフェーズ遷移のみ扱う。

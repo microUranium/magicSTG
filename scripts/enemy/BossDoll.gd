@@ -1,5 +1,8 @@
 extends EnemyBase
 
+## HP でフェーズが切り替わる境目 {フェーズ番号: そのフェーズを終える HP の割合}
+const PHASE_END_HP_RATIOS := {1: 0.8, 3: 0.4, 5: 0.05}
+
 @onready var ai: BossDollAI = $EnemyAI
 @onready var attack_collision: CollisionShape2D = $CollisionShape_attack
 var prev_position: Vector2 = Vector2.ZERO
@@ -23,23 +26,27 @@ func take_damage(amount: int) -> void:
   super.take_damage(amount)
 
 
+func get_burst_hp_floor() -> int:
+  return phase_burst_hp_floor(ai._phase_idx, PHASE_END_HP_RATIOS)
+
+
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  if current_hp <= max_hp * 0.8 and ai._phase_idx == 1:
+  if current_hp <= max_hp * PHASE_END_HP_RATIOS[1] and ai._phase_idx == 1:
     # HPが80%以下になったら次のフェーズへ
     if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
       StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
       StageSignals.emit_destroy_bullet()  # Destroy bullet
       StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
-  elif current_hp <= max_hp * 0.4 and ai._phase_idx == 3:
+  elif current_hp <= max_hp * PHASE_END_HP_RATIOS[3] and ai._phase_idx == 3:
     # HPが40%以下になったら次のフェーズへ
     if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
       StageSignals.emit_request_hud_flash(1)  # フラッシュを発行
       StageSignals.emit_destroy_bullet()  # Destroy bullet
       StageSignals.emit_signal("sfx_play_requested", "destroy_boss", global_position, 0, 0)
     ai._next_phase()
-  elif current_hp <= max_hp * 0.05 and ai._phase_idx == 5:
+  elif current_hp <= max_hp * PHASE_END_HP_RATIOS[5] and ai._phase_idx == 5:
     # HPが5%以下になったら次のフェーズへ
     if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す
       StageSignals.emit_request_hud_flash(1)  # フラッシュを発行

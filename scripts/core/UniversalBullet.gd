@@ -162,8 +162,8 @@ func set_spiral_center(center_pos: Vector2) -> void:
   _spiral_center = center_pos
 
 
-func _process(delta):
-  super._process(delta)
+func _bullet_process(delta: float) -> void:
+  super._bullet_process(delta)
 
   # フェード更新（FADE_INまたはFADE_OUTの場合のみ）
   if _fade_state == FadeState.FADE_IN or _fade_state == FadeState.FADE_OUT:

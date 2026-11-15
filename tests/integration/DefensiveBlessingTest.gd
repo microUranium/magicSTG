@@ -71,6 +71,22 @@ func test_shield_absorb_and_break() -> void:
 
 
 # 破壊されていない時、無被弾が続くとシールドが徐々に回復する
+# Player.take_damage() と同じ流れ（加護処理 → damage_received 発火）でも
+# シールドの被弾処理は1回だけ走ること
+func test_shield_damage_processed_once_per_hit() -> void:
+  var bl := _equip_blessing()
+  var p: Node = bl.player_ref
+  var hits := [0]
+  bl.shield_damaged.connect(func(_cur, _max): hits[0] += 1)
+
+  var final_dmg: int = bl.process_damage(p, 5)
+  p.emit_signal("damage_received", final_dmg)
+
+  assert_int(final_dmg).is_equal(0)
+  assert_int(hits[0]).is_equal(1)
+  assert_int(bl.shield_current).is_equal(45)
+
+
 func test_natural_regen_after_delay() -> void:
   var bl := _equip_blessing({"shield_regen_delay": 0.1, "shield_regen_rate": 50.0})
 

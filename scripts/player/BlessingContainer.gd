@@ -50,12 +50,14 @@ func equip_instance(inst: ItemInstance) -> void:
   add_child(blessing)
 
   blessing.on_equip(_player)
+  blessing.setup_counter(_player)  # 反撃（各加護の on_equip は基底を呼ばないためここで行う）
   blessings.append(blessing)
   emit_signal("blessing_equipped", blessing)
 
 
 func unequip_all() -> void:
   for b in blessings:
+    b.teardown_counter()
     b.on_unequip(_player)
     b.queue_free()
     emit_signal("blessing_unequipped", b)
@@ -85,7 +87,9 @@ func _is_fatal(player: Node2D, damage: int) -> bool:
   var hp = player.get("hp_node")
   if hp == null:
     return false
-  return damage >= hp.current_hp
+  # 追加の体力（庇護）が残っていれば、それを使い切るまでは致命傷にならない
+  var extra = hp.get("extra_hp")
+  return damage >= hp.current_hp + (int(extra) if extra != null else 0)
 
 
 # 与ダメージ（自弾→敵）に対する介入 -------------------------------
@@ -95,6 +99,7 @@ func process_outgoing_damage(enemy: Node, base_damage: int, ctx := {}) -> int:
   var bonus := 0.0
   for b in blessings:
     bonus += b.get_damage_bonus_pct(_player, enemy, ctx)
+    bonus += b.get_counter_bonus_pct()  # 反撃（被弾後の効果時間内のみ）
   return int(round(base_damage * (1.0 + bonus)))
 
 

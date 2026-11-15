@@ -2,6 +2,7 @@ extends BlessingBase
 
 ## 体力増強の加護：装備するとプレイヤーの最大HPが増加する（常時型）。
 ## 割合(hp_pct)は基底の最大HPをベースに加算する。
+## エンチャント「庇護」(hp_extra_pct) 装着時は、最大HPの割合だけ回復されない追加の体力を得る。
 
 var player_ref
 var _orig_max: int = 0
@@ -37,9 +38,20 @@ func _apply() -> void:
   player_ref.hp_node.set_max_hp(_orig_max + _bonus)
   player_ref.hp_node.heal(_bonus)  # 増えた枠を満タンで開始
   _applied = true
+  _grant_extra_hp()
+
+
+## 庇護：ステージ開始時（装備時）に、最大体力（この加護・増健を反映後）の割合だけ追加の体力を得る
+func _grant_extra_hp() -> void:
+  var pct := _sum_pct("hp_extra_pct")
+  if pct <= 0.0 or not player_ref.hp_node.has_method("set_extra_hp"):
+    return
+  player_ref.hp_node.set_extra_hp(int(round(player_ref.hp_node.max_hp * pct)))
 
 
 func _on_unequip_impl(_player) -> void:
   if _applied and is_instance_valid(player_ref) and player_ref.hp_node:
     player_ref.hp_node.set_max_hp(_orig_max)
+    if _sum_pct("hp_extra_pct") > 0.0 and player_ref.hp_node.has_method("set_extra_hp"):
+      player_ref.hp_node.set_extra_hp(0)
   _applied = false

@@ -25,11 +25,11 @@
 
 | 既存コア | 型 | damage_base | cooldown | 特徴 |
 |---|---|---|---|---|
-| エネルギーショット | SINGLE_SHOT | 1.0 | 0.2 | 高速直進・高連射 |
+| エネルギーショット | SINGLE_SHOT | 2.0 | 0.2 | 高速直進・高連射 |
 | ファイアボール | SINGLE_SHOT | 5.0 | 1.0 | 低速・単発重火力 |
 | バブルショット | RAPID_FIRE | 2.0 | 1.0 | 低速カーブ弾を連射 |
 | バリアオーブ | BARRIER_BULLETS | 2.0 | 5.0 | 自機周回→直進、貫通1 |
-| ビーム | BEAM | 1.0 | 2.0 | 持続ダメージ |
+| ビーム | BEAM | 2.0 | 2.0 | 持続ダメージ（15回/秒、照射2秒→CT2秒） |
 | トリプルバースト | BURST_WITH_TRACKING | 3.0 | 0.1 | 弾が消えるまで撃てない高速3連 |
 | エレキショック | SHOT_ON_HIT | 5.0 | 0.3 | 着弾時に拡散弾 |
 | **ニードルショット** | **SINGLE_SHOT + 接触tick** | **2.0** | **1.5** | **接触中 2F毎にダメージ。無限貫通** |
@@ -45,7 +45,7 @@
 | `pattern_type` | 0（SINGLE_SHOT） | 0 SINGLE_SHOT / 1 RAPID_FIRE / 2 BARRIER_BULLETS / 3 SPIRAL / 4 BEAM / 5 CUSTOM / 6 BURST_WITH_TRACKING / 7 SHOT_ON_HIT |
 | `direction_type` | 0（FIXED） | 0 FIXED / 1 TO_PLAYER / 2 RANDOM / 3 CIRCLE / 4 CUSTOM / 5 TO_OWNER |
 | `base_direction` | `Vector2(0, -1)` | プレイヤーは基本 `Vector2(0, -1)` |
-| `angle_spread` / `angle_offset` | 0 / 0 | `bullet_count > 1` のとき効く。本コアは 1 固定運用（4章） |
+| `angle_spread` / `angle_offset` | 0 / 0 | `bullet_count > 1` のとき効く。増弾で弾数と角度が増える（4章） |
 | `spawn_position_mode` | 0（OWNER） | 0 OWNER / 1 FIXED_ABSOLUTE / 2 RELATIVE_TO_OWNER / 3 RELATIVE_TO_TARGET / 4 CUSTOM |
 | `bullet_movement_config.movement_type` | **2（ACCELERATE）** | 0 STRAIGHT / 1 DECELERATE / 2 ACCELERATE / 3 SINE_WAVE / 4 HOMING / 5 GRAVITY / 6 SPIRAL |
 | `bullet_lifetime` | 0（無限） | エンチャント「残留」は 0 だと効かない（意図通り） |
@@ -111,8 +111,8 @@
 | 雑魚 44×70 | 70 | 82px | 0.41s | 12 | 24 | **16.0** | 48.0 |
 | 雑魚 42×66 | 66 | 78px | 0.39s | 11 | 22 | 14.7 | 44.0 |
 
-- **比較基準はビーム**。ビームは `damage 1 × 30tick/s = 30 DPS/体`、かつ `cooldown_sec 2.0` / `beam_duration 2.0` で CT が発射時点から走る（`AttackCoreBase._start_cooldown()`）ため**実質常時オン・無照準・射線上の全員**に 30 DPS。tick 型どうしなのでここが唯一の正しい比較対象（テンプレートの「エレキショック 16.7」は単発型の値）
-- ニードルショットはボスで 27〜39 DPS、雑魚で 15〜16 DPS。**ボスでビームと同格、雑魚では半分**という位置付け。照準が要る代償として大型に寄せた形
+- **比較基準はビーム**。ビームは照射中 `damage 2 × 15tick/s = 30 DPS/体`（2026-11-13 に 1×30tick/s から変更、照射中の値は同じ）。ただし `AttackCoreBase.trigger()` が照射終了（`beam_duration 2.0`）まで待ってから `_start_cooldown()`（`cooldown_sec 2.0`）を呼ぶため、照射率は50%で**実効 15 DPS/体**（2026-11-13 実測 14.8）。当初は「CT が発射時点から走るので常時オン・30 DPS」としていたが、これは誤り。tick 型どうしなのでここが唯一の正しい比較対象（テンプレートの「エレキショック 16.7」は単発型の値）
+- ニードルショットはボスで 27〜39 DPS、雑魚で 15〜16 DPS（雑魚 44×70・距離300px の実測は 12.2）。ビームの実効値（15）に対し、**ボスで約2倍、雑魚で同格**。照準が要る代償として大型に寄せた形（当初はビームを常時30 DPSと見て「ボスで同格・雑魚で半分」としていた）
 - **CT は唯一の調整ノブ**。`damage` は整数なので 2→1 では半減してしまい細かく下げられない
 
 | CT | ボス doll | 雑魚 44×70 | 位置付け |
@@ -120,6 +120,8 @@
 | 1.0 | 46.0 | 24.0 | ビームを大きく超える（過剰） |
 | **1.5** | **30.7** | **16.0** | **ビーム同格（採用）** |
 | 2.0 | 23.0 | 12.0 | エレキショック(16.7)寄りに落としたい場合 |
+
+※ この表の「位置付け」は、ビームを常時30 DPSと見ていた当時のもの。実際のビームは実効15 DPSなので、CT 1.5 はボスでビームの約2倍になる（10章参照）。
 
 ### 速射適用時
 
@@ -141,7 +143,7 @@
 | エンチャント | キー | このコアでの挙動 | 対応 |
 |---|---|---|---|
 | 速射 | `cooldown_pct` | ◯ 主力。CT が唯一の火力ノブなので素直に効く | pool に入れる |
-| 増輪 | `bullet_count_add` | **機構上は効く（✕ではない）**。ただし `angle_spread = 0` なので弾が完全に重なり、接触tick×無限貫通で**素直にN倍DPS**になる（Lv3 = 7本 = 7倍） | **pool から除外** |
+| 増弾 | `bullet_count_add` | ◯ 基本 `angle_spread = 0` だが増弾の角度加算（+20/+40/+60°）で扇状に開く（3 / 5 / 9 本）。正面の大型敵には複数本が重なり、接触tick×無限貫通で**N倍DPSに近づく**（Lv3 = 9本） | 許可する（当初は除外していたが、2026-11-14 に許可へ変更） |
 | 貫通 | `penetration_add` | **構造的に無効**。tick モードでは `BulletBase._on_area_entered()` のダメージ・貫通判定経路を通らないため `penetration_count` を誰も読まない（6章）。付いても無害 | 念のため pool から除外 |
 | 残留 | `bullet_lifetime_pct` | ✕ `bullet_lifetime = 0`（無限）なのでファクトリが 0 のまま返す。意図通り | — |
 | 炸裂 | `spread_bullet_count_add` | ✕ `on_hit_pattern` なし | — |
@@ -150,9 +152,11 @@
 
 ### 除外の実装
 
+> 現在は、アイテムの `allowed_enchantments`（速射・増弾・追尾）で抽選対象を絞り込んでいる（`docs/blessing_magic_enchantment_gauge_design.md` 3.6）。以下は当初の案として残す。
+
 `DropTableEntry` は `prototype`（アイテム）と `enchant_rule` が1対1で、`LootSystem._roll_enchantments()` は `entry.enchant_rule.pool` からしか抽選しない。したがって **`droptableentry_needleshot.tres` に専用の `enchantmentrule_needleshot.tres`（`pool` は `cooldown_pct` のみ）を紐付けるだけ**でよく、コード変更は不要。既存の `enchantmentrule_debug_bullet.tres` は使い回さない。
 
-- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に増輪／貫通を付けないこと
+- `default_player_save.json` は `LootSystem` を通らないので、手置き個体に貫通を付けないこと
 - 「-1 に `penetration_add` を加算して有限化する」という根本の挙動（`PlayerAttackPatternFactory.update_pattern_from_enchantments()`）は本コアでは無害化されるが、**他コアで `penetration_count = -1` を使うと同じ穴を踏む**。別途の課題として残す
 
 ## 5. HUDゲージ
@@ -212,9 +216,9 @@
 - [x] `scripts/core/UniversalAttackCore.gd` の `enable_contact_damage()` 呼び出し
 - [x] `resources/data/attackcore_needleshot.tres`
 - [x] `resources/data/default_player_save.json` に `inventory.attack_core` エントリ追加（`uid` はユニークに）
-  - 無エンチャント／速射Lv2／速射Lv3 の3個体（増輪・貫通は付けない）
+  - 無エンチャント／速射Lv2／速射Lv3 の3個体（増弾・貫通は付けない）
 - [ ] `resources/itemdrop/droptableentry_needleshot.tres` ／ `enchantmentrule_needleshot.tres`
-  - **今回は作成しない**。ドロップテーブルは現状 `attackcore_magic_bullet` の1件（`droptableentry_debug_core.tres`）のみで他コアには未設定であり、`enchantmentrule_debug_bullet.tres` の `pool` も `cooldown_pct` だけなので増輪・貫通はそもそもドロップしない。加えて貫通は tick モードで構造的に無効化されている（6章）。作成しても敵シーンの `drop_table` への配線が別途必要で現時点では無効になるため、ドロップ実装をまとめて行うときに対応する
+  - **今回は作成しない**。ドロップテーブルは現状 `attackcore_magic_bullet` の1件（`droptableentry_debug_core.tres`）のみで他コアには未設定であり、`enchantmentrule_debug_bullet.tres` の `pool` も `cooldown_pct` だけなので増弾・貫通はそもそもドロップしない。加えて貫通は tick モードで構造的に無効化されている（6章）。作成しても敵シーンの `drop_table` への配線が別途必要で現時点では無効になるため、ドロップ実装をまとめて行うときに対応する
 - [x] `tests/unit/NeedleShotFeatureTest.gd`（22件）
 - [x] スクリプト変更に対するテスト更新
 
@@ -273,7 +277,7 @@
 ## 10. 未決事項
 
 - **`damage_base` が整数で刻みが粗い**：2 → 1 では半減してしまう。微調整は `cooldown_sec_base` か `contact_speed` で行う（`contact_speed` を上げると滞在が短くなり火力が下がる）。
-- **CT 1.5 はビーム基準**。ビーム（30 DPS/体・常時・無照準・射線上全員）自体が既存コア群（5〜17 DPS）から大きく外れているため、ビームを過剰と判断するなら CT 2.0（ボス 23／雑魚 12）に落とす。実測後に判断する。
+- **CT 1.5 はビーム基準のつもりだったが、基準がずれている**。当初はビームを30 DPS/体・常時オンとしていたが、実際は照射率50%の実効15 DPS（2026-11-13 実測 14.8）で、ニードルはボスでビームの約2倍になる。過剰と判断するなら CT 2.0（ボス 23／雑魚 12）に落とす。実測後に判断する。
 - **雑魚密集列での上振れ**：無限貫通＋接触中 200px/s 固定なので、縦に並んだ雑魚5体（間隔100px）を約4.2秒かけて貫き、その間ダメージを与え続ける。ユーザー判断でこの挙動は許容する方針だが、実プレイでの掃討力を確認する。
 - **`CapsuleShape2D` の向き**：3章の通過距離は当たり判定カプセルが縦向き（height が Y 軸方向）である前提。シーン側で回転しているボスがいれば数値を再計算する。
 - **針の長さが当たり判定に反映されない**：6章末尾の通り当たり判定は円固定。見た目と挙動の乖離が気になる場合は `CapsuleShape2D` 対応を別課題として立てる。

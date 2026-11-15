@@ -7,5 +7,5 @@
 [resource]
 script = ExtResource("3_script")
 prototype = ExtResource("1_item")
-probability = 0.413
+probability = 0.393
 enchant_rule = ExtResource("2_rule")

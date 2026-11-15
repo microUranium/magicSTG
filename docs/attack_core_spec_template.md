@@ -27,11 +27,11 @@
 
 | 既存コア | 型 | damage_base | cooldown | 特徴 |
 |---|---|---|---|---|
-| エネルギーショット | SINGLE_SHOT | 1.0 | 0.2 | 高速直進・高連射 |
+| エネルギーショット | SINGLE_SHOT | 2.0 | 0.2 | 高速直進・高連射 |
 | ファイアボール | SINGLE_SHOT | 5.0 | 1.0 | 低速・単発重火力 |
 | バブルショット | RAPID_FIRE | 2.0 | 1.0 | 低速カーブ弾を連射 |
 | バリアオーブ | BARRIER_BULLETS | 2.0 | 5.0 | 自機周回→直進、貫通1 |
-| ビーム | BEAM | 1.0 | 2.0 | 持続ダメージ |
+| ビーム | BEAM | 2.0 | 2.0 | 持続ダメージ（15回/秒、照射2秒→CT2秒） |
 | トリプルバースト | BURST_WITH_TRACKING | 3.0 | 0.1 | 弾が消えるまで撃てない高速3連 |
 | エレキショック | SHOT_ON_HIT | 5.0 | 0.3 | 着弾時に拡散弾 |
 
@@ -64,7 +64,7 @@
 | `base_modifiers.bullet_speed` | | → `pattern.bullet_speed` |
 | その他 `base_modifiers` | | 例：`spread_bullet_count`（SHOT_ON_HIT用） |
 
-- **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ ____ ／ 既存比較：エネルギーショット 5.0、ファイアボール 5.0、エレキショック 16.7
+- **理論DPS**：`damage_base ÷ cooldown_sec_base` ＝ ____ ／ 既存比較の実測（小型の敵 44×70・距離300px・加護なし、2026-11-13）：エネルギーショット 9.5、ファイアボール 7.3（直撃5＋爆発3）、ビーム 14.8（照射率50%）、トリプルバースト 24.8、ニードルショット 12.2、ブーメラン 4.6 ※エレキショックは未計測（理論 16.7）
 - **命中期待込みの実効DPS**：※ 自動命中なら理論値に近い、要照準なら割り引く。ここが差別化の根拠
 - **速射Lv3（-75%）適用時**：CT ____ → DPS ____ ※ 下限は `max(cooldown, 0.02)`
 
@@ -76,7 +76,7 @@
 | エンチャント | キー | このコアでの挙動 | 期待する強さ |
 |---|---|---|---|
 | 速射 | `cooldown_pct` | | |
-| 増輪 | `bullet_count_add` | ※ `angle_spread` が 0 だと弾が重なるだけになる | |
+| 増弾 | `bullet_count_add` | ※ `angle_spread_add` で扇の角度も広がる（基本 `angle_spread` に加算）。CIRCLE 配置では角度は無関係 | |
 | 貫通 | `penetration_add` | | |
 | 残留 | `bullet_lifetime_pct` | ※ `bullet_lifetime > 0` が前提 | |
 | 炸裂 | `spread_bullet_count_add` | ※ `on_hit_pattern` がある場合のみ | |

@@ -74,7 +74,7 @@ func start_rotation(duration: float = 3.0, rotation_speed: float = 90.0):
   movement_config.rotation_speed = rotation_speed
 
   # 軌道への移動を開始
-  var tween = create_tween()
+  var tween = _track_scaled_tween(create_tween())
   tween.tween_property(
     self, "_current_orbit_radius", movement_config.orbit_radius, movement_config.approach_duration
   )
@@ -139,7 +139,7 @@ func apply_barrier_movement_config(_movement_config: BarrierBulletMovement = nul
   speed = movement_config.projectile_speed
 
 
-func _process(delta):
+func _bullet_process(delta: float) -> void:
   # 画面外チェック
   if (
     not PlayArea.get_play_rect().has_point(global_position)

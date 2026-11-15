@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Enchantment" load_steps=6 format=3 uid="uid://ba866ldub6mxv"]
+
+[ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="1"]
+[ext_resource type="Script" uid="uid://c4v5bw8t8ls4n" path="res://scripts/item/EnchantmentTier.gd" id="2"]
+
+[sub_resource type="Resource" id="T1"]
+script = ExtResource("2")
+level = 1
+modifiers = {
+"counter_damage_pct": 0.5
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[sub_resource type="Resource" id="T2"]
+script = ExtResource("2")
+level = 2
+modifiers = {
+"counter_damage_pct": 1.0
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[sub_resource type="Resource" id="T3"]
+script = ExtResource("2")
+level = 3
+modifiers = {
+"counter_damage_pct": 2.0
+}
+metadata/_custom_type_script = "uid://c4v5bw8t8ls4n"
+
+[resource]
+script = ExtResource("1")
+id = &"counter_damage_pct"
+display_name = "反撃"
+description = "ダメージを受けると、一定時間攻撃力が増加します。"
+tiers = Array[ExtResource("2")]([SubResource("T1"), SubResource("T2"), SubResource("T3")])
+metadata/_custom_type_script = "uid://b1salw3wjfq77"

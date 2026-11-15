@@ -29,6 +29,12 @@ var contact_damage_tick_sec: float = 0.0
 var _contact_targets: Array[Node] = []
 ## tick の経過時間の累積
 var _contact_tick_accum: float = 0.0
+## 弾の時間の進み方（時界の加護の結界内で 0.05 になる）。1.0 = 通常。
+## 毎フレームの処理（移動・寿命・接触ダメージなど）は delta × time_scale で進む。
+var time_scale: float = 1.0
+## time_scale に合わせて速度を変える Tween（減速・軌道移動など）
+var _scaled_tweens: Array[Tween] = []
+
 ## 1フレームで処理する tick の上限。
 ## 長いフレーム落ちの後に累積が一気に消化されて大ダメージが入るのを防ぐ。
 const MAX_CONTACT_TICKS_PER_FRAME := 4
@@ -45,6 +51,27 @@ func _ready():
   connect("area_entered", Callable(self, "_on_area_entered"))
   StageSignals.destroy_bullet.connect(_destroy_bullet)
   StageSignals.destroy_bullets_by_target.connect(_on_destroy_by_target)
+
+
+func set_time_scale(new_scale: float) -> void:
+  """弾の時間の進み方を変える（時界の加護の結界から呼ばれる）"""
+  time_scale = new_scale
+  _scaled_tweens = _scaled_tweens.filter(func(tw: Tween) -> bool: return tw.is_valid())
+  for tw in _scaled_tweens:
+    tw.set_speed_scale(new_scale)
+
+
+func _track_scaled_tween(tween: Tween) -> Tween:
+  """time_scale に合わせて速度を変える Tween として登録する"""
+  tween.set_speed_scale(time_scale)
+  _scaled_tweens.append(tween)
+  return tween
+
+
+func vanish() -> void:
+  """爆発などを起こさずに静かに消す（時界の加護の弾消し用）"""
+  _handle_particle_cleanup()
+  queue_free()
 
 
 func _destroy_bullet() -> void:

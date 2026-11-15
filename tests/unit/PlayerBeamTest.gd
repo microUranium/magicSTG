@@ -6,14 +6,17 @@
 #   4. 下向き（後方発射）でも手前の敵で止まる
 #   5. 当たり判定の幅は 4px
 #   6. 加護の与ダメージ補正が乗る
-#   7. ファクトリー：位置のずらしなし、持続時間はアイテムデータ、貫通エンチャント
-#   8. 付与できるエンチャント（速射・貫通）
+#   7. ファクトリー：位置のずらしなし、持続時間はデータ＋持続エンチャント、貫通エンチャント
+#   8. 付与できるエンチャント（速射・貫通・持続）
 extends GdUnitTestSuite
 
 const PLAYER_BEAM_SCENE := "res://scenes/attackCores/player/beam.tscn"
 const BEAM_ITEM_PATH := "res://resources/data/attackcore_normal_beam.tres"
+const DURATION_PATH := "res://resources/data/enchantment_blessing_duration_pct.tres"
 const PENETRATION_PATH := "res://resources/data/enchantment_penetration_add.tres"
 const COOLDOWN_PATH := "res://resources/data/enchantment_cooldown_pct.tres"
+const BULLET_COUNT_PATH := "res://resources/data/enchantment_bullet_count_add.tres"
+const TRIPLE_BURST_PATH := "res://resources/data/attackcore_triple_burst.tres"
 
 
 class DamageCounterEnemy:
@@ -203,6 +206,24 @@ func test_factory_beam_duration_from_data() -> void:
   assert_float(_make_pattern().beam_duration).is_equal_approx(2.0, 0.0001)
 
 
+func test_duration_enchantment_extends_beam() -> void:
+  var expected := {1: 2.4, 2: 3.0, 3: 4.0}
+  for level in expected:
+    var duration := _make_pattern({DURATION_PATH: level}).beam_duration
+    var label := "Lv%d" % level
+    assert_float(duration).override_failure_message(label).is_equal_approx(expected[level], 0.0001)
+
+
+func test_beam_duration_update_is_idempotent() -> void:
+  var inst := ItemInstance.new(load(BEAM_ITEM_PATH))
+  inst.add_enchantment(load(DURATION_PATH), 3)
+  var pattern := PlayerAttackPatternFactory.create_pattern_from_item_instance(inst)
+  PlayerAttackPatternFactory.update_pattern_from_enchantments(pattern, inst)
+  PlayerAttackPatternFactory.update_pattern_from_enchantments(pattern, inst)
+
+  assert_float(pattern.beam_duration).is_equal_approx(4.0, 0.0001)
+
+
 func test_penetration_enchantment_sets_beam_penetration() -> void:
   var expected := {1: 1, 2: 2, 3: 4}
   for level in expected:
@@ -212,5 +233,32 @@ func test_penetration_enchantment_sets_beam_penetration() -> void:
 
 func test_beam_allowed_enchantments() -> void:
   var item: ItemBase = load(BEAM_ITEM_PATH)
-  for path in [COOLDOWN_PATH, PENETRATION_PATH]:
+  for path in [COOLDOWN_PATH, PENETRATION_PATH, DURATION_PATH, BULLET_COUNT_PATH]:
     assert_bool(item.allows_enchantment(load(path))).override_failure_message(path).is_true()
+
+
+func test_duration_enchantment_description() -> void:
+  var enchant: Enchantment = load(DURATION_PATH)
+  assert_str(enchant.description).is_equal("効果時間が伸びます。")
+
+
+func test_player_beam_deals_2_damage_15_times_per_second() -> void:
+  var beam: UniversalBeam = auto_free(load(PLAYER_BEAM_SCENE).instantiate())
+  assert_float(beam.damage_tick_sec).is_equal_approx(1.0 / 15.0, 0.0001)
+  assert_int(_make_pattern().damage).is_equal(2)
+
+
+func test_bullet_count_enchantment_adds_beams_in_fan() -> void:
+  """増弾 Lv1/2/3 でビームが 3 / 5 / 9 本、扇の角度が 20 / 40 / 60°"""
+  var expected := {1: [3, 20.0], 2: [5, 40.0], 3: [9, 60.0]}
+  for level in expected:
+    var pattern := _make_pattern({BULLET_COUNT_PATH: level})
+    assert_int(pattern.bullet_count).is_equal(expected[level][0])
+    assert_float(pattern.angle_spread).is_equal_approx(expected[level][1], 0.0001)
+
+
+func test_triple_burst_does_not_allow_rapid_fire() -> void:
+  """トリプルバーストは発射間隔が弾の消滅と最短間隔で決まり、速射が効かないため付与しない"""
+  var item: ItemBase = load(TRIPLE_BURST_PATH)
+  assert_bool(item.allows_enchantment(load(COOLDOWN_PATH))).is_false()
+  assert_bool(item.allows_enchantment(load(PENETRATION_PATH))).is_true()

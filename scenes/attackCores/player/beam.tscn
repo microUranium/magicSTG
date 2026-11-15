@@ -18,6 +18,7 @@ size = Vector2(4, 40)
 
 [node name="Beam" type="Area2D"]
 script = ExtResource("1_jsy6y")
+damage_tick_sec = 0.0666667
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="."]
 enabled = false

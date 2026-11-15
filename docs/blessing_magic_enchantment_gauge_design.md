@@ -53,6 +53,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | 被ダメージ介入 | `process_damage(player, dmg) -> int` | デフォルトは素通し |
 | 致命ダメージ介入 | `process_fatal_damage(player, dmg) -> bool` | 全加護通過後、残ダメージで HP が 0 になる時のみ呼ばれる。true で無効化（不屈） |
 | 与ダメージ介入 | `get_damage_bonus_pct(player, enemy, ctx) -> float` | 自弾→敵ヒット時のボーナス率 |
+| 反撃 | `setup_counter(player)` / `teardown_counter()` / `get_counter_bonus_pct() -> float` | エンチャント「反撃」。装備・解除時に `BlessingContainer` が呼ぶ。被弾後 0.67 秒間ボーナス率を返す（背水・近接が `get_damage_bonus_pct` を上書きしているため別関数） |
 | 魔法CT介入 | `get_attack_cooldown_mult(player) -> float` | 1.0=等倍 |
 
 ### 1.4 BlessingContainer の合成ルール
@@ -60,11 +61,15 @@ GenericGauge / GaugeManager ← HUD描画側
 | 介入 | メソッド | 合成方式 |
 |---|---|---|
 | 被ダメージ | `process_damage()` | 各加護を**直列**に通す（前段の結果を次段へ）。通過後に残ダメージが致命傷なら `process_fatal_damage()` を順に回す |
-| 与ダメージ | `process_outgoing_damage(enemy, base, ctx)` | 各加護の `get_damage_bonus_pct` を**加算**し、基底値へ一括適用：`base * (1 + Σbonus)` |
+| 与ダメージ | `process_outgoing_damage(enemy, base, ctx)` | 各加護の `get_damage_bonus_pct` と `get_counter_bonus_pct` を**加算**し、基底値へ一括適用：`round(base * (1 + Σbonus))`。弾・接触ダメージ・ビームが敵に当たった瞬間に呼ばれる |
 | 魔法CT | `get_attack_cooldown_mult()` | 各加護の倍率を**乗算** |
 | アクティブ発動 | `_unhandled_input()` | `blessing_slot_1/2/3` 入力で対応スロットの `ActiveBlessingBase.activate()` |
 
 - スロット上限 `MAX_SLOTS = 3`（`PlayerSaveData.MAX_BLESSINGS` と一致させる）。
+- **【課題】爆発ダメージに与ダメージ補正が乗らない**（2026-11-14 確認、未対応）
+  - `ExplosionEffect._deal_damage_to_target()` が `target.take_damage(damage)` を直接呼んでおり、`process_outgoing_damage()` を通らない。近接・背水・反撃のいずれも爆発には乗らない（現状プレイヤー側で爆発ダメージがあるのはファイアボールの 3 のみ）。
+  - 意図した仕様ではなく、加護の補正を `BulletBase` にだけ入れた（`bdd3050`）際の対応漏れ。爆発（2025-08 作成）は弾とは別ノードでダメージを与えるため対象から漏れた。
+  - 直し方の案：`_deal_damage_to_target()` で、相手グループが `enemies` のときだけ弾と同じく `process_outgoing_damage()` を通す（敵の弾の爆発＝相手が `players` には影響しない）。
 
 ### 1.5 加護の3類型と実装済み一覧
 
@@ -83,12 +88,13 @@ GenericGauge / GaugeManager ← HUD描画側
 | 障壁 | `DefensiveBlessing` | シールドが被ダメージを完全吸収。破壊後は時間で復活 | 下記 1.6 参照 |
 | 不屈 | `FortitudeBlessing` | 致命ダメージを受けた瞬間に自動で復活し、一定時間無敵。回数制 | 下記 1.8 参照 |
 
-**C. アクティブ型（`ActiveBlessingBase`。キー発動・使用回数制・短CT）**
+**C. アクティブ型（`ActiveBlessingBase`。キー発動。打消・迷彩は使用回数制・短CT、時界はクールタイム制）**
 
 | 加護 | スクリプト | 効果 | 参照キー |
 |---|---|---|---|
 | 打消 | `NullifyBlessing` | 発動で場の敵弾を全消去（HUDフラッシュ）。「強奪」で撃破時に確率回数回復 | `max_uses`,`blessing_cooldown_sec` / enchant: `blessing_uses_add`,`nullify_steal_chance_pct` |
-| 迷彩 | `CamouflageBlessing` | 一定時間、敵の照準対象から外れる（当たり判定は残る） | `max_uses`,`blessing_cooldown_sec`,`camouflage_duration_sec` / enchant: `blessing_uses_add`,`camouflage_duration_pct` |
+| 迷彩 | `CamouflageBlessing` | 一定時間、敵の照準対象から外れる（当たり判定は残る） | `max_uses`,`blessing_cooldown_sec`,`camouflage_duration_sec` / enchant: `blessing_uses_add`,`blessing_duration_pct` |
+| 時界 | `SpacetimeBlessing` | クールタイムが溜まると発動。周囲の敵弾を消し、自機についていく結界を張る。結界内の敵弾は -95% に減速し、効果終了時に結界内の敵弾を消す | `blessing_cooldown_sec`,`spacetime_duration_sec`,`spacetime_radius` / enchant: `blessing_duration_pct`（下記 1.9 参照） |
 
 `ActiveBlessingBase` パラメータ設計：
 
@@ -149,6 +155,7 @@ GenericGauge / GaugeManager ← HUD描画側
 | `max_uses` | 1 | `max_uses + Σblessing_uses_add` | 1ステージの発動回数 |
 | `revive_hp_ratio` | 0.5 | `fortitude_revive_hp_ratio` | 復活後のHP（最大HPに対する割合） |
 | `invincible_sec` | 2.0 | `fortitude_invincible_sec × (1+Σfortitude_invincible_pct)` | 復活直後の無敵時間 |
+| `michizure_damage` | 0 | `Σfortitude_michizure_damage_add`（道連） | 発動時に画面内の敵全体へ与えるダメージ（0 なら無効） |
 
 挙動：
 - **発動条件**：`BlessingContainer.process_damage()` が全加護を通した後、残ダメージ ≧ 現在HP の時だけ `process_fatal_damage()` が呼ばれる。障壁などが肩代わりできるダメージでは回数を消費しない。
@@ -157,6 +164,60 @@ GenericGauge / GaugeManager ← HUD描画側
 - **見た目**：無敵中は自機スプライトのみ点滅（`BLINK_INTERVAL=0.08秒`、暗側アルファ0.2）。迷彩の半透明とは `Player._update_sprite_alpha()` で乗算合成される。
 - **発動演出**（`_play_revive_effects()`）：HUDフラッシュ、`request_start_vibration`（撃破時と同じ画面揺れ）、効果音 `fortitude`、星の収束パーティクル `scenes/player/revive_particle_player.tscn`（外周から出て `radial_accel` 負で中心へ収束。撃破時の飛散と逆の動き。寿命後に自動で解放）。
 - **ゲージ**：残回数を `durability` スタイルで表示し、使い切ったら `durability_recovering`（無効化画像）へ切替。
+- **道連**（`_michizure()`）：復活の直後に、`enemies` グループのうち `PlayArea.get_play_rect()` 内にいる敵へ `michizure_damage` を与える。幸運で回数を消費しなかったときも発動する。加護のダメージ補正（近接・背水・反撃）は乗らない固定ダメージ。
+  - ダメージは `EnemyBase.take_burst_damage()` で与える。HP を `get_burst_hp_floor()` より下に減らさないため、HP でフェーズが切り替わるボスは一度に 1 フェーズしか進まない（下記）。
+  - ヘビの胴体（`WormSegment`）は受けたダメージを頭へ渡すため、頭に置き換えて 1 回だけ当てる。
+  - 演出：画面内の敵それぞれの位置から `scenes/enemy/michizure_particle.tscn`（撃破時の星 `destroy_particle.tscn` の大きさ 0.5 倍・速さ 120）を出す。
+
+#### 大ダメージの下限（`EnemyBase.take_burst_damage()` / `get_burst_hp_floor()`）
+
+一度に大きなダメージを与えるもの（現状は道連のみ）は、`take_damage()` ではなく `take_burst_damage()` を使う。与えるダメージは `min(量, 今のHP − get_burst_hp_floor())` で、0 以下なら何もしない。
+
+- 既定の下限は 0（倒してよい）。
+- HP でフェーズが切り替わるボスは「次のフェーズに切り替わる HP のうち最も高い値」（`hp_threshold(割合)` ＝ `floor(max_hp × 割合)`）を返す。境目ちょうどで止まるので、次のフェーズには必ず進み、その先へは飛ばない。最後のフェーズでは 0 で、そのまま倒せる。
+- 多段階のボスは `PHASE_END_HP_RATIOS = {フェーズ番号: そのフェーズを終える HP 割合}` を持ち、`on_hp_changed()` の切り替え条件と `phase_burst_hp_floor()` の両方がこれを使う。`phase_burst_hp_floor()` は今のフェーズ以降で最初に来る境目を下限にするため、境目のないフェーズ（会話など）を挟んでも先の境目を飛ばさない。
+- 2 段階のボス（トリ・ローブ・クモ・エイ）は `PHASE_CHANGE_HP_RATIO` を持ち、フェーズ1以下の間だけ下限を返す。ハーピーはフェーズ1の `end_hp_ratio` を使う。
+- クマはフェーズ1と2を行き来し、境目を下回ってから実際に第2形態へ移るまで間があるため、「第2形態に一度入ったか」（`_second_form_reached`）で判定する。
+
+| ボス | 下限（フェーズ → 境目の HP 割合） |
+|---|---|
+| クマ | 第2形態に入るまで 50% |
+| トリ・ローブ・エイ | 1 → 50% |
+| クモ | 1 → 30% |
+| 悪魔 | 1 → 50% |
+| 強化版の悪魔 | 1 → 90%、3 → 60%、5 → 10% |
+| 人形 | 1 → 80%、3 → 40%、5 → 5% |
+| 吸血鬼 | 1 → 80%、3 → 40% |
+| 沼のトリ | 3 → 80%、5 → 25%、8 → 10% |
+| ヘビ | 2 → 30%、3 → 20%、4 → 10% |
+| ハーピー | 1 → `end_hp_ratio` |
+
+### 1.9 時界の加護（SpacetimeBlessing）詳細
+
+`ActiveBlessingBase` を継承するが、使用回数制ではなく**クールタイム制**（`activate()` / `can_activate()` / `on_equip()` を上書き）。保持・幸運は付けない。
+
+| パラメータ | 既定 | 由来 | 意味 |
+|---|---|---|---|
+| `cooldown_total` | 40.0 | `blessing_cooldown_sec × (1+Σblessing_cooldown_pct)` | クールタイム（効果終了後に 0 から溜まる。ステージ開始時も 0 から）。速復で短くなる |
+| `duration_sec` | 7.0 | `spacetime_duration_sec × (1+Σblessing_duration_pct)` | 効果時間（持続で伸びる） |
+| `radius` | 200.0 | `(spacetime_radius + Σspacetime_radius_add) × (1+Σblessing_area_pct)` | 結界の半径＝発動時・終了時に弾を消す範囲・背景の反転が残る範囲。広範で広がる |
+
+付与できるエンチャントは持続・広範・速復。`spacetime_radius_add` は今後のエンチャント用に読み込みだけ用意している（対応するエンチャントは未作成）。
+
+挙動：
+- **状態**：クールタイム中 → 準備完了 → 効果中 → クールタイム中…。発動は準備完了のときだけ。タイマーはポーズ管理対象（`register_timer`）で、ポーズ・会話中の一時停止中は進まない。
+- **発動**：自機を中心に半径内の敵弾（`target_group == "players"`）を物理空間への問い合わせで集めて消し、結界（`Area2D`）を張る。弾を探すマスクはレイヤー1と2（弾の多くはレイヤー2だが、敵シーンに埋め込まれた弾＝ゴースト・スパイク・沼の鳥などはレイヤー未設定の1）。
+- **減速**：結界に入った敵弾は `BulletBase.set_time_scale(0.05)`、出ると `1.0`。自弾と敵のビームは対象外。
+- **終了**：半径内の敵弾を消し、残っている減速を解除して結界を消す。
+- **弾の消し方**：`BulletBase.vanish()`。爆発（`_create_explosion_effect`）を起こさない（自機のすぐ近くで消すため、敵弾の爆発に巻き込まれないように）。打消の加護の弾消しは従来どおり爆発する。
+- **ゲージ**（`cooldown` スタイル）：クールタイム中は溜まり、準備完了で満タン、効果中は残り時間に応じて減る（ビームと同じ）。
+
+**弾の時間（`time_scale`）**：`BulletBase.time_scale`（既定 1.0）。`ProjectileBullet._process(delta)` は `_bullet_process(delta × time_scale)` を呼び、サブクラス（`UniversalBullet`・`ScytheBullet`・`FinalStarBullet`・`EnhancedBarrierBullet`）は `_bullet_process` を上書きする。移動・加速・追尾・寿命などがすべて同じ割合で遅くなる。弾が使う Tween は `_track_scaled_tween()` で登録し、`time_scale` に合わせて速度を変える。見た目のアニメーション（スプライトのコマ送り・パーティクル）は遅くしない。
+
+**背景の演出**（`scripts/effects/SpacetimeFieldEffect.gd` ＋ `assets/shaders/spacetime_field.gdshader`）：
+- 背景（`ParallaxBackground`、layer -100）のすぐ上（layer -99）の CanvasLayer に全画面の `ColorRect` を置き、それまでに描かれた画面（＝背景だけ）を読み取って反転する。自機・敵・弾は上の層なので反転しない。
+- 発動の瞬間に全体を反転 → 0.5 秒で結界の外側だけ元に戻る（内側は反転のまま、自機についていく）→ 効果終了の 2 秒前から内側の反転が点滅する（1 周期 0.5 秒。0.35 秒かけて余韻を残しながら暗くなり（最暗 0.15）、0.15 秒でなめらかに点き直す。点いた状態から始まる。`SpacetimeBlessing._update_warning()` が効果時間のタイマーの残りから `set_warning_elapsed()` を呼ぶので、一時停止中は点滅も止まる）→ 終了時に内側を一瞬白く光らせ（0.15 秒）、同時に結界が急激に縮んで（0.25 秒、`EASE_IN`）消える。
+- アニメーションは Tween で動かす（シェーダーの `TIME` はポーズ中も進むため使わない）。演出の秒数は調整前提の仮の値。
 
 ---
 
@@ -246,20 +307,30 @@ GenericGauge / GaugeManager ← HUD描画側
 | 表示名 | id (modifierキー) | 効果 | Lv1 / Lv2 / Lv3 | 主な適用先 |
 |---|---|---|---|---|
 | 堅固 | `shield_hp_pct` | シールド耐久 +% | +50% / +100% / +200% | 障壁 |
-| 速復 | `shield_recover_delay_pct` | シールド復活待機 短縮 | -10% / -20% / -50% | 障壁 |
+| 速復 | `shield_recover_delay_pct`＋`blessing_cooldown_pct` | 加護の再使用時間 短縮（障壁のシールド復活待機、時界のクールタイム） | -10% / -20% / -50% | 障壁・時界 |
+| 緩衝 | `shield_damage_taken_pct` | シールドが受けるダメージ 軽減（端数は小数部分の確率で切り上げ。ダメージ1も確率で0） | -10% / -20% / -50% | 障壁 |
 | 増健 | `hp_add` | 最大HP +（加算） | +3 / +6 / +10 | 体力増強 |
+| 庇護 | `hp_extra_pct` | ステージ開始時に最大HP（増健等の反映後）の割合だけ追加の体力を得る。被弾時は先に減り、回復されない。HPバーに金色で重ねて表示 | +50% / +100% / +200% | 体力増強 |
 | 速治 | `regen_interval_sec_pct` | 回復間隔 短縮 | -20% / -50% / -80% | 再生 |
+| 危癒 | `regen_low_hp_interval_pct` | 体力が少ないほど回復間隔 短縮（残HP3割以下で最大、下限0.2秒） | -15% / -30% / -50% | 再生 |
+| 応急 | `regen_on_hit_chance_pct` | 被弾時（実ダメージ>0）に確率で回復量1回分を即時回復 | 5% / 20% / 50% | 再生 |
 | 必死 | `laststand_cdr_pct` | 低HP時の魔法CT短縮 | +15% / +30% / +50% | 背水 |
 | 無我 | `laststand_max_pct_pct`＋`proximity_max_pct_pct` | 最大ダメージ倍率 +% | +15% / +30% / +50% | 背水・近接 |
+| 反撃 | `counter_damage_pct` | 被弾（体力にダメージが通ったとき）から 0.67 秒間、敵に当たった弾の与ダメージ +%。被弾時の弾ではなく命中時に判定。再被弾で効果時間を戻す（重ならない）。爆発には乗らない | +50% / +100% / +200% | 背水・体力増強・近接 |
 | 凝集 | `proximity_range_add` | 最大ダメ到達距離 +px | +50 / +100 / +180 | 近接 |
 | 強奪 | `nullify_steal_chance_pct` | 撃破時 使用回数回復確率 | +2% / +5% / +10% | 打消 |
+| 道連 | `fortitude_michizure_damage_add` | 不屈の発動時に、画面内の敵全体へダメージ（固定値。ボスは次のフェーズの境目まで） | 150 / 450 / 1000 | 不屈 |
 | 保持 | `blessing_uses_add` | 使用回数上限 + | +1 / +2 / +3 | アクティブ加護 |
+| 幸運 | `blessing_free_use_chance_pct` | 発動時に確率で使用回数を消費しない（残り0回では発動不可） | 10% / 30% / 70% | 不屈・打消・迷彩 |
+| 持続 | `blessing_duration_pct`＋`beam_duration_pct` | 効果時間 +%（迷彩の効果時間、ビームの照射時間） | +20% / +50% / +100% | 迷彩・ビーム |
+| 広範 | `blessing_area_pct` | 加護の効果範囲 +%（時界の結界の半径） | +15% / +30% / +80% | 時界 |
 | 速射 | `cooldown_pct` | 連射CT 短縮 | -20% / -50% / -75% | 攻撃コア |
-| 増輪 | `bullet_count_add` | 弾数 + | +1 / +3 / +6 | 攻撃コア |
+| 増弾 | `bullet_count_add`＋`angle_spread_add` | 弾数 +／扇の角度 +° | +2・+20° / +4・+40° / +8・+60° | 攻撃コア |
 | 炸裂 | `spread_bullet_count_add` | 拡散弾数 + | (tier値) | 攻撃コア |
 | 残留 | `bullet_lifetime_pct` | 弾寿命 +% | +50% / +50% / +200% | 攻撃コア |
 | 貫通 | `penetration_add` | 貫通回数 + | +1 / +2 / +4 | 攻撃コア |
 | 追尾 | `homing_correction_px_add` | 追尾の横ズレ補正 +px | +60 / +150 / +300 | 攻撃コア（SPIRAL / BOOMERANG / バリア弾は対象外） |
+| 加速 | `bullet_speed_pct` | 弾速 +% | +20% / +50% / +100% | 攻撃コア（トリプルバースト） |
 
 ### 3.5 新規エンチャント追加手順
 
@@ -278,22 +349,22 @@ GenericGauge / GaugeManager ← HUD描画側
 
 - `tests/unit/ItemAllowedEnchantmentTest.gd` が「全アイテムに許可リストがあること」「`default_player_save.json` の個体が許可リストに反していないこと」を検証する（この表との一致は検証しない）。
 - 許可リストはドロップ抽選にだけ効く。セーブデータや装備時に付与済みのエンチャントは制限しない。
-- 許可エンチャントが上限（3 個）より少ないアイテム（ニードルショット・ビーム・全加護）は、その数までしか付与されない。
+- 許可エンチャントが上限（3 個）より少ないアイテムは、その数までしか付与されない（現状は該当なし）。
 
 #### 攻撃コア
 
-| コア | `.tres` | 速射 | 増輪 | 貫通 | 残留 | 炸裂 | 追尾 | 除外理由 |
-|---|---|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
-| ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | 残留：寿命無限 |
-| バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
-| トリプルバースト | `attackcore_triple_burst` | ◯ | – | ◯ | – | – | ◯ | 増輪：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
-| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | 増輪：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
-| バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：バリア弾はコード上で対象外 |
-| ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
-| マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | 追尾：効果が薄い |
-| ニードルショット | `attackcore_needleshot` | ◯ | – | – | – | – | ◯ | 増輪：弾が重なり N 倍 DPS になる／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
-| ビーム | `attackcore_normal_beam` | ◯ | – | – | – | – | – | 弾パラメータが効かない。増輪は `bullet_count` がビーム本数として扱われるが、挙動未確認のため除外 |
+| コア | `.tres` | 速射 | 増弾 | 貫通 | 残留 | 炸裂 | 追尾 | 加速 | 除外理由 |
+|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
+| エネルギーショット | `attackcore_magic_bullet` | ◯ | ◯ | ◯ | – | – | ◯ | – | 残留：寿命無限 |
+| ファイアボール | `attackcore_fireball` | ◯ | ◯ | ◯ | – | – | ◯ | – | 残留：寿命無限 |
+| バブルショット | `attackcore_bubble_shot` | ◯ | ◯ | ◯ | ◯ | – | – | – | 追尾：効果が薄い |
+| トリプルバースト | `attackcore_triple_burst` | – | – | ◯ | – | – | ◯ | ◯ | 加速：弾が早く消えるぶん発射間隔も縮む（距離 300px で Lv3 +43%、600px で +68%）／速射：弾が消えるまで次を撃たない仕組みと最短間隔（`min_cooldown` 0.0833 秒）で発射間隔が決まり、クールダウンを縮めても効果がない／増弾：「トリプル」という名前に反する／残留：寿命より先に画面外へ出て消える |
+| エレキショック | `attackcore_elec_shock` | ◯ | – | ◯ | – | ◯ | ◯ | – | 増弾：許可エンチャント数の制御、DPS の伸びが大きい／残留：寿命より先に画面外へ出て消える |
+| バリアオーブ | `attackcore_barrier_orb` | ◯ | ◯ | ◯ | ◯ | – | – | – | 追尾：バリア弾はコード上で対象外 |
+| ブーメラン | `attackcore_boomerang` | ◯ | ◯ | ◯ | – | – | – | – | 残留：寿命無限（プレイヤーに戻るまで消えない）／追尾：BOOMERANG 移動は対象外 |
+| マジカルボール | `attackcore_magical_ball` | ◯ | ◯ | ◯ | ◯ | – | – | – | 追尾：効果が薄い |
+| ニードルショット | `attackcore_needleshot` | ◯ | ◯ | – | – | – | ◯ | – | 増弾：◯（針が 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に並ぶ。大きい敵には複数本が同時に刺さり DPS が大きく伸びる）／貫通：tick ダメージでは無効／残留：寿命無限（`docs/specs/attackcore_needleshot.md` 4章） |
+| ビーム | `attackcore_normal_beam` | ◯ | ◯ | ◯ | – | – | – | – | 持続：◯（`beam_duration_pct` で照射時間が伸びる）／増弾：ビームが 3 / 5 / 9 本に増え、20 / 40 / 60° の扇に並ぶ／貫通：各ビームが手前から「貫通数 + 1」体に当たる／残留・炸裂・追尾：弾パラメータが効かない |
 
 - 炸裂は `on_hit_pattern` を持つコア（現状エレキショックのみ）でしか効かない。
 - 残留は `bullet_lifetime > 0` のコアでしか効かない（0 は無限扱いで、ファクトリが 0 のまま返す）。
@@ -302,16 +373,17 @@ GenericGauge / GaugeManager ← HUD描画側
 
 | 加護 | `.tres` | 許可エンチャント |
 |---|---|---|
-| 障壁の加護 | `blessing_shield` | 堅固・速復 |
-| 体力増強の加護 | `blessing_hp_boost` | 増健 |
-| 回復の加護 | `blessing_regen` | 速治 |
-| 背水の加護 | `blessing_laststand` | 必死・無我 |
-| 近接の加護 | `blessing_proximity` | 凝集・無我 |
-| 打消の加護 | `blessing_nullify` | 保持・強奪 |
-| 迷彩の加護 | `blessing_camouflage` | 保持 |
-| 不屈の加護 | `blessing_fortitude` | 保持 |
+| 障壁の加護 | `blessing_shield` | 堅固・速復・緩衝 |
+| 体力増強の加護 | `blessing_hp_boost` | 増健・庇護・反撃 |
+| 回復の加護 | `blessing_regen` | 速治・応急・危癒 |
+| 背水の加護 | `blessing_laststand` | 必死・無我・反撃 |
+| 近接の加護 | `blessing_proximity` | 凝集・無我・反撃 |
+| 打消の加護 | `blessing_nullify` | 保持・強奪・幸運 |
+| 迷彩の加護 | `blessing_camouflage` | 保持・幸運・持続 |
+| 不屈の加護 | `blessing_fortitude` | 保持・幸運・道連 |
+| 時界の加護 | `blessing_spacetime` | 持続・広範・速復 |
 
-- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`camouflage_duration_pct`（迷彩）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
+- 加護側で集計しているがエンチャントのリソースが未作成のキーがある：`hp_pct`（体力増強）、`shield_hp_add`（障壁）、`fortitude_invincible_pct`（不屈）。リソースを作ったら該当する加護の許可リストに追加する。
 
 ---
 

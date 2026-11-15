@@ -1,5 +1,7 @@
 extends EnemyBase
 
+const PHASE_CHANGE_HP_RATIO := 0.3  # フェーズ1で HP がこの割合以下になると次のフェーズへ
+
 @onready var ai: BossSpiderAI = $EnemyAI
 @onready var attack_collision: CollisionShape2D = $CollisionShape_attack
 var prev_position: Vector2 = Vector2.ZERO
@@ -22,9 +24,16 @@ func take_damage(amount: int) -> void:
   super.take_damage(amount)
 
 
+func get_burst_hp_floor() -> int:
+  # フェーズ1（と登場時のフェーズ0）の間は、次のフェーズの境目より下に減らさない
+  if ai._phase_idx <= 1:
+    return hp_threshold(PHASE_CHANGE_HP_RATIO)
+  return 0
+
+
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
-  if current_hp <= max_hp * 0.3 and ai._phase_idx == 1:
+  if current_hp <= max_hp * PHASE_CHANGE_HP_RATIO and ai._phase_idx == 1:
     # Phase 1でHPが30%以下になったら次のフェーズへ
     ai._next_phase()
   elif current_hp <= 0:

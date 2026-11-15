@@ -150,3 +150,9 @@ func test_scaled_beam_hit_width_stays_4px() -> void:
   await get_tree().physics_frame
   beam._process(0.0)
   assert_array(beam._hits).contains_exactly([outside])
+
+
+func test_enemy_beam_keeps_30_ticks_per_second() -> void:
+  """プレイヤーのビームの回数変更（15回/秒）は敵のビームに影響しない"""
+  var beam := _make_beam()
+  assert_float(beam.damage_tick_sec).is_equal_approx(1.0 / 30.0, 0.0001)

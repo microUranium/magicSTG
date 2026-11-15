@@ -165,12 +165,7 @@
       {
         "uid": "attackcore_triple_burst_2",
         "id": "attackcore_triple_burst",
-        "enchantments": [
-          {
-            "id": "cooldown_pct",
-            "level": 2
-          }
-        ]
+        "enchantments": []
       },
       {
         "uid": "attackcore_triple_burst_3",
@@ -179,10 +174,6 @@
           {
             "id": "penetration_add",
             "level": 1
-          },
-          {
-            "id": "cooldown_pct",
-            "level": 3
           }
         ]
       },

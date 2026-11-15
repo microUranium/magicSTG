@@ -7,7 +7,13 @@ class_name InventoryPanel
 @onready var sort_btn := $ItemListPane/Sort
 @onready var panel_label := $Label
 
-var _current_sort: int = ItemBase.ItemType.ATTACK_CORE  # 現在のソート状態
+const SORT_LABELS := {
+  ItemGrid.SortMode.ATTACK_CORE_FIRST: "魔法",
+  ItemGrid.SortMode.RARITY: "レア度",
+  ItemGrid.SortMode.BLESSING_FIRST: "加護",
+}
+
+var _current_sort: ItemGrid.SortMode = ItemGrid.SortMode.ATTACK_CORE_FIRST  # 現在のソート状態
 
 
 func _ready():
@@ -38,11 +44,10 @@ func _on_next_pressed():
 
 # ソート
 func _on_sort_pressed():
-  _current_sort = (_current_sort + 1) % ItemBase.ItemType.size()
+  _current_sort = ((_current_sort + 1) % ItemGrid.SortMode.size()) as ItemGrid.SortMode
   grid.sort_requested.emit(_current_sort)
   # ソートボタンの表示更新
-  var type_names := ["加護", "魔法"]
-  sort_btn.text = "ソート: %s" % type_names[_current_sort]
+  sort_btn.text = "ソート: %s" % SORT_LABELS[_current_sort]
 
 
 func change_label_text(text: String):

@@ -40,7 +40,7 @@ func _load_inventory():
 
   print_debug("Loaded inventory items: %d" % list.size())
   grid_inv.set_items(list)
-  grid_inv.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
+  grid_inv.sort_requested.emit(ItemGrid.SortMode.ATTACK_CORE_FIRST)  # 初期ソート
 
 
 func _show_result_items():
@@ -51,7 +51,7 @@ func _show_result_items():
     list.append(d)
 
   grid_results.set_items(list)
-  grid_results.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
+  grid_results.sort_requested.emit(ItemGrid.SortMode.ATTACK_CORE_FIRST)  # 初期ソート
 
 
 func _on_swap_request(src: Node, dst: Node):

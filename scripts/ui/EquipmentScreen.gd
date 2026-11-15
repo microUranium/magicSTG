@@ -56,7 +56,7 @@ func _load_inventory():
 
   print_debug("Loaded inventory items: %d" % list.size())
   grid_inv.set_items(list)
-  grid_inv.sort_requested.emit(ItemBase.ItemType.ATTACK_CORE)  # 初期ソート
+  grid_inv.sort_requested.emit(ItemGrid.SortMode.ATTACK_CORE_FIRST)  # 初期ソート
 
   # 削除スロットは常に空の状態で開始する
   var empty: Array[ItemPanelData] = []

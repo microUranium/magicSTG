@@ -157,7 +157,7 @@ func _next_pattern():
   elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 26):
     _set_attack_patterns(phase3_patterns_3)
   elif _phase_idx == 5 and _idx % patterns.size() == 12:
-    _attack_star_spiral()  # 下端への突進（パターン12）を終えた
+    _attack_star_spiral()  # 突進中の渦巻き攻撃
   elif _phase_idx == 5 and _idx % patterns.size() == 16:
     _clear_all_pattern_cores()
     _attack_starrush_2(0.5, 10)
@@ -165,7 +165,7 @@ func _next_pattern():
     _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
   elif _phase_idx == 5 and _idx % patterns.size() == 27:
-    _attack_star_spiral()  # 上端への突進（パターン27）を終えた
+    _attack_star_spiral()  # 突進中の渦巻き攻撃
   elif _phase_idx == 5 and _idx % patterns.size() == 0:
     _attack_phase3_rush()  # 上端から戻り、最後の待機（パターン29）を開始
 

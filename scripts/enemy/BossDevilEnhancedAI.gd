@@ -167,7 +167,9 @@ func _next_pattern():
   elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 26):
     _set_attack_patterns(phase3_patterns_3)
   elif _phase_idx == 5 and _idx % patterns.size() == 12:
-    _attack_star_spiral()  # 突進中の渦巻き攻撃
+    # 渦巻き攻撃。溜めの移動（パターン11）開始時に呼ぶが、実際の発射はコア追加時の
+    # 既定クールダウン（1秒）明け＝下端への突進（パターン12）開始時になる
+    _attack_star_spiral()
   elif _phase_idx == 5 and _idx % patterns.size() == 16:
     _clear_all_pattern_cores()
     _attack_starrush_2(0.5, 10)
@@ -176,7 +178,9 @@ func _next_pattern():
     _set_attack_patterns(phase3_patterns_2)
     _start_devil_beam()  # 32方向5連射の間、定期的にビームを撃つ
   elif _phase_idx == 5 and _idx % patterns.size() == 27:
-    _attack_star_spiral()  # 突進中の渦巻き攻撃
+    # 渦巻き攻撃。溜めの移動（パターン26）開始時に呼ぶが、実際の発射はコア追加時の
+    # 既定クールダウン（1秒）明け＝上端への突進（パターン27）開始時になる
+    _attack_star_spiral()
   elif _phase_idx == 5 and _idx % patterns.size() == 0:
     _attack_phase3_rush()  # 上端から戻り、最後の待機（パターン29）を開始
 
@@ -802,6 +806,8 @@ func _attack_star_spiral(_phase = 5):
   await get_tree().process_frame
   if _phase_idx != _phase:
     return  # 待機中にフェーズが変わっていたら撃たない（コアは次フェーズの切り替えで消える）
+  # 注意: 追加直後のコアは既定クールダウン（cooldown_sec = 1.0）中のため、この trigger() は無視され、
+  # 実際にはクールダウン明け（呼び出しから約1秒後）に撃ち始める。現状はこの遅れ込みでタイミングを合わせている
   for core in _pattern_cores.slice(first_new):
     if is_instance_valid(core):
       core.trigger()

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bi3dwcyblil0o"]
+[gd_scene load_steps=11 format=3 uid="uid://bi3dwcyblil0o"]
 
 [ext_resource type="Script" uid="uid://mb6vqnw8g23g" path="res://scripts/ui/StageSelectController.gd" id="1_gn162"]
 [ext_resource type="PackedScene" uid="uid://bh68hvfympwiu" path="res://scenes/ui/background.tscn" id="1_i3kq2"]
 [ext_resource type="Texture2D" uid="uid://b5kuya0bm55nv" path="res://assets/gfx/backgrounds/hud_background_sprite.png" id="2_gn162"]
 [ext_resource type="Texture2D" uid="uid://dqj525odhm4t8" path="res://assets/gfx/sprites/stage_back_button.png" id="3_2fl3e"]
 [ext_resource type="Texture2D" uid="uid://yi4gdgtkjmmm" path="res://assets/gfx/sprites/stage_forward_button.png" id="4_3qv83"]
+[ext_resource type="FontFile" uid="uid://ctho2c0voglnq" path="res://assets/fonts/Nosutaru-dotMPlusH-10-Regular.ttf" id="4_6ffpe"]
 [ext_resource type="Script" uid="uid://doog04k3yauxp" path="res://scripts/ui/CurrentEquipContainer.gd" id="6_2fl3e"]
 [ext_resource type="Texture2D" uid="uid://oby7obaj8gsn" path="res://assets/gfx/sprites/button_to_equip.png" id="7_fh8sw"]
 [ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="8_6ffpe"]
@@ -47,6 +48,9 @@ theme_override_constants/margin_right = -140
 [node name="ChapterName" type="Label" parent="ChapterSelectContainer/MarginContainer"]
 custom_minimum_size = Vector2(830, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.805311, 0.311201, 0.622494, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_6ffpe")
 theme_override_font_sizes/font_size = 80
 text = "Stage1 馬車道の森"
 horizontal_alignment = 1

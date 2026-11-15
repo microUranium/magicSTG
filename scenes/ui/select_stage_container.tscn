@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnvr7vnfgrj0o"]
+[gd_scene load_steps=6 format=3 uid="uid://bnvr7vnfgrj0o"]
 
 [ext_resource type="Script" uid="uid://cwyntf4n88cdu" path="res://scripts/ui/StageButtonController.gd" id="1_baru5"]
 [ext_resource type="Texture2D" uid="uid://b4dok6iokkqs0" path="res://assets/gfx/sprites/stage_select_button.png" id="1_qqqam"]
 [ext_resource type="Texture2D" uid="uid://cbxghykxoao3x" path="res://assets/gfx/sprites/dialogue_enable.png" id="2_baru5"]
+[ext_resource type="FontFile" uid="uid://dndwqq68fxoko" path="res://assets/fonts/DotGothic16-Regular.ttf" id="3_boagu"]
 [ext_resource type="Texture2D" uid="uid://d2yg0pxaggw64" path="res://assets/gfx/sprites/cleared_sprite.png" id="4_clear"]
 
 [node name="SelectStageContainer" type="Control"]
@@ -43,8 +44,10 @@ offset_top = 80.0
 offset_right = 846.0
 offset_bottom = 169.0
 theme_override_colors/font_color = Color(0.25, 0.25, 0.25, 1)
+theme_override_fonts/font = ExtResource("3_boagu")
 theme_override_font_sizes/font_size = 64
 text = "1-1 馬車道の異変"
+vertical_alignment = 1
 
 [node name="DialogueToggleButton" type="Button" parent="Control"]
 layout_mode = 0

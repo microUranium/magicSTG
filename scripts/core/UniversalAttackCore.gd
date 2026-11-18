@@ -1058,8 +1058,8 @@ func _show_attack_warning() -> Vector2:
     var start_pos: Vector2
     start_pos = warning_config.position_offset
 
-    # 警告線の終点座標を計算（角度を使用）
-    var angle_rad = base_dir.angle()
+    # 警告線の終点座標を計算（基準方向 ＋ 警告線ごとのずらし角度）
+    var angle_rad = base_dir.angle() + deg_to_rad(warning_config.angle_offset_degrees)
     var direction = Vector2(cos(angle_rad), sin(angle_rad))
     var end_pos = start_pos + direction * warning_config.warning_length
 

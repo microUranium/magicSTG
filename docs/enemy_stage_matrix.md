@@ -32,7 +32,7 @@
 | enemy_lantern | — | — | ● 6+4 | — | ● 4+2（派生版） | — | stage5に登場する方は攻撃手段、HP据え置き。stage5 は章別ドロップ用の `enemy_lantern_ch5`（継承シーン） |
 | enemy_grimoire | — | — | ● 4+3 | — | ● 2+2（派生版） | — | stage5に登場する方は攻撃手段強化、HP据え置き |
 | enemy_bat_a | — | — | ● 4+4 | — | — | — | |
-| enemy_swamp_bird | — | — | — | ● 5+5 | — | ● 2+3（派生版） | stage6に登場する方は攻撃手段HP共に据え置き。stage6 は章別ドロップ用の `enemy_swamp_bird_ch6`（継承シーン） |
+| enemy_swamp_bird | — | — | — | ● 5+5 | — | ● 2+3（派生版） | stage6 は `enemy_swamp_bird_ch6`（継承シーン。ドロップ・HP・攻撃パターンを個別に持つ）。HP60→300、攻撃は減速を緩め（毎秒100→80）、サイクルを短縮（1.9→1.52秒） |
 | enemy_living_wood | — | — | — | ● 3+1 | — | — | |
 | enemy_cedar | — | — | — | — | — | ● 2+1 | 新規（stage6 のみ）。HP1500、通常攻撃なし。HP が20%減るごと（撃破時含む）に花粉150発を、画面の外側寄りにばらまく |
 | enemy_spike | — | — | — | ● 5+4 | — | — | |

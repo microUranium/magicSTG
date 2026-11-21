@@ -1,4 +1,4 @@
-[gd_scene load_steps=122 format=3 uid="uid://clyvgmbvrxlee"]
+[gd_scene load_steps=124 format=3 uid="uid://clyvgmbvrxlee"]
 
 [ext_resource type="Script" uid="uid://bfh7nk4uh43bd" path="res://scripts/enemy/BossDevilEnhanced.gd" id="1_lfkl1"]
 [ext_resource type="Texture2D" uid="uid://cjgapdfuxrkjc" path="res://assets/gfx/sprites/enemy_boss_vampire_sprite.png" id="2_mse8r"]
@@ -1098,6 +1098,27 @@ skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
+[sub_resource type="Resource" id="Resource_dash_down_wait"]
+script = ExtResource("7_aturw")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
 [sub_resource type="Resource" id="Resource_igkvl"]
 script = ExtResource("7_aturw")
 movement_type = 2
@@ -1392,9 +1413,30 @@ skip_on_dialogue_skip = false
 block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
+[sub_resource type="Resource" id="Resource_dash_up_wait"]
+script = ExtResource("7_aturw")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 1.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
 [sub_resource type="Resource" id="Resource_6q3d8"]
 script = ExtResource("6_4r3ww")
-patterns = Array[ExtResource("7_aturw")]([SubResource("Resource_m81nq"), SubResource("Resource_r0rtm"), SubResource("Resource_t2dfo"), SubResource("Resource_yi177"), SubResource("Resource_y6q5v"), SubResource("Resource_mige0"), SubResource("Resource_uklgy"), SubResource("Resource_dfv2b"), SubResource("Resource_e3rsx"), SubResource("Resource_73ryd"), SubResource("Resource_ep1j7"), SubResource("Resource_6hj3w"), SubResource("Resource_7ex70"), SubResource("Resource_bp33h"), SubResource("Resource_igkvl"), SubResource("Resource_72q5e"), SubResource("Resource_1td54"), SubResource("Resource_044am"), SubResource("Resource_i7bpl"), SubResource("Resource_yadcx"), SubResource("Resource_5ok7j"), SubResource("Resource_n2pvy"), SubResource("Resource_5q8r5"), SubResource("Resource_v8oj4"), SubResource("Resource_8rece"), SubResource("Resource_gism8"), SubResource("Resource_y7her"), SubResource("Resource_6gvxe")])
+patterns = Array[ExtResource("7_aturw")]([SubResource("Resource_m81nq"), SubResource("Resource_r0rtm"), SubResource("Resource_t2dfo"), SubResource("Resource_yi177"), SubResource("Resource_y6q5v"), SubResource("Resource_mige0"), SubResource("Resource_uklgy"), SubResource("Resource_dfv2b"), SubResource("Resource_e3rsx"), SubResource("Resource_73ryd"), SubResource("Resource_ep1j7"), SubResource("Resource_6hj3w"), SubResource("Resource_7ex70"), SubResource("Resource_bp33h"), SubResource("Resource_dash_down_wait"), SubResource("Resource_igkvl"), SubResource("Resource_72q5e"), SubResource("Resource_1td54"), SubResource("Resource_044am"), SubResource("Resource_i7bpl"), SubResource("Resource_yadcx"), SubResource("Resource_5ok7j"), SubResource("Resource_n2pvy"), SubResource("Resource_5q8r5"), SubResource("Resource_v8oj4"), SubResource("Resource_8rece"), SubResource("Resource_gism8"), SubResource("Resource_y7her"), SubResource("Resource_6gvxe"), SubResource("Resource_dash_up_wait")])
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.1
@@ -1690,7 +1732,7 @@ shape = SubResource("CapsuleShape2D_wvsr4")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_aumgx")
-max_hp = 200
+max_hp = 35000
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot_final", "attack_core_slot")]
 script = ExtResource("5_esmht")

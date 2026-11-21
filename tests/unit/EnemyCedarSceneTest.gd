@@ -1,13 +1,12 @@
 # === enemy_cedar（スギ）のテスト ===
-# 通常攻撃はせず、HP が 20% 減るごとに花粉を 50 発ばらまく（撃破時も含む）
+# 通常攻撃はせず、HP が 20% 減るごとに花粉をばらまく（撃破時も含む）。
+# HP・弾数は調整で変わるため、区切りの量と弾数はシーンの値から求める
 extends GdUnitTestSuite
 
-const LIVING_WOOD := "res://scenes/enemy/enemy_living_wood.tscn"
 const CEDAR := "res://scenes/enemy/enemy_cedar.tscn"
 const CEDAR_TEXTURE := "res://assets/gfx/sprites/enemy_cedar_sprite.png"
 const POLLEN_TEXTURE := "res://assets/gfx/sprites/bullet_enemy_sprite_2.png"
 const STAGE_DATA := "res://resources/data/stage_data.json"
-const POLLEN_PER_BURST := 50
 
 var _bullet_root: Node2D
 
@@ -41,6 +40,16 @@ func _pollen() -> AttackPattern:
   return _instantiate(CEDAR).get_node("AttackCoreSlot").attack_pattern
 
 
+## 1 回にばらまく花粉の数
+func _per_burst() -> int:
+  return _pollen().bullet_count
+
+
+## 花粉をばらまく区切り（最大 HP の 20%）
+func _step(cedar: Node) -> int:
+  return int(cedar.get_node("HpNode").max_hp / 5.0)
+
+
 # --- シーン構成 ---
 
 
@@ -53,11 +62,9 @@ func test_cedar_uses_cedar_sprite() -> void:
     assert_str(tex.atlas.resource_path).is_equal(CEDAR_TEXTURE)
 
 
-func test_cedar_has_same_hp_as_living_wood() -> void:
-  var living_wood := _instantiate(LIVING_WOOD)
-  var cedar := _instantiate(CEDAR)
-
-  assert_int(cedar.get_node("HpNode").max_hp).is_equal(living_wood.get_node("HpNode").max_hp)
+func test_cedar_hp_splits_evenly_into_five_steps() -> void:
+  # 区切りの判定は割り切れる前提（20% ちょうどで発射）なので、最大 HP は 5 の倍数にする
+  assert_int(_instantiate(CEDAR).get_node("HpNode").max_hp % 5).is_equal(0)
 
 
 func test_cedar_has_no_shield() -> void:
@@ -70,11 +77,11 @@ func test_pollen_does_not_fire_automatically() -> void:
   assert_bool(_pollen().auto_start).is_false()
 
 
-func test_pollen_scatters_50_bullets_in_random_directions() -> void:
+func test_pollen_scatters_bullets_in_random_directions() -> void:
   var pollen := _pollen()
 
   assert_int(pollen.pattern_type).is_equal(AttackPattern.PatternType.SINGLE_SHOT)
-  assert_int(pollen.bullet_count).is_equal(POLLEN_PER_BURST)
+  assert_int(pollen.bullet_count).is_greater(0)
   # RANDOM + angle_spread 0 で全方向ランダム
   assert_int(pollen.direction_type).is_equal(AttackPattern.DirectionType.RANDOM)
   assert_float(pollen.angle_spread).is_equal(0.0)
@@ -88,11 +95,11 @@ func test_pollen_uses_unscaled_sprite_with_8px_hitbox() -> void:
   assert_float(visual.collision_radius).is_equal(8.0)
 
 
-func test_pollen_lifetime_is_random_between_2_5_and_3_5_sec() -> void:
+func test_pollen_lifetime_is_random_range() -> void:
   var pollen := _pollen()
 
-  assert_float(pollen.bullet_lifetime).is_equal(2.5)
-  assert_float(pollen.bullet_lifetime_max).is_equal(3.5)
+  assert_float(pollen.bullet_lifetime).is_greater(0.0)
+  assert_float(pollen.bullet_lifetime_max).is_greater(pollen.bullet_lifetime)
 
 
 func test_pollen_decelerates_from_random_speed_and_keeps_drifting() -> void:
@@ -117,7 +124,7 @@ func test_cedar_is_registered_in_stage_data() -> void:
 func test_no_pollen_before_losing_20_percent() -> void:
   var cedar := await _spawn_cedar()
 
-  cedar.get_node("HpNode").take_damage(99)  # 500 中 99 減 = 19.8%
+  cedar.get_node("HpNode").take_damage(_step(cedar) - 1)  # 20% にわずかに届かない
 
   assert_int(_bullet_root.get_child_count()).is_equal(0)
 
@@ -125,27 +132,27 @@ func test_no_pollen_before_losing_20_percent() -> void:
 func test_scatters_pollen_at_exactly_20_percent() -> void:
   var cedar := await _spawn_cedar()
 
-  cedar.get_node("HpNode").take_damage(100)
+  cedar.get_node("HpNode").take_damage(_step(cedar))
 
-  assert_int(_bullet_root.get_child_count()).is_equal(POLLEN_PER_BURST)
+  assert_int(_bullet_root.get_child_count()).is_equal(_per_burst())
 
 
 func test_scatters_once_per_threshold_crossed_by_single_hit() -> void:
   var cedar := await _spawn_cedar()
 
-  cedar.get_node("HpNode").take_damage(210)  # 一撃で 20% と 40% を越える
+  cedar.get_node("HpNode").take_damage(_step(cedar) * 2 + 10)  # 一撃で 20% と 40% を越える
 
-  assert_int(_bullet_root.get_child_count()).is_equal(POLLEN_PER_BURST * 2)
+  assert_int(_bullet_root.get_child_count()).is_equal(_per_burst() * 2)
 
 
 func test_does_not_scatter_again_within_same_step() -> void:
   var cedar := await _spawn_cedar()
   var hp := cedar.get_node("HpNode")
 
-  hp.take_damage(100)
-  hp.take_damage(50)  # 30% 減。次の区切り（40%）には届いていない
+  hp.take_damage(_step(cedar))
+  hp.take_damage(int(_step(cedar) / 2.0))  # 30% 減。次の区切り（40%）には届いていない
 
-  assert_int(_bullet_root.get_child_count()).is_equal(POLLEN_PER_BURST)
+  assert_int(_bullet_root.get_child_count()).is_equal(_per_burst())
 
 
 func test_scatters_five_times_including_defeat() -> void:
@@ -153,16 +160,16 @@ func test_scatters_five_times_including_defeat() -> void:
   var hp := cedar.get_node("HpNode")
 
   for i in 5:
-    hp.take_damage(100)
+    hp.take_damage(_step(cedar))
 
   # 20/40/60/80% と撃破時（100%）の計 5 回
-  assert_int(_bullet_root.get_child_count()).is_equal(POLLEN_PER_BURST * 5)
+  assert_int(_bullet_root.get_child_count()).is_equal(_per_burst() * 5)
   assert_bool(cedar.is_queued_for_deletion()).is_true()
 
 
 func test_overkill_scatters_remaining_bursts() -> void:
   var cedar := await _spawn_cedar()
 
-  cedar.get_node("HpNode").take_damage(9999)
+  cedar.get_node("HpNode").take_damage(cedar.get_node("HpNode").max_hp * 10)
 
-  assert_int(_bullet_root.get_child_count()).is_equal(POLLEN_PER_BURST * 5)
+  assert_int(_bullet_root.get_child_count()).is_equal(_per_burst() * 5)

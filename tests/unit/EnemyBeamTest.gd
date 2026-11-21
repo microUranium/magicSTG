@@ -85,6 +85,16 @@ func test_enemy_beam_full_length_without_player() -> void:
   assert_float(beam.ninepatch.size.y).is_equal_approx(beam.desired_length, 0.01)
 
 
+func test_frame_is_drawn_at_same_horizontal_scale_as_caps() -> void:
+  # シェーダーは切り出し範囲の 1/3 を 1 コマとして描く。その横幅がビームの見た目の幅と同じなら
+  # 横方向が等倍になり、等倍で描かれる上下の丸い飾り（patch_margin）が縦長に歪まない
+  var beam := _make_beam()
+  var frame_count: int = (beam.ninepatch.material as ShaderMaterial).get_shader_parameter(
+    "frame_count"
+  )
+  assert_float(beam.ninepatch.region_rect.size.x / frame_count).is_equal(beam.ninepatch.size.x)
+
+
 func test_animation_time_advances_only_in_process() -> void:
   var beam := _make_beam()
   var material := beam.ninepatch.material as ShaderMaterial

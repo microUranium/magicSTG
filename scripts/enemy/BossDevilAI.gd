@@ -226,7 +226,7 @@ func create_phase2_pattern_2() -> Array[AttackPattern]:
 
     var movement_config = BulletMovementConfig.new()
     movement_config.movement_type = BulletMovementConfig.MovementType.HOMING
-    movement_config.initial_speed = 500.0
+    movement_config.initial_speed = 400.0
     movement_config.homing_duration = 2.5
     movement_config.max_turn_angle_per_second = 120.0
     pattern.bullet_movement_config = movement_config
@@ -247,12 +247,12 @@ func create_phase2_pattern_2() -> Array[AttackPattern]:
   pattern.target_group = "players"
   pattern.burst_delay = 0.75
   pattern.bullet_count = 5
-  pattern.angle_spread = 15.0  # 各パターンで角度をずらす
+  pattern.angle_spread = 30.0  # 各パターンで角度をずらす
   pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
 
   var movement_config = BulletMovementConfig.new()
   movement_config.movement_type = BulletMovementConfig.MovementType.STRAIGHT
-  movement_config.initial_speed = 700.0
+  movement_config.initial_speed = 450.0
   pattern.bullet_movement_config = movement_config
   patterns.append(pattern)
 

@@ -114,8 +114,8 @@ func test_grimoire_strong_keeps_other_stats() -> void:
 # --- enemy_flower_b_strong（stage6 向け強化版）---
 
 
-func test_flower_b_strong_has_500_hp() -> void:
-  assert_int(_instantiate(FLOWER_B_STRONG).get_node("HpNode").max_hp).is_equal(500)
+func test_flower_b_strong_has_700_hp() -> void:
+  assert_int(_instantiate(FLOWER_B_STRONG).get_node("HpNode").max_hp).is_equal(700)
 
 
 func test_flower_b_strong_keeps_upward_pattern_as_base() -> void:
@@ -187,6 +187,24 @@ func test_chapter_drop_variants_keep_base_stats() -> void:
     var variant := _instantiate(pair[1])
 
     assert_object(variant.get_script()).is_equal(base.get_script())
-    assert_int(variant.get_node("HpNode").max_hp).is_equal(base.get_node("HpNode").max_hp)
     assert_str(variant.name).is_equal(base.name)
     assert_array(variant.get_groups()).contains(["enemies"])
+
+  # swamp_bird_ch6 は stage6 向けに HP・攻撃パターンを調整するため、HP の一致は lantern_ch5 だけ確認する
+  var lantern := _instantiate(LANTERN)
+  var lantern_ch5 := _instantiate(LANTERN_CH5)
+  assert_int(lantern_ch5.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
+
+
+# --- enemy_swamp_bird_ch6（stage6 向けに HP・攻撃パターンを個別に調整できる派生版）---
+
+
+func test_swamp_bird_ch6_has_own_attack_pattern() -> void:
+  # ch6 の攻撃パターンを調整しても stage4 の swamp_bird に影響しないよう、
+  # パターン・弾の動き・弾のシーンのどれも元シーンと共有していないこと
+  var base_pattern := _pattern(_instantiate(SWAMP_BIRD))
+  var ch6_pattern := _pattern(_instantiate(SWAMP_BIRD_CH6))
+
+  assert_object(ch6_pattern).is_not_same(base_pattern)
+  assert_object(ch6_pattern.bullet_movement_config).is_not_same(base_pattern.bullet_movement_config)
+  assert_object(ch6_pattern.bullet_scene).is_not_same(base_pattern.bullet_scene)

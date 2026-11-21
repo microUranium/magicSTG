@@ -48,9 +48,9 @@ size = Vector2(133, 181)
 [sub_resource type="Resource" id="Resource_pollen_movement"]
 script = ExtResource("11_movement")
 movement_type = 1
-initial_speed = 150.0
-initial_speed_max = 600.0
-deceleration_rate = 200.0
+initial_speed = 250.0
+initial_speed_max = 550.0
+deceleration_rate = 140.0
 min_speed = 20.0
 acceleration_rate = 50.0
 max_speed = 500.0
@@ -106,14 +106,14 @@ bullet_scene = ExtResource("8_bullet")
 target_group = "players"
 damage = 5
 bullet_range = 0.0
-bullet_lifetime = 2.5
-bullet_lifetime_max = 3.5
+bullet_lifetime = 5.0
+bullet_lifetime_max = 7.0
 auto_start = false
 penetration_count = 0
 contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_pollen_visual")
 bullet_movement_config = SubResource("Resource_pollen_movement")
-bullet_count = 50
+bullet_count = 150
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
 burst_delay = 0.5
@@ -170,7 +170,7 @@ shape = SubResource("RectangleShape2D_cedar")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("3_hp")
-max_hp = 500
+max_hp = 1500
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("4_ai")

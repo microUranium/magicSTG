@@ -20,6 +20,8 @@ var _rear_firing_mode: bool = false  # 後方発射モード
 var _base_dir_cached: Vector2 = Vector2.ZERO  # ベース方向のキャッシュ
 var _tracked_bullets: Array[Node] = []  # BURST_WITH_TRACKING用の弾丸追跡
 var _last_spawn_sound_frame: int = -1  # 発射音の同一フレーム重複再生を防ぐ
+var _active_warnings: Array[Node] = []  # 表示中の警告線（cancel_attack で消すため）
+var _cancel_serial: int = 0  # cancel_attack が呼ばれるたびに増やす（警告線の待ち中の発射を中止する判定用）
 
 
 class ExecutionContext:
@@ -102,9 +104,13 @@ func _do_fire() -> bool:
 
   # 警告表示（warning_configが存在する場合のみ）
   if !attack_pattern.warning_configs.is_empty():
+    var cancel_serial_at_start := _cancel_serial
     _base_dir_cached = await _show_attack_warning()
     # 警告の待ち中にツリーから外れた場合は撃たない（ビームなど以降の処理が get_tree() を使う）
     if not is_inside_tree():
+      return false
+    # 警告の待ち中に cancel_attack された場合も撃たない
+    if _cancel_serial != cancel_serial_at_start:
       return false
 
   # 実行コンテキストを作成
@@ -1052,8 +1058,8 @@ func _show_attack_warning() -> Vector2:
     var start_pos: Vector2
     start_pos = warning_config.position_offset
 
-    # 警告線の終点座標を計算（角度を使用）
-    var angle_rad = base_dir.angle()
+    # 警告線の終点座標を計算（基準方向 ＋ 警告線ごとのずらし角度）
+    var angle_rad = base_dir.angle() + deg_to_rad(warning_config.angle_offset_degrees)
     var direction = Vector2(cos(angle_rad), sin(angle_rad))
     var end_pos = start_pos + direction * warning_config.warning_length
 
@@ -1064,6 +1070,8 @@ func _show_attack_warning() -> Vector2:
       warning_config,
       _owner_actor if warning_config.use_relative_position else null
     )
+    _active_warnings.append(warning)
+    warning.tree_exiting.connect(_on_warning_exiting.bind(warning))
 
     # 最長の警告時間を記録
     max_duration = max(max_duration, warning_config.warning_duration)
@@ -1073,6 +1081,22 @@ func _show_attack_warning() -> Vector2:
     await get_tree().create_timer(max_duration, false).timeout
 
   return base_dir
+
+
+func _on_warning_exiting(warning: Node) -> void:
+  _active_warnings.erase(warning)
+
+
+func cancel_attack() -> void:
+  """表示中の警告線と発射中のビームを即座に消し、警告線の待ち中の発射も中止させる。
+  コアを止めたいときは、この後にスロットからコアを取り除く（クールダウン後の再発射は止めない）"""
+  _cancel_serial += 1
+  for node in _active_warnings + _active_beams:
+    if is_instance_valid(node):
+      node.queue_free()
+  _active_warnings.clear()
+  _active_beams.clear()
+  _active_beam_pattern = null
 
 
 func cleanup_on_death() -> void:

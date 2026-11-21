@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://wbp6oy3xn7mi"]
+[gd_scene load_steps=52 format=3 uid="uid://wbp6oy3xn7mi"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_yea2y"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_mc14j"]
@@ -17,6 +17,10 @@
 [ext_resource type="Resource" uid="uid://gnjd5u6i5sby" path="res://resources/bulletVisuals/basic_bullet_standard.tres" id="15_wibll"]
 [ext_resource type="Resource" uid="uid://ltyq2qp4wy72" path="res://resources/bullet_movements/straight_fast.tres" id="16_r07n0"]
 [ext_resource type="Texture2D" uid="uid://b5ixsnmknr1c5" path="res://assets/gfx/sprites/bullet_enemy_sprite.png" id="17_sokdm"]
+[ext_resource type="PackedScene" uid="uid://be5bkq7jemq4n" path="res://scenes/attackCores/enemy/enemy_beam.tscn" id="20_beam"]
+[ext_resource type="Shader" uid="uid://dj4d6ff8ed81d" path="res://assets/shaders/beam_shader.gdshader" id="21_beam_shader"]
+[ext_resource type="Script" uid="uid://bci33nkpd7hly" path="res://scripts/core/BeamVisualConfig.gd" id="22_beam_visual"]
+[ext_resource type="Texture2D" uid="uid://dd136wvb57tpg" path="res://assets/gfx/sprites/beam_enemy_sprite.png" id="23_beam_tex"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_d_attackcore_magic_bullet.tres" id="dt_1"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_d_attackcore_magical_ball.tres" id="dt_2"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_bird_d_attackcore_needleshot.tres" id="dt_3"]
@@ -394,6 +398,121 @@ homing_max_turn_rate_deg = 180.0
 homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+shader = ExtResource("21_beam_shader")
+shader_parameter/frame_count = 3
+shader_parameter/fps = 12.0
+shader_parameter/anim_time = -1.0
+
+[sub_resource type="Resource" id="Resource_beam_visual"]
+script = ExtResource("22_beam_visual")
+texture = ExtResource("23_beam_tex")
+color = Color(1, 1, 1, 1)
+width = 32.0
+scale = Vector2(2, 2)
+material = SubResource("ShaderMaterial_beam")
+use_shader_animation = true
+animation_speed = 12.0
+enable_particles = false
+volume = 1.0
+metadata/_custom_type_script = "uid://bci33nkpd7hly"
+
+[sub_resource type="Resource" id="Resource_beam_warning_l"]
+script = ExtResource("13_f70qo")
+base_color = Color(0.501961, 0.0980392, 0.0980392, 1)
+glow_width = 16.0
+outline_width = 16.0
+warning_duration = 1.0
+glow_intensity = 2.0
+warning_length = 1000.0
+angle_degrees = 0.0
+angle_offset_degrees = -15.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
+metadata/_custom_type_script = "uid://cisl1a65xgxeq"
+
+[sub_resource type="Resource" id="Resource_beam_warning_c"]
+script = ExtResource("13_f70qo")
+base_color = Color(0.501961, 0.0980392, 0.0980392, 1)
+glow_width = 16.0
+outline_width = 16.0
+warning_duration = 1.0
+glow_intensity = 2.0
+warning_length = 1000.0
+angle_degrees = 0.0
+angle_offset_degrees = 0.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
+metadata/_custom_type_script = "uid://cisl1a65xgxeq"
+
+[sub_resource type="Resource" id="Resource_beam_warning_r"]
+script = ExtResource("13_f70qo")
+base_color = Color(0.501961, 0.0980392, 0.0980392, 1)
+glow_width = 16.0
+outline_width = 16.0
+warning_duration = 1.0
+glow_intensity = 2.0
+warning_length = 1000.0
+angle_degrees = 0.0
+angle_offset_degrees = 15.0
+position_offset = Vector2(0, 0)
+use_relative_position = true
+metadata/_custom_type_script = "uid://cisl1a65xgxeq"
+
+[sub_resource type="Resource" id="Resource_beam_fan"]
+script = ExtResource("11_qltra")
+pattern_type = 4
+target_group = "players"
+damage = 1
+bullet_range = 0.0
+bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
+auto_start = true
+penetration_count = 0
+contact_damage_tick_sec = 0.0
+bullet_count = 3
+rapid_fire_count = 1
+rapid_fire_interval = 0.1
+burst_delay = 4.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 1
+base_direction = Vector2(0, 1)
+angle_spread = 30.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 200.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 3.0
+beam_scene = ExtResource("20_beam")
+continuous_damage = true
+beam_visual_config = SubResource("Resource_beam_visual")
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 0)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("11_qltra")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("13_f70qo")]([SubResource("Resource_beam_warning_l"), SubResource("Resource_beam_warning_c"), SubResource("Resource_beam_warning_r")])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
 [node name="EnemyBirdD" type="Area2D" groups=["enemies"]]
 collision_layer = 3
 collision_mask = 3
@@ -411,7 +530,7 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("5_f70qo")
-max_hp = 100
+max_hp = 300
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("6_4i110")
@@ -421,5 +540,5 @@ base_speed = 200.0
 script = ExtResource("8_wibll")
 default_core_scene = ExtResource("9_r07n0")
 attack_pattern = SubResource("Resource_pmcmy")
-attack_patterns_additive = Array[ExtResource("11_qltra")]([SubResource("Resource_cf7yw"), SubResource("Resource_x1vhf")])
+attack_patterns_additive = Array[ExtResource("11_qltra")]([SubResource("Resource_cf7yw"), SubResource("Resource_x1vhf"), SubResource("Resource_beam_fan")])
 auto_create_core = true

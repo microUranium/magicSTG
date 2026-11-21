@@ -9,6 +9,7 @@ class_name BossDevilEnhancedAI
 @export var phase3_patterns_2: Array[AttackPattern]
 @export var phase3_patterns_3: Array[AttackPattern]
 @export var phase3_patterns_4: Array[AttackPattern]
+@export var phase3_patterns_5: Array[AttackPattern]  # 突進後の星の渦巻き3連射
 @export var phase4_patterns_1: Array[AttackPattern]
 @export var phase4_patterns_2: Array[AttackPattern]
 
@@ -25,6 +26,13 @@ var starrush_scene: PackedScene = preload("res://scenes/enemy/enemy_boss_devil_s
 
 var _phase_idx := 0
 var _phase2_starrush_count := 0
+var _beam_core: UniversalAttackCore = null  # phase5 のビーム専用コア（_pattern_cores とは別に管理）
+
+const DEVIL_BEAM_SCENE := preload("res://scenes/attackCores/enemy/enemy_beam_devil.tscn")
+const DEVIL_BEAM_TEXTURE := preload("res://assets/gfx/sprites/beam_devil_sprite.png")
+const SCREEN_HALF_VERTICAL_DIRECTION := preload(
+  "res://scripts/enemy/ScreenHalfVerticalDirection.gd"
+)
 
 
 func _ready():
@@ -64,6 +72,7 @@ func _next_phase():
     return
 
   _cancel_current_pattern()
+  _cancel_devil_beam()  # フェーズが変わったらビームも止める
 
   _phase_idx += 1
   if _phase_idx >= phases.size():
@@ -148,20 +157,32 @@ func _next_pattern():
     _set_attack_patterns(phase2_patterns_1)
   elif _phase_idx == 3 and (_idx % patterns.size() == 8 or _idx % patterns.size() == 0):
     _clear_all_pattern_cores()
+  # phase5: _idx は「開始したパターンの次」を指すため、_idx % size == k はパターン番号 k-1 の開始時
   elif _phase_idx == 5 and _idx % patterns.size() == 3:
     _set_attack_patterns(phase3_patterns_2)
-  elif _phase_idx == 5 and (_idx % patterns.size() == 10 or _idx % patterns.size() == 24):
+    _start_devil_beam()  # 32方向5連射の間、定期的にビームを撃つ
+  elif _phase_idx == 5 and (_idx % patterns.size() == 10 or _idx % patterns.size() == 25):
     _clear_all_pattern_cores()
-  elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 25):
+    _cancel_devil_beam()  # 32方向5連射の終了に合わせて、警告線・発射中のビームごと止める
+  elif _phase_idx == 5 and (_idx % patterns.size() == 11 or _idx % patterns.size() == 26):
     _set_attack_patterns(phase3_patterns_3)
-  elif _phase_idx == 5 and _idx % patterns.size() == 15:
-    _clear_all_pattern_cores()
-    _attack_starrush_2(0.5, 10)
+  elif _phase_idx == 5 and _idx % patterns.size() == 12:
+    # 渦巻き攻撃。溜めの移動（パターン11）開始時に呼ぶが、実際の発射はコア追加時の
+    # 既定クールダウン（1秒）明け＝下端への突進（パターン12）開始時になる
+    _attack_star_spiral()
   elif _phase_idx == 5 and _idx % patterns.size() == 16:
     _clear_all_pattern_cores()
+    _attack_starrush_2(0.5, 10)
+  elif _phase_idx == 5 and _idx % patterns.size() == 17:
+    _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
+    _start_devil_beam()  # 32方向5連射の間、定期的にビームを撃つ
+  elif _phase_idx == 5 and _idx % patterns.size() == 27:
+    # 渦巻き攻撃。溜めの移動（パターン26）開始時に呼ぶが、実際の発射はコア追加時の
+    # 既定クールダウン（1秒）明け＝上端への突進（パターン27）開始時になる
+    _attack_star_spiral()
   elif _phase_idx == 5 and _idx % patterns.size() == 0:
-    _attack_phase3_rush()
+    _attack_phase3_rush()  # 上端から戻り、最後の待機（パターン29）を開始
 
 
 func _set_attack_patterns(patterns: Array[AttackPattern]):
@@ -340,12 +361,12 @@ func create_phase2_pattern_2() -> Array[AttackPattern]:
   pattern.target_group = "players"
   pattern.burst_delay = 0.75
   pattern.bullet_count = 5
-  pattern.angle_spread = 15.0  # 各パターンで角度をずらす
+  pattern.angle_spread = 30.0  # 各パターンで角度をずらす
   pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
 
   var movement_config = BulletMovementConfig.new()
   movement_config.movement_type = BulletMovementConfig.MovementType.STRAIGHT
-  movement_config.initial_speed = 700.0
+  movement_config.initial_speed = 450.0
   pattern.bullet_movement_config = movement_config
   patterns.append(pattern)
 
@@ -522,6 +543,42 @@ func create_phase3_pattern_4() -> Array[AttackPattern]:
   return patterns
 
 
+func create_phase3_pattern_5() -> Array[AttackPattern]:
+  """Phase3相当のパターンを作成（突進後に星10個のリングを渦巻状に5連射）"""
+  var patterns: Array[AttackPattern] = []
+
+  var pattern = AttackPatternFactory.create_rapid_fire(
+    AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.1, 5
+  )
+  pattern.target_group = "players"
+  pattern.auto_start = false
+  pattern.burst_delay = 20
+  pattern.bullet_count = 10
+  pattern.direction_type = AttackPattern.DirectionType.CIRCLE
+
+  # 螺旋移動の設定（弾ごとの位相ずれは UniversalAttackCore 側で自動設定される）
+  var movement_config = BulletMovementConfig.new()
+  movement_config.movement_type = BulletMovementConfig.MovementType.SPIRAL
+  movement_config.initial_speed = 0.0  # 中心は発射位置に固定
+  movement_config.spiral_radius_growth = 350.0
+  movement_config.spiral_rotation_speed = 30.0
+  movement_config.spiral_clockwise = true
+  movement_config.spiral_phase_offset = 0.0
+  pattern.bullet_movement_config = movement_config
+
+  if visual_config_star != null:
+    pattern.bullet_visual_config = visual_config_star
+
+  # 画面外でも消えない設定
+  pattern.persist_offscreen = true
+  pattern.max_offscreen_distance = 2000.0  # 発射位置から2000pxまで
+  pattern.forced_lifetime = 5.0  # 最大5秒
+
+  patterns.append(pattern)
+
+  return patterns
+
+
 func create_phase4_pattern_1() -> Array[AttackPattern]:
   """Phase4相当のパターンを作成"""
   var layered_patterns: Array[AttackPattern] = []
@@ -685,6 +742,75 @@ func _attack_phase3_rush(delay = 0.3, count = 10, _phase = 5):
   await get_tree().create_timer(1, false).timeout
   if _phase_idx == _phase:  # 待機中に次のフェーズへ進んでいたら、次フェーズのコアは残す
     _clear_all_pattern_cores()  # ラッシュ終了後に全てのパターンコアを削除
+
+
+func create_phase3_beam_pattern() -> AttackPattern:
+  """Phase3相当のビーム（警告線2秒 → 発射5秒 → クールタイム5秒）。
+  ボスが画面の上半分にいれば下向き、下半分にいれば上向きに撃ち、警告線・ビームともボスに追従する"""
+  var pattern := AttackPattern.new()
+  pattern.pattern_type = AttackPattern.PatternType.BEAM
+  pattern.beam_scene = DEVIL_BEAM_SCENE  # 当たり判定の帯も見た目のビーム本体と同じ 128px
+  pattern.target_group = "players"
+  pattern.damage = 2
+  pattern.bullet_count = 1
+  pattern.beam_duration = 5.0
+  pattern.burst_delay = 5.0
+  pattern.auto_start = true
+  pattern.beam_offset = Vector2.ZERO  # 上向き・下向きのどちらでもボスの中心から出す
+  pattern.direction_type = AttackPattern.DirectionType.CUSTOM
+  pattern.custom_script = SCREEN_HALF_VERTICAL_DIRECTION
+
+  # 画像の1コマ（128px）のうちビーム本体は 16px。シーン側で本体を含む中央 64px を等倍で切り出し、
+  # ビーム全体を 8 倍にして本体を 128px に見せる（端の丸い飾りも縦横同じ比率で拡大される）。
+  # 当たり判定の幅は UniversalBeam がスケールを打ち消して 128px に保ち、長さは見た目と揃う
+  var visual := BeamVisualConfig.new()
+  visual.texture = DEVIL_BEAM_TEXTURE
+  visual.width = 64.0
+  visual.scale = Vector2(8, 8)
+  pattern.beam_visual_config = visual
+
+  var warning := AttackWarningConfig.new()
+  warning.warning_duration = 2.0
+  warning.warning_length = 1000.0
+  warning.glow_width = 128.0
+  warning.outline_width = 128.0
+  pattern.warning_configs = [warning]
+
+  return pattern
+
+
+func _start_devil_beam():
+  """ビーム専用コアを追加する。最初の警告線はクールタイム（5秒）の後に出る"""
+  _cancel_devil_beam()
+  _beam_core = attack_core_slot.add_core(core_scene) as UniversalAttackCore
+  if _beam_core == null:
+    return
+  _beam_core.set_attack_pattern(create_phase3_beam_pattern())
+  # 追加時に既定の1秒で始まったクールダウンを、パターンのクールタイムでやり直す
+  _beam_core._start_cooldown()
+
+
+func _cancel_devil_beam():
+  """表示中の警告線・発射中のビームを消し、ビーム専用コアを取り除く"""
+  if is_instance_valid(_beam_core):
+    _beam_core.cancel_attack()
+    attack_core_slot.remove_core(_beam_core)
+  _beam_core = null
+
+
+func _attack_star_spiral(_phase = 5):
+  """星の渦巻き5連射。既存のコア（星バリアなど）は残したまま、追加したコアだけを撃たせる"""
+  phase3_patterns_5 = create_phase3_pattern_5()
+  var first_new := _pattern_cores.size()
+  _add_attack_patterns(phase3_patterns_5)
+  await get_tree().process_frame
+  if _phase_idx != _phase:
+    return  # 待機中にフェーズが変わっていたら撃たない（コアは次フェーズの切り替えで消える）
+  # 注意: 追加直後のコアは既定クールダウン（cooldown_sec = 1.0）中のため、この trigger() は無視され、
+  # 実際にはクールダウン明け（呼び出しから約1秒後）に撃ち始める。現状はこの遅れ込みでタイミングを合わせている
+  for core in _pattern_cores.slice(first_new):
+    if is_instance_valid(core):
+      core.trigger()
 
 
 func _attack_final_rush():

@@ -11,5 +11,8 @@ class_name AttackWarningConfig extends Resource
 
 # === 警告線の方向・位置設定 ===
 @export var angle_degrees: float = 0.0  # 警告線の角度（度）
+## 攻撃の基準方向（プレイヤー狙いなら自機への向き）から警告線をずらす角度（度）。
+## 扇状の複数ビームで、ビームごとに警告線を出すときに使う
+@export var angle_offset_degrees: float = 0.0
 @export var position_offset: Vector2 = Vector2.ZERO  # 位置オフセット
 @export var use_relative_position: bool = true  # 相対座標（true）か絶対座標（false）か

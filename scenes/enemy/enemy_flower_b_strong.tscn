@@ -166,7 +166,7 @@ metadata/_custom_type_script = "uid://su05ub25qwt5"
 drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
 
 [node name="HpNode" parent="."]
-max_hp = 500
+max_hp = 700
 
 [node name="AttackCoreSlot" parent="."]
 attack_patterns_additive = Array[ExtResource("12_xicvl")]([SubResource("Resource_downward")])

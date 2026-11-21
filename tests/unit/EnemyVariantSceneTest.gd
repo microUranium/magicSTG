@@ -114,8 +114,8 @@ func test_grimoire_strong_keeps_other_stats() -> void:
 # --- enemy_flower_b_strong（stage6 向け強化版）---
 
 
-func test_flower_b_strong_has_500_hp() -> void:
-  assert_int(_instantiate(FLOWER_B_STRONG).get_node("HpNode").max_hp).is_equal(500)
+func test_flower_b_strong_has_700_hp() -> void:
+  assert_int(_instantiate(FLOWER_B_STRONG).get_node("HpNode").max_hp).is_equal(700)
 
 
 func test_flower_b_strong_keeps_upward_pattern_as_base() -> void:

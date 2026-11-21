@@ -56,7 +56,7 @@ func _initialize_attack_patterns():
   if phase3_patterns1.is_empty():
     phase3_patterns1 = create_phase3_pattern1()
   if phase3_patterns2.is_empty():
-    phase3_patterns2 = create_phase5_pattern2()
+    phase3_patterns2 = create_phase5_pattern2(0.5)  # phase3 は 24 方向 5 連射の間隔を広げる
   if phase5_patterns1.is_empty():
     phase5_patterns1 = create_phase5_pattern1()
   if phase5_patterns2.is_empty():
@@ -392,12 +392,12 @@ func create_phase5_pattern1() -> Array[AttackPattern]:
   return patterns
 
 
-func create_phase5_pattern2() -> Array[AttackPattern]:
-  """Phase5相当のパターンを作成"""
+func create_phase5_pattern2(ring_rapid_interval: float = 0.3) -> Array[AttackPattern]:
+  """Phase5相当のパターンを作成（phase3 でも使う）。ring_rapid_interval は 24 方向 5 連射の間隔"""
   var patterns: Array[AttackPattern] = []
   for i in range(5):
     var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.3, 4
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, ring_rapid_interval, 3
     )
     pattern.target_group = "players"
     pattern.burst_delay = 1.5

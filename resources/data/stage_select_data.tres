@@ -374,11 +374,11 @@ metadata/_custom_type_script = "uid://ckbh7pwpofpdd"
 
 [sub_resource type="Resource" id="StageData_debug_6_test"]
 script = ExtResource("3_stage")
-stage_name = "DEBUG-6 山の単体テスト"
+stage_name = "DEBUG-N 敵のテスト"
 chapter_id = "chapter_debug"
-stage_id = "debug_stage6_test"
+stage_id = "debug_stageN_test"
 is_seed_fixed = true
-fixed_seed = "s6x_flower_c"
+fixed_seed = "s5z2"
 is_unlocked = true
 dialogue_enabled = false
 random_seed_pools = Array[Dictionary]([])

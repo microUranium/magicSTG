@@ -513,7 +513,7 @@ script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_x5nyp"), SubResource("Resource_01hkn"), SubResource("Resource_t7ghq"), SubResource("Resource_2km0j"), SubResource("Resource_85er7"), SubResource("Resource_fclmm"), SubResource("Resource_qjr2w"), SubResource("Resource_i2doi"), SubResource("Resource_5p7v6"), SubResource("Resource_rchal"), SubResource("Resource_8rn8w"), SubResource("Resource_5v5eo"), SubResource("Resource_5axc1"), SubResource("Resource_4kq7k")])
 loop_type = 0
 show_hp_bar = true
-end_hp_ratio = 0.8
+end_hp_ratio = 0.9
 bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
@@ -825,7 +825,7 @@ script = ExtResource("4_x5nyp")
 patterns = Array[ExtResource("5_01hkn")]([SubResource("Resource_qskyv"), SubResource("Resource_p00on"), SubResource("Resource_63ra1"), SubResource("Resource_rgpmg"), SubResource("Resource_aouh0"), SubResource("Resource_aef4w"), SubResource("Resource_nshvq"), SubResource("Resource_ak786"), SubResource("Resource_u6mvx"), SubResource("Resource_hmfel"), SubResource("Resource_arfk7"), SubResource("Resource_q7nhh")])
 loop_type = 0
 show_hp_bar = true
-end_hp_ratio = 0.4
+end_hp_ratio = 0.5
 bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 

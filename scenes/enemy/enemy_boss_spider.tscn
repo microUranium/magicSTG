@@ -495,6 +495,10 @@ script = ExtResource("1_m3mwo")
 destroy_particles_scene = ExtResource("2_md488")
 drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3")])
 
+[node name="SpiderString" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 0, -1000)
+width = 3.0
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")
 frame_progress = 0.456478

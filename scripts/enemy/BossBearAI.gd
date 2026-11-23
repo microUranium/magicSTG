@@ -170,7 +170,7 @@ func create_phase1_pattern() -> Array[AttackPattern]:
 
   for i in range(5):
     var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.3, 4
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.4, 4
     )
     pattern.target_group = "players"
     pattern.burst_delay = 1.5

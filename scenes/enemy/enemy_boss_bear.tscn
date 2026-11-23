@@ -177,7 +177,7 @@ metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 script = ExtResource("7_bqy6d")
 movement_type = 0
 move_to = Vector2(196, 144)
-move_time = 1.5
+move_time = 3.0
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -198,7 +198,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_bqy6d")
 movement_type = 2
 move_to = Vector2(0, 0)
-move_time = 0.5
+move_time = 1.0
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -219,7 +219,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_bqy6d")
 movement_type = 0
 move_to = Vector2(700, 144)
-move_time = 1.5
+move_time = 3.0
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -240,7 +240,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_bqy6d")
 movement_type = 2
 move_to = Vector2(0, 0)
-move_time = 0.5
+move_time = 1.0
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -423,7 +423,7 @@ shape = SubResource("CapsuleShape2D_p4pu0")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_8gjqd")
-max_hp = 800
+max_hp = 8000
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("4_g7xud")

@@ -119,7 +119,7 @@ bullet_movement_config = SubResource("Resource_hdcbw")
 bullet_count = 3
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
-burst_delay = 3.0
+burst_delay = 1.5
 burst_count = 3
 burst_interval = 0.05
 min_cooldown = 0.0833
@@ -261,7 +261,7 @@ death_attack_slot = NodePath("DeathAttackSlot")
 max_hp = 200
 
 [node name="EnemyAI" parent="." index="3"]
-warp_interval = 3.0
+warp_interval = 2.5
 
 [node name="AttackCoreSlot" parent="." index="4"]
 attack_pattern = SubResource("Resource_84bg0")

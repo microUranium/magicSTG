@@ -73,6 +73,7 @@ alpha_curve = SubResource("CurveTexture_pwxes")
 
 [sub_resource type="Resource" id="Resource_pwxes"]
 script = ExtResource("2_pwxes")
+enable_particles = true
 explosion_particle_material = SubResource("ParticleProcessMaterial_6l0x7")
 explosion_scale = 1.0
 explosion_duration = 0.5

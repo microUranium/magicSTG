@@ -3,14 +3,18 @@ extends Node
 class_name ExplosionFactory
 
 const EXPLOSION_SCENE = preload("res://scenes/effects/explosion_effect.tscn")
+const DAMAGE_FIELD_SCRIPT = preload("res://scripts/effects/DamageField.gd")
 
 # エフェクトプール（パフォーマンス最適化）
 static var _explosion_pool: Array[ExplosionEffect] = []
 static var _pool_max_size: int = 20
 
 
-static func create_explosion(config: ExplosionConfig, position: Vector2, source_group: String = ""):
-  """爆発エフェクトを生成"""
+static func create_explosion(
+  config: ExplosionConfig, position: Vector2, source_group: String = "", spawn_damage_field := true
+):
+  """爆発エフェクトを生成。config.damage_field があれば、同じ位置にダメージフィールドも残す
+  （spawn_damage_field = false なら出さない。弾の一斉消去や画面外で消えたときなど）"""
   if not config:
     return null
 
@@ -21,6 +25,10 @@ static func create_explosion(config: ExplosionConfig, position: Vector2, source_
   if scene_root:
     scene_root.add_child(explosion)
     explosion.initialize(config, position, source_group)
+    if spawn_damage_field and config.damage_field:
+      var field = DAMAGE_FIELD_SCRIPT.new()
+      field.setup(config.damage_field, position, source_group)
+      scene_root.add_child(field)
 
   return explosion
 

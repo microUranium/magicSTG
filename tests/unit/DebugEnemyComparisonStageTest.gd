@@ -39,11 +39,9 @@ const EXPECTED_STAGES := {
   },
 }
 
-# 単体テスト用ステージ（stage_id -> ステージ番号）。
-# 調整したい敵に合わせてシードを差し替えて使うため、出現する敵は固定しない
-const FREE_TEST_STAGES := {
-  "debug_stage6_test": 6,
-}
+# 各章の敵の検証用ステージ。
+# 調整したい敵に合わせてシードを差し替えて使うため、出現する敵も章（背景・BGM）も固定しない
+const FREE_TEST_STAGES: Array[String] = ["debug_stageN_test"]
 
 
 func _load_wave_templates() -> Dictionary:
@@ -130,12 +128,11 @@ func test_free_test_stages_use_existing_wave_templates() -> void:
 
 func test_debug_stage_seeds_resolve_to_their_stage_environment() -> void:
   # StageManager._determine_current_stage() はシード中の "s6"〜"s2" を大きい順に探して背景・BGM を決める
+  # 検証用ステージは章をまたいで使うので、背景・BGM はシードに書いた敵の章で決まればよい
   for stage in _debug_chapter().stages:
-    var expected: int = (
-      FREE_TEST_STAGES[stage.stage_id]
-      if FREE_TEST_STAGES.has(stage.stage_id)
-      else EXPECTED_STAGES[stage.stage_id]["stage_number"]
-    )
+    if FREE_TEST_STAGES.has(stage.stage_id):
+      continue
+    var expected: int = EXPECTED_STAGES[stage.stage_id]["stage_number"]
     var resolved := 1
     for n in [6, 5, 4, 3, 2]:
       if stage.fixed_seed.contains("s%d" % n):

@@ -25,21 +25,22 @@ func _pattern(enemy: Node) -> AttackPattern:
   return enemy.get_node("AttackCoreSlot").attack_pattern
 
 
-# --- enemy_lantern_b_weak（stage3 向け弱体版）---
+# --- enemy_lantern_b_weak（stage3 向け。lantern_b を継承し、HP・攻撃パターンを個別に持つ）---
 
 
-func test_lantern_b_weak_slows_spiral_by_30_percent() -> void:
-  var base_mc := _pattern(_instantiate(LANTERN_B)).bullet_movement_config
-  var weak_mc := _pattern(_instantiate(LANTERN_B_WEAK)).bullet_movement_config
+func test_lantern_b_weak_has_own_attack_pattern() -> void:
+  # lantern_b（stage5）と lantern_b_weak（stage3）は章ごとに独立して調整するため、
+  # 値の関係は確認しない。代わりに、パターンと弾の動きを共有していない（片方の調整がもう片方に波及しない）ことを確認する
+  var base_pattern := _pattern(_instantiate(LANTERN_B))
+  var weak_pattern := _pattern(_instantiate(LANTERN_B_WEAK))
 
-  # 螺旋弾は半径の広がりと回転の両方を 0.7 倍にして、軌道形状を保ったまま減速する
-  assert_float(weak_mc.spiral_radius_growth).is_equal_approx(
-    base_mc.spiral_radius_growth * 0.7, 0.01
+  assert_object(weak_pattern).is_not_same(base_pattern)
+  assert_object(weak_pattern.bullet_movement_config).is_not_same(
+    base_pattern.bullet_movement_config
   )
-  assert_float(weak_mc.spiral_rotation_speed).is_equal_approx(
-    base_mc.spiral_rotation_speed * 0.7, 0.01
+  assert_int(weak_pattern.bullet_movement_config.movement_type).is_equal(
+    BulletMovementConfig.MovementType.SPIRAL
   )
-  assert_int(weak_mc.movement_type).is_equal(base_mc.movement_type)
 
 
 func test_lantern_b_weak_has_same_hp_as_lantern() -> void:
@@ -50,65 +51,46 @@ func test_lantern_b_weak_has_same_hp_as_lantern() -> void:
   assert_int(weak.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
 
 
-func test_lantern_b_weak_keeps_other_stats() -> void:
+func test_lantern_b_weak_inherits_lantern_b() -> void:
   var base := _instantiate(LANTERN_B)
   var weak := _instantiate(LANTERN_B_WEAK)
 
-  assert_float(_pattern(weak).burst_delay).is_equal(_pattern(base).burst_delay)
-  assert_int(_pattern(weak).bullet_count).is_equal(_pattern(base).bullet_count)
-  assert_int(_pattern(weak).damage).is_equal(_pattern(base).damage)
+  assert_object(weak.get_script()).is_equal(base.get_script())
   assert_str(weak.name).is_equal(base.name)
 
 
-# --- enemy_grimoire_strong（stage5 向け強化版）---
+# --- enemy_grimoire_strong（stage5 向け。grimoire を継承し、攻撃パターン・移動などを個別に持つ）---
 
 
-func test_grimoire_strong_shortens_warp_interval() -> void:
-  var base := _instantiate(GRIMOIRE)
-  var strong := _instantiate(GRIMOIRE_STRONG)
+func test_grimoire_strong_has_own_attack_pattern() -> void:
+  # grimoire（stage3）と grimoire_strong（stage5）は章ごとに独立して調整するため、
+  # 値の関係は確認しない。代わりに、パターンと弾の動きを共有していない（片方の調整がもう片方に波及しない）ことを確認する
+  var base_pattern := _pattern(_instantiate(GRIMOIRE))
+  var strong_pattern := _pattern(_instantiate(GRIMOIRE_STRONG))
 
-  assert_float(strong.get_node("EnemyAI").warp_interval).is_equal_approx(
-    base.get_node("EnemyAI").warp_interval * 0.75, 0.01
+  assert_object(strong_pattern).is_not_same(base_pattern)
+  assert_object(strong_pattern.bullet_movement_config).is_not_same(
+    base_pattern.bullet_movement_config
   )
 
 
-func test_grimoire_strong_fires_three_spread_bullets() -> void:
+func test_grimoire_strong_inherits_grimoire() -> void:
+  var base := _instantiate(GRIMOIRE)
+  var strong := _instantiate(GRIMOIRE_STRONG)
+
+  assert_object(strong.get_script()).is_equal(base.get_script())
+  assert_object(strong.get_node("EnemyAI").get_script()).is_equal(
+    base.get_node("EnemyAI").get_script()
+  )
+  assert_str(strong.name).is_equal(base.name)
+
+
+func test_grimoire_strong_fires_spread_bullets() -> void:
   var pattern := _pattern(_instantiate(GRIMOIRE_STRONG))
 
-  assert_int(pattern.bullet_count).is_equal(3)
-  # 角度差がないと 3 発が重なって 1 発に見えるため、扇状に広げる
-  assert_float(pattern.angle_spread).is_greater(0.0)
-
-
-func test_grimoire_strong_homing_turns_more_gently() -> void:
-  var base_mc := _pattern(_instantiate(GRIMOIRE)).bullet_movement_config
-  var strong_mc := _pattern(_instantiate(GRIMOIRE_STRONG)).bullet_movement_config
-
-  # 旋回が速いと扇状の弾がすぐ 1 点に収束してしまうため、追尾の角速度を緩める
-  assert_int(strong_mc.movement_type).is_equal(base_mc.movement_type)
-  assert_float(strong_mc.max_turn_angle_per_second).is_less(base_mc.max_turn_angle_per_second)
-
-
-func test_grimoire_strong_bullets_are_15_percent_faster() -> void:
-  var base := _pattern(_instantiate(GRIMOIRE))
-  var strong := _pattern(_instantiate(GRIMOIRE_STRONG))
-
-  # 実際の弾速は movement_config.initial_speed で上書きされるため両方を揃えて上げる
-  assert_float(strong.bullet_movement_config.initial_speed).is_equal_approx(
-    base.bullet_movement_config.initial_speed * 1.15, 0.01
-  )
-  assert_float(strong.bullet_speed).is_equal_approx(base.bullet_speed * 1.15, 0.01)
-
-
-func test_grimoire_strong_keeps_other_stats() -> void:
-  var base := _instantiate(GRIMOIRE)
-  var strong := _instantiate(GRIMOIRE_STRONG)
-
-  assert_int(_pattern(strong).damage).is_equal(_pattern(base).damage)
-  assert_int(strong.get_node("HpNode").max_hp).is_equal(base.get_node("HpNode").max_hp)
-  assert_object(_pattern(strong).bullet_visual_config.texture).is_same(
-    _pattern(base).bullet_visual_config.texture
-  )
+  # 複数発を撃つとき、角度差がないと重なって 1 発に見えるため、扇状に広げる
+  if pattern.bullet_count > 1:
+    assert_float(pattern.angle_spread).is_greater(0.0)
 
 
 # --- enemy_flower_b_strong（stage6 向け強化版）---
@@ -178,7 +160,7 @@ func test_variants_are_registered_in_stage_data() -> void:
   assert_str(enemies["enemy_swamp_bird_ch6"]["scene_path"]).is_equal(SWAMP_BIRD_CH6)
 
 
-# --- 章ごとにドロップテーブルを分けるための派生版（ドロップ以外は元シーンと同じ）---
+# --- 章ごとにドロップテーブルを分けるための派生版（ドロップ・HP・攻撃パターンを個別に持つ）---
 
 
 func test_chapter_drop_variants_keep_base_stats() -> void:
@@ -189,11 +171,22 @@ func test_chapter_drop_variants_keep_base_stats() -> void:
     assert_object(variant.get_script()).is_equal(base.get_script())
     assert_str(variant.name).is_equal(base.name)
     assert_array(variant.get_groups()).contains(["enemies"])
+  # HP・攻撃パターンはどちらも章ごとに調整するため、元シーンとの一致は確認しない
 
-  # swamp_bird_ch6 は stage6 向けに HP・攻撃パターンを調整するため、HP の一致は lantern_ch5 だけ確認する
-  var lantern := _instantiate(LANTERN)
-  var lantern_ch5 := _instantiate(LANTERN_CH5)
-  assert_int(lantern_ch5.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
+
+# --- enemy_lantern_ch5（stage5 向けに HP・攻撃パターンを個別に調整できる派生版）---
+
+
+func test_lantern_ch5_has_own_attack_patterns() -> void:
+  # ch5 の攻撃パターンを調整しても stage3 の lantern に影響しないよう、
+  # 4つのスロットのパターンと弾の見た目のどれも元シーンと共有していないこと
+  var base := _instantiate(LANTERN)
+  var ch5 := _instantiate(LANTERN_CH5)
+  for slot in ["AttackCoreSlot", "AttackCoreSlot2", "AttackCoreSlot3", "AttackCoreSlot4"]:
+    var base_pattern: AttackPattern = base.get_node(slot).attack_pattern
+    var ch5_pattern: AttackPattern = ch5.get_node(slot).attack_pattern
+    assert_object(ch5_pattern).override_failure_message(slot).is_not_same(base_pattern)
+    assert_object(ch5_pattern.bullet_visual_config).is_not_same(base_pattern.bullet_visual_config)
 
 
 # --- enemy_swamp_bird_ch6（stage6 向けに HP・攻撃パターンを個別に調整できる派生版）---

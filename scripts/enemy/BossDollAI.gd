@@ -9,6 +9,8 @@ class_name BossDollAI
 @export var phase5_patterns2: Array[AttackPattern]
 @export var phase5_patterns3: Array[AttackPattern]
 @export var phase5_patterns4: Array[AttackPattern]
+@export var phase5_enraged_patterns1: Array[AttackPattern]  # phase5・HP25%未満の6.5秒待機（音符）
+@export var phase5_enraged_patterns3: Array[AttackPattern]  # phase5・HP25%未満の5秒待機（鎌＋追尾弾）
 
 @export var visual_config: BulletVisualConfig = null  # ビジュアル設定
 @export var visual_config_note: BulletVisualConfig = null
@@ -38,6 +40,7 @@ const CUTSCENE_FADE_OUT_TIME := 0.8
 
 var _phase_idx := 0
 var _cutscene_harpy: CutsceneActor = null
+var _phase5_enraged := false  # phase5 で HP が 25%（BossDoll.PHASE5_ENRAGE_HP_RATIO）を切ったか（BossDoll から通知される）
 
 
 func _ready():
@@ -56,7 +59,7 @@ func _initialize_attack_patterns():
   if phase3_patterns1.is_empty():
     phase3_patterns1 = create_phase3_pattern1()
   if phase3_patterns2.is_empty():
-    phase3_patterns2 = create_phase5_pattern2()
+    phase3_patterns2 = create_phase5_pattern2(0.5)  # phase3 は 24 方向 5 連射の間隔を広げる
   if phase5_patterns1.is_empty():
     phase5_patterns1 = create_phase5_pattern1()
   if phase5_patterns2.is_empty():
@@ -65,6 +68,15 @@ func _initialize_attack_patterns():
     phase5_patterns3 = create_phase5_pattern3()
   if phase5_patterns4.is_empty():
     phase5_patterns4 = create_phase5_pattern4()
+  if phase5_enraged_patterns1.is_empty():
+    phase5_enraged_patterns1 = create_phase5_enraged_pattern1()
+  if phase5_enraged_patterns3.is_empty():
+    phase5_enraged_patterns3 = create_phase5_enraged_pattern3()
+
+
+func enable_phase5_enrage() -> void:
+  """phase5 で HP が 25% を切ったときに呼ばれる。次の待機から強化版の攻撃に切り替わる"""
+  _phase5_enraged = true
 
 
 func _next_phase():
@@ -131,10 +143,10 @@ func _next_pattern():
     _set_attack_patterns(phase3_patterns2)
   elif _phase_idx == 5 and _idx % patterns.size() == 1:
     _clear_all_pattern_cores()
-    _set_attack_patterns(phase5_patterns1)
+    _set_attack_patterns(phase5_enraged_patterns1 if _phase5_enraged else phase5_patterns1)
   elif _phase_idx == 5 and _idx % patterns.size() == 7:
     _clear_all_pattern_cores()
-    _set_attack_patterns(phase5_patterns3)
+    _set_attack_patterns(phase5_enraged_patterns3 if _phase5_enraged else phase5_patterns3)
   elif _phase_idx == 5 and (_idx % patterns.size() == 2 or _idx % patterns.size() == 8):
     _clear_all_pattern_cores()
     _set_attack_patterns(phase5_patterns2)
@@ -352,16 +364,18 @@ func create_phase3_pattern1() -> Array[AttackPattern]:
   return patterns
 
 
-func create_phase5_pattern1() -> Array[AttackPattern]:
-  """Phase5相当のパターンを作成"""
+func create_phase5_pattern1(
+  shots: int = 3, interval: float = 0.5, burst_delay: float = 2.5
+) -> Array[AttackPattern]:
+  """Phase5相当のパターンを作成（プレイヤーの周りに現れて集まる音符8個を shots 回連射）"""
   var patterns: Array[AttackPattern] = []
 
   for i in range(8):
     var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 0.5, 5
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, shots, interval, 5
     )
     pattern.target_group = "players"
-    pattern.burst_delay = 2.5
+    pattern.burst_delay = burst_delay
     pattern.spawn_position_mode = AttackPattern.SpawnPositionMode.RELATIVE_TO_TARGET
     pattern.spawn_position_offset = Vector2(
       sin(deg_to_rad(45 * i)) * 250, cos(deg_to_rad(45 * i)) * 250
@@ -392,12 +406,12 @@ func create_phase5_pattern1() -> Array[AttackPattern]:
   return patterns
 
 
-func create_phase5_pattern2() -> Array[AttackPattern]:
-  """Phase5相当のパターンを作成"""
+func create_phase5_pattern2(ring_rapid_interval: float = 0.3) -> Array[AttackPattern]:
+  """Phase5相当のパターンを作成（phase3 でも使う）。ring_rapid_interval は 24 方向 5 連射の間隔"""
   var patterns: Array[AttackPattern] = []
   for i in range(5):
     var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.3, 4
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, ring_rapid_interval, 3
     )
     pattern.target_group = "players"
     pattern.burst_delay = 1.5
@@ -479,6 +493,38 @@ func create_phase5_pattern3() -> Array[AttackPattern]:
   pattern.bullet_visual_config = _visual_config
 
   pattern.bullet_movement_config = movement_config
+
+  patterns.append(pattern)
+
+  return patterns
+
+
+func create_phase5_enraged_pattern1() -> Array[AttackPattern]:
+  """phase5・HP25%未満の6.5秒待機：音符8個を0.4秒間隔で5回 → 1.5秒待機 → 再度5回。
+  コア追加直後の1秒の遅れ込みで、1.0〜2.6秒と4.1〜5.7秒の2回になる（3回目は7.2秒で、待機が終わる6.5秒より後）"""
+  return create_phase5_pattern1(5, 0.4, 1.5)
+
+
+func create_phase5_enraged_pattern3() -> Array[AttackPattern]:
+  """phase5・HP25%未満の5秒待機：鎌の連射に、プレイヤー狙いの追尾弾（0.3秒間隔）を加える"""
+  var patterns: Array[AttackPattern] = create_phase5_pattern3()
+
+  var pattern = AttackPatternFactory.create_single_shot(
+    AttackPatternFactory.DEFAULT_BULLET_SCENE, 4
+  )
+  pattern.target_group = "players"
+  pattern.burst_delay = 0.15
+  pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
+
+  var movement_config = BulletMovementConfig.new()
+  movement_config.movement_type = BulletMovementConfig.MovementType.HOMING
+  movement_config.initial_speed = 350.0
+  movement_config.homing_duration = 1.5
+  movement_config.max_turn_angle_per_second = 30.0
+  pattern.bullet_movement_config = movement_config
+
+  if visual_config != null:
+    pattern.bullet_visual_config = visual_config
 
   patterns.append(pattern)
 

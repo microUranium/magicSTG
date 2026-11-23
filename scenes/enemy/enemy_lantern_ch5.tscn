@@ -1,11 +1,264 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=17 format=3 uid="uid://dxb7ltvua0fm7"]
 
 [ext_resource type="PackedScene" uid="uid://dwv2nynhx5ojt" path="res://scenes/enemy/enemy_lantern.tscn" id="0_base"]
+[ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="13_0qglt"]
+[ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="13_k1u54"]
+[ext_resource type="Texture2D" uid="uid://dklpvgy02hrw8" path="res://assets/gfx/sprites/bullet_fireball_red.png" id="14_0qglt"]
+[ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_duwbf"]
+[ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_vqqp2"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_nullify.tres" id="dt_2"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_proximity.tres" id="dt_3"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_blessing_camouflage.tres" id="dt_4"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_ch5_attackcore_fireball.tres" id="dt_5"]
 
+[sub_resource type="Resource" id="Resource_vgpq5_ch5"]
+script = ExtResource("13_0qglt")
+texture = ExtResource("14_0qglt")
+scale = 2.0
+color = Color(1, 1, 1, 1)
+collision_radius = 16.0
+enable_particles = false
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
+animation_name = ""
+fade_in_initial_alpha = 1.0
+fade_in_duration = 0.0
+fade_out_duration = 0.0
+metadata/_custom_type_script = "uid://bgake8ntgc47w"
+
+[sub_resource type="Resource" id="Resource_0qglt_ch5"]
+script = ExtResource("15_duwbf")
+pattern_type = 1
+bullet_scene = ExtResource("13_k1u54")
+target_group = "players"
+damage = 3
+bullet_range = 750.0
+bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
+auto_start = true
+penetration_count = 0
+contact_damage_tick_sec = 0.0
+bullet_visual_config = SubResource("Resource_vgpq5_ch5")
+bullet_count = 1
+rapid_fire_count = 120
+rapid_fire_interval = 0.05
+burst_delay = 3.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, 1)
+angle_spread = 270.0
+angle_offset = 0.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("15_duwbf")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_je4w4_ch5"]
+script = ExtResource("15_duwbf")
+pattern_type = 1
+bullet_scene = ExtResource("13_k1u54")
+target_group = "players"
+damage = 3
+bullet_range = 750.0
+bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
+auto_start = true
+penetration_count = 0
+contact_damage_tick_sec = 0.0
+bullet_visual_config = SubResource("Resource_vgpq5_ch5")
+bullet_count = 1
+rapid_fire_count = 120
+rapid_fire_interval = 0.05
+burst_delay = 3.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, 1)
+angle_spread = 270.0
+angle_offset = 90.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("15_duwbf")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_oep7i_ch5"]
+script = ExtResource("15_duwbf")
+pattern_type = 1
+bullet_scene = ExtResource("13_k1u54")
+target_group = "players"
+damage = 3
+bullet_range = 750.0
+bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
+auto_start = true
+penetration_count = 0
+contact_damage_tick_sec = 0.0
+bullet_visual_config = SubResource("Resource_vgpq5_ch5")
+bullet_count = 1
+rapid_fire_count = 120
+rapid_fire_interval = 0.05
+burst_delay = 3.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, 1)
+angle_spread = 270.0
+angle_offset = 180.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("15_duwbf")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
+[sub_resource type="Resource" id="Resource_rd5me_ch5"]
+script = ExtResource("15_duwbf")
+pattern_type = 1
+bullet_scene = ExtResource("13_k1u54")
+target_group = "players"
+damage = 3
+bullet_range = 750.0
+bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
+auto_start = true
+penetration_count = 0
+contact_damage_tick_sec = 0.0
+bullet_visual_config = SubResource("Resource_vgpq5_ch5")
+bullet_count = 1
+rapid_fire_count = 120
+rapid_fire_interval = 0.05
+burst_delay = 3.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
+spawn_position_mode = 0
+spawn_position_offset = Vector2(0, 0)
+spawn_positions_multi = Array[Vector2]([])
+direction_type = 0
+base_direction = Vector2(0, 1)
+angle_spread = 270.0
+angle_offset = 270.0
+circle_radius = 100.0
+rotation_speed = 90.0
+rotation_duration = 3.0
+movement_type = 0
+bullet_speed = 800.0
+curve_strength = 0.0
+orbit_radius = 50.0
+beam_duration = 1.0
+continuous_damage = false
+beam_direction_override = Vector2(0, 0)
+beam_offset = Vector2(0, 50)
+custom_parameters = {}
+pattern_layers = Array[ExtResource("15_duwbf")]([])
+layer_delays = Array[float]([])
+warning_configs = Array[ExtResource("16_vqqp2")]([])
+persist_offscreen = false
+max_offscreen_distance = 2000.0
+forced_lifetime = 30.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
+metadata/_custom_type_script = "uid://su05ub25qwt5"
+
 [node name="EnemyLantern" instance=ExtResource("0_base")]
 drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5")])
+
+[node name="HpNode" parent="." index="2"]
+max_hp = 350
+
+[node name="AttackCoreSlot" parent="." index="4"]
+attack_pattern = SubResource("Resource_0qglt_ch5")
+
+[node name="AttackCoreSlot2" parent="." index="5"]
+attack_pattern = SubResource("Resource_je4w4_ch5")
+
+[node name="AttackCoreSlot3" parent="." index="6"]
+attack_pattern = SubResource("Resource_oep7i_ch5")
+
+[node name="AttackCoreSlot4" parent="." index="7"]
+attack_pattern = SubResource("Resource_rd5me_ch5")

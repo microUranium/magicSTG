@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://c4appudefs67a"]
+[gd_scene load_steps=41 format=3 uid="uid://c4appudefs67a"]
 
 [ext_resource type="Script" uid="uid://kmda0p0saq3k" path="res://scripts/core/EnemyBase.gd" id="1_urq22"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="2_h0mb6"]
@@ -12,14 +12,16 @@
 [ext_resource type="PackedScene" uid="uid://phoaomysa03n" path="res://scenes/bullets/universal_bullet.tscn" id="12_dnta4"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="12_h0mb6"]
 [ext_resource type="Script" uid="uid://bgake8ntgc47w" path="res://scripts/core/BulletVisualConfig.gd" id="13_rfgei"]
-[ext_resource type="Texture2D" uid="uid://dklpvgy02hrw8" path="res://assets/gfx/sprites/bullet_fireball_red.png" id="14_ii26b"]
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="15_oyijb"]
 [ext_resource type="Script" uid="uid://cisl1a65xgxeq" path="res://scripts/core/AttackWarningConfig.gd" id="16_escga"]
+[ext_resource type="Texture2D" uid="uid://hao2fyjhb2x3" path="res://assets/gfx/sprites/bullet_fireball_purple.png" id="20_ppbky"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_b_blessing_fortitude.tres" id="dt_1"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_b_blessing_camouflage.tres" id="dt_2"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_b_blessing_nullify.tres" id="dt_3"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_b_blessing_laststand.tres" id="dt_4"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_lantern_b_attackcore_normal_beam.tres" id="dt_5"]
+[ext_resource type="Script" uid="uid://cmf38edjntyfq" path="res://scripts/core/ExplosionConfig.gd" id="lb_explosion_cfg"]
+[ext_resource type="Script" uid="uid://de3d6kfgg3cw3" path="res://scripts/core/DamageFieldConfig.gd" id="lb_field_cfg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7y43"]
 atlas = ExtResource("5_p2tam")
@@ -74,19 +76,26 @@ size = Vector2(44, 94)
 
 [sub_resource type="Resource" id="Resource_b102c"]
 script = ExtResource("12_h0mb6")
-movement_type = 6
-initial_speed = 0.0
+movement_type = 0
+initial_speed = 250.0
+initial_speed_max = 0.0
 deceleration_rate = 100.0
 min_speed = 50.0
 acceleration_rate = 50.0
 max_speed = 500.0
+contact_speed = 0.0
 wave_amplitude = 50.0
 wave_frequency = 2.0
 homing_duration = 3.0
 max_turn_angle_per_second = 180.0
 gravity_strength = 980.0
 gravity_direction = Vector2(0, 1)
+gravity_follows_direction = false
 air_resistance = 0.0
+boomerang_outbound_time = 1.5
+boomerang_return_accel = 900.0
+boomerang_return_max_speed = 700.0
+boomerang_catch_radius = 24.0
 bounce_factor = 0.0
 max_bounces = 0
 spiral_radius_growth = 800.0
@@ -102,14 +111,86 @@ initial_rotation = 0.0
 angular_velocity = 0.0
 metadata/_custom_type_script = "uid://urppv4s7es6g"
 
+[sub_resource type="Resource" id="Resource_lb_field"]
+script = ExtResource("lb_field_cfg")
+radius = 120.0
+duration = 2.0
+damage = 1
+tick_sec = 0.0666667
+area_color = Color(1, 0.15, 0.1, 0.25)
+particle_color = Color(0.62652, 0.1196, 0.92, 1)
+particle_end_color = Color(0.85831, 0.703862, 1, 1)
+particle_amount = 128
+particle_lifetime = 0.6
+particle_scale_min = 3.0
+particle_scale_max = 6.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lb_explosion"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+spread = 180.0
+initial_velocity_min = 80.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 12.0
+color = Color(1, 0.3, 0.15, 1)
+
+[sub_resource type="Resource" id="Resource_lb_explosion"]
+script = ExtResource("lb_explosion_cfg")
+enable_particles = true
+explosion_particle_material = SubResource("ParticleProcessMaterial_lb_explosion")
+explosion_scale = 1.0
+explosion_duration = 0.3
+explosion_damage = 5
+explosion_radius = 100.0
+damage_falloff = true
+damage_field = SubResource("Resource_lb_field")
+explosion_type = 0
+knockback_force = 0.0
+screen_shake_intensity = 0.0
+
+[sub_resource type="Curve" id="Curve_lb_trail"]
+_data = [Vector2(0, 0.636595), 0.0, 0.190969, 0, 0, Vector2(0.996835, 0.0171537), -0.401525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lb_trail"]
+curve = SubResource("Curve_lb_trail")
+
+[sub_resource type="Gradient" id="Gradient_lb_trail"]
+offsets = PackedFloat32Array(0.489362, 1)
+colors = PackedColorArray(0.55, 0.15, 0.85, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lb_trail"]
+gradient = SubResource("Gradient_lb_trail")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lb_trail"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+scale_min = 12.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_lb_trail")
+alpha_curve = SubResource("CurveTexture_lb_trail")
+
 [sub_resource type="Resource" id="Resource_vgpq5"]
 script = ExtResource("13_rfgei")
-texture = ExtResource("14_ii26b")
+texture = ExtResource("20_ppbky")
 scale = 2.0
 color = Color(1, 1, 1, 1)
 collision_radius = 16.0
-enable_particles = false
+enable_particles = true
+particle_material = SubResource("ParticleProcessMaterial_lb_trail")
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
+explosion_config = SubResource("Resource_lb_explosion")
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
 fade_out_duration = 0.0
@@ -121,20 +202,27 @@ pattern_type = 0
 bullet_scene = ExtResource("12_dnta4")
 target_group = "players"
 damage = 5
-bullet_range = 0.0
+bullet_range = 600.0
 bullet_lifetime = 0.0
+bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
+contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_vgpq5")
 bullet_movement_config = SubResource("Resource_b102c")
-bullet_count = 13
+bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
-burst_delay = 1.0
+burst_delay = 2.0
+burst_count = 3
+burst_interval = 0.05
+min_cooldown = 0.0833
+on_hit_use_hit_position = true
+on_hit_trigger_once = true
 spawn_position_mode = 0
 spawn_position_offset = Vector2(0, 0)
 spawn_positions_multi = Array[Vector2]([])
-direction_type = 3
+direction_type = 1
 base_direction = Vector2(0, 1)
 angle_spread = 0.0
 angle_offset = 0.0
@@ -153,9 +241,14 @@ custom_parameters = {}
 pattern_layers = Array[ExtResource("15_oyijb")]([])
 layer_delays = Array[float]([])
 warning_configs = Array[ExtResource("16_escga")]([])
-persist_offscreen = true
+persist_offscreen = false
 max_offscreen_distance = 2000.0
 forced_lifetime = 3.0
+homing_correction_px = 0.0
+homing_distance = 800.0
+homing_lock_angle_deg = 60.0
+homing_max_turn_rate_deg = 180.0
+homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
 [node name="EnemyLanternB" type="Area2D" groups=["enemies"]]

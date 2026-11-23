@@ -25,7 +25,9 @@ enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS
 @export_group("Animation Control")
 @export var change_animation: bool = false
 @export var animation_name: String = ""  # 変更するアニメーション名
-@export var restore_animation: bool = true  # パターン終了時に元のアニメーションに戻すか
+## パターン終了時（フェーズ切り替えなどでの打ち切りを含む）に元のアニメーションに戻すか。
+## 戻す処理は EnemyPatternedAIBase が敵ごとに行う
+@export var restore_animation: bool = true
 
 @export_group("Dialogue")
 @export var dialogue_path: String = ""  # stage_data.json の会話パス（新方式）
@@ -33,8 +35,6 @@ enum DirectionType { FIXED_ANGLE, TO_PLAYER, AWAY_FROM_PLAYER, CONTINUE_PREVIOUS
 
 @export_group("Player Control")
 @export var block_player_control: bool = false  # 演出中にプレイヤー操作（移動・攻撃）を会話中と同様に止めるか
-
-var _original_animation: String = ""
 
 
 func start(enemy: Node2D, _ai: Node, finished_cb: Callable):
@@ -257,10 +257,7 @@ func _handle_animation_change(enemy: Node2D):
     print_debug("EnemyPatternResource: Node is not AnimatedSprite2D")
     return
 
-  # Store original animation for restoration
-  if restore_animation:
-    _original_animation = animated_sprite.animation
-
+  # 元のアニメーションへの戻しは EnemyPatternedAIBase が行う（restore_animation 参照）
   # Check if the animation exists
   if animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
     animated_sprite.play(animation_name)
@@ -273,18 +270,8 @@ func _on_pattern_complete(enemy: Node2D, original_callback: Callable):
   if not enemy or not enemy.is_inside_tree():
     print_debug("EnemyPatternResource: Enemy is no longer valid, skipping completion")
     return
-  # Restore original animation if needed
-  if restore_animation and change_animation and not _original_animation.is_empty():
-    var animated_sprite = enemy.get_node_or_null("AnimatedSprite2D")
-    if animated_sprite and animated_sprite is AnimatedSprite2D:
-      if (
-        animated_sprite.sprite_frames
-        and animated_sprite.sprite_frames.has_animation(_original_animation)
-      ):
-        animated_sprite.play(_original_animation)
-        print_debug("EnemyPatternResource: Restored animation to ", _original_animation)
 
-  # Call the original callback
+  # Call the original callback（アニメーションの戻しは呼び出し側の AI が行う）
   if enemy and enemy.is_inside_tree():
     original_callback.call()
 

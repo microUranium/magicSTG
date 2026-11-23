@@ -8,6 +8,8 @@ enum MovementState { MOVEMENT, STAY, INIT }  # 移動  # 停止  # 初期化
 @export var visual_config_dark: BulletVisualConfig
 @export var positions: Array[Vector2] = [Vector2(64, 64), Vector2(384, 64), Vector2(832, 64)]
 @export var damage: int = 10  # 体当たり攻撃のダメージ量
+## 本体の HP がこの割合以下になるまで、最初の位置から動かない（その間も攻撃は続ける）。0 なら最初から動く
+@export var move_start_hp_ratio: float = 0.4
 
 var collision: CollisionShape2D
 
@@ -16,6 +18,8 @@ var current_state: MovementState = MovementState.INIT
 var current_tween: Tween = null
 var state_timer: float = 0.0
 var owner_original: Node = null  # オリジナルの敵ノードへの参照
+var _move_unlocked := false  # 本体の HP が move_start_hp_ratio 以下になり、動いてよくなったか
+var _waiting_for_unlock := false  # 停止時間を終え、動いてよくなるのを待っているか
 
 
 func _ready():
@@ -35,6 +39,14 @@ func initialize(position_idx: int, original: Node2D):
   tween.tween_property(enemy_node, "global_position", target_pos, 2.0)
   tween.connect("finished", Callable(self, "_on_tween_completed"))
   enemy_node.connect("area_entered", Callable(self, "_on_area_entered"))
+
+  _move_unlocked = move_start_hp_ratio <= 0.0
+  var hp_node = owner_original.get_node_or_null("HpNode")
+  if hp_node:
+    hp_node.hp_changed.connect(_on_owner_hp_changed)
+    _on_owner_hp_changed(hp_node.current_hp, hp_node.max_hp)
+  else:
+    _move_unlocked = true
 
 
 func _update_movement():
@@ -65,9 +77,22 @@ func _update_random_movement():
 
 
 func _update_stay_movement():
-  # 3秒間停止
+  # 5秒間停止
   await get_tree().create_timer(5.0, false).timeout
+  if not _move_unlocked:
+    _waiting_for_unlock = true  # 本体の HP が下がるまでこの場で攻撃を続ける
+    return
   _check_state_transitions()
+
+
+func _on_owner_hp_changed(current_hp: int, max_hp: int) -> void:
+  if _move_unlocked or max_hp <= 0:
+    return
+  if current_hp <= max_hp * move_start_hp_ratio:
+    _move_unlocked = true
+    if _waiting_for_unlock:
+      _waiting_for_unlock = false
+      _check_state_transitions()
 
 
 func _initialize_attack_patterns():

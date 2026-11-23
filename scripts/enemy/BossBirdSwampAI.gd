@@ -5,6 +5,10 @@ class_name BossBirdSwampAI
 @export var phase1_patterns: Array[AttackPattern] = []
 @export var phase3_patterns: Array[AttackPattern]
 @export var phase5_patterns: Array[AttackPattern]
+## フェーズ5で HP が phase5_spread_hp_ratio 以下になってからの攻撃（自機狙い弾が3方向）
+@export var phase5_spread_patterns: Array[AttackPattern]
+## フェーズ5で、HP がこの割合以下になると攻撃を phase5_spread_patterns に切り替える
+@export var phase5_spread_hp_ratio: float = 0.4
 @export var warning_config: AttackWarningConfig
 
 @export var _bgm: AudioStream
@@ -16,6 +20,7 @@ const SKIP_INTRO_DESCEND := preload("res://resources/enemy/harpy/pattern/harpy_p
 const SKIP_INTRO_BATTLE_PHASE := 3  # 登場後に始める戦闘フェーズ
 
 var _phase_idx := 0
+var _phase5_spread_applied := false  # フェーズ5の攻撃を3方向に切り替えたか
 var _harpy_swamp_ai: EnemyHarpySwampAI
 var afterimage_scene: PackedScene = preload("res://scenes/effects/after_image.tscn")
 
@@ -67,6 +72,8 @@ func _initialize_attack_patterns():
     phase3_patterns = create_phase3_pattern()
   if phase5_patterns.is_empty():
     phase5_patterns = create_phase5_pattern()
+  if phase5_spread_patterns.is_empty():
+    phase5_spread_patterns = create_phase5_spread_pattern()
 
 
 func _setup_afterimage_timer():
@@ -181,15 +188,12 @@ func _next_pattern():
   if _phase_idx == 1 and _idx % patterns.size() == 1:
     enable_afterimage(true)
 
-  if _phase_idx == 8 and _idx % 2 == 1:
-    enable_afterimage(true)
-  elif _phase_idx == 8 and _idx % 2 == 0:
-    enable_afterimage(false)
-
-  if _phase_idx == 9 and _idx % 2 == 0:
-    enable_afterimage(true)
-  elif _phase_idx == 9 and _idx % 2 == 1:
-    enable_afterimage(false)
+  # フェーズ8・9は突進と減速の繰り返し。突進（rush アニメーションのパターン）の間だけ残像を出す。
+  # パターンの並びに依存しないよう、何番目かではなく始まったパターンのアニメーションで決める
+  if _phase_idx == 8 or _phase_idx == 9:
+    enable_afterimage(
+      _current != null and _current.change_animation and _current.animation_name == "rush"
+    )
 
 
 func _instantiate_afterimage_effect():
@@ -296,41 +300,21 @@ func create_phase1_pattern() -> Array[AttackPattern]:
 
 func create_phase3_pattern() -> Array[AttackPattern]:
   """Phase3相当のパターンを作成"""
-  var patterns: Array[AttackPattern] = []
-
-  var pattern = AttackPatternFactory.create_rapid_fire(
-    AttackPatternFactory.DEFAULT_BULLET_SCENE, 16, 0.15, 3
-  )
-  pattern.target_group = "players"
-  pattern.burst_delay = 3
-  pattern.bullet_count = 32
-  pattern.direction_type = AttackPattern.DirectionType.CIRCLE
-
-  pattern.bullet_speed = 500
-  patterns.append(pattern)
-
-  for i in range(5):
-    var pattern2 = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1.5, 5
-    )
-    pattern2.target_group = "players"
-    pattern2.burst_delay = 5
-    pattern2.direction_type = AttackPattern.DirectionType.TO_PLAYER
-    pattern2.angle_spread = 40
-    pattern2.bullet_speed = 400 - (i * 70)
-
-    var visual_config = BulletVisualConfig.new()
-    visual_config.scale = 3.0 - (i * 0.4)
-    visual_config.collision_radius = 24.0 - (i * 3.2)
-    pattern2.bullet_visual_config = visual_config
-
-    patterns.append(pattern2)
-
-  return patterns
+  return _create_ring_and_aimed_patterns(1)
 
 
 func create_phase5_pattern() -> Array[AttackPattern]:
-  """Phase5相当のパターンを作成"""
+  """Phase5相当のパターンを作成（HP が下がるまでは Phase3 と同じ1方向）"""
+  return _create_ring_and_aimed_patterns(1)
+
+
+func create_phase5_spread_pattern() -> Array[AttackPattern]:
+  """Phase5で HP が下がってからのパターンを作成（自機狙い弾が3方向の扇）"""
+  return _create_ring_and_aimed_patterns(3)
+
+
+func _create_ring_and_aimed_patterns(aimed_count: int) -> Array[AttackPattern]:
+  """全周の連射 + 弾速と大きさの違う自機狙い弾5種。aimed_count は自機狙い弾の方向数（扇40°）"""
   var patterns: Array[AttackPattern] = []
 
   var pattern = AttackPatternFactory.create_rapid_fire(
@@ -338,7 +322,7 @@ func create_phase5_pattern() -> Array[AttackPattern]:
   )
   pattern.target_group = "players"
   pattern.burst_delay = 3
-  pattern.bullet_count = 32
+  pattern.bullet_count = 24
   pattern.direction_type = AttackPattern.DirectionType.CIRCLE
 
   pattern.bullet_speed = 500
@@ -350,7 +334,7 @@ func create_phase5_pattern() -> Array[AttackPattern]:
     )
     pattern2.target_group = "players"
     pattern2.burst_delay = 5
-    pattern2.bullet_count = 3
+    pattern2.bullet_count = aimed_count
     pattern2.direction_type = AttackPattern.DirectionType.TO_PLAYER
     pattern2.angle_spread = 40
     pattern2.bullet_speed = 400 - (i * 70)
@@ -363,6 +347,13 @@ func create_phase5_pattern() -> Array[AttackPattern]:
     patterns.append(pattern2)
 
   return patterns
+
+
+func on_hp_ratio_changed(hp_ratio: float) -> void:
+  """本体の HP の割合が変わったときに呼ぶ。フェーズ5で一定以下になったら自機狙い弾を3方向にする"""
+  if _phase_idx == 5 and not _phase5_spread_applied and hp_ratio <= phase5_spread_hp_ratio:
+    _phase5_spread_applied = true
+    _set_attack_patterns(phase5_spread_patterns)
 
 
 func _spawn_decoys():

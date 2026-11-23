@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://byxyawydpds61" path="res://scenes/blessings/defensive_blessing.tscn" id="1_xq25p"]
 [ext_resource type="Texture2D" uid="uid://cyinsxb4l6mma" path="res://assets/gfx/sprites/icon_blessing_shield.png" id="2_skbd8"]
 [ext_resource type="Script" uid="uid://b1salw3wjfq77" path="res://scripts/item/Enchantment.gd" id="ae_script"]
+[ext_resource type="Resource" uid="uid://ccpby3h8wrcx3" path="res://resources/data/enchantment_shield_damage_taken_pct.tres" id="ae_shield_damage_taken_pct"]
 [ext_resource type="Resource" uid="uid://b5ygisaornxxp" path="res://resources/data/enchantment_shield_hp_pct.tres" id="ae_shield_hp_pct"]
 [ext_resource type="Resource" uid="uid://csrdpench8j4t" path="res://resources/data/enchantment_shield_recover_delay_pct.tres" id="ae_shield_recover_delay_pct"]
-[ext_resource type="Resource" uid="uid://ccpby3h8wrcx3" path="res://resources/data/enchantment_shield_damage_taken_pct.tres" id="ae_shield_damage_taken_pct"]
 
 [resource]
 script = ExtResource("1_qkv0m")

@@ -47,6 +47,11 @@ func _start_fade_out():
   queue_free()
 
 
+func _keeps_alive_offscreen_for_bounce() -> bool:
+  """画面外に出ても、跳ね返りのために消さない弾か。跳ね返りを持つ UniversalBullet が上書きする"""
+  return false
+
+
 func _process(delta):
   # 毎フレームの処理は弾の時間（time_scale）で進める。サブクラスは _bullet_process を上書きする
   _bullet_process(delta * time_scale)
@@ -71,7 +76,12 @@ func _bullet_process(delta: float) -> void:
   var is_onscreen = play_rect.has_point(global_position)
 
   if not is_onscreen:
-    if not persist_offscreen:
+    if _keeps_alive_offscreen_for_bounce():
+      # 跳ね返りの回数が残っている弾は消さない。同じフレームの後段の跳ね返り判定
+      # （UniversalBullet._handle_boundary_bounce）が壁の内側へ戻して反射させる。
+      # 1フレームの移動量が壁際の判定幅より大きいと、ここで消されて跳ね返らないことがあった
+      pass
+    elif not persist_offscreen:
       # 通常の削除（即座削除、フェードアウトなし）
       _immediate_removal()
       return

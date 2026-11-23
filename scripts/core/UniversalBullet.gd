@@ -647,6 +647,16 @@ func _update_spiral(delta: float):
   global_position = _spiral_center + spiral_offset
 
 
+func _keeps_alive_offscreen_for_bounce() -> bool:
+  """跳ね返りの回数が残っていれば、画面外に出ても消さない（_bullet_process の跳ね返り判定と同じ条件）。
+  使い切った後は、これまでどおり画面外に出た時点で消える"""
+  if not movement_config or movement_config.bounce_factor <= 0:
+    return false
+  if movement_config.movement_type == BulletMovementConfig.MovementType.SPIRAL:
+    return false  # 螺旋移動は跳ね返りの判定をしない
+  return movement_config.max_bounces <= 0 or _bounce_count < movement_config.max_bounces
+
+
 func _handle_boundary_bounce():
   """境界でのバウンス処理（反射回数制限付き）"""
   # 反射回数制限チェック

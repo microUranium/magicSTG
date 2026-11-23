@@ -178,7 +178,7 @@ func test_variants_are_registered_in_stage_data() -> void:
   assert_str(enemies["enemy_swamp_bird_ch6"]["scene_path"]).is_equal(SWAMP_BIRD_CH6)
 
 
-# --- 章ごとにドロップテーブルを分けるための派生版（ドロップ以外は元シーンと同じ）---
+# --- 章ごとにドロップテーブルを分けるための派生版（ドロップ・HP・攻撃パターンを個別に持つ）---
 
 
 func test_chapter_drop_variants_keep_base_stats() -> void:
@@ -189,11 +189,22 @@ func test_chapter_drop_variants_keep_base_stats() -> void:
     assert_object(variant.get_script()).is_equal(base.get_script())
     assert_str(variant.name).is_equal(base.name)
     assert_array(variant.get_groups()).contains(["enemies"])
+  # HP・攻撃パターンはどちらも章ごとに調整するため、元シーンとの一致は確認しない
 
-  # swamp_bird_ch6 は stage6 向けに HP・攻撃パターンを調整するため、HP の一致は lantern_ch5 だけ確認する
-  var lantern := _instantiate(LANTERN)
-  var lantern_ch5 := _instantiate(LANTERN_CH5)
-  assert_int(lantern_ch5.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
+
+# --- enemy_lantern_ch5（stage5 向けに HP・攻撃パターンを個別に調整できる派生版）---
+
+
+func test_lantern_ch5_has_own_attack_patterns() -> void:
+  # ch5 の攻撃パターンを調整しても stage3 の lantern に影響しないよう、
+  # 4つのスロットのパターンと弾の見た目のどれも元シーンと共有していないこと
+  var base := _instantiate(LANTERN)
+  var ch5 := _instantiate(LANTERN_CH5)
+  for slot in ["AttackCoreSlot", "AttackCoreSlot2", "AttackCoreSlot3", "AttackCoreSlot4"]:
+    var base_pattern: AttackPattern = base.get_node(slot).attack_pattern
+    var ch5_pattern: AttackPattern = ch5.get_node(slot).attack_pattern
+    assert_object(ch5_pattern).override_failure_message(slot).is_not_same(base_pattern)
+    assert_object(ch5_pattern.bullet_visual_config).is_not_same(base_pattern.bullet_visual_config)
 
 
 # --- enemy_swamp_bird_ch6（stage6 向けに HP・攻撃パターンを個別に調整できる派生版）---

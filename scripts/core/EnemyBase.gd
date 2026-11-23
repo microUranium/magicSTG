@@ -14,6 +14,9 @@ var destroy_particles_scene: PackedScene = preload("res://scenes/enemy/destroy_p
 @export var skip_boss_defeat_effect: bool = false  # ボス撃破エフェクトをスキップするかどうか
 @export var isInvincible: bool = false  # 無敵状態かどうか
 @export var show_damage_numbers: bool = true  # 被弾ダメージ数字を表示するか（デバッグビルドのみ有効）
+## 撃破時に一度だけ全コアを撃つスロット（撃破時の攻撃）。空なら何もしない。
+## 通常攻撃のスロットとは別に置き、パターンの auto_start は false にする
+@export var death_attack_slot: UniversalAttackCoreSlot = null
 
 var _damage_flash_time: float
 var _is_hit_per_frame: bool = false  # フレームごとの被弾フラグ
@@ -96,10 +99,18 @@ func on_hp_changed(current_hp: int, max_hp: int) -> void:
       return
     emit_signal("destroyed")
     StageSignals.emit_enemy_defeated(self)  # 強奪の加護など、敵撃破を購読する側へ通知
+    _fire_death_attack()
     _spawn_destroy_particles()
     _drop_item()
     StageSignals.emit_signal("sfx_play_requested", "destroy_enemy", global_position, 0, 0)
     queue_free()
+
+
+func _fire_death_attack() -> void:
+  """撃破時の攻撃。death_attack_slot の全コアを一度だけ撃つ。
+  弾は撃った瞬間に弾の親（敵の外）へ生成されるので、この後に敵が消えても残る"""
+  if is_instance_valid(death_attack_slot):
+    death_attack_slot.trigger_all_cores()
 
 
 func _spawn_destroy_particles():

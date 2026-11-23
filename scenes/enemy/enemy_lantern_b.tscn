@@ -139,6 +139,7 @@ color = Color(1, 0.3, 0.15, 1)
 
 [sub_resource type="Resource" id="Resource_lb_explosion"]
 script = ExtResource("lb_explosion_cfg")
+enable_particles = true
 explosion_particle_material = SubResource("ParticleProcessMaterial_lb_explosion")
 explosion_scale = 1.0
 explosion_duration = 0.3

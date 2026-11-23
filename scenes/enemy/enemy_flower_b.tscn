@@ -124,6 +124,7 @@ alpha_curve = SubResource("CurveTexture_ss4gf")
 
 [sub_resource type="Resource" id="Resource_2nqia"]
 script = ExtResource("13_h1a4l")
+enable_particles = true
 explosion_particle_material = SubResource("ParticleProcessMaterial_default")
 explosion_scale = 1.0
 explosion_duration = 0.3

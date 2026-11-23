@@ -148,6 +148,11 @@ func _on_area_entered(body):
       _trigger_on_hit_pattern(body)  # 初回接触イベントは従来どおり発火させる
       return
 
+    # ダメージ0の弾（演出用・撃破時にダメージフィールドだけを残す弾など）は当たらずにすり抜ける。
+    # 当たると 0 ダメージの被弾として加護の被弾処理（シールドの回復待ちのリセットなど）が動いてしまう
+    if damage <= 0:
+      return
+
     body.take_damage(_resolve_damage(body))  # 敵側に take_damage 実装がある前提
     hit_count += 1
 

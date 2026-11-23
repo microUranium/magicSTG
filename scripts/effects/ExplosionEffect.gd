@@ -42,6 +42,8 @@ func initialize(config: ExplosionConfig, position: Vector2, target: String):
 
 
 func _setup_visual_effect():
+  if particles:
+    particles.visible = explosion_config.enable_particles
   if explosion_config.explosion_particle_material and particles:
     particles.process_material = explosion_config.explosion_particle_material
     particles.scale = Vector2.ONE * explosion_config.explosion_scale
@@ -74,7 +76,7 @@ func _setup_audio():
 
 
 func _start_explosion():
-  if particles:
+  if particles and explosion_config.enable_particles:
     particles.restart()
 
   # エフェクト完了後のクリーンアップタイマー

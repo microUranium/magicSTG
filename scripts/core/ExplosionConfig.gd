@@ -2,6 +2,8 @@
 class_name ExplosionConfig extends Resource
 
 @export_group("Visual Effects")
+## false なら爆発のパーティクルを出さない（ダメージフィールドだけを残したいときなど）
+@export var enable_particles: bool = true
 @export var explosion_particle_material: ParticleProcessMaterial
 @export var explosion_sound: AudioStream
 @export var explosion_scale: float = 1.0

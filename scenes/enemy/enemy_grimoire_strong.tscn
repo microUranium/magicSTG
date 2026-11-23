@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c6rdgtn88g8pa"]
+[gd_scene load_steps=33 format=3 uid="uid://c6rdgtn88g8pa"]
 
 [ext_resource type="PackedScene" uid="uid://hfpv5mpgr26q" path="res://scenes/enemy/enemy_grimoire.tscn" id="0_base"]
 [ext_resource type="Script" uid="uid://urppv4s7es6g" path="res://scripts/core/BulletMovementConfig.gd" id="12_nm61o"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://de3d6kfgg3cw3" path="res://scripts/core/DamageFieldConfig.gd" id="ds_field_cfg"]
 [ext_resource type="PackedScene" uid="uid://cyyoe8pge3tsh" path="res://scenes/attackCores/controller/attack_core_slot.tscn" id="ds_slot_scene"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="ds_slot_script"]
+[ext_resource type="Script" uid="uid://bnbk37mwnx1aa" path="res://scripts/enemy/OnDestroyAttackAI.gd" id="ds_on_destroy_ai"]
 [ext_resource type="Script" uid="uid://b6c0ynisf4fes" path="res://scripts/item/DropTableEntry.gd" id="dt_1"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_blessing_regen.tres" id="dt_2"]
 [ext_resource type="Resource" path="res://resources/itemdrop/entries/droptableentry_enemy_grimoire_strong_blessing_shield.tres" id="dt_3"]
@@ -253,9 +254,8 @@ homing_lock_angle_deg = 60.0
 homing_max_turn_rate_deg = 180.0
 homing_relock_on_target_lost = true
 
-[node name="EnemyGrimoire" node_paths=PackedStringArray("death_attack_slot") instance=ExtResource("0_base")]
+[node name="EnemyGrimoire" instance=ExtResource("0_base")]
 drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3"), ExtResource("dt_4"), ExtResource("dt_5"), ExtResource("dt_6"), ExtResource("dt_7")])
-death_attack_slot = NodePath("DeathAttackSlot")
 
 [node name="HpNode" parent="." index="2"]
 max_hp = 200
@@ -273,3 +273,7 @@ default_core_scene = ExtResource("ds_core_scene")
 attack_pattern = SubResource("Resource_ds_pattern")
 attack_patterns_additive = Array[ExtResource("15_vg3nm")]([])
 auto_create_core = true
+
+[node name="DeathAttackAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
+script = ExtResource("ds_on_destroy_ai")
+attack_core_slot = NodePath("../DeathAttackSlot")

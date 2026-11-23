@@ -43,5 +43,7 @@ func test_skip_dialogue_bear_never_blocks_player_until_battle_starts() -> void:
     waited += 100
 
   assert_int(ai._phase_idx).is_equal(1)
+  # 演出用の待機パターン（計2秒）も会話と一緒に省略され、登場の移動（2秒）が終わるとすぐ戦闘が始まる
+  assert_int(waited).is_less(3000)
   # 演出用パターン（block_player_control）を通っても操作ロックは要求されない
   assert_array(_pause_events).not_contains([true])

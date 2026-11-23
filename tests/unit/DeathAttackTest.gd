@@ -1,5 +1,7 @@
-# === 撃破時の攻撃（EnemyBase.death_attack_slot）と grimoire_strong の撃破時のダメージフィールドのテスト ===
+# === grimoire_strong の撃破時の攻撃（OnDestroyAttackAI）とダメージフィールドのテスト ===
 # テスト対象:
+#   0. 撃破時の攻撃は OnDestroyAttackAI（DeathAttackAI）が専用のスロット（DeathAttackSlot）を撃つ形で、
+#      ワープの AI（EnemyAI）はそのまま残る
 #   1. grimoire_strong を倒すと、その位置にダメージフィールドが残る（設定は撃破時の攻撃パターンから読む）
 #   2. 撃破時の爆発はパーティクルを出さない（ExplosionConfig.enable_particles = false）
 #   3. 撃破時の攻撃は、倒されるまで撃たない
@@ -73,9 +75,25 @@ func _spawn_grimoire(pos: Vector2) -> Node2D:
   return g
 
 
+func _death_slot(g: Node) -> UniversalAttackCoreSlot:
+  return g.get_node("DeathAttackSlot")
+
+
 func _death_field_config(g: Node) -> Resource:
-  var pattern: AttackPattern = g.death_attack_slot.attack_pattern
+  var pattern: AttackPattern = _death_slot(g).attack_pattern
   return pattern.bullet_visual_config.explosion_config.damage_field
+
+
+func test_death_attack_uses_on_destroy_ai_and_keeps_warp_ai() -> void:
+  var g := await _spawn_grimoire(Vector2(448, 300))
+
+  var death_ai = g.get_node("DeathAttackAI")
+  assert_bool(death_ai is OnDestroyAttackAI).is_true()
+  assert_object(death_ai.attack_core_slot).is_same(_death_slot(g))
+  # 撃破時の攻撃のスロットは通常攻撃のスロットとは別
+  assert_object(_death_slot(g)).is_not_same(g.get_node("AttackCoreSlot"))
+  assert_bool(_death_slot(g).attack_pattern.auto_start).is_false()
+  assert_bool(g.get_node("EnemyAI") is WarpBehindAI).is_true()
 
 
 func test_grimoire_strong_leaves_damage_field_on_death() -> void:
@@ -98,11 +116,11 @@ func test_grimoire_strong_leaves_damage_field_on_death() -> void:
 func test_death_explosion_has_no_particles_and_no_damage() -> void:
   var g := await _spawn_grimoire(Vector2(448, 300))
   var explosion: ExplosionConfig = (
-    g.death_attack_slot.attack_pattern.bullet_visual_config.explosion_config
+    _death_slot(g).attack_pattern.bullet_visual_config.explosion_config
   )
   assert_bool(explosion.enable_particles).is_false()
   assert_int(explosion.explosion_damage).is_equal(0)
-  assert_int(g.death_attack_slot.attack_pattern.damage).is_equal(0)
+  assert_int(_death_slot(g).attack_pattern.damage).is_equal(0)
 
   g.get_node("HpNode").take_damage(g.get_node("HpNode").max_hp)
   for i in 3:

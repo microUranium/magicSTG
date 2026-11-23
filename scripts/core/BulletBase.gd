@@ -20,6 +20,8 @@ var on_hit_use_hit_position: bool = true
 var on_hit_trigger_once: bool = true
 ## 発動済みフラグ
 var _on_hit_triggered: bool = false
+## 消えるときの爆発でダメージフィールドを出さないか（弾の一斉消去・画面外で消えたとき）
+var _suppress_damage_field: bool = false
 
 # === 接触継続ダメージ設定 ===
 ## 接触中のダメージ間隔（秒）。0 = 無効＝従来どおり進入時に1回だけダメージ。
@@ -76,12 +78,14 @@ func vanish() -> void:
 
 func _destroy_bullet() -> void:
   """シグナルによる弾の破壊（即座削除）"""
+  _suppress_damage_field = true  # 一斉消去で画面中にフィールドが残らないようにする
   _immediate_removal()
 
 
 func _on_destroy_by_target(group: String) -> void:
   """指定ターゲットグループを狙う弾のみ破壊（打消の加護など）"""
   if target_group == group:
+    _suppress_damage_field = true
     _immediate_removal()
 
 

@@ -12,6 +12,10 @@ class_name ExplosionConfig extends Resource
 @export var explosion_radius: float = 0.0
 @export var damage_falloff: bool = true  # 距離による減衰
 
+@export_group("Damage Field")
+## 爆発した位置に残すダメージフィールド（DamageFieldConfig）。空ならフィールドは出ない
+@export var damage_field: Resource = null
+
 @export_group("Advanced")
 @export var explosion_type: ExplosionType = ExplosionType.NORMAL
 @export var knockback_force: float = 0.0

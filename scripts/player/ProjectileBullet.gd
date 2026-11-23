@@ -82,7 +82,8 @@ func _bullet_process(delta: float) -> void:
       # 1フレームの移動量が壁際の判定幅より大きいと、ここで消されて跳ね返らないことがあった
       pass
     elif not persist_offscreen:
-      # 通常の削除（即座削除、フェードアウトなし）
+      # 通常の削除（即座削除、フェードアウトなし）。画面外にダメージフィールドは残さない
+      _suppress_damage_field = true
       _immediate_removal()
       return
     else:

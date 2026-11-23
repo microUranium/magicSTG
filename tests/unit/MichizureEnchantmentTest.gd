@@ -310,16 +310,16 @@ func test_doll_burst_stops_at_floor_when_already_there() -> void:
 func test_bear_keeps_floor_until_second_form() -> void:
   var boss = await _spawn_boss("res://scenes/enemy/enemy_boss_bear.tscn")
   var hp = boss.get_node("HpNode")
-  var max_hp: int = hp.max_hp
+  var floor_hp := floori(hp.max_hp * boss.PHASE_CHANGE_HP_RATIO)  # 調整で変わるのでクマの定義から読む
   boss.ai._phase_idx = 1
 
   boss.take_burst_damage(100000)
-  assert_int(hp.current_hp).is_equal(floori(max_hp * 0.5))
+  assert_int(hp.current_hp).is_equal(floor_hp)
   assert_bool(boss.ai.get_phase_changable()).is_true()
 
   # 第2形態に移るまでは、それ以上削れない
   boss.take_burst_damage(100000)
-  assert_int(hp.current_hp).is_equal(floori(max_hp * 0.5))
+  assert_int(hp.current_hp).is_equal(floor_hp)
 
   # 第2形態に入った後は倒せる
   boss.ai._next_phase()
@@ -333,7 +333,8 @@ func test_stingray_dies_on_last_phase() -> void:
   boss.ai._phase_idx = 1
 
   boss.take_burst_damage(100000)
-  assert_int(hp.current_hp).is_equal(floori(hp.max_hp * 0.5))
+  # 調整で変わるのでエイの定義から読む
+  assert_int(hp.current_hp).is_equal(floori(hp.max_hp * boss.PHASE_CHANGE_HP_RATIO))
   assert_int(boss.ai._phase_idx).is_equal(2)
 
   boss.take_burst_damage(100000)

@@ -25,21 +25,22 @@ func _pattern(enemy: Node) -> AttackPattern:
   return enemy.get_node("AttackCoreSlot").attack_pattern
 
 
-# --- enemy_lantern_b_weak（stage3 向け弱体版）---
+# --- enemy_lantern_b_weak（stage3 向け。lantern_b を継承し、HP・攻撃パターンを個別に持つ）---
 
 
-func test_lantern_b_weak_slows_spiral_by_30_percent() -> void:
-  var base_mc := _pattern(_instantiate(LANTERN_B)).bullet_movement_config
-  var weak_mc := _pattern(_instantiate(LANTERN_B_WEAK)).bullet_movement_config
+func test_lantern_b_weak_has_own_attack_pattern() -> void:
+  # lantern_b（stage5）と lantern_b_weak（stage3）は章ごとに独立して調整するため、
+  # 値の関係は確認しない。代わりに、パターンと弾の動きを共有していない（片方の調整がもう片方に波及しない）ことを確認する
+  var base_pattern := _pattern(_instantiate(LANTERN_B))
+  var weak_pattern := _pattern(_instantiate(LANTERN_B_WEAK))
 
-  # 螺旋弾は半径の広がりと回転の両方を 0.7 倍にして、軌道形状を保ったまま減速する
-  assert_float(weak_mc.spiral_radius_growth).is_equal_approx(
-    base_mc.spiral_radius_growth * 0.7, 0.01
+  assert_object(weak_pattern).is_not_same(base_pattern)
+  assert_object(weak_pattern.bullet_movement_config).is_not_same(
+    base_pattern.bullet_movement_config
   )
-  assert_float(weak_mc.spiral_rotation_speed).is_equal_approx(
-    base_mc.spiral_rotation_speed * 0.7, 0.01
+  assert_int(weak_pattern.bullet_movement_config.movement_type).is_equal(
+    BulletMovementConfig.MovementType.SPIRAL
   )
-  assert_int(weak_mc.movement_type).is_equal(base_mc.movement_type)
 
 
 func test_lantern_b_weak_has_same_hp_as_lantern() -> void:
@@ -50,13 +51,11 @@ func test_lantern_b_weak_has_same_hp_as_lantern() -> void:
   assert_int(weak.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
 
 
-func test_lantern_b_weak_keeps_other_stats() -> void:
+func test_lantern_b_weak_inherits_lantern_b() -> void:
   var base := _instantiate(LANTERN_B)
   var weak := _instantiate(LANTERN_B_WEAK)
 
-  assert_float(_pattern(weak).burst_delay).is_equal(_pattern(base).burst_delay)
-  assert_int(_pattern(weak).bullet_count).is_equal(_pattern(base).bullet_count)
-  assert_int(_pattern(weak).damage).is_equal(_pattern(base).damage)
+  assert_object(weak.get_script()).is_equal(base.get_script())
   assert_str(weak.name).is_equal(base.name)
 
 

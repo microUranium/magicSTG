@@ -5,6 +5,7 @@
 #   3. 弾の一斉消去（destroy_bullet / destroy_bullets_by_target）で消える
 #   4. 爆発の設定に damage_field があれば ExplosionFactory がフィールドを出す（出さない指定もできる）
 #   5. 弾が当たる・射程が尽きると爆発でフィールドが出る。一斉消去・画面外で消えたときは出ない
+#   6. lantern_b の攻撃が、プレイヤー狙いで1発ずつ撃つ、フィールドを残すファイアボールになっている
 extends GdUnitTestSuite
 
 const PLAY_AREA_SCRIPT := preload("res://scripts/autoload/PlayArea.gd")
@@ -12,6 +13,7 @@ const PLAY_RECT := Rect2(0, 0, 896, 896)
 const DAMAGE_FIELD := preload("res://scripts/effects/DamageField.gd")
 const DAMAGE_FIELD_CONFIG := preload("res://scripts/core/DamageFieldConfig.gd")
 const BULLET := preload("res://scenes/bullets/universal_bullet.tscn")
+const LANTERN_B := preload("res://scenes/enemy/enemy_lantern_b.tscn")
 
 
 class DamageCounter:
@@ -272,3 +274,22 @@ func test_no_field_when_bullet_leaves_screen() -> void:
 
   assert_bool(b.is_queued_for_deletion()).is_true()
   assert_int(_fields().size()).is_equal(0)
+
+
+# --- lantern_b の攻撃 ---
+
+
+func test_lantern_b_fires_aimed_fireball_leaving_damage_field() -> void:
+  var lantern: Node = auto_free(LANTERN_B.instantiate())
+  var pattern: AttackPattern = lantern.get_node("AttackCoreSlot").attack_pattern
+
+  assert_int(pattern.direction_type).is_equal(AttackPattern.DirectionType.TO_PLAYER)
+  assert_int(pattern.bullet_count).is_equal(1)
+  assert_float(pattern.bullet_range).is_greater(0.0)  # 当たらなくても射程の終わりで爆発する
+
+  var explosion: ExplosionConfig = pattern.bullet_visual_config.explosion_config
+  assert_object(explosion).is_not_null()
+  assert_int(explosion.explosion_damage).is_greater(0)
+  assert_float(explosion.explosion_radius).is_greater(0.0)
+  assert_object(explosion.damage_field).is_not_null()
+  assert_object(explosion.damage_field.get_script()).is_same(DAMAGE_FIELD_CONFIG)

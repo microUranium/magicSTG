@@ -16,6 +16,9 @@ const INTRO_PLAYER_APPROACH_TIME := 1.5
 const INTRO_PLAYER_RETREAT_POSITION := Vector2(448, 480)  # 画面中央
 const INTRO_PLAYER_RETREAT_TIME := 0.2
 
+## フェーズ1（の移動パターン一周）を何周したら第2形態へ移れるか（HP が境目以下であることも必要）
+const SECOND_FORM_LOOP_COUNT := 10
+
 var _phase_idx := 0
 var _phase_transition_counter := 0
 
@@ -110,7 +113,7 @@ func _on_pattern_finished(cb_token: int):
       _next_phase()
     elif _phase_idx == 1:
       _phase_transition_counter += 1
-      if _phase_transition_counter >= 20 and _phase_changable:
+      if _phase_transition_counter >= SECOND_FORM_LOOP_COUNT and _phase_changable:
         _phase_transition_counter = 0
         _next_phase()
       else:

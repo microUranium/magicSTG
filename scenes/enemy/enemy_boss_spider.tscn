@@ -112,7 +112,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_uspes")
 movement_type = 2
 move_to = Vector2(0, 0)
-move_time = 3.0
+move_time = 4.5
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -196,7 +196,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_uspes")
 movement_type = 2
 move_to = Vector2(0, 0)
-move_time = 3.0
+move_time = 4.5
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -280,7 +280,7 @@ metadata/_custom_type_script = "uid://bps01f3m37042"
 script = ExtResource("7_uspes")
 movement_type = 2
 move_to = Vector2(0, 0)
-move_time = 3.0
+move_time = 4.5
 direction_type = 0
 move_angle = 0.0
 move_speed = 100.0
@@ -495,6 +495,10 @@ script = ExtResource("1_m3mwo")
 destroy_particles_scene = ExtResource("2_md488")
 drop_table = Array[ExtResource("dt_1")]([ExtResource("dt_2"), ExtResource("dt_3")])
 
+[node name="SpiderString" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 0, -1000)
+width = 3.0
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrb5u")
 frame_progress = 0.456478
@@ -505,7 +509,7 @@ shape = SubResource("CapsuleShape2D_fg38x")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_1k3hq")
-max_hp = 1200
+max_hp = 5000
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("5_m3mwo")

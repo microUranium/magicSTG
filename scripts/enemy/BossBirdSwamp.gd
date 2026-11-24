@@ -37,6 +37,8 @@ func get_burst_hp_floor() -> int:
 
 func on_hp_changed(current_hp: int, max_hp: int) -> void:
   # Handle HP changes, e.g., update UI or play animations
+  if max_hp > 0:
+    ai.on_hp_ratio_changed(float(current_hp) / max_hp)  # フェーズ5の途中で攻撃が強くなる
   if current_hp <= max_hp * PHASE_END_HP_RATIOS[3] and ai._phase_idx == 3:
     # Phase 3でHPが80%以下になったら次のフェーズへ
     if not ai.skip_dialogue:  # 会話省略時はパワーアップ演出のみ残す

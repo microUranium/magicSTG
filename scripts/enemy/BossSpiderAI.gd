@@ -156,7 +156,7 @@ func create_pattern_spidernet_horizontal() -> Array[AttackPattern]:
     )
     pattern.target_group = "players"
     pattern.burst_delay = 2
-    pattern.bullet_count = 36
+    pattern.bullet_count = 24
     pattern.direction_type = AttackPattern.DirectionType.CIRCLE
 
     # 螺旋移動の設定
@@ -189,7 +189,7 @@ func create_phase1_pattern() -> Array[AttackPattern]:
 
   for i in range(5):
     var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1, 3
+      AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1.5, 3
     )
     pattern.target_group = "players"
     pattern.burst_delay = 5

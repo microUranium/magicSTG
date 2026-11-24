@@ -152,7 +152,7 @@ spawn_position_offset = Vector2(0, 0)
 spawn_positions_multi = Array[Vector2]([])
 direction_type = 1
 base_direction = Vector2(0, 1)
-angle_spread = 30.0
+angle_spread = 60.0
 angle_offset = 0.0
 circle_radius = 100.0
 rotation_speed = 90.0
@@ -196,7 +196,7 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("5_bq12l")
-max_hp = 60
+max_hp = 80
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("6_6dd6g")

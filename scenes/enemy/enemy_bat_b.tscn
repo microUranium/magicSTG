@@ -91,6 +91,7 @@ bullet_lifetime = 5.0
 bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
+immune_to_blessings = false
 contact_damage_tick_sec = 0.0
 bullet_movement_config = SubResource("Resource_hr08y")
 bullet_count = 9

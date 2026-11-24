@@ -56,6 +56,7 @@ func create_pattern() -> AttackPattern:
   pattern.rapid_fire_interval = 0
   pattern.auto_start = false
   pattern.penetration_count = -1  # 無限貫通
+  pattern.immune_to_blessings = true  # 本体のバリア弾と同じく加護で消えない（消えると本物と見分けられる）
 
   var visual_config = BulletVisualConfig.new()
   visual_config.scale = 2

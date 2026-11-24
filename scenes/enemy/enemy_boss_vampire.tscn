@@ -1,7 +1,5 @@
 [gd_scene load_steps=66 format=3 uid="uid://dhym3c4ao25nr"]
 
-[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
-
 [ext_resource type="Script" uid="uid://dpkpdmta4uel8" path="res://scripts/enemy/BossVampire.gd" id="1_cpn46"]
 [ext_resource type="PackedScene" uid="uid://8qmifk236sqc" path="res://scenes/enemy/destroy_particle_boss.tscn" id="2_6r602"]
 [ext_resource type="Texture2D" uid="uid://cjgapdfuxrkjc" path="res://assets/gfx/sprites/enemy_boss_vampire_sprite.png" id="3_u3ffy"]
@@ -16,6 +14,7 @@
 [ext_resource type="Script" uid="uid://su05ub25qwt5" path="res://scripts/core/AttackPattern.gd" id="14_817ac"]
 [ext_resource type="Script" uid="uid://cs5tqw24uumih" path="res://scripts/player/UniversalAttackCoreSlot.gd" id="15_uu8hs"]
 [ext_resource type="PackedScene" uid="uid://bu48bcyms674m" path="res://scenes/attackCores/universal_attack_core.tscn" id="16_ahaiq"]
+[ext_resource type="PackedScene" uid="uid://c66548ep3nbb4" path="res://scenes/ui/boss_hp_bar.tscn" id="90_hpbar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w6ydq"]
 atlas = ExtResource("3_u3ffy")
@@ -128,6 +127,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_wvsr4"]
@@ -147,6 +148,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_6r602"]
@@ -166,12 +169,17 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s3d12.battle_conversation"
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_u8iun"]
 script = ExtResource("6_vmo6y")
 patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wv3pu"), SubResource("Resource_wvsr4"), SubResource("Resource_6r602")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_u5oi5"]
@@ -191,6 +199,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_817ac"]
@@ -210,6 +220,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_npgnb"]
@@ -229,6 +241,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_886se"]
@@ -248,6 +262,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_dkucv"]
@@ -267,6 +283,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_gck8h"]
@@ -286,6 +304,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_icsnu"]
@@ -294,6 +314,7 @@ patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_u5oi5"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.8
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_cpn46"]
@@ -313,6 +334,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s3d12.battle_progression_1"
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_vmo6y"]
@@ -332,6 +355,7 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
 block_player_control = true
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
@@ -352,12 +376,17 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s3d12.battle_progression_2"
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ex3q3"]
 script = ExtResource("6_vmo6y")
 patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wvsr4"), SubResource("Resource_cpn46"), SubResource("Resource_vmo6y"), SubResource("Resource_1btcl")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_5v4m6"]
@@ -377,6 +406,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_hqj3m"]
@@ -396,6 +427,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ahaiq"]
@@ -415,6 +448,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_nn1x5"]
@@ -434,6 +469,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_jrp6c"]
@@ -453,6 +490,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_3trdo"]
@@ -472,6 +511,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_uu8hs"]
@@ -480,6 +521,7 @@ patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_u5oi5"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.4
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_u6ygb"]
@@ -499,12 +541,17 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = "s3d12.battle_progression_3"
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_7vmf2"]
 script = ExtResource("6_vmo6y")
 patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_wvsr4"), SubResource("Resource_u6ygb")])
 loop_type = 0
+show_hp_bar = false
+end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Resource" id="Resource_aqvku"]
@@ -524,6 +571,8 @@ change_animation = true
 animation_name = "attack"
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_5c0kx"]
@@ -543,6 +592,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_otfo7"]
@@ -562,6 +613,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_g0syn"]
@@ -581,6 +634,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_w7qpw"]
@@ -600,6 +655,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_4cg32"]
@@ -619,6 +676,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_dcy1t"]
@@ -638,6 +697,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_vlpnf"]
@@ -657,6 +718,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_ytk1c"]
@@ -676,6 +739,8 @@ change_animation = false
 animation_name = ""
 restore_animation = true
 dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
 metadata/_custom_type_script = "uid://bps01f3m37042"
 
 [sub_resource type="Resource" id="Resource_viq2f"]
@@ -684,6 +749,7 @@ patterns = Array[ExtResource("7_ex3q3")]([SubResource("Resource_aqvku"), SubReso
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.0
+bar_merge_with_previous = false
 metadata/_custom_type_script = "uid://cy6oe8emo4iir"
 
 [sub_resource type="Curve" id="Curve_58abv"]
@@ -721,6 +787,10 @@ color = Color(1, 1, 1, 1)
 collision_radius = 16.0
 enable_particles = true
 particle_material = SubResource("ParticleProcessMaterial_nm61o")
+enable_afterimage = false
+afterimage_interval = 0.05
+afterimage_lifetime = 0.25
+afterimage_color = Color(1, 1, 1, 0.45)
 animation_name = ""
 fade_in_initial_alpha = 1.0
 fade_in_duration = 0.0
@@ -743,7 +813,7 @@ shape = SubResource("CapsuleShape2D_wvsr4")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_u5oi5")
-max_hp = 2400
+max_hp = 8500
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("5_cpn46")
@@ -760,4 +830,3 @@ attack_patterns_additive = Array[ExtResource("14_817ac")]([])
 auto_create_core = true
 
 [node name="BossHpBar" parent="." instance=ExtResource("90_hpbar")]
-mode = 1

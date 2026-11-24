@@ -415,3 +415,20 @@ func test_blessing_blinks_field_in_last_two_seconds() -> void:
 
   blessing._end_field()
   get_tree().current_scene = saved_scene
+
+
+func test_blessing_immune_bullets_are_neither_vanished_nor_slowed() -> void:
+  # immune_to_blessings の敵弾は、発動時・結界内・効果終了時のどれでも影響を受けない
+  var immune := _make_bullet(Vector2(400, 300))
+  immune.immune_to_blessings = true
+  var blessing := _ready_blessing()
+  await _physics_frames()
+
+  blessing.activate()
+  assert_bool(immune.is_queued_for_deletion()).is_false()
+
+  await _physics_frames()
+  assert_float(immune.time_scale).is_equal_approx(1.0, 0.0001)
+
+  blessing._end_field()
+  assert_bool(immune.is_queued_for_deletion()).is_false()

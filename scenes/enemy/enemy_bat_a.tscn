@@ -109,13 +109,14 @@ bullet_lifetime = 0.0
 bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
+immune_to_blessings = false
 contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_1etxb")
 bullet_movement_config = SubResource("Resource_hr08y")
 bullet_count = 1
 rapid_fire_count = 1
 rapid_fire_interval = 0.1
-burst_delay = 3.0
+burst_delay = 2.0
 burst_count = 3
 burst_interval = 0.05
 min_cooldown = 0.0833
@@ -170,7 +171,7 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("5_pnr8h")
-max_hp = 15
+max_hp = 30
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("6_yewhx")

@@ -13,8 +13,16 @@ class_name BossVampireAI
 @export
 var firerush_scene: PackedScene = preload("res://scenes/enemy/enemy_boss_vampire_firerush.tscn")
 @export var visual_config_dark: BulletVisualConfig
+## フェーズ5で、炎の突進を始める時点の HP がこの割合以下なら、強化版の炎の突進にする
+@export var firerush_enhanced_hp_ratio: float = 0.2
 
 const DECOY_PATTERN_IDX := 2  # フェーズ2でコウモリを出すパターンの番号
+const FIRERUSH_SPAWN_INTERVAL := 0.05  # 同じ組の炎を1本ずつ出す間隔（秒）
+# 炎の向き（_spawn_firerush の angle。撃つ方向は angle + 90°）
+const FIRERUSH_TO_LEFT := 90.0
+const FIRERUSH_TO_RIGHT := -90.0
+const FIRERUSH_TO_DOWN := 0.0
+const FIRERUSH_TO_UP := 180.0
 
 var animated_sprite: AnimatedSprite2D
 var _phase_idx := 0
@@ -245,7 +253,80 @@ func _spawn_firerush(angle: float, position: Vector2):
   firerush.global_position = position
 
 
+func _is_firerush_enhanced() -> bool:
+  var hp_node = enemy_node.get_node_or_null("HpNode") if is_instance_valid(enemy_node) else null
+  if hp_node == null or hp_node.max_hp <= 0:
+    return false
+  return hp_node.current_hp <= hp_node.max_hp * firerush_enhanced_hp_ratio
+
+
+func _angle_to_player_from(pos: Vector2) -> float:
+  """pos からプレイヤー（迷彩中は囮）を狙う _spawn_firerush の angle。プレイヤーがいなければ真下"""
+  var player = TargetService.get_player()
+  if not is_instance_valid(player):
+    return FIRERUSH_TO_DOWN
+  var to_target := TargetService.get_aim_position_for(player) - pos
+  if to_target == Vector2.ZERO:
+    return FIRERUSH_TO_DOWN
+  return rad_to_deg(to_target.angle()) - 90.0
+
+
+func _wait_firerush(seconds: float) -> bool:
+  """炎の突進の合間に待つ。待っている間にボスが消えたら false"""
+  await get_tree().create_timer(seconds, false).timeout
+  return is_inside_tree() and is_instance_valid(enemy_node)
+
+
+func _spawn_firerush_group(angle: float, positions: Array) -> bool:
+  """同じ向きの炎を、positions の順に FIRERUSH_SPAWN_INTERVAL ずつずらして出す"""
+  for pos in positions:
+    _spawn_firerush(angle, pos)
+    if not await _wait_firerush(FIRERUSH_SPAWN_INTERVAL):
+      return false
+  return true
+
+
+func _spawn_firerush_aimed_row(positions: Array) -> bool:
+  """positions の順に、それぞれの位置からプレイヤーを狙う炎を出す"""
+  for pos in positions:
+    _spawn_firerush(_angle_to_player_from(pos), pos)
+    if not await _wait_firerush(FIRERUSH_SPAWN_INTERVAL):
+      return false
+  return true
+
+
+func _attack_firerush_enhanced() -> void:
+  """HP が firerush_enhanced_hp_ratio 以下のときの炎の突進。
+  四方の端から撃ったあと、上端に並べた炎からプレイヤーを狙って撃つ"""
+  var steps := [
+    [FIRERUSH_TO_LEFT, [Vector2(895, 64), Vector2(895, 320), Vector2(895, 576), Vector2(895, 832)]],
+    [FIRERUSH_TO_RIGHT, [Vector2(1, 192), Vector2(1, 448), Vector2(1, 704), Vector2(1, 960)]],
+    [FIRERUSH_TO_DOWN, [Vector2(64, 1), Vector2(320, 1), Vector2(576, 1), Vector2(832, 1)]],
+    [FIRERUSH_TO_UP, [Vector2(192, 959), Vector2(448, 959), Vector2(704, 959)]],
+  ]
+  for step in steps:
+    if not await _spawn_firerush_group(step[0], step[1]):
+      return
+    if not await _wait_firerush(0.5):
+      return
+
+  var left_to_right := []
+  var right_to_left := []
+  for i in range(18):
+    left_to_right.append(Vector2(32 + i * 32, 1))
+    right_to_left.append(Vector2(864 - i * 32, 1))
+  if not await _spawn_firerush_aimed_row(left_to_right):
+    return
+  if not await _wait_firerush(0.7):
+    return
+  await _spawn_firerush_aimed_row(right_to_left)
+
+
 func _attack_firerush():
+  if _is_firerush_enhanced():
+    await _attack_firerush_enhanced()
+    return
+
   var attack_positions = [Vector2(895, 64), Vector2(895, 320), Vector2(895, 576), Vector2(895, 832)]
   var attack_angle = 90.0
   for pos in attack_positions:

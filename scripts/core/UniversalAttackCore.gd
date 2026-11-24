@@ -357,6 +357,8 @@ func _execute_shot_on_hit(pattern: AttackPattern) -> bool:
 
   if "penetration_count" in bullet:
     bullet.penetration_count = pattern.penetration_count
+  if "immune_to_blessings" in bullet:
+    bullet.immune_to_blessings = pattern.immune_to_blessings
 
   # ヒット時パターンの設定を弾に渡す
   if pattern.on_hit_pattern:
@@ -895,6 +897,8 @@ func _apply_bullet_configs(bullet: Node, pattern: AttackPattern, bullet_index: i
   # 貫通設定の適用
   if "penetration_count" in bullet:
     bullet.penetration_count = pattern.penetration_count
+  if "immune_to_blessings" in bullet:
+    bullet.immune_to_blessings = pattern.immune_to_blessings
 
   # 視覚設定の適用
   if pattern.bullet_visual_config and bullet.has_method("apply_visual_config"):

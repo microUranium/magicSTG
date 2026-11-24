@@ -210,6 +210,7 @@ func create_phase2_pattern() -> AttackPattern:
   pattern.rapid_fire_interval = 0
   pattern.auto_start = false
   pattern.penetration_count = -1  # 無限貫通
+  pattern.immune_to_blessings = true  # 打消・時界の加護で消えない（フェーズ3まで回り続ける本体の攻撃）
 
   var visual_config = BulletVisualConfig.new()
   visual_config.scale = 2

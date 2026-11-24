@@ -215,7 +215,10 @@ func _follow_player() -> void:
 
 
 func _is_enemy_bullet(area: Node) -> bool:
-  return area is BulletBase and area.target_group == ENEMY_BULLET_GROUP
+  # 加護の影響を受けない弾（immune_to_blessings）は、遅くも消しもしない
+  return (
+    area is BulletBase and area.target_group == ENEMY_BULLET_GROUP and not area.immune_to_blessings
+  )
 
 
 func _on_area_entered_field(area: Area2D) -> void:

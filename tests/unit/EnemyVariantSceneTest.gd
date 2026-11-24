@@ -38,17 +38,20 @@ func test_lantern_b_weak_has_own_attack_pattern() -> void:
   assert_object(weak_pattern.bullet_movement_config).is_not_same(
     base_pattern.bullet_movement_config
   )
-  assert_int(weak_pattern.bullet_movement_config.movement_type).is_equal(
-    BulletMovementConfig.MovementType.SPIRAL
-  )
+  assert_object(weak_pattern.bullet_visual_config).is_not_same(base_pattern.bullet_visual_config)
 
 
-func test_lantern_b_weak_has_same_hp_as_lantern() -> void:
-  var lantern := _instantiate(LANTERN)
-  var weak := _instantiate(LANTERN_B_WEAK)
-
-  # stage3 の雑魚に合わせ、同ステージの enemy_lantern と同じ HP にする
-  assert_int(weak.get_node("HpNode").max_hp).is_equal(lantern.get_node("HpNode").max_hp)
+func test_lantern_b_weak_has_own_hp() -> void:
+  # HP も章ごとに調整するので値の関係は確認せず、lantern_b の HP を上書きしていることだけを確認する
+  var weak_state := (load(LANTERN_B_WEAK) as PackedScene).get_state()
+  var overrides_hp := false
+  for i in weak_state.get_node_count():
+    if weak_state.get_node_name(i) != "HpNode":
+      continue
+    for j in weak_state.get_node_property_count(i):
+      if weak_state.get_node_property_name(i, j) == "max_hp":
+        overrides_hp = true
+  assert_bool(overrides_hp).is_true()
 
 
 func test_lantern_b_weak_inherits_lantern_b() -> void:

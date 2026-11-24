@@ -4,6 +4,9 @@ class_name BulletBase
 @export var target_group: String = "enemies"
 @export var damage: int = 1
 var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
+## 加護の影響を受けないか（打消の加護で消えず、時界の加護の結界で遅くも消えもしない）。
+## destroy_bullet（ステージ側の一斉消去）では消える
+var immune_to_blessings: bool = false
 var hit_count: int = 0  # 現在のヒット回数
 
 # === 1F無敵設定 ===
@@ -84,6 +87,8 @@ func _destroy_bullet() -> void:
 
 func _on_destroy_by_target(group: String) -> void:
   """指定ターゲットグループを狙う弾のみ破壊（打消の加護など）"""
+  if immune_to_blessings:
+    return
   if target_group == group:
     _suppress_damage_field = true
     _immediate_removal()

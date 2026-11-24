@@ -522,7 +522,7 @@ shape = SubResource("CapsuleShape2D_js1y1")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("7_bfynv")
-max_hp = 800
+max_hp = 3000
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("animated_sprite", "attack_core_slot")]
 script = ExtResource("1_l6hyg")

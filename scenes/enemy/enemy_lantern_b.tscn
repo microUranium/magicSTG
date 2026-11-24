@@ -76,12 +76,12 @@ size = Vector2(44, 94)
 
 [sub_resource type="Resource" id="Resource_b102c"]
 script = ExtResource("12_h0mb6")
-movement_type = 0
-initial_speed = 250.0
+movement_type = 2
+initial_speed = 5.0
 initial_speed_max = 0.0
 deceleration_rate = 100.0
 min_speed = 50.0
-acceleration_rate = 50.0
+acceleration_rate = 500.0
 max_speed = 500.0
 contact_speed = 0.0
 wave_amplitude = 50.0
@@ -231,7 +231,7 @@ circle_radius = 100.0
 rotation_speed = 90.0
 rotation_duration = 3.0
 movement_type = 0
-bullet_speed = 200.0
+bullet_speed = 5.0
 curve_strength = 0.0
 orbit_radius = 50.0
 beam_duration = 1.0
@@ -252,7 +252,7 @@ homing_max_turn_rate_deg = 180.0
 homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
-[node name="EnemyLanternB" type="Area2D" groups=["enemies"]]
+[node name="EnemyLanternB2" type="Area2D" groups=["enemies"]]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_urq22")

@@ -3,7 +3,10 @@
 #   1. sweep_spread の TO_PLAYER の連射は、撃ち始めのプレイヤーの向きを中心に angle_spread の範囲を1発ずつ掃く
 #   2. 撃っている途中でプレイヤーが動いても、中心は撃ち始めの向きのまま
 #   3. sweep_spread なしの TO_PLAYER の連射は、これまでどおり毎回プレイヤーを狙う（掃かない）
+#   4. boss_stingray のフェーズ2に、プレイヤーを中心に掃く連射が加わっている
 extends GdUnitTestSuite
+
+const BOSS_STINGRAY_AI := preload("res://scripts/enemy/BossStingrayAI.gd")
 
 
 ## 弾を出す代わりに向きを記録する。プレイヤーの位置はテストから決める
@@ -94,3 +97,18 @@ func test_without_sweep_aims_each_shot() -> void:
 
   for d in _core.directions:
     assert_vector(d).is_equal_approx(to_player, Vector2(0.001, 0.001))
+
+
+func test_boss_stingray_phase2_has_player_centered_sweep() -> void:
+  var ai = auto_free(BOSS_STINGRAY_AI.new())
+
+  var patterns: Array[AttackPattern] = ai.create_phase2_pattern()
+
+  var sweeps := patterns.filter(func(p): return p.sweep_spread)
+  assert_int(sweeps.size()).is_equal(1)
+  var sweep: AttackPattern = sweeps[0]
+  assert_int(sweep.direction_type).is_equal(AttackPattern.DirectionType.TO_PLAYER)
+  assert_float(sweep.angle_spread).is_greater(0.0)
+  assert_int(sweep.pattern_type).is_equal(AttackPattern.PatternType.RAPID_FIRE)
+  # ランダムな連射も残っている
+  assert_int(patterns.size()).is_equal(2)

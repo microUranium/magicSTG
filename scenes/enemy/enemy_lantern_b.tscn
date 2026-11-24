@@ -252,7 +252,7 @@ homing_max_turn_rate_deg = 180.0
 homing_relock_on_target_lost = true
 metadata/_custom_type_script = "uid://su05ub25qwt5"
 
-[node name="EnemyLanternB2" type="Area2D" groups=["enemies"]]
+[node name="EnemyLanternB" type="Area2D" groups=["enemies"]]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_urq22")

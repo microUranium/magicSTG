@@ -67,6 +67,10 @@ enum SpawnPositionMode {
 @export var base_direction: Vector2 = Vector2.DOWN
 @export var angle_spread: float = 0.0  # 扇状に広がる角度（度）
 @export var angle_offset: float = 0.0  # 基準角度からのオフセット
+## 連射（RAPID_FIRE）で、angle_spread の範囲を1発ずつ掃くように撃つ（FIXED 以外の向きでも）。
+## 基準の向きは撃ち始めに決める（TO_PLAYER なら撃ち始めのプレイヤーの位置を中心に掃く）。
+## FIXED は従来どおり、この設定がなくても掃く
+@export var sweep_spread: bool = false
 
 # === 円形配置設定 ===
 @export var circle_radius: float = 100.0

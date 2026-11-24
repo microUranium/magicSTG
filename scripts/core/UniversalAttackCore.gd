@@ -251,8 +251,11 @@ func _execute_rapid_fire(pattern: AttackPattern) -> bool:
   var success = true
 
   for burst in range(pattern.rapid_fire_count):
-    if pattern.angle_spread > 0 and pattern.direction_type == AttackPattern.DirectionType.FIXED:
-      # 角度スプレッドがある場合はランダム方向を計算
+    if (
+      pattern.angle_spread > 0
+      and (pattern.direction_type == AttackPattern.DirectionType.FIXED or pattern.sweep_spread)
+    ):
+      # angle_spread の範囲を1発ずつ掃く（target_pos は撃ち始めの位置のまま）
       var base_dir = pattern.calculate_base_direction(
         _owner_actor.global_position, target_pos, _rear_firing_mode
       )

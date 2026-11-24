@@ -137,4 +137,5 @@ auto_create_core = true
 
 [node name="CounterAttackAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("13_3rqqi")
+counter_cooldown_sec = 0.067
 attack_core_slot = NodePath("../AttackCoreSlot")

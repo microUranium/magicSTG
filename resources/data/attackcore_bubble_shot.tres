@@ -114,6 +114,7 @@ bullet_lifetime = 3.0
 bullet_lifetime_max = 0.0
 auto_start = true
 penetration_count = 0
+immune_to_blessings = false
 contact_damage_tick_sec = 0.0
 bullet_visual_config = SubResource("Resource_6l0x7")
 bullet_movement_config = SubResource("Resource_1j6lm")

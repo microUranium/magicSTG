@@ -267,7 +267,6 @@ warp_interval = 2.5
 
 [node name="AttackCoreSlot" parent="." index="4"]
 attack_pattern = SubResource("Resource_84bg0")
-attack_patterns_additive = Array[ExtResource("15_vg3nm")]([])
 
 [node name="DeathAttackSlot" parent="." index="5" instance=ExtResource("ds_slot_scene")]
 script = ExtResource("ds_slot_script")

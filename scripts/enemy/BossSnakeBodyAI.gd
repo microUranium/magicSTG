@@ -55,7 +55,7 @@ func create_phase1_pattern() -> AttackPattern:
   )
   pattern.target_group = "players"
   pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
-  pattern.burst_delay = 5
+  pattern.burst_delay = 4
 
   var visual_config = BulletVisualConfig.new()
   visual_config.scale = 2

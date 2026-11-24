@@ -171,7 +171,7 @@ shape = SubResource("CircleShape2D_p22mw")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_rukl6")
-max_hp = 2800
+max_hp = 5000
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("4_5cj6h")

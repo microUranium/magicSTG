@@ -26,6 +26,9 @@ enum SpawnPositionMode {
 @export var bullet_lifetime_max: float = 0.0
 @export var auto_start: bool = true  # AttackCoreの自動発射設定
 @export var penetration_count: int = 0  # 貫通回数 0=貫通なし 1以上=貫通回数 -1=無限貫通
+## 加護の影響を受けない弾にする（打消の加護で消えず、時界の加護の結界で遅くも消えもしない）。
+## ステージ側の弾の一斉消去（フェーズの切り替え・ボス撃破など）では、これまでどおり消える
+@export var immune_to_blessings: bool = false
 ## 敵に接触している間ダメージを与える間隔（秒）。
 ## 0 = 無効で、従来どおり進入時（area_entered）に1回だけダメージを与える。
 ## 0より大きいときは進入時ダメージと貫通判定を行わず、この間隔でダメージを与え続ける。

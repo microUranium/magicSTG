@@ -2,6 +2,7 @@ extends WormBoss
 class_name BossSnake
 
 signal change_body_attack(_phase_idx: int)  # ボディアタックの変更を通知
+signal battle_started  # 登場と会話が終わり、戦闘（フェーズ2）が始まった
 
 ## HP でフェーズが切り替わる境目 {フェーズ番号: そのフェーズを終える HP の割合}
 const PHASE_END_HP_RATIOS := {2: 0.3, 3: 0.2, 4: 0.1}

@@ -134,6 +134,7 @@ direction_type = 1
 base_direction = Vector2(0, 1)
 angle_spread = 60.0
 angle_offset = 0.0
+sweep_spread = false
 circle_radius = 100.0
 rotation_speed = 90.0
 rotation_duration = 3.0
@@ -232,6 +233,7 @@ direction_type = 0
 base_direction = Vector2(0, 1)
 angle_spread = 0.0
 angle_offset = 0.0
+sweep_spread = false
 circle_radius = 100.0
 rotation_speed = 90.0
 rotation_duration = 3.0
@@ -267,7 +269,6 @@ warp_interval = 2.5
 
 [node name="AttackCoreSlot" parent="." index="4"]
 attack_pattern = SubResource("Resource_84bg0")
-attack_patterns_additive = Array[ExtResource("15_vg3nm")]([])
 
 [node name="DeathAttackSlot" parent="." index="5" instance=ExtResource("ds_slot_scene")]
 script = ExtResource("ds_slot_script")

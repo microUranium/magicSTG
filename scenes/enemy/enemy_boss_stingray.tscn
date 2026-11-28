@@ -276,6 +276,7 @@ alpha_curve = SubResource("CurveTexture_pwxes")
 
 [sub_resource type="Resource" id="Resource_pwxes"]
 script = ExtResource("10_5xo3n")
+enable_particles = true
 explosion_particle_material = SubResource("ParticleProcessMaterial_6l0x7")
 explosion_scale = 1.0
 explosion_duration = 0.5
@@ -323,7 +324,7 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("4_5xo3n")
-max_hp = 800
+max_hp = 1200
 
 [node name="EnemyAI" type="Node" parent="." node_paths=PackedStringArray("attack_core_slot")]
 script = ExtResource("5_lommv")

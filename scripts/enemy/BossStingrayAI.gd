@@ -163,7 +163,7 @@ func create_phase2_pattern() -> Array[AttackPattern]:
   pattern.burst_delay = 2
   pattern.direction_type = AttackPattern.DirectionType.RANDOM
   pattern.angle_spread = 360
-  pattern.bullet_range = 300
+  pattern.bullet_lifetime = 10.0
 
   var movement_config = BulletMovementConfig.new()
   movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
@@ -178,5 +178,16 @@ func create_phase2_pattern() -> Array[AttackPattern]:
     pattern.bullet_visual_config = _visual_config
 
   patterns.append(pattern)
+
+  # 撃ち始めのプレイヤーの位置を中心に、90°の範囲を1発ずつ掃く（弾はフェーズ1と同じ）
+  var sweep = AttackPatternFactory.create_rapid_fire(
+    AttackPatternFactory.DEFAULT_BULLET_SCENE, 12, 0.05, 3
+  )
+  sweep.target_group = "players"
+  sweep.direction_type = AttackPattern.DirectionType.TO_PLAYER
+  sweep.angle_spread = 90
+  sweep.sweep_spread = true
+  sweep.burst_delay = 3
+  patterns.append(sweep)
 
   return patterns

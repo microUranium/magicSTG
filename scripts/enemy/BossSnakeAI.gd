@@ -40,6 +40,8 @@ func _next_phase():
     StageSignals.emit_signal("sfx_play_requested", "power_up_boss", Vector2.INF, -5, 0)
     enemy_node.connect("area_entered", Callable(enemy_node, "_on_area_entered"))
     current_state = MovementState.CHASE
+    if enemy_node.has_signal("battle_started"):
+      enemy_node.battle_started.emit()
     return
 
   var phase := phases[_phase_idx]

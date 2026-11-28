@@ -2,6 +2,7 @@ extends WormBoss
 class_name BossSnake
 
 signal change_body_attack(_phase_idx: int)  # ボディアタックの変更を通知
+signal battle_started  # 登場と会話が終わり、戦闘（フェーズ2）が始まった
 
 ## HP でフェーズが切り替わる境目 {フェーズ番号: そのフェーズを終える HP の割合}
 const PHASE_END_HP_RATIOS := {2: 0.3, 3: 0.2, 4: 0.1}
@@ -138,6 +139,11 @@ func _destroy_segment():
     StageSignals.emit_signal(
       "sfx_play_requested", "destroy_enemy", last_segment.global_position, 0, 0
     )
+
+    # 節が壊れたときの攻撃（ツリーから外れるとコアが撃てないので、削除する前に撃つ）
+    var body_ai = last_segment.get_node_or_null("EnemyAI")
+    if body_ai and body_ai.has_method("fire_destroy_attack"):
+      body_ai.fire_destroy_attack()
 
   # 実際に削除
   segment_manager.remove_last_segment()

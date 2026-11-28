@@ -112,6 +112,7 @@ shape = SubResource("RectangleShape2D_4utyh")
 
 [node name="HpNode" type="Node" parent="."]
 script = ExtResource("5_eggcf")
+max_hp = 25
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("6_p2ljo")

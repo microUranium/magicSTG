@@ -159,15 +159,14 @@ func create_harpy_phase1_pattern() -> Array[AttackPattern]:
       preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
     )
     visual_config.scale = 1.5
+    visual_config.collision_radius = 6
     visual_config.texture = preload("res://assets/gfx/sprites/bullet_harpy_sprite.png")
     visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
     pattern.bullet_visual_config = visual_config
 
     var movement_config = BulletMovementConfig.new()
-    movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
-    movement_config.initial_speed = 500.0
-    movement_config.deceleration_rate = 200.0
-    movement_config.min_speed = 500.0 - (i * 50.0)
+    movement_config.movement_type = BulletMovementConfig.MovementType.STRAIGHT
+    movement_config.initial_speed = 500.0 - (i * 100.0)
     pattern.bullet_movement_config = movement_config
     _patterns.append(pattern)
 

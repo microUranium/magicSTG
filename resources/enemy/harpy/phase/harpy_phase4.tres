@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PhaseResource" load_steps=7 format=3 uid="uid://b62fimtgpgajo"]
+[gd_resource type="Resource" script_class="PhaseResource" load_steps=8 format=3 uid="uid://b62fimtgpgajo"]
 
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="1_05j7f"]
 [ext_resource type="Resource" uid="uid://wwbarjlrwj4" path="res://resources/enemy/harpy/pattern/harpy_pattern2-1.tres" id="2_mimup"]
@@ -7,9 +7,30 @@
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="4_ahckj"]
 [ext_resource type="Resource" uid="uid://brbki733tlxfc" path="res://resources/enemy/harpy/pattern/harpy_pattern4-2.tres" id="5_xvnjv"]
 
+[sub_resource type="Resource" id="Resource_stay"]
+script = ExtResource("1_05j7f")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
 [resource]
 script = ExtResource("4_ahckj")
-patterns = Array[ExtResource("1_05j7f")]([ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("3_ahckj"), ExtResource("2_mimup"), ExtResource("4_6gebm"), ExtResource("5_xvnjv"), ExtResource("4_6gebm")])
+patterns = Array[ExtResource("1_05j7f")]([ExtResource("2_mimup"), SubResource("Resource_stay"), ExtResource("3_ahckj"), SubResource("Resource_stay"), ExtResource("2_mimup"), SubResource("Resource_stay"), ExtResource("4_6gebm"), ExtResource("5_xvnjv"), ExtResource("4_6gebm")])
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.0

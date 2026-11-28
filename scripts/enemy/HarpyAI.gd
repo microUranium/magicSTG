@@ -30,7 +30,7 @@ func _initialize_attack_patterns():
 
   if phase3_patterns_1.is_empty():
     # Phase 3-1: バリア弾パターン
-    phase3_patterns_1 = create_harpy_phase1_pattern()
+    phase3_patterns_1 = create_harpy_phase3_aimed_pattern()
     phase3_patterns_1.append(create_harpy_phase3_barrier2())
 
   if phase3_patterns_2.is_empty():
@@ -74,7 +74,10 @@ func _next_phase():
 func _next_pattern():
   super._next_pattern()
 
-  if _phase_idx == 3 and _idx % patterns.size() == 10:
+  # フェーズ3は「左右に移動して止まる」を繰り返したあと、中央へ移動 → 中央で止まる → 中央へ戻る、の順。
+  # 中央へ移動し始めたら高密度のバリア弾、中央へ戻り始めたら元の攻撃に切り替える
+  # （_idx は始まったパターンの次を指す。末尾3つが中央のパターンなので、パターン数から決める）
+  if _phase_idx == 3 and _idx % patterns.size() == patterns.size() - 2:
     _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
   elif _phase_idx == 3 and _idx % patterns.size() == 0:
@@ -139,7 +142,19 @@ func _clear_all_pattern_cores():
 
 
 func create_harpy_phase1_pattern() -> Array[AttackPattern]:
-  """Phase1相当のパターンを作成"""
+  """Phase1の自機狙い弾（3方向・扇30°、クールタイム3秒）"""
+  return _create_harpy_aimed_patterns(3, 30.0, 3.0)
+
+
+func create_harpy_phase3_aimed_pattern() -> Array[AttackPattern]:
+  """Phase3の自機狙い弾（5方向・扇60°、クールタイム2秒）"""
+  return _create_harpy_aimed_patterns(5, 60.0, 2.0)
+
+
+func _create_harpy_aimed_patterns(
+  count: int, spread: float, cooldown: float
+) -> Array[AttackPattern]:
+  """自機狙い弾を1秒間隔で3連射する。弾速の違う3コア（500 / 400 / 300）"""
   var _patterns: Array[AttackPattern] = []
 
   for i in range(3):
@@ -147,24 +162,23 @@ func create_harpy_phase1_pattern() -> Array[AttackPattern]:
       AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1, 1
     )
     pattern.target_group = "players"
-    pattern.burst_delay = 3
-    pattern.bullet_count = 3
-    pattern.angle_spread = 30.0  # 各パターンで角度をずらす
+    pattern.burst_delay = cooldown
+    pattern.bullet_count = count
+    pattern.angle_spread = spread
     pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
 
     var visual_config = (
       preload("res://resources/bulletVisuals/basic_bullet_standard.tres").duplicate()
     )
     visual_config.scale = 1.5
+    visual_config.collision_radius = 6
     visual_config.texture = preload("res://assets/gfx/sprites/bullet_harpy_sprite.png")
     visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
     pattern.bullet_visual_config = visual_config
 
     var movement_config = BulletMovementConfig.new()
-    movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
-    movement_config.initial_speed = 500.0
-    movement_config.deceleration_rate = 200.0
-    movement_config.min_speed = 500.0 - (i * 50.0)
+    movement_config.movement_type = BulletMovementConfig.MovementType.STRAIGHT
+    movement_config.initial_speed = 500.0 - (i * 100.0)
     pattern.bullet_movement_config = movement_config
     _patterns.append(pattern)
 

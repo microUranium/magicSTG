@@ -11,9 +11,6 @@ var phase4_patterns: Array[AttackPattern] = []
 
 func _ready():
   _initialize_attack_patterns()
-  #ノードの削除時のシグナル
-  connect("tree_exiting", Callable(self, "_on_tree_exiting"))
-
   super._ready()
 
   await get_tree().process_frame
@@ -82,6 +79,7 @@ func create_body_destroy_pattern() -> AttackPattern:
   pattern.angle_spread = 360
   pattern.auto_start = false
   pattern.bullet_lifetime = 6.0
+  pattern.persist_offscreen = true  # 画面外で壊れた節（尾）の弾も消さない（6秒で消える）
 
   var visual_config = BulletVisualConfig.new()
   visual_config.texture = preload("res://assets/gfx/sprites/bullet_snake_scale.png")
@@ -134,7 +132,8 @@ func create_phase4_pattern() -> AttackPattern:
   return pattern
 
 
-func _on_tree_exiting():
-  """ノードがツリーから削除される際に呼ばれる"""
+func fire_destroy_attack() -> void:
+  """節が壊れたときの攻撃。BossSnake._destroy_segment から、節を削除する前に呼ばれる。
+  （以前は tree_exiting で撃っていたが、そのときにはコアがツリーから外れていて撃てなかった）"""
   if is_instance_valid(attack_core_slot):
     attack_core_slot.trigger_all_cores()

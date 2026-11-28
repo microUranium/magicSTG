@@ -139,5 +139,10 @@ func _destroy_segment():
       "sfx_play_requested", "destroy_enemy", last_segment.global_position, 0, 0
     )
 
+    # 節が壊れたときの攻撃（ツリーから外れるとコアが撃てないので、削除する前に撃つ）
+    var body_ai = last_segment.get_node_or_null("EnemyAI")
+    if body_ai and body_ai.has_method("fire_destroy_attack"):
+      body_ai.fire_destroy_attack()
+
   # 実際に削除
   segment_manager.remove_last_segment()

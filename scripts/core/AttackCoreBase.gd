@@ -116,6 +116,24 @@ func force_fire() -> void:
     emit_signal("core_fired")
 
 
+func restart_cooldown(seconds: float) -> void:
+  """次に撃つまでの待ち時間を seconds にし直す（撃った後は cooldown_sec の周期に戻る）。
+  同時に作った複数のコアの撃つタイミングをずらすときに使う"""
+  if not is_inside_tree():
+    return
+  var saved := cooldown_sec
+  cooldown_sec = seconds
+  _start_cooldown()
+  cooldown_sec = saved
+
+
+func get_cooldown_time_left() -> float:
+  """次に撃つまでの残りの待ち時間（秒）。待っていなければ 0"""
+  if _cooling and _cool_timer:
+    return _cool_timer.time_left
+  return 0.0
+
+
 func can_fire() -> bool:
   """発射可能かチェック"""
   return not _paused and not _cooling

@@ -74,7 +74,10 @@ func _next_phase():
 func _next_pattern():
   super._next_pattern()
 
-  if _phase_idx == 3 and _idx % patterns.size() == 10:
+  # フェーズ3は「左右に移動して止まる」を繰り返したあと、中央へ移動 → 中央で止まる → 中央へ戻る、の順。
+  # 中央へ移動し始めたら高密度のバリア弾、中央へ戻り始めたら元の攻撃に切り替える
+  # （_idx は始まったパターンの次を指す。末尾3つが中央のパターンなので、パターン数から決める）
+  if _phase_idx == 3 and _idx % patterns.size() == patterns.size() - 2:
     _clear_all_pattern_cores()
     _set_attack_patterns(phase3_patterns_2)
   elif _phase_idx == 3 and _idx % patterns.size() == 0:

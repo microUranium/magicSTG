@@ -1,13 +1,56 @@
-[gd_resource type="Resource" script_class="PhaseResource" load_steps=5 format=3 uid="uid://tgegwq2bima6"]
+[gd_resource type="Resource" script_class="PhaseResource" load_steps=7 format=3 uid="uid://tgegwq2bima6"]
 
 [ext_resource type="Script" uid="uid://bps01f3m37042" path="res://scripts/systems/EnemyPatternResource.gd" id="1_21hem"]
 [ext_resource type="Resource" uid="uid://wwbarjlrwj4" path="res://resources/enemy/harpy/pattern/harpy_pattern2-1.tres" id="2_padsh"]
 [ext_resource type="Resource" uid="uid://j1go501kf2t2" path="res://resources/enemy/harpy/pattern/harpy_pattern2-2.tres" id="3_21hem"]
 [ext_resource type="Script" uid="uid://cy6oe8emo4iir" path="res://scripts/systems/PhaseResource.gd" id="5_k0o0b"]
 
+[sub_resource type="Resource" id="Resource_lsybi"]
+script = ExtResource("1_21hem")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
+[sub_resource type="Resource" id="Resource_xoef7"]
+script = ExtResource("1_21hem")
+movement_type = 2
+move_to = Vector2(0, 0)
+move_time = 2.0
+direction_type = 0
+move_angle = 0.0
+move_speed = 100.0
+max_turn_angle_per_second = 180.0
+use_movement_bounds = false
+movement_bounds = Rect2(0, 0, 1, 1)
+core_to_enable = ""
+core_duration = 3.0
+change_animation = false
+animation_name = ""
+restore_animation = true
+dialogue_path = ""
+skip_on_dialogue_skip = false
+block_player_control = false
+metadata/_custom_type_script = "uid://bps01f3m37042"
+
 [resource]
 script = ExtResource("5_k0o0b")
-patterns = Array[ExtResource("1_21hem")]([ExtResource("2_padsh"), ExtResource("3_21hem")])
+patterns = Array[ExtResource("1_21hem")]([ExtResource("2_padsh"), SubResource("Resource_lsybi"), ExtResource("3_21hem"), SubResource("Resource_xoef7")])
 loop_type = 0
 show_hp_bar = true
 end_hp_ratio = 0.5
+bar_merge_with_previous = false

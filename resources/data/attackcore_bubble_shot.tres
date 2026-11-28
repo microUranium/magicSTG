@@ -134,6 +134,7 @@ direction_type = 2
 base_direction = Vector2(0, -1)
 angle_spread = 60.0
 angle_offset = 0.0
+sweep_spread = false
 circle_radius = 100.0
 rotation_speed = 90.0
 rotation_duration = 3.0

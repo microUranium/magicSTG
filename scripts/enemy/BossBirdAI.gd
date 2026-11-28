@@ -3,7 +3,6 @@ class_name BossBirdAI
 
 @export var phases: Array[PhaseResource] = []  # 各 Phase のパターンリソース
 @export var phase1_patterns: Array[AttackPattern]
-@export var phase2_patterns: Array[AttackPattern]
 
 @export var _bgm: AudioStream
 @export var bgm_fade_in := 2.0
@@ -24,8 +23,6 @@ func _initialize_attack_patterns():
   """攻撃パターンの初期化"""
   if phase1_patterns.is_empty():
     phase1_patterns = create_phase1_pattern()
-  if phase2_patterns.is_empty():
-    phase2_patterns = create_phase2_pattern()
 
 
 func _next_phase():
@@ -124,30 +121,6 @@ func create_phase1_pattern() -> Array[AttackPattern]:
     )
     visual_config.spawn_sound = preload("res://assets/audio/sfx/shot_magic_bullet_4.wav")  # 弾丸の発射音を設定
     pattern.bullet_visual_config = visual_config
-
-    var movement_config = BulletMovementConfig.new()
-    movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE
-    movement_config.initial_speed = 300.0 - (i * 30.0)
-    movement_config.deceleration_rate = 200.0
-    movement_config.min_speed = 150.0 - (i * 15.0)
-    pattern.bullet_movement_config = movement_config
-    patterns.append(pattern)
-
-  return patterns
-
-
-func create_phase2_pattern() -> Array[AttackPattern]:
-  """Phase2相当のパターンを作成"""
-  var patterns: Array[AttackPattern] = []
-
-  for i in range(3):
-    var pattern = AttackPatternFactory.create_rapid_fire(
-      AttackPatternFactory.DEFAULT_BULLET_SCENE, 5, 0.7, 3
-    )
-    pattern.target_group = "players"
-    pattern.burst_delay = 5
-    pattern.bullet_count = 16
-    pattern.direction_type = AttackPattern.DirectionType.CIRCLE
 
     var movement_config = BulletMovementConfig.new()
     movement_config.movement_type = BulletMovementConfig.MovementType.DECELERATE

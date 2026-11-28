@@ -30,7 +30,7 @@ func _initialize_attack_patterns():
 
   if phase3_patterns_1.is_empty():
     # Phase 3-1: バリア弾パターン
-    phase3_patterns_1 = create_harpy_phase1_pattern()
+    phase3_patterns_1 = create_harpy_phase3_aimed_pattern()
     phase3_patterns_1.append(create_harpy_phase3_barrier2())
 
   if phase3_patterns_2.is_empty():
@@ -142,7 +142,19 @@ func _clear_all_pattern_cores():
 
 
 func create_harpy_phase1_pattern() -> Array[AttackPattern]:
-  """Phase1相当のパターンを作成"""
+  """Phase1の自機狙い弾（3方向・扇30°、クールタイム3秒）"""
+  return _create_harpy_aimed_patterns(3, 30.0, 3.0)
+
+
+func create_harpy_phase3_aimed_pattern() -> Array[AttackPattern]:
+  """Phase3の自機狙い弾（5方向・扇60°、クールタイム2秒）"""
+  return _create_harpy_aimed_patterns(5, 60.0, 2.0)
+
+
+func _create_harpy_aimed_patterns(
+  count: int, spread: float, cooldown: float
+) -> Array[AttackPattern]:
+  """自機狙い弾を1秒間隔で3連射する。弾速の違う3コア（500 / 400 / 300）"""
   var _patterns: Array[AttackPattern] = []
 
   for i in range(3):
@@ -150,9 +162,9 @@ func create_harpy_phase1_pattern() -> Array[AttackPattern]:
       AttackPatternFactory.DEFAULT_BULLET_SCENE, 3, 1, 1
     )
     pattern.target_group = "players"
-    pattern.burst_delay = 3
-    pattern.bullet_count = 3
-    pattern.angle_spread = 30.0  # 各パターンで角度をずらす
+    pattern.burst_delay = cooldown
+    pattern.bullet_count = count
+    pattern.angle_spread = spread
     pattern.direction_type = AttackPattern.DirectionType.TO_PLAYER
 
     var visual_config = (

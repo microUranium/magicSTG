@@ -5,6 +5,7 @@
 #   2. 中央へ移動し始めてから中央で止まっている間は、高密度のバリア弾（phase3_patterns_2）
 #   3. 中央へ戻り始めたら通常の攻撃に戻る
 #   4. 左右の移動のあとには、必ず止まるパターンがある
+#   5. フェーズ3の自機狙い弾は、フェーズ1より方向数が多く・扇が広く・間隔が短い（弾速の組み合わせは同じ）
 # パターンの数は調整で変わるため、末尾の中央のパターンの位置はパターン数から求める
 extends GdUnitTestSuite
 
@@ -70,3 +71,30 @@ func test_each_side_move_is_followed_by_stay() -> void:
     if p.movement_type == EnemyPatternResource.MovementType.MOVE_TO_POSITION:
       var next: EnemyPatternResource = patterns[i + 1]
       assert_int(next.movement_type).is_equal(EnemyPatternResource.MovementType.STAY_IN_PLACE)
+
+
+func _aimed(patterns: Array) -> Array:
+  return patterns.filter(
+    func(p):
+      return (
+        p.pattern_type == AttackPattern.PatternType.RAPID_FIRE
+        and p.direction_type == AttackPattern.DirectionType.TO_PLAYER
+      )
+  )
+
+
+func test_phase3_aimed_is_denser_than_phase1() -> void:
+  var p1 := _aimed(_ai.phase1_patterns)
+  var p3 := _aimed(_ai.phase3_patterns_1)
+  assert_int(p3.size()).is_equal(p1.size())
+  for i in p3.size():
+    assert_int(p3[i].bullet_count).is_greater(p1[i].bullet_count)
+    assert_float(p3[i].angle_spread).is_greater(p1[i].angle_spread)
+    assert_float(p3[i].burst_delay).is_less(p1[i].burst_delay)
+    assert_float(p3[i].bullet_movement_config.initial_speed).is_equal(
+      p1[i].bullet_movement_config.initial_speed
+    )
+  # フェーズ3の通常の攻撃で、実際にフェーズ3の自機狙い弾を撃つ
+  var firing := _ai._pattern_cores.map(func(c): return c.attack_pattern)
+  for p in p3:
+    assert_bool(firing.has(p)).is_true()
